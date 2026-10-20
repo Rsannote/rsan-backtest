@@ -1,0 +1,31 @@
+{
+  "新浪_ETF不复权日线": {
+    "ok": true,
+    "status": 200,
+    "bytes_sample": 300,
+    "seconds": 2.26
+  },
+  "新浪_行情接口": {
+    "ok": true,
+    "status": 200,
+    "bytes_sample": 300,
+    "seconds": 1.73
+  },
+  "东财_K线接口": {
+    "ok": false,
+    "error": "RemoteDisconnected: Remote end closed connection without response",
+    "seconds": 0.82
+  },
+  "腾讯_K线接口": {
+    "ok": true,
+    "status": 200,
+    "bytes_sample": 300,
+    "seconds": 0.89
+  },
+  "GitHub_开源数据集": {
+    "ok": true,
+    "status": 200,
+    "bytes_sample": 300,
+    "seconds": 0.59
+  }
+}
