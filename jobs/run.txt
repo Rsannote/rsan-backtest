@@ -1,2 +1,2 @@
 # 一行：脚本名 [参数]，推送后由 GitHub 服务器运行（见 .github/workflows/push-task.yml）
-update_hangqing.py --full --codes 510880,513100,511260,518880,600900,601899,000333,300308,688981,sh000300,159915
+update_hangqing.py --full

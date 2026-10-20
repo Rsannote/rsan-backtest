@@ -1,0 +1,47 @@
+name: 行情库自动更新
+
+# 每个交易日收盘后增量更新；每周六全量重抓一次，顺便核对历史数据有没有被数据源改动。
+# 也可以在 Actions 页面手动运行（可选全量）。结果见 logs/行情库_最新.md。
+
+on:
+  schedule:
+    - cron: "40 8 * * 1-5"   # 北京时间周一到周五 16:40
+    - cron: "17 2 * * 6"     # 北京时间周六 10:17，全量
+  workflow_dispatch:
+    inputs:
+      full:
+        description: "全量重抓"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: repo-writer
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - name: 安装依赖
+        run: pip install pandas numpy
+      - name: 更新行情库
+        run: |
+          if [ "${{ github.event.schedule }}" = "17 2 * * 6" ] || [ "${{ inputs.full }}" = "true" ]; then
+            python3 scripts/update_hangqing.py --full
+          else
+            python3 scripts/update_hangqing.py
+          fi
+      - name: 提交更新
+        if: always()
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/行情库 logs/行情库_最新.md
+          git commit -m "行情库更新 $(TZ=Asia/Shanghai date +%Y-%m-%d)" || exit 0
+          for i in 1 2 3; do git pull --rebase origin main && git push && exit 0; sleep 5; done
+          exit 1

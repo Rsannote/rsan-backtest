@@ -114,7 +114,7 @@ def factors(raw, events, typ):
     F = pd.Series(1.0, index=cal)
     if typ == "指数" or not events:
         return F
-    if "f" in events[0]:  # 股票：累计因子
+    if "u" not in events[0]:  # 股票：只有累计因子 f（ETF 的表里也有 f，但恒为 1，要用 u/s）
         ev = pd.Series([float(x["f"]) for x in events], index=pd.to_datetime([x["d"] for x in events]))
         ev = ev[~ev.index.duplicated(keep="last")].sort_index()
         pos = ev.index.searchsorted(cal, side="right") - 1
