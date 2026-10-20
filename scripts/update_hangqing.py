@@ -18,7 +18,8 @@
 
 用法：
   python3 scripts/update_hangqing.py                 # 增量：每个标的只重抓最近约 40 天，并和已存数据核对
-  python3 scripts/update_hangqing.py --full          # 全量重抓（每周六自动跑一次，自我校验）
+  python3 scripts/update_hangqing.py --full          # 全部全量重抓
+  python3 scripts/update_hangqing.py --full --rotate # 约四分之一全量重抓、其余增量（每周六自动跑，四周轮一遍，核对历史有没有被改）
   python3 scripts/update_hangqing.py --codes 600900,510880   # 只更新这几个（必须已在标的清单里）
 """
 import argparse
@@ -28,11 +29,14 @@ import json
 import os
 import re
 import sys
+import threading
 import time
+import urllib.error
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime, timedelta, timezone
 
+import numpy as np
 import pandas as pd
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -42,20 +46,37 @@ EVD = os.path.join(LIB, "分红表")
 UA_QQ = {"User-Agent": "Mozilla/5.0", "Referer": "https://gu.qq.com"}
 UA_SINA = {"User-Agent": "Mozilla/5.0", "Referer": "https://finance.sina.com.cn"}
 COLS = ["open", "high", "low", "close", "volume"]
-FULL_START = date(1999, 1, 1)
+FULL_START = date(2005, 1, 1)
 OVERLAP_DAYS = 40
 BJ = timezone(timedelta(hours=8))
 
 
 # ---------------------------------------------------------------- 网络
-def get(url, headers, tries=4):
+_lock = threading.Lock()
+_next = [0.0]
+PACE = 0.8  # 两次请求之间至少间隔的秒数（腾讯请求太密会返回 501）
+
+
+def get(url, headers, tries=5):
     last = None
     for i in range(tries):
+        with _lock:  # 全局节流
+            wait = _next[0] - time.time()
+            if wait > 0:
+                time.sleep(wait)
+            _next[0] = time.time() + PACE
         try:
             req = urllib.request.Request(url, headers=headers)
             with urllib.request.urlopen(req, timeout=30) as r:
                 return r.read().decode("utf-8", "replace")
-        except Exception as e:  # 超时、断连都重试
+        except urllib.error.HTTPError as e:
+            last = e
+            if e.code in (403, 429, 501, 503):  # 被限流：所有线程一起暂停
+                with _lock:
+                    _next[0] = time.time() + 30 * (i + 1)
+            else:
+                time.sleep(2 * (i + 1))
+        except Exception as e:  # 超时、断连
             last = e
             time.sleep(2 * (i + 1))
     raise RuntimeError(f"请求失败：{url} -> {last!r}")
@@ -82,7 +103,6 @@ def fetch_raw(sym, start):
             if len(r) >= 6:
                 rows[r[0]] = [float(r[1]), float(r[3]), float(r[4]), float(r[2]), float(r[5])]
         s = e + timedelta(days=1)
-        time.sleep(0.2)
     # 腾讯日线顺序是 日期,开,收,高,低,量 → 这里存成 开,高,低,收,量
     df = pd.DataFrame([[d] + v for d, v in sorted(rows.items())], columns=["date"] + COLS)
     df["date"] = pd.to_datetime(df["date"])
@@ -121,24 +141,33 @@ def factors(raw, events, typ):
         vals = [ev.iloc[p] if p >= 0 else 1.0 for p in pos]
         # 上市前就有的事件（因子 >1 但早于本库第一天）不会出现；上市当天之前一律按 1
         return pd.Series(vals, index=cal, dtype=float)
-    # ETF：u 累计每份分红，s 拆分比例
-    by_day, prev_u = {}, 0.0
+    # ETF：u = 累计每份分红，s = 累计份额折算比例（两者都是累计值，相邻事件相减/相除得到当次）。
+    # 折算的生效日：新浪有时把登记日和实际折算日都列出来，所以在事件日起 4 个交易日内，
+    # 选开盘/前收最接近 1/当次比例 的那天生效。
+    by_day, prev_u, prev_s = {}, 0.0, 1.0
+    opens, closes = raw["open"].values, raw["close"].values
     for x in events:
         u, s = float(x.get("u", 0) or 0), float(x.get("s", 1) or 1)
         div = round(u - prev_u, 6)
-        prev_u = u
+        ratio = s / prev_s if s > 0 else 1.0
+        prev_u, prev_s = u, (s if s > 0 else prev_s)
         p = cal.searchsorted(pd.Timestamp(x["d"]))  # 除息日不是交易日时顺延
-        if 0 < p < len(cal):
-            by_day.setdefault(cal[p], []).append((div if div > 0 else 0.0, s))
+        if not 0 < p < len(cal):
+            continue
+        if div > 0:
+            by_day.setdefault(p, []).append(("div", div))
+        if abs(ratio - 1) > 0.01:
+            cands = range(p, min(p + 4, len(cal)))
+            best = min(cands, key=lambda k: abs(np.log(opens[k] / closes[k - 1]) + np.log(ratio)))
+            by_day.setdefault(best, []).append(("split", ratio))
     f = 1.0
-    closes = raw["close"].values
     out = []
-    for i, d in enumerate(cal):
-        for div, s in by_day.get(d, []):
-            if div > 0:
-                f *= closes[i - 1] / (closes[i - 1] - div)
-            if s not in (0.0, 1.0):
-                f *= s
+    for i in range(len(cal)):
+        for kind, v in by_day.get(i, []):
+            if kind == "div":
+                f *= closes[i - 1] / (closes[i - 1] - v)
+            else:
+                f *= v
         out.append(f)
     return pd.Series(out, index=cal)
 
@@ -262,7 +291,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--full", action="store_true", help="全量重抓")
     ap.add_argument("--codes", default="", help="只更新这些代码，逗号分隔")
-    ap.add_argument("--workers", type=int, default=3)
+    ap.add_argument("--workers", type=int, default=2)
+    ap.add_argument("--rotate", action="store_true", help="配合 --full：只全量重抓约四分之一的标的（按周轮换，四周一轮），其余增量")
     a = ap.parse_args()
 
     items = list(csv.DictReader(open(LIST, encoding="utf-8")))
@@ -274,8 +304,15 @@ def main():
         items = [x for x in items if x["code"] in want]
 
     t0 = time.time()
+    week = date.today().isocalendar()[1]
+    def is_full(it):
+        if not a.full:
+            return False
+        if not a.rotate:
+            return True
+        return int(hashlib.md5(it["code"].encode()).hexdigest(), 16) % 4 == week % 4
     with ThreadPoolExecutor(a.workers) as ex:
-        reps = list(ex.map(lambda it: update_one(it, a.full), items))
+        reps = list(ex.map(lambda it: update_one(it, is_full(it)) | {"full": is_full(it)}, items))
 
     # 状态表：保留没在本次更新范围里的旧行
     stp = os.path.join(LIB, "状态.csv")
@@ -300,7 +337,7 @@ def main():
     bad = [r for r in reps if r["status"] != "ok"]
     lasts = sorted({r["last"] for r in ok})
     lines = [f"# 行情库更新 {now}（北京时间）", "",
-             f"- 模式：{'全量' if a.full else '增量'}；标的 {len(reps)} 个，成功 {len(ok)}，失败 {len(bad)}；用时 {time.time() - t0:.0f} 秒",
+             f"- 模式：全量重抓 {sum(r['full'] for r in reps)} 个，其余增量；标的 {len(reps)} 个，成功 {len(ok)}，失败 {len(bad)}；用时 {time.time() - t0:.0f} 秒",
              f"- 最新交易日：{lasts[-1] if lasts else '无'}" + (f"（有 {sum(r['last'] != lasts[-1] for r in ok)} 个标的最后日期更早，可能停牌）" if len(lasts) > 1 else ""),
              f"- 新增行数合计：{sum(r.get('added', 0) for r in ok)}", ""]
     if bad:

@@ -1,12 +1,12 @@
 name: 行情库自动更新
 
-# 每个交易日收盘后增量更新；每周六全量重抓一次，顺便核对历史数据有没有被数据源改动。
+# 每个交易日收盘后增量更新；每周六把约四分之一标的全量重抓（四周轮一遍），核对历史数据有没有被数据源改动。
 # 也可以在 Actions 页面手动运行（可选全量）。结果见 logs/行情库_最新.md。
 
 on:
   schedule:
     - cron: "40 8 * * 1-5"   # 北京时间周一到周五 16:40
-    - cron: "17 2 * * 6"     # 北京时间周六 10:17，全量
+    - cron: "17 2 * * 6"     # 北京时间周六 10:17，轮换全量
   workflow_dispatch:
     inputs:
       full:
@@ -31,8 +31,10 @@ jobs:
         run: pip install pandas numpy
       - name: 更新行情库
         run: |
-          if [ "${{ github.event.schedule }}" = "17 2 * * 6" ] || [ "${{ inputs.full }}" = "true" ]; then
+          if [ "${{ inputs.full }}" = "true" ]; then
             python3 scripts/update_hangqing.py --full
+          elif [ "${{ github.event.schedule }}" = "17 2 * * 6" ]; then
+            python3 scripts/update_hangqing.py --full --rotate
           else
             python3 scripts/update_hangqing.py
           fi
