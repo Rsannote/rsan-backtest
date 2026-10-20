@@ -6,6 +6,9 @@ on:
     # 北京时间 15:45（收盘后），周一到周五
     - cron: "45 7 * * 1-5"
 
+permissions:
+  contents: write
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -13,8 +16,14 @@ jobs:
       - uses: actions/checkout@v4
       - name: 检测数据源连通性
         run: python3 scripts/check_sources.py
-      - uses: actions/upload-artifact@v4
+      - name: 把检测结果存回仓库
         if: always()
-        with:
-          name: source_check
-          path: source_check.json
+        run: |
+          mkdir -p logs
+          cp source_check.json "logs/source_check_$(date -u +%Y-%m-%d_%H%M).json"
+          cp source_check.json logs/source_check_latest.json
+          git config user.name "github-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add logs
+          git commit -m "记录数据源检测结果" || exit 0
+          git push
