@@ -1,0 +1,20 @@
+name: 检测行情数据源
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 北京时间 15:45（收盘后），周一到周五
+    - cron: "45 7 * * 1-5"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 检测数据源连通性
+        run: python3 scripts/check_sources.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: source_check
+          path: source_check.json
