@@ -1,0 +1,48 @@
+name: 推送即运行
+
+# 用法：把 jobs/run.txt 改成一行「脚本名 [参数]」并推送，GitHub 服务器就会运行 scripts/ 下的这个脚本，
+# 把 logs/ 和 data/ 的产出提交回仓库。云端对话连不上行情网站时，靠它在 GitHub 服务器上抓数据。
+# 例：update_hangqing.py --codes 600900,000333
+
+on:
+  push:
+    branches: [main]
+    paths: ["jobs/run.txt"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: repo-writer
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - name: 读取任务
+        id: job
+        run: |
+          line=$(grep -v '^\s*#' jobs/run.txt | grep -v '^\s*$' | head -1)
+          script=$(echo "$line" | awk '{print $1}')
+          args=$(echo "$line" | cut -s -d' ' -f2-)
+          case "$script" in *[!A-Za-z0-9_.]*|"") echo "脚本名不合法：$script"; exit 1;; esac
+          case "$args" in *[!A-Za-z0-9_.,=:\ -]*) echo "参数含不允许的字符：$args"; exit 1;; esac
+          test -f "scripts/$script"
+          echo "script=$script" >> "$GITHUB_OUTPUT"
+          echo "args=$args" >> "$GITHUB_OUTPUT"
+      - name: 安装依赖
+        run: pip install pandas numpy
+      - name: 运行
+        run: python3 "scripts/${{ steps.job.outputs.script }}" ${{ steps.job.outputs.args }}
+      - name: 把产出存回仓库
+        if: always()
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add logs data
+          git commit -m "任务产出：${{ steps.job.outputs.script }} ${{ steps.job.outputs.args }}" || exit 0
+          for i in 1 2 3; do git pull --rebase origin main && git push && exit 0; sleep 5; done
+          exit 1

@@ -1,0 +1,2 @@
+# 一行：脚本名 [参数]，推送后由 GitHub 服务器运行（见 .github/workflows/push-task.yml）
+explore_stock.py
