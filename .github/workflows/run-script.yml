@@ -1,0 +1,36 @@
+name: 运行脚本并保存结果
+
+on:
+  workflow_dispatch:
+    inputs:
+      script:
+        description: "scripts/ 下的脚本文件名，如 fetch_etf.py"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 检查脚本名
+        run: |
+          case "${{ inputs.script }}" in
+            *[!A-Za-z0-9_.]*|"") echo "脚本名不合法"; exit 1;;
+          esac
+          test -f "scripts/${{ inputs.script }}"
+      - name: 安装依赖
+        run: pip install pandas numpy
+      - name: 运行
+        run: python3 "scripts/${{ inputs.script }}"
+      - name: 把产出存回仓库
+        if: always()
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add logs data
+          git commit -m "脚本产出：${{ inputs.script }}" || exit 0
+          git pull --rebase origin main
+          git push
