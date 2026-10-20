@@ -63,6 +63,18 @@ def fetch_raw(code):
     return df.set_index("date")
 
 
+def drop_spikes(raw, code, removed):
+    """剔除孤立坏点：当天收盘与前后两天都相差 40% 以上，而前后两天彼此相差不到 15%。
+    （永久性的水平跳变，如拆分，前后两天差距很大，不会被误删。）"""
+    prev_c, next_c = raw["close"].shift(1), raw["close"].shift(-1)
+    spike = ((raw["close"] / prev_c - 1).abs() > 0.4) & ((raw["close"] / next_c - 1).abs() > 0.4) \
+        & ((prev_c / next_c - 1).abs() < 0.15)
+    for d in raw.index[spike.fillna(False)]:
+        removed.append(f"{code} {d.date()} 孤立坏点已剔除：open={raw.at[d, 'open']} close={raw.at[d, 'close']}"
+                       f"（前收 {prev_c.at[d]}，后收 {next_c.at[d]}）")
+    return raw[~spike.fillna(False)]
+
+
 def fetch_events(code):
     t = get(f"https://finance.sina.com.cn/realstock/company/sh{code}/hfq.js", UA_SINA)
     m = re.search(r"=\s*(\{.*?\})\s*(?:/\*|$)", t, re.S)
@@ -79,8 +91,8 @@ def fetch_events(code):
     return out
 
 
-def build(code):
-    raw = fetch_raw(code)
+def build(code, removed):
+    raw = drop_spikes(fetch_raw(code), code, removed)
     events = fetch_events(code)
     cal = raw.index
     F = pd.Series(1.0, index=cal)
@@ -114,9 +126,9 @@ def build(code):
 
 
 def main():
-    frames, all_checks, warns = {}, [], []
+    frames, all_checks, warns, removed = {}, [], [], []
     for c in CODES:
-        out, checks, raw = build(c)
+        out, checks, raw = build(c, removed)
         frames[c] = out
         all_checks += checks
         # 后复权价的跳空：除拆分日外，不应出现大于 21% 的开盘跳空
@@ -137,7 +149,7 @@ def main():
     pd.DataFrame(all_checks).to_csv(f"{dd}_分红核对.csv", index=False, encoding="utf-8-sig")
     os.makedirs("logs", exist_ok=True)
     with open(f"logs/fetch_{last}.txt", "w", encoding="utf-8") as fh:
-        fh.write("\n".join(warns) if warns else "无跳空报警")
+        fh.write("\n".join(["【剔除的坏点】"] + (removed or ["无"]) + ["【跳空报警】"] + (warns or ["无"])))
     for w in warns:
         print("⚠️", w)
     print("输出目录：", dd)
