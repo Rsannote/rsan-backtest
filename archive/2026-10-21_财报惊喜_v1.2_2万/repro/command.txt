@@ -1,0 +1,1 @@
+engine/backtest.py --data data/日线_2026-10-20_4 --strategy strategies/caibao_jingxi/cj_main5.py --capital 20000 --out archive/2026-10-21_财报惊喜_v1.2_2万
