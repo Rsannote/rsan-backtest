@@ -292,6 +292,7 @@ def main():
     ap.add_argument("--full", action="store_true", help="全量重抓")
     ap.add_argument("--codes", default="", help="只更新这些代码，逗号分隔")
     ap.add_argument("--workers", type=int, default=2)
+    ap.add_argument("--budget", type=float, default=60, help="最多用多少分钟；超时后不再开始新的标的（没轮到的下次自动补上）")
     ap.add_argument("--rotate", action="store_true", help="配合 --full：只全量重抓约四分之一的标的（按周轮换，四周一轮），其余增量")
     a = ap.parse_args()
 
@@ -304,6 +305,12 @@ def main():
         items = [x for x in items if x["code"] in want]
 
     t0 = time.time()
+    # 先做还没有文件的（新标的），再按上次更新时间从旧到新，保证超时没轮到的下次优先
+    stp0 = os.path.join(LIB, "状态.csv")
+    last_upd = {}
+    if os.path.exists(stp0):
+        last_upd = {r["code"]: r.get("updated", "") for r in csv.DictReader(open(stp0, encoding="utf-8"))}
+    items.sort(key=lambda it: last_upd.get(it["code"], ""))
     week = date.today().isocalendar()[1]
     def is_full(it):
         if not a.full:
@@ -312,7 +319,12 @@ def main():
             return True
         return int(hashlib.md5(it["code"].encode()).hexdigest(), 16) % 4 == week % 4
     with ThreadPoolExecutor(a.workers) as ex:
-        reps = list(ex.map(lambda it: update_one(it, is_full(it)) | {"full": is_full(it)}, items))
+        def job(it):
+            if time.time() - t0 > a.budget * 60:
+                return {"code": it["code"], "name": it["name"], "type": it["type"], "status": "未轮到",
+                        "notes": [f"超过 {a.budget:.0f} 分钟时间预算，下次运行补上"], "full": False}
+            return update_one(it, is_full(it)) | {"full": is_full(it)}
+        reps = list(ex.map(job, items))
 
     # 状态表：保留没在本次更新范围里的旧行
     stp = os.path.join(LIB, "状态.csv")
@@ -334,14 +346,17 @@ def main():
                 w.writerow({k: keep[c].get(k, "") for k in fields})
 
     ok = [r for r in reps if r["status"] == "ok"]
-    bad = [r for r in reps if r["status"] != "ok"]
+    bad = [r for r in reps if r["status"] == "失败"]
+    skipped = [r for r in reps if r["status"] == "未轮到"]
     lasts = sorted({r["last"] for r in ok})
     lines = [f"# 行情库更新 {now}（北京时间）", "",
-             f"- 模式：全量重抓 {sum(r['full'] for r in reps)} 个，其余增量；标的 {len(reps)} 个，成功 {len(ok)}，失败 {len(bad)}；用时 {time.time() - t0:.0f} 秒",
+             f"- 模式：全量重抓 {sum(r['full'] for r in reps)} 个，其余增量；标的 {len(reps)} 个，成功 {len(ok)}，失败 {len(bad)}，超时未轮到 {len(skipped)}；用时 {time.time() - t0:.0f} 秒",
              f"- 最新交易日：{lasts[-1] if lasts else '无'}" + (f"（有 {sum(r['last'] != lasts[-1] for r in ok)} 个标的最后日期更早，可能停牌）" if len(lasts) > 1 else ""),
              f"- 新增行数合计：{sum(r.get('added', 0) for r in ok)}", ""]
     if bad:
         lines += ["## 失败", ""] + [f"- {r['code']} {r['name']}：{'；'.join(r['notes'])}" for r in bad] + [""]
+    if skipped:
+        lines += [f"## 超时未轮到（下次运行优先补上）", "", "- " + "、".join(f"{r['code']} {r['name']}" for r in skipped), ""]
     noted = [r for r in ok if r["notes"]]
     if noted:
         lines += ["## 需要留意", ""] + [f"- {r['code']} {r['name']}：{'；'.join(r['notes'])}" for r in noted] + [""]
