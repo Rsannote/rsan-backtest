@@ -18,7 +18,7 @@
   python3 scripts/v3_select.py --force             # 立即重算本期
   python3 scripts/v3_select.py --test --asof=2026-09-01   # 测试：按指定日期算，结果写到 logs/v3_test/，不影响正式名单
 """
-import os, sys, json, time, math, re, warnings, subprocess, urllib.request, datetime as dt
+import os, sys, json, time, math, re, warnings, subprocess, urllib.request, urllib.error, datetime as dt
 from concurrent.futures import ThreadPoolExecutor
 warnings.filterwarnings("ignore")
 
@@ -87,9 +87,29 @@ def cached(name, fn, max_age_days=3):
     log(f"  取数失败 {name}: {str(err)[:80]}"); FAILS.append(name)
     return None
 
-def _get(url, ref="https://gu.qq.com"):
-    r = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0", "Referer": ref})
-    return urllib.request.urlopen(r, timeout=20).read().decode("gbk", "ignore")
+import threading
+_lock = threading.Lock(); _next = [0.0]
+PACE = 0.8  # 腾讯两次请求至少间隔的秒数（太密会返回 501，与 update_hangqing.py 相同）
+
+def _get(url, ref="https://gu.qq.com", tries=5):
+    """腾讯接口：全局节流；被限流时所有线程一起暂停。"""
+    last = None
+    for i in range(tries):
+        with _lock:
+            wait = _next[0] - time.time()
+            if wait > 0: time.sleep(wait)
+            _next[0] = time.time() + PACE
+        try:
+            r = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0", "Referer": ref})
+            return urllib.request.urlopen(r, timeout=30).read().decode("gbk", "ignore")
+        except urllib.error.HTTPError as e:
+            last = e
+            if e.code in (403, 429, 501, 503):
+                with _lock: _next[0] = time.time() + 30 * (i + 1)
+            else: time.sleep(2 * (i + 1))
+        except Exception as e:
+            last = e; time.sleep(2 * (i + 1))
+    raise RuntimeError(f"请求失败 {last!r}")
 
 def _sym(c):
     return ("sh" if c.startswith(("6", "9")) else "sz") + c
@@ -126,15 +146,22 @@ class Live:
                 return res
             out.update(cached(f"spot_{i}_{batch[0]}", f, 1) or {})
         return out
-    def hist(self, c):
-        """腾讯日K（不复权），返回 [{日期, 收盘, 成交额}]；成交额 = 成交量(手)×100×收盘价，近似。"""
-        start = (today_bj() - dt.timedelta(days=int(365 * (CFG["list_years"] + 0.6)))).isoformat()
+    def hist(self, c, asof):
+        """腾讯日K（不复权），两个小窗口代替整段历史（腾讯不允许一次取太长，请求太密还会限流）：
+        ① 换股日前一年：用于日均成交额（成交额 = 成交量(手)×100×收盘价，近似）和 ≥200 个交易日的要求；
+        ② 换股日前「上市年限−30天」那天之前的 40 天：有交易记录就说明上市已满年限。
+        返回的行与原版格式相同 [{日期, 收盘, 成交额}]：首行取自窗口②（若有），其余为窗口①。"""
         def f():
-            t = _get(f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={_sym(c)},day,{start},2050-12-31,2000,")
-            d = json.loads(t)["data"][_sym(c)]
-            rows = d.get("day") or d.get("qfqday") or []
-            return [{"日期": r[0], "收盘": r[2], "成交额": float(r[5]) * 100 * float(r[2])} for r in rows]
-        return cached(f"hist_{c}", f, 3) or []
+            out = []
+            cut = asof - dt.timedelta(days=365 * CFG["list_years"] - 30)
+            for a, b, n in ((cut - dt.timedelta(days=40), cut, 40), (asof - dt.timedelta(days=365), asof - dt.timedelta(days=1), 300)):
+                t = _get(f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={_sym(c)},day,{a},{b},{n},")
+                d = (json.loads(t).get("data") or {}).get(_sym(c)) or {}
+                rows = d.get("day") or d.get("qfqday") or []
+                out.append([{"日期": r[0], "收盘": r[2], "成交额": float(r[5]) * 100 * float(r[2])} for r in rows if len(r) >= 6])
+            old, recent = out
+            return ([dict(old[0], 窗口="上市检查")] if old else []) + recent
+        return cached(f"hist_{c}_{asof}", f, 3) or []
     def annual(self, c):
         return cached(f"fy_{c}", lambda: self.ak.stock_financial_abstract_ths(symbol=c, indicator="按年度").astype(str).to_dict("records"), 20) or []
     def quarterly(self, c):
@@ -223,14 +250,14 @@ def select(src, asof, prev_hold):
     spot = src.spot(pool)
     log(f"行业成分 {len(cons)} 只（取到行情 {len(spot)} 只）；年报口径 {Y}；季报截止 {asof}")
     pre = [c for c in pool if c in spot and "ST" not in spot[c]["name"].upper() and spot[c]["mcap"] >= CFG["mcap_min"]]
-    hists = dict(zip(pre, pmap(src.hist, pre)))
+    hists = dict(zip(pre, pmap(lambda c: src.hist(c, asof), pre)))
     cands = []
     for c in pre:
         h = hists[c]
-        if len(h) < 200: continue
+        if len(h) < 200: continue          # 窗口①不足200个交易日（含停牌过多、上市不满一年）
         first = dt.date.fromisoformat(str(h[0]["日期"])[:10])
         if (asof - first).days < 365 * CFG["list_years"] - 30: continue
-        amt = [num(r["成交额"]) for r in h[-250:]]; amt = [a for a in amt if a == a]
+        amt = [num(r["成交额"]) for r in h[-250:] if "窗口" not in r]; amt = [a for a in amt if a == a]
         if not amt or sum(amt) / len(amt) < CFG["amt_min"]: continue
         cands.append(c)
     log(f"总市值≥{CFG['mcap_min']/1e8:.0f}亿 {len(pre)} 只；规模、流动性、上市年限达标 {len(cands)} 只")
