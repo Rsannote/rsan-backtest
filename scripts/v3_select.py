@@ -73,7 +73,7 @@ def num(x):
     except: return math.nan
 
 # ---------- 取数（带缓存与重试） ----------
-FAILS = []
+FAILS = []; RECOVERED = []
 def cached(name, fn, max_age_days=3):
     p = os.path.join(CACHE, name + ".json")
     if os.path.exists(p) and (time.time() - os.path.getmtime(p)) < max_age_days * 86400:
@@ -180,7 +180,7 @@ class Live:
         return cached(f"div_{c}", lambda: self.ak.stock_history_dividend_detail(symbol=c, indicator="分红").astype(str).to_dict("records"), 20) or []
 
 T0 = time.time()
-BUDGET = 75 * 60          # 运行满 75 分钟主动停下，避免被 GitHub 90 分钟上限强制杀掉
+BUDGET = int(os.environ.get("V3_BUDGET_MIN", "75")) * 60   # 超过预算主动停下，避免被 GitHub 时间上限强制杀掉（正式工作流设 160）
 STOPPED = []
 def elapsed(): return time.time() - T0
 def over_budget():
@@ -191,7 +191,15 @@ def over_budget():
 
 def pmap(fn, items, workers=4):
     with ThreadPoolExecutor(workers) as ex:
-        return list(ex.map(lambda x: None if over_budget() else fn(x), items))
+        res = list(ex.map(lambda x: None if over_budget() else fn(x), items))
+    miss = [i for i, v in enumerate(res) if not v]
+    if miss and not over_budget():                 # 冷却 60 秒后逐个补抓一轮
+        log(f"  {len(miss)} 只取数失败，60 秒后补抓"); time.sleep(60)
+        for i in miss:
+            if over_budget(): break
+            res[i] = fn(items[i])
+            if res[i]: RECOVERED.append(1)
+    return res
 
 # ---------- 第一层（与原版相同） ----------
 def fy_table(rows):
@@ -372,7 +380,7 @@ def main():
         else:
             write(res)
     finally:
-        log(f"\n用时 {time.time()-t:.0f} 秒；取数失败 {len(FAILS)} 次" + (f"：{'、'.join(FAILS[:30])}" if FAILS else ""))
+        log(f"\n用时 {time.time()-t:.0f} 秒；取数失败 {len(FAILS)} 次（补抓成功 {len(RECOVERED)} 只）" + (f"：{'、'.join(FAILS[:30])}" if FAILS else ""))
         open(LOGF, "w", encoding="utf-8").write(f"# v3 选股运行日志（{(dt.datetime.utcnow() + dt.timedelta(hours=8)):%Y-%m-%d %H:%M}，换股日 {per}）\n\n```\n" + "\n".join(LOG) + "\n```\n")
 
 FAILED = []

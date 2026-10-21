@@ -1,0 +1,44 @@
+name: 业绩加速换股选股
+
+# 每年 5/1、9/1、11/1 起连续三天北京时间 10:07 运行；本期已算出正式名单就自动跳过，失败了第二、三天会重试。
+# 结果：data/v3/<换股日>.json、data/v3/latest.json、data/v3/最新名单.md；日志：logs/v3_最新.md
+# 手动重算：在 Actions 页面运行本工作流，勾选「强制重算」。
+
+on:
+  schedule:
+    - cron: "7 2 1,2,3 5,9,11 *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "强制重算本期"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: repo-writer
+  cancel-in-progress: false
+
+jobs:
+  select:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      V3_BUDGET_MIN: "160"
+    steps:
+      - uses: actions/checkout@v4
+      - name: 安装依赖
+        run: pip install pandas numpy akshare
+      - name: 选股
+        run: python3 scripts/v3_select.py ${{ inputs.force && '--force' || '' }}
+      - name: 把结果存回仓库
+        if: always()
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add logs data
+          git commit -m "业绩加速选股：$(date -u -d '+8 hours' +%F)" || exit 0
+          for i in 1 2 3; do git pull --rebase origin main && git push && exit 0; sleep 5; done
+          exit 1
