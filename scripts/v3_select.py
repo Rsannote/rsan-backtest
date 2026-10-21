@@ -270,24 +270,10 @@ def select(src, asof, prev_hold):
     spot = src.spot(pool)
     log(f"行业成分 {len(cons)} 只（取到行情 {len(spot)} 只）；年报口径 {Y}；季报截止 {asof}")
     pre = [c for c in pool if c in spot and "ST" not in spot[c]["name"].upper() and spot[c]["mcap"] >= CFG["mcap_min"]]
-    hists = {}
-    for i, c in enumerate(pre):                      # 腾讯接口单线程匀速请求
-        if over_budget(): break
-        hists[c] = src.hist(c, asof)
-        if (i + 1) % 100 == 0: log(f"  周K进度 {i+1}/{len(pre)}，已用 {elapsed()/60:.0f} 分钟")
-    cands = []
-    for c in pre:
-        h = hists.get(c)
-        if not h: continue
-        if h["days"] < 200: continue          # 近一年不足约200个交易日（停牌过多或上市不满一年）
-        first = dt.date.fromisoformat(h["first"][:10])
-        if (asof - first).days < 365 * CFG["list_years"] - 30: continue
-        if h["amt"] < CFG["amt_min"]: continue
-        cands.append(c)
-    log(f"总市值≥{CFG['mcap_min']/1e8:.0f}亿 {len(pre)} 只；规模、流动性、上市年限达标 {len(cands)} 只")
-    annual = dict(zip(cands, pmap(src.annual, cands)))
+    # 各道筛选都是"同时满足"，顺序不影响结果：先用同花顺财报筛，最后只对通过的少数几十只查腾讯周K（腾讯在 GitHub 上限流严重）
+    annual = dict(zip(pre, pmap(src.annual, pre)))
     passed, need_div = [], []
-    for c in cands:
+    for c in pre:
         fy = fy_table(annual[c] or []); isfin = cons[c]["sw"] in FIN
         typ, why = layer1(fy, None, Y, isfin)
         if typ: passed.append((c, typ))
@@ -297,7 +283,7 @@ def select(src, asof, prev_hold):
         typ, why = layer1(fy_table(annual[c] or []), div_by_fy(divs[c] or []), Y, cons[c]["sw"] in FIN)
         if typ: passed.append((c, typ))
     passed.sort()
-    log(f"第一层通过 {len(passed)} 只")
+    log(f"总市值≥{CFG['mcap_min']/1e8:.0f}亿 {len(pre)} 只；第一层财务规则通过 {len(passed)} 只（已用 {elapsed()/60:.0f} 分钟）")
     quarts = dict(zip([c for c, _ in passed], pmap(src.quarterly, [c for c, _ in passed])))
     rows = []
     for c, typ in passed:
@@ -306,6 +292,20 @@ def select(src, asof, prev_hold):
         ok = (CFG["g_min"] < sig["g"] <= CFG["g_max"]) and sig["acc"] > 0 and sig["gprev"] > CFG["prev_min"] and sig["grev"] > 0
         rows.append(dict(code=c, name=spot.get(c, {}).get("name") or cons[c]["name"], sw=cons[c]["sw"], typ=typ,
                          price=spot.get(c, {}).get("price"), ok=ok, **sig))
+    n_acc = sum(r["ok"] for r in rows)
+    log(f"季报加速条件满足 {n_acc} 只，再查成交额与上市年限（已用 {elapsed()/60:.0f} 分钟）")
+    cands = []
+    for r in rows:
+        if not r["ok"]: continue
+        if over_budget(): break
+        h = src.hist(r["code"], asof)
+        why = ("周K取不到" if not h else "近一年交易日不足" if h["days"] < 200
+               else "上市未满年限" if (asof - dt.date.fromisoformat(h["first"][:10])).days < 365 * CFG["list_years"] - 30
+               else "日均成交额不足" if h["amt"] < CFG["amt_min"] else "")
+        if why: r["ok"] = False; r["drop"] = why
+        else: cands.append(r["code"])
+    dropped = [f"{r['name']}（{r['drop']}）" for r in rows if r.get("drop")]
+    if dropped: log("  因流动性/上市年限剔除：" + "、".join(dropped))
     ok = sorted([r for r in rows if r["ok"]], key=lambda r: -r["g"])
     log(f"符合加速条件 {len(ok)} 只")
     # 排序选股：同行业最多1只；一手买不起（超过每只预算）的跳过
@@ -325,7 +325,7 @@ def select(src, asof, prev_hold):
     new = {r["code"] for r in picks}
     return dict(asof=asof.isoformat(), fy=Y, generated=(dt.datetime.utcnow() + dt.timedelta(hours=8)).strftime("%Y-%m-%d %H:%M"),
                 config=CFG, source="GitHub服务器（腾讯行情+akshare财报）",
-                counts=dict(industry=len(cons), mcap_ok=len(pre), size_ok=len(cands), layer1=len(passed), accel=len(ok)),
+                counts=dict(industry=len(cons), mcap_ok=len(pre), layer1=len(passed), accel_raw=n_acc, accel=len(ok), size_ok=len(ok)),
                 fetch_fail=len(FAILS), incomplete=bool(STOPPED),
                 picks=picks, sell=sorted(set(prev_hold) - new), buy=sorted(new - set(prev_hold)), keep=sorted(new & set(prev_hold)),
                 skipped_lot=[dict(code=r["code"], name=r["name"], price=r["price"]) for r in skipped],
@@ -337,7 +337,7 @@ def write(res):
     json.dump(res, open(os.path.join(OUT, "latest.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     name = {r["code"]: r["name"] for r in res["bench"]}
     L = [f"# v3 换股名单（{res['asof']}）" + ("　⚠️未跑完，名单不可用" if res.get("incomplete") else ""), "", f"生成：{res['generated']}（{res['source']}）　年报口径：{res['fy']}　资金：{res['config']['capital']}元　持股：{res['config']['n_hold']}只", "",
-         f"范围 {res['counts']['industry']} → 规模达标 {res['counts']['size_ok']} → 第一层通过 {res['counts']['layer1']} → 加速 {res['counts']['accel']}"
+         f"范围 {res['counts']['industry']} → 市值达标 {res['counts']['mcap_ok']} → 第一层通过 {res['counts']['layer1']} → 季报加速 {res['counts']['accel_raw']} → 成交额与上市年限也达标 {res['counts']['accel']}"
          + (f"（取数失败 {res['fetch_fail']} 次，见日志）" if res["fetch_fail"] else ""), "",
          "| 代码 | 名称 | 行业 | 单季扣非增速 | 上季增速 | 营收增速 | 参考价 | 建议股数 |", "| --- | --- | --- | --- | --- | --- | --- | --- |"]
     for r in res["picks"]:
@@ -363,7 +363,7 @@ def main():
         res = select(Live(), per, prev)
         bad = []
         if res["counts"]["industry"] < 1500: bad.append(f"行业成分只有 {res['counts']['industry']} 只（正常约 2300 只）")
-        if res["counts"]["size_ok"] == 0: bad.append("规模达标 0 只")
+        if res["counts"]["layer1"] == 0: bad.append("第一层通过 0 只")
         if res.get("incomplete"): bad.append("超过时间预算没跑完")
         if bad:
             log("❌ 本次结果不可用，未写入正式名单：" + "；".join(bad))
