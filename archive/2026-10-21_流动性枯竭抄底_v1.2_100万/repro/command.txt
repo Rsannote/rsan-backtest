@@ -1,0 +1,1 @@
+engine/backtest.py --data data/日线_2026-10-20_5 --strategy strategies/liudong_kujie/kj_a_cash.py strategies/liudong_kujie/kj_b_cash.py strategies/liudong_kujie/kj_a_div.py strategies/liudong_kujie/kj_b_div.py strategies/liudong_kujie/hold_510300.py --capital 1000000 --end 2026-10-20 --out archive/2026-10-21_流动性枯竭抄底_v1.2_100万
