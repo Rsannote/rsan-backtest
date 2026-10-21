@@ -1,0 +1,1 @@
+engine/backtest.py --data data/日线_2026-10-20_3 --strategy strategies/tuodi_xinhao/td_cash20.py strategies/tuodi_xinhao/td_cash60.py strategies/tuodi_xinhao/td_cash20_optimistic.py strategies/tuodi_xinhao/td_div20.py strategies/tuodi_xinhao/hold_510300.py --capital 20000 --start 2023-10-10 --end 2026-10-20 --out archive/2026-10-21_托底信号_v1.2_2万
