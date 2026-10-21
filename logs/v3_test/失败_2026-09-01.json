@@ -1,0 +1,31 @@
+{
+ "asof": "2026-09-01",
+ "fy": 2025,
+ "generated": "2026-10-21 16:25",
+ "config": {
+  "capital": 20000,
+  "n_hold": 5,
+  "g_min": 0.2,
+  "g_max": 2.0,
+  "prev_min": 0.1,
+  "mcap_min": 15000000000.0,
+  "amt_min": 50000000.0,
+  "list_years": 5
+ },
+ "source": "GitHub服务器（腾讯行情+akshare财报）",
+ "counts": {
+  "industry": 2353,
+  "mcap_ok": 717,
+  "size_ok": 403,
+  "layer1": 0,
+  "accel": 0
+ },
+ "fetch_fail": 2,
+ "incomplete": true,
+ "picks": [],
+ "sell": [],
+ "buy": [],
+ "keep": [],
+ "skipped_lot": [],
+ "bench": []
+}
