@@ -32,7 +32,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-ENGINE_VERSION = "1.1"
+ENGINE_VERSION = "1.2"
 CASH_WARN = 0.10  # 平均现金占比超过这个值就报警
 COMMISSION_RATE = 0.0001
 COMMISSION_MIN = 0.1
@@ -378,6 +378,80 @@ def archive_inputs(out: Path, a, engine_path: Path) -> dict:
     return {"engine_hash": sha(engine_path)[:16], "data_hash": data_hash, "n_files": len(rows)}
 
 
+# ---------------------------------------------------------------- chart
+PLOT_PER_PANEL = 4  # 每格最多几条策略线（两个基准另画）
+PLOT_COLORS = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100"]  # 固定顺序，已过色盲区分校验
+BENCH_STYLE = [("#8a8984", "--"), ("#4a4945", ":")]  # 红利、红利稳健配置：灰色虚线/点线
+
+
+def plot_nav(navdf, bench, panels, path, subtitle):
+    """净值图：每格 = 两个基准 + 最多 4 条策略，上净值下回撤；净值跨度大时自动用对数坐标；图例放在格子下面，线尾标终值。"""
+    import warnings
+    warnings.filterwarnings("ignore")  # 缺中文字体时的大量告警不影响结果
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    from matplotlib import font_manager
+    from matplotlib.ticker import FuncFormatter, LogLocator, NullLocator
+    for f in ("Noto Sans CJK SC", "Noto Serif CJK SC", "WenQuanYi Zen Hei", "SimHei", "PingFang SC", "Microsoft YaHei"):
+        if any(f == x.name for x in font_manager.fontManager.ttflist):
+            plt.rcParams["font.sans-serif"] = [f]
+            break
+    plt.rcParams["axes.unicode_minus"] = False
+    panels = panels or [[]]
+    ncol = min(3, len(panels))
+    nrow = -(-len(panels) // ncol)
+    leg_h = 0.2 * (len(bench) + max(len(p) for p in panels)) + 0.45  # 图例区高度（英寸），留出和下一行标题的间隔
+    H = (4.6 + leg_h) * nrow + 0.8
+    fig = plt.figure(figsize=(5.6 * ncol, H))
+    gs = fig.add_gridspec(nrow * 3, ncol, height_ratios=[3, 1.1, leg_h] * nrow, hspace=0.35, wspace=0.22,
+                          top=1 - 0.8 / H, bottom=0.02, left=0.06, right=0.95)
+    for k, names in enumerate(panels):
+        r0, c0 = 3 * (k // ncol), k % ncol
+        ax = fig.add_subplot(gs[r0, c0])
+        axd = fig.add_subplot(gs[r0 + 1, c0], sharex=ax)
+        axl = fig.add_subplot(gs[r0 + 2, c0])
+        axl.axis("off")
+        lines = [(b, *BENCH_STYLE[i]) for i, b in enumerate(bench)] + \
+                [(n, PLOT_COLORS[i % len(PLOT_COLORS)], "-") for i, n in enumerate(names)]
+        cols = [n for n, _, _ in lines]
+        lo, hi = float(navdf[cols].min().min()), float(navdf[cols].max().max())
+        logy = hi / max(lo, 1e-9) > 4
+        if logy:
+            ax.set_yscale("log")
+            ax.yaxis.set_major_locator(LogLocator(base=10, subs=(1, 2, 5)))
+            ax.yaxis.set_minor_locator(NullLocator())
+            ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}"))
+        for n, color, ls in lines:
+            y = navdf[n]
+            ax.plot(y.index, y, color=color, ls=ls, lw=1.8, label=n)
+            axd.plot(y.index, y / y.cummax() - 1, color=color, ls=ls, lw=1.1)
+        # 线尾标终值，相近的往上错开，避免重叠
+        tf = np.log if logy else (lambda v: v)
+        inv = np.exp if logy else (lambda v: v)
+        y0, y1 = ax.get_ylim()
+        gap, placed = (tf(y1) - tf(y0)) * 0.06, []
+        for v in sorted(float(navdf[n].iloc[-1]) for n in cols):
+            p = tf(v)
+            if placed and p - placed[-1] < gap:
+                p = placed[-1] + gap
+            placed.append(p)
+            ax.annotate(f"{v:.2f}", (navdf.index[-1], inv(p)), xytext=(4, 0), textcoords="offset points",
+                        va="center", fontsize=8, color="#2b2b2a", annotation_clip=False)
+        ax.set_title("净值（起点=1" + ("，对数坐标）" if logy else "）"), fontsize=10, color="#2b2b2a")
+        axd.set_ylabel("回撤", fontsize=9)
+        axd.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:.0%}"))
+        for a_ in (ax, axd):
+            a_.grid(alpha=.25)
+            a_.spines[["top", "right"]].set_visible(False)
+            a_.tick_params(labelsize=8)
+        plt.setp(ax.get_xticklabels(), visible=False)
+        axl.legend(*ax.get_legend_handles_labels(), loc="upper center", ncol=1, fontsize=8, frameon=False)
+    fig.suptitle(f"净值与回撤（灰线为两个基准）\n{subtitle}", fontsize=12, y=1 - 0.1 / H)
+    fig.savefig(path, dpi=130, bbox_inches="tight")
+    plt.close(fig)
+
+
 # ---------------------------------------------------------------- main
 def main():
     ap = argparse.ArgumentParser(description="Rsan 固定口径回测")
@@ -506,28 +580,14 @@ def main():
     (out / "report.md").write_text("\n".join(lines), encoding="utf-8")
 
     try:
-        import warnings
-        warnings.filterwarnings("ignore")  # 缺中文字体时的大量告警不影响结果
-        import matplotlib
-        matplotlib.use("Agg")
-        import matplotlib.pyplot as plt
-        from matplotlib import font_manager
-        for f in ("Noto Sans CJK SC", "Noto Serif CJK SC", "WenQuanYi Zen Hei", "SimHei", "PingFang SC", "Microsoft YaHei"):
-            if any(f == x.name for x in font_manager.fontManager.ttflist):
-                plt.rcParams["font.sans-serif"] = [f]
-                break
-        plt.rcParams["axes.unicode_minus"] = False
-        fig, ax = plt.subplots(2, 1, figsize=(11, 7), sharex=True, gridspec_kw={"height_ratios": [3, 1]})
-        for c in navdf.columns:
-            ax[0].plot(navdf.index, navdf[c], label=c, lw=1.3)
-            ax[1].plot(navdf.index, navdf[c] / navdf[c].cummax() - 1, lw=1)
-        ax[0].set_title("净值（统一窗口）")
-        ax[0].legend()
-        ax[0].grid(alpha=.3)
-        ax[1].set_title("回撤")
-        ax[1].grid(alpha=.3)
-        fig.tight_layout()
-        fig.savefig(out / "nav.png", dpi=130)
+        # 分组：按策略声明的第一个必需标的分组，每组最多 PLOT_PER_PANEL 条；两个基准画在每一格里
+        groups: dict[str, list] = {}
+        for m, r in zip(strats, results[2:]):
+            req = [norm_code(str(c)) for c in getattr(m, "REQUIRED", [])]
+            groups.setdefault(req[0] if req else "其他", []).append(r.name)
+        panels = [v[i:i + PLOT_PER_PANEL] for v in groups.values() for i in range(0, len(v), PLOT_PER_PANEL)]
+        plot_nav(navdf, [div, cp], panels, out / "nav.png",
+                 f"{cal[0].date()} → {cal[-1].date()}｜本金 {a.capital:,.0f}｜引擎 v{ENGINE_VERSION}")
     except Exception as e:  # 图失败不影响报告
         print("画图失败：", e, file=sys.stderr)
 
