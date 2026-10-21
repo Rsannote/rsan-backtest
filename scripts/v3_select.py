@@ -147,21 +147,20 @@ class Live:
             out.update(cached(f"spot_{i}_{batch[0]}", f, 1) or {})
         return out
     def hist(self, c, asof):
-        """腾讯日K（不复权），两个小窗口代替整段历史（腾讯不允许一次取太长，请求太密还会限流）：
-        ① 换股日前一年：用于日均成交额（成交额 = 成交量(手)×100×收盘价，近似）和 ≥200 个交易日的要求；
-        ② 换股日前「上市年限−30天」那天之前的 40 天：有交易记录就说明上市已满年限。
-        返回的行与原版格式相同 [{日期, 收盘, 成交额}]：首行取自窗口②（若有），其余为窗口①。"""
+        """腾讯周K（不复权），一次请求取换股日前约5.6年，返回 dict：
+        first=第一根周线日期（判断上市年限）；days=近一年交易日数；amt=近一年日均成交额（周成交量×100×周收盘价，近似）。"""
         def f():
-            out = []
-            cut = asof - dt.timedelta(days=365 * CFG["list_years"] - 30)
-            for a, b, n in ((cut - dt.timedelta(days=40), cut, 40), (asof - dt.timedelta(days=365), asof - dt.timedelta(days=1), 300)):
-                t = _get(f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={_sym(c)},day,{a},{b},{n},")
-                d = (json.loads(t).get("data") or {}).get(_sym(c)) or {}
-                rows = d.get("day") or d.get("qfqday") or []
-                out.append([{"日期": r[0], "收盘": r[2], "成交额": float(r[5]) * 100 * float(r[2])} for r in rows if len(r) >= 6])
-            old, recent = out
-            return ([dict(old[0], 窗口="上市检查")] if old else []) + recent
-        return cached(f"hist_{c}_{asof}", f, 3) or []
+            a = asof - dt.timedelta(days=int(365 * (CFG["list_years"] + 0.6)))
+            t = _get(f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={_sym(c)},week,{a},{asof - dt.timedelta(days=1)},320,")
+            d = (json.loads(t).get("data") or {}).get(_sym(c)) or {}
+            rows = [r for r in (d.get("week") or d.get("qfqweek") or []) if len(r) >= 6]
+            if not rows: return None
+            y1 = (asof - dt.timedelta(days=365)).isoformat()
+            last = [r for r in rows if r[0] > y1]
+            amt = sum(float(r[5]) * 100 * float(r[2]) for r in last)
+            days = round(len(last) * 4.85)          # A股一年约 242 个交易日 / 50 周
+            return dict(first=rows[0][0], days=days, amt=amt / days if days else 0, weeks=len(last))
+        return cached(f"histw_{c}_{asof}", f, 3)
     def annual(self, c):
         return cached(f"fy_{c}", lambda: self.ak.stock_financial_abstract_ths(symbol=c, indicator="按年度").astype(str).to_dict("records"), 20) or []
     def quarterly(self, c):
@@ -169,9 +168,19 @@ class Live:
     def dividends(self, c):
         return cached(f"div_{c}", lambda: self.ak.stock_history_dividend_detail(symbol=c, indicator="分红").astype(str).to_dict("records"), 20) or []
 
+T0 = time.time()
+BUDGET = 75 * 60          # 运行满 75 分钟主动停下，避免被 GitHub 90 分钟上限强制杀掉
+STOPPED = []
+def elapsed(): return time.time() - T0
+def over_budget():
+    if elapsed() > BUDGET:
+        if not STOPPED: STOPPED.append(1); log(f"⚠️ 已运行 {elapsed()/60:.0f} 分钟，超过时间预算，停止取数，以下结果不完整")
+        return True
+    return False
+
 def pmap(fn, items, workers=4):
     with ThreadPoolExecutor(workers) as ex:
-        return list(ex.map(fn, items))
+        return list(ex.map(lambda x: None if over_budget() else fn(x), items))
 
 # ---------- 第一层（与原版相同） ----------
 def fy_table(rows):
@@ -250,34 +259,38 @@ def select(src, asof, prev_hold):
     spot = src.spot(pool)
     log(f"行业成分 {len(cons)} 只（取到行情 {len(spot)} 只）；年报口径 {Y}；季报截止 {asof}")
     pre = [c for c in pool if c in spot and "ST" not in spot[c]["name"].upper() and spot[c]["mcap"] >= CFG["mcap_min"]]
-    hists = dict(zip(pre, pmap(lambda c: src.hist(c, asof), pre)))
+    hists = {}
+    for i, c in enumerate(pre):                      # 腾讯接口单线程匀速请求
+        if over_budget(): break
+        hists[c] = src.hist(c, asof)
+        if (i + 1) % 100 == 0: log(f"  周K进度 {i+1}/{len(pre)}，已用 {elapsed()/60:.0f} 分钟")
     cands = []
     for c in pre:
-        h = hists[c]
-        if len(h) < 200: continue          # 窗口①不足200个交易日（含停牌过多、上市不满一年）
-        first = dt.date.fromisoformat(str(h[0]["日期"])[:10])
+        h = hists.get(c)
+        if not h: continue
+        if h["days"] < 200: continue          # 近一年不足约200个交易日（停牌过多或上市不满一年）
+        first = dt.date.fromisoformat(h["first"][:10])
         if (asof - first).days < 365 * CFG["list_years"] - 30: continue
-        amt = [num(r["成交额"]) for r in h[-250:] if "窗口" not in r]; amt = [a for a in amt if a == a]
-        if not amt or sum(amt) / len(amt) < CFG["amt_min"]: continue
+        if h["amt"] < CFG["amt_min"]: continue
         cands.append(c)
     log(f"总市值≥{CFG['mcap_min']/1e8:.0f}亿 {len(pre)} 只；规模、流动性、上市年限达标 {len(cands)} 只")
     annual = dict(zip(cands, pmap(src.annual, cands)))
     passed, need_div = [], []
     for c in cands:
-        fy = fy_table(annual[c]); isfin = cons[c]["sw"] in FIN
+        fy = fy_table(annual[c] or []); isfin = cons[c]["sw"] in FIN
         typ, why = layer1(fy, None, Y, isfin)
         if typ: passed.append((c, typ))
         elif why == "类型条件都不满足": need_div.append(c)
     divs = dict(zip(need_div, pmap(src.dividends, need_div)))
     for c in need_div:
-        typ, why = layer1(fy_table(annual[c]), div_by_fy(divs[c]), Y, cons[c]["sw"] in FIN)
+        typ, why = layer1(fy_table(annual[c] or []), div_by_fy(divs[c] or []), Y, cons[c]["sw"] in FIN)
         if typ: passed.append((c, typ))
     passed.sort()
     log(f"第一层通过 {len(passed)} 只")
     quarts = dict(zip([c for c, _ in passed], pmap(src.quarterly, [c for c, _ in passed])))
     rows = []
     for c, typ in passed:
-        sig = q_signal(quarts[c], asof)
+        sig = q_signal(quarts[c] or [], asof)
         if not sig: continue
         ok = (CFG["g_min"] < sig["g"] <= CFG["g_max"]) and sig["acc"] > 0 and sig["gprev"] > CFG["prev_min"] and sig["grev"] > 0
         rows.append(dict(code=c, name=spot.get(c, {}).get("name") or cons[c]["name"], sw=cons[c]["sw"], typ=typ,
@@ -302,7 +315,7 @@ def select(src, asof, prev_hold):
     return dict(asof=asof.isoformat(), fy=Y, generated=(dt.datetime.utcnow() + dt.timedelta(hours=8)).strftime("%Y-%m-%d %H:%M"),
                 config=CFG, source="GitHub服务器（腾讯行情+akshare财报）",
                 counts=dict(industry=len(cons), mcap_ok=len(pre), size_ok=len(cands), layer1=len(passed), accel=len(ok)),
-                fetch_fail=len(FAILS),
+                fetch_fail=len(FAILS), incomplete=bool(STOPPED),
                 picks=picks, sell=sorted(set(prev_hold) - new), buy=sorted(new - set(prev_hold)), keep=sorted(new & set(prev_hold)),
                 skipped_lot=[dict(code=r["code"], name=r["name"], price=r["price"]) for r in skipped],
                 bench=ok[:30])
@@ -312,7 +325,7 @@ def write(res):
     json.dump(res, open(p, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     json.dump(res, open(os.path.join(OUT, "latest.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     name = {r["code"]: r["name"] for r in res["bench"]}
-    L = [f"# v3 换股名单（{res['asof']}）", "", f"生成：{res['generated']}（{res['source']}）　年报口径：{res['fy']}　资金：{res['config']['capital']}元　持股：{res['config']['n_hold']}只", "",
+    L = [f"# v3 换股名单（{res['asof']}）" + ("　⚠️未跑完，名单不可用" if res.get("incomplete") else ""), "", f"生成：{res['generated']}（{res['source']}）　年报口径：{res['fy']}　资金：{res['config']['capital']}元　持股：{res['config']['n_hold']}只", "",
          f"范围 {res['counts']['industry']} → 规模达标 {res['counts']['size_ok']} → 第一层通过 {res['counts']['layer1']} → 加速 {res['counts']['accel']}"
          + (f"（取数失败 {res['fetch_fail']} 次，见日志）" if res["fetch_fail"] else ""), "",
          "| 代码 | 名称 | 行业 | 单季扣非增速 | 上季增速 | 营收增速 | 参考价 | 建议股数 |", "| --- | --- | --- | --- | --- | --- | --- | --- |"]
@@ -334,7 +347,7 @@ def main():
     prev = {}
     olds = sorted(f for f in os.listdir(OUT) if re.fullmatch(r"\d{4}-\d{2}-\d{2}\.json", f) and f < f"{per.isoformat()}.json")
     if olds: prev = {r["code"] for r in json.load(open(os.path.join(OUT, olds[-1]), encoding="utf-8"))["picks"]}
-    t = time.time()
+    t = T0
     try:
         res = select(Live(), per, prev)
         write(res)
