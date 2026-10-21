@@ -1,0 +1,10 @@
+{
+ "capital": 20000,
+ "n_hold": 5,
+ "g_min": 0.2,
+ "g_max": 2.0,
+ "prev_min": 0.1,
+ "mcap_min": 15000000000.0,
+ "amt_min": 50000000.0,
+ "list_years": 5
+}
