@@ -123,13 +123,24 @@ class Live:
             import akshare as ak
         self.ak = ak
     def constituents(self):
-        out = {}
+        """申万成分：取到就存档到 data/v3/申万成分.json；某个行业取不到时用存档（成分股半年才调整一次）。"""
+        arch_p = os.path.join(ROOT, "data", "v3", "申万成分.json")
+        arch = json.load(open(arch_p, encoding="utf-8")) if os.path.exists(arch_p) else {}
+        out, used_arch = {}, []
         for code, name in SW.items():
-            rows = cached(f"cons_{code}", lambda c=code: self.ak.index_component_sw(symbol=c).astype(str).to_dict("records"), 30) or []
+            rows = cached(f"cons_{code}", lambda c=code: self.ak.index_component_sw(symbol=c).astype(str).to_dict("records"), 30)
+            if rows:
+                arch[code] = {"date": today_bj().isoformat(), "rows": rows}
+            elif code in arch:
+                rows = arch[code]["rows"]; used_arch.append(f"{name}（{arch[code]['date']}）")
+            else:
+                rows = []
             for r in rows:
                 k = [v for kk, v in r.items() if "代码" in kk][0]
                 n = [v for kk, v in r.items() if "简称" in kk or "名称" in kk]
                 out[str(k).zfill(6)] = {"sw": name, "name": n[0] if n else ""}
+        if used_arch: log(f"⚠️ 申万成分取不到，改用存档：{'、'.join(used_arch)}")
+        json.dump(arch, open(arch_p, "w", encoding="utf-8"), ensure_ascii=False)
         return out
     def spot(self, codes):
         """腾讯实时行情：价格（元）、总市值（字段45，单位亿元）。"""
@@ -350,10 +361,21 @@ def main():
     t = T0
     try:
         res = select(Live(), per, prev)
-        write(res)
+        bad = []
+        if res["counts"]["industry"] < 1500: bad.append(f"行业成分只有 {res['counts']['industry']} 只（正常约 2300 只）")
+        if res["counts"]["size_ok"] == 0: bad.append("规模达标 0 只")
+        if res.get("incomplete"): bad.append("超过时间预算没跑完")
+        if bad:
+            log("❌ 本次结果不可用，未写入正式名单：" + "；".join(bad))
+            json.dump(res, open(os.path.join(OUT, f"失败_{per.isoformat()}.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+            FAILED.append(1)
+        else:
+            write(res)
     finally:
         log(f"\n用时 {time.time()-t:.0f} 秒；取数失败 {len(FAILS)} 次" + (f"：{'、'.join(FAILS[:30])}" if FAILS else ""))
         open(LOGF, "w", encoding="utf-8").write(f"# v3 选股运行日志（{(dt.datetime.utcnow() + dt.timedelta(hours=8)):%Y-%m-%d %H:%M}，换股日 {per}）\n\n```\n" + "\n".join(LOG) + "\n```\n")
 
+FAILED = []
 if __name__ == "__main__":
     main()
+    if FAILED: sys.exit(1)

@@ -1,4 +1,4 @@
 # 一行：脚本名 [参数]，推送后由 GitHub 服务器运行（见 .github/workflows/push-task.yml）
 # 同样的命令再跑一次时，改一下下面这行时间，否则推送不会触发
-# 2026-10-21 14:40
-fetch_caibao.py
+# 2026-10-21 15:00
+v3_select.py --test --asof=2026-09-01
