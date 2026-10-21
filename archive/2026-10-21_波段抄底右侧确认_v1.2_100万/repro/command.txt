@@ -1,0 +1,1 @@
+engine/backtest.py --data data/日线_2026-10-20_4 --strategy strategies/boduan_youce/bd_left.py strategies/boduan_youce/bd_pullback.py strategies/boduan_youce/bd_breakout.py --capital 1000000 --out archive/2026-10-21_波段抄底右侧确认_v1.2_100万

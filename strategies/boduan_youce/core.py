@@ -25,25 +25,45 @@ INDUSTRY = dict(zip(_ind["code"], _ind["行业"]))
 POOL = [c for c in INDUSTRY if not c.startswith(("688", "4", "8", "9"))]
 
 SLOTS, STOP, UP, MAXHOLD, COOL = 6, 0.08, 0.20, 126, 20
+_IND = {}   # 指标表缓存：只用 rolling/shift 这类只看过去的运算，回测时只取当日那一行（等价于逐日用 ctx.history 计算，提速用）
 
 
-def _signal(mode, h):
-    """h：截至今天的 260 日历史（后复权）。返回 (是否买, 前高) 。"""
-    c = h["close"]
-    px = float(c.iloc[-1])
-    r120 = px / float(c.iloc[-121]) - 1
+def _indicators(ctx, c):
+    if c not in _IND:
+        df = ctx._prices.get(c)
+        if df is None:
+            _IND[c] = None
+            return None
+        cl = df["close"]
+        raw = cl / df["factor"]
+        ma20 = cl.rolling(20).mean()
+        _IND[c] = pd.DataFrame({
+            "n": pd.Series(range(1, len(df) + 1), index=df.index),
+            "px": cl,
+            "prev": cl.shift(1),
+            "r120": cl / cl.shift(120) - 1,
+            "hi250": cl.rolling(250).max(),
+            "hi250_prev": cl.shift(1).rolling(250).max(),
+            "lo60": cl.rolling(60).min(),
+            "hi60": cl.rolling(60).max(),
+            "ma20": ma20,
+            "ma20_prev": ma20.shift(1),
+            "amt60": (df["volume"] * 100 * raw).rolling(60).mean(),
+        })
+    t = _IND[c]
+    if t is None or ctx.date not in t.index:
+        return None
+    return t.loc[ctx.date]
+
+
+def _signal(mode, r):
+    px = r.px
     if mode == "left":
-        hi = float(c.iloc[-250:].max())
-        lo60 = float(c.iloc[-60:].min())
-        return (px <= hi * 0.80 and px <= lo60 * 1.03), hi, r120
+        return (px <= r.hi250 * 0.80 and px <= r.lo60 * 1.03), r.hi250
     if mode == "pullback":
-        hi = float(c.iloc[-60:].max())
-        ma = c.rolling(20).mean()
-        ok = r120 > 0 and px <= hi * 0.90 and px > float(ma.iloc[-1]) and float(c.iloc[-2]) <= float(ma.iloc[-2])
-        return ok, hi, r120
+        return (r.r120 > 0 and px <= r.hi60 * 0.90 and px > r.ma20 and r.prev <= r.ma20_prev), r.hi60
     if mode == "breakout":
-        ok = r120 > 0 and px >= float(c.iloc[-251:-1].max())
-        return ok, px, r120
+        return (r.r120 > 0 and px >= r.hi250_prev), px
     raise ValueError(mode)
 
 
@@ -85,20 +105,17 @@ def make(mode):
             used = {INDUSTRY.get(c) for c in keep}
             cands = []
             for c in POOL:
-                if c in keep or c in cool or c not in ctx.universe:
+                if c in keep or c in cool:
                     continue
-                h = ctx.history(c, 260)
-                if len(h) < 252:
+                r = _indicators(ctx, c)
+                if r is None or r.n < 252 or not (r.amt60 >= 0.5e8):
                     continue
-                raw = h["close"].iloc[-60:] / h["factor"].iloc[-60:]
-                if float((h["volume"].iloc[-60:] * 100 * raw).mean()) < 0.5e8:
-                    continue
-                ok, hi, r120 = _signal(mode, h)
+                ok, hi = _signal(mode, r)
                 if not ok:
                     continue
-                px = float(h["close"].iloc[-1])
+                px = float(r.px)
                 room = min(hi / px - 1, UP) if hi > px * 1.001 else UP
-                cands.append((room, r120, c, hi))
+                cands.append((room, float(r.r120), c, float(hi)))
             for room, r120, c, hi in sorted(cands, reverse=True):
                 if free <= 0:
                     break
