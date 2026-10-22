@@ -1,0 +1,7 @@
+日期：2026-10-22
+成功：东财人气榜（100行）
+失败：
+东财飙升榜：JSONDecodeError Expecting value: line 1 column 1 (char 0)
+雪球关注榜：NetworkError Failed to request Xueqiu hot rank endpoint: Expecting value: line 1 column 1 (char 0)
+雪球讨论榜：NetworkError Failed to request Xueqiu hot rank endpoint: Expecting value: line 1 column 1 (char 0)
+雪球交易榜：NetworkError Failed to request Xueqiu hot rank endpoint: Expecting value: line 1 column 1 (char 0)
