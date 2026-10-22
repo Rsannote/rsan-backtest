@@ -1,0 +1,50 @@
+name: 散户情绪指标
+
+# 「市场状态」跑完后自动运行（那时当天成交额、涨跌停已入库）：按 system/情绪规则.md 算情绪温度计、
+# 文本指标和触发情况，写 data/社区情绪/最新.md、触发.json、温度计.csv、文本指标.csv。
+# 触发日由定时任务「散户情绪·触发判读」（北京时间 18:13）读 触发.json 做阶段判读并推送。
+
+on:
+  workflow_run:
+    workflows: ["市场状态"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "处理哪一天（YYYY-MM-DD，留空=最新）"
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: repo-writer
+  cancel-in-progress: false
+
+jobs:
+  index:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: 安装依赖
+        run: pip install pandas numpy
+      - name: 计算情绪指标
+        env:
+          DAY: ${{ inputs.date }}
+        run: |
+          if [ -n "$DAY" ]; then
+            case "$DAY" in [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]) ;; *) echo "日期格式不对"; exit 1;; esac
+            python3 scripts/sentiment_index.py --date "$DAY"
+          else
+            python3 scripts/sentiment_index.py
+          fi
+      - name: 提交
+        if: always()
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/社区情绪/温度计.csv data/社区情绪/文本指标.csv data/社区情绪/最新.md data/社区情绪/触发.json
+          git commit -m "散户情绪指标 $(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M')" || exit 0
+          for i in 1 2 3; do git pull --rebase origin main && git push && exit 0; sleep 5; done
+          exit 1
