@@ -1,0 +1,316 @@
+{
+ "etf_names": {
+  "512480": {
+   "name": "半导体ETF国联安",
+   "price": "0.815",
+   "amount_wan": "95398"
+  },
+  "515880": {
+   "name": "通信ETF国泰",
+   "price": "0.509",
+   "amount_wan": "272575"
+  },
+  "512720": {
+   "name": "计算机ETF国泰",
+   "price": "1.015",
+   "amount_wan": "1738"
+  },
+  "159819": {
+   "name": "人工智能ETF易方达",
+   "price": "1.444",
+   "amount_wan": "25935"
+  },
+  "512980": {
+   "name": "传媒ETF广发",
+   "price": "0.760",
+   "amount_wan": "19438"
+  },
+  "159869": {
+   "name": "游戏ETF华夏",
+   "price": "0.977",
+   "amount_wan": "49440"
+  },
+  "562500": {
+   "name": "机器人ETF华夏",
+   "price": "0.832",
+   "amount_wan": "53610"
+  },
+  "515030": {
+   "name": "新能源车ETF华夏",
+   "price": "1.274",
+   "amount_wan": "11032"
+  },
+  "159755": {
+   "name": "电池ETF广发",
+   "price": "0.731",
+   "amount_wan": "25866"
+  },
+  "515790": {
+   "name": "光伏ETF华泰柏瑞",
+   "price": "0.709",
+   "amount_wan": "12955"
+  },
+  "512660": {
+   "name": "军工ETF国泰",
+   "price": "1.044",
+   "amount_wan": "24649"
+  },
+  "512880": {
+   "name": "证券ETF国泰",
+   "price": "1.000",
+   "amount_wan": "167202"
+  },
+  "512800": {
+   "name": "银行ETF华宝",
+   "price": "0.863",
+   "amount_wan": "92955"
+  },
+  "512070": {
+   "name": "证券保险ETF易方达",
+   "price": "0.735",
+   "amount_wan": "34444"
+  },
+  "512010": {
+   "name": "医药ETF易方达",
+   "price": "0.369",
+   "amount_wan": "32419"
+  },
+  "159992": {
+   "name": "创新药ETF银华",
+   "price": "0.794",
+   "amount_wan": "48251"
+  },
+  "512170": {
+   "name": "医疗ETF华宝",
+   "price": "0.327",
+   "amount_wan": "36632"
+  },
+  "512690": {
+   "name": "酒ETF鹏华",
+   "price": "0.406",
+   "amount_wan": "33309"
+  },
+  "515170": {
+   "name": "食品饮料ETF华夏",
+   "price": "0.452",
+   "amount_wan": "5594"
+  },
+  "159996": {
+   "name": "家电ETF国泰",
+   "price": "1.332",
+   "amount_wan": "3371"
+  },
+  "516110": {
+   "name": "汽车ETF国泰",
+   "price": "1.017",
+   "amount_wan": "2062"
+  },
+  "159865": {
+   "name": "养殖ETF国泰",
+   "price": "0.526",
+   "amount_wan": "23081"
+  },
+  "159825": {
+   "name": "农业ETF富国",
+   "price": "0.708",
+   "amount_wan": "4938"
+  },
+  "515220": {
+   "name": "煤炭ETF国泰",
+   "price": "1.207",
+   "amount_wan": "66510"
+  },
+  "512400": {
+   "name": "有色金属ETF南方",
+   "price": "1.463",
+   "amount_wan": "52471"
+  },
+  "515210": {
+   "name": "钢铁ETF国泰",
+   "price": "1.083",
+   "amount_wan": "4834"
+  },
+  "159870": {
+   "name": "化工ETF鹏华",
+   "price": "0.675",
+   "amount_wan": "26087"
+  },
+  "512200": {
+   "name": "房地产ETF南方",
+   "price": "1.155",
+   "amount_wan": "8940"
+  },
+  "516950": {
+   "name": "基建ETF银华",
+   "price": "0.963",
+   "amount_wan": "585"
+  },
+  "159611": {
+   "name": "电力ETF广发",
+   "price": "1.029",
+   "amount_wan": "24015"
+  },
+  "159930": {
+   "name": "能源ETF汇添富",
+   "price": "1.722",
+   "amount_wan": "9167"
+  },
+  "159766": {
+   "name": "旅游ETF富国",
+   "price": "0.513",
+   "amount_wan": "7947"
+  },
+  "159666": {
+   "name": "交通运输ETF华夏",
+   "price": "0.949",
+   "amount_wan": "2783"
+  },
+  "561320": {
+   "name": "交运ETF国泰",
+   "price": "0.920",
+   "amount_wan": "285"
+  },
+  "516910": {
+   "name": "物流ETF富国",
+   "price": "1.113",
+   "amount_wan": "1996"
+  },
+  "159301": {
+   "name": "公用事业ETF华夏",
+   "price": "0.960",
+   "amount_wan": "2212"
+  },
+  "560880": {
+   "name": "家电ETF广发",
+   "price": "1.422",
+   "amount_wan": "1774"
+  },
+  "159619": {
+   "name": "基建ETF国泰",
+   "price": "0.873",
+   "amount_wan": "264"
+  },
+  "516160": {
+   "name": "新能源ETF南方",
+   "price": "1.953",
+   "amount_wan": "9864"
+  },
+  "159995": {
+   "name": "芯片ETF华夏",
+   "price": "0.888",
+   "amount_wan": "59228"
+  },
+  "515050": {
+   "name": "通信ETF华夏",
+   "price": "0.784",
+   "amount_wan": "63480"
+  },
+  "159928": {
+   "name": "消费ETF汇添富",
+   "price": "0.655",
+   "amount_wan": "28950"
+  },
+  "512580": {
+   "name": "环保ETF广发",
+   "price": "0.995",
+   "amount_wan": "607"
+  },
+  "516070": {
+   "name": "低碳ETF易方达",
+   "price": "0.486",
+   "amount_wan": "634"
+  },
+  "159698": {
+   "name": "粮食ETF鹏华",
+   "price": "0.839",
+   "amount_wan": "6521"
+  },
+  "515000": {
+   "name": "科技ETF华宝",
+   "price": "1.030",
+   "amount_wan": "9204"
+  },
+  "159807": {
+   "name": "科技ETF易方达",
+   "price": "0.749",
+   "amount_wan": "2231"
+  }
+ },
+ "etf_first_day": {
+  "512480": "err list indices must be integers or slices, not str",
+  "515880": "err list indices must be integers or slices, not str",
+  "512720": "err list indices must be integers or slices, not str",
+  "159819": "err list indices must be integers or slices, not str",
+  "512980": "err list indices must be integers or slices, not str",
+  "159869": "err list indices must be integers or slices, not str",
+  "562500": "err list indices must be integers or slices, not str",
+  "515030": "err list indices must be integers or slices, not str",
+  "159755": "err list indices must be integers or slices, not str",
+  "515790": "err list indices must be integers or slices, not str",
+  "512660": "err list indices must be integers or slices, not str",
+  "512880": "err list indices must be integers or slices, not str",
+  "512800": "err list indices must be integers or slices, not str",
+  "512070": "err list indices must be integers or slices, not str",
+  "512010": "err list indices must be integers or slices, not str",
+  "159992": "err list indices must be integers or slices, not str",
+  "512170": "err list indices must be integers or slices, not str",
+  "512690": "err list indices must be integers or slices, not str",
+  "515170": "err list indices must be integers or slices, not str",
+  "159996": "err list indices must be integers or slices, not str",
+  "516110": "err list indices must be integers or slices, not str",
+  "159865": "err list indices must be integers or slices, not str",
+  "159825": "err list indices must be integers or slices, not str",
+  "515220": "err list indices must be integers or slices, not str",
+  "512400": "err list indices must be integers or slices, not str",
+  "515210": "err list indices must be integers or slices, not str",
+  "159870": "err list indices must be integers or slices, not str",
+  "512200": "err list indices must be integers or slices, not str",
+  "516950": "err list indices must be integers or slices, not str",
+  "159611": "err list indices must be integers or slices, not str",
+  "159930": "err list indices must be integers or slices, not str",
+  "159766": "err list indices must be integers or slices, not str",
+  "159666": "err list indices must be integers or slices, not str",
+  "561320": "err list indices must be integers or slices, not str",
+  "516910": "err list indices must be integers or slices, not str",
+  "159301": "err list indices must be integers or slices, not str",
+  "560880": "err list indices must be integers or slices, not str",
+  "159619": "err list indices must be integers or slices, not str",
+  "516160": "err list indices must be integers or slices, not str",
+  "159995": "err list indices must be integers or slices, not str",
+  "515050": "err list indices must be integers or slices, not str",
+  "159928": "err list indices must be integers or slices, not str",
+  "512580": "err list indices must be integers or slices, not str",
+  "516070": "err list indices must be integers or slices, not str",
+  "159698": "err list indices must be integers or slices, not str",
+  "515000": "err list indices must be integers or slices, not str",
+  "159807": "err list indices must be integers or slices, not str"
+ },
+ "qlib": {
+  "last": "2026-10-21",
+  "first": "2000-01-04",
+  "n_stocks": 5563,
+  "recent_total_amount_raw": {
+   "2026-10-12": 1943182280.949707,
+   "2026-10-13": 2117731754.1794434,
+   "2026-10-14": 1782652792.7268066,
+   "2026-10-15": 2116182152.8686523,
+   "2026-10-16": 1969003670.0656738,
+   "2026-10-19": 1800784430.6394043,
+   "2026-10-20": 1852227529.491455,
+   "2026-10-21": 1429171847.835205
+  }
+ },
+ "margin": {
+  "pages_at_500": 9,
+  "newest": {
+   "DIM_DATE": "2026-10-21 00:00:00",
+   "RZYE": 2450277179446,
+   "RZRQYE": 2479131277149
+  },
+  "oldest_in_page": {
+   "DIM_DATE": "2024-09-24 00:00:00",
+   "RZYE": 1362668227442,
+   "RZRQYE": 1372401462859
+  }
+ }
+}
