@@ -5,14 +5,15 @@
 
 1. 下载 qlib 开源数据集（chenditc/investment_data），按每只 A 股的日线推算每天的：
    全市场成交额、涨停、跌停、炸板、最高连板（推算规则见下），写 data/市场状态/回补_qlib.csv（原始单位）。
-2. 用上交所官网的每日成交金额校准 qlib 成交额的单位（qlib 沪市合计 ÷ 上交所官方），系数写进
-   data/市场状态/回补_校准.json；不稳定（各天系数相差超过 3%）就不写日指标，只报告。
+2. 用 data/市场状态/回补_校准样本.csv（Mac 股票助理 2025-09 至 2026-09 记下的真实两市成交额和涨跌停）
+   定 qlib 成交额的换算系数（中位数），并在几种炸板容差里选和真实炸板数最接近的一种；结果写
+   data/市场状态/回补_校准.json。系数离散度（标准差/均值）超过 5% 就不写日指标，只报告。
 3. 把校准后的数据并进 data/市场状态/日指标.csv，来源记 `回补估算`；已有 `实时` 记录的日期不动。
 4. 东财两融全部历史写 data/市场状态/融资余额.csv。
 
 涨跌停推算：涨跌幅限制主板 10%，创业板（2020-08-24 起）和科创板 20%，北交所不计；
 收盘价=最高价 且 涨幅 ≥ 限制−0.5 个百分点 记涨停；收盘价=最低价 且 跌幅 ≥ 限制−0.5 记跌停；
-最高价达到涨停幅度但收盘没封住记炸板；上市不满 5 个交易日的不计。ST 股 5% 限制没有区分，会少算。
+最高价达到涨停幅度（容差见校准）但收盘没封住记炸板；上市不满 5 个交易日的不计。ST 股 5% 限制没有区分，会少算。
 """
 import argparse
 import json
@@ -61,8 +62,10 @@ def qlib_daily(since):
     tot_sh = np.zeros(n)
     zt = np.zeros(n, int)
     dtn = np.zeros(n, int)
-    zb = np.zeros(n, int)
+    TOL = [0.005, 0.003, 0.002, 0.001, 0.0005]
+    zbs = {t: np.zeros(n, int) for t in TOL}
     maxlb = np.zeros(n, int)
+    ntr = np.zeros(n, int)
     for inst in sorted(os.listdir(fdir)):
         if not (inst.startswith("sh6") or inst.startswith("sz0") or inst.startswith("sz3")):
             continue
@@ -79,6 +82,7 @@ def qlib_daily(since):
         if inst.startswith("sh"):
             tot_sh += a
         traded = ~np.isnan(c) & (a > 0)
+        ntr += traded
         idx = np.where(traded)[0]
         if len(idx) < 6:
             continue
@@ -99,10 +103,10 @@ def qlib_daily(since):
             ok = traded & (age >= 5) & ~np.isnan(prev)
             up = ok & (chg >= lim - 0.005) & (np.abs(c - h) <= 1e-6 * np.abs(h) + 1e-9)
             down = ok & (chg <= -(lim - 0.005)) & (np.abs(c - lo) <= 1e-6 * np.abs(lo) + 1e-9)
-            broke = ok & (hchg >= lim - 0.005) & ~up
+            for t in TOL:
+                zbs[t] += ok & (hchg >= lim - t) & ~up
         zt += up
         dtn += down
-        zb += broke
         # 连板：连续涨停天数（按有交易的日子连续）
         run = 0
         for i in idx:
@@ -111,11 +115,16 @@ def qlib_daily(since):
                 maxlb[i] = run
     shutil.rmtree(WORK, ignore_errors=True)
     df = pd.DataFrame({"date": cal, "qlib成交额": tot, "qlib沪市成交额": tot_sh, "涨停": zt, "跌停": dtn,
-                       "炸板": zb, "最高连板": maxlb}).iloc[i0:]
-    return df[df["qlib成交额"] > 0]
+                       "最高连板": maxlb, "有交易股票数": ntr, **{f"炸板_{t}": zbs[t] for t in TOL}}).iloc[i0:]
+    df = df[df["qlib成交额"] > 0].reset_index(drop=True)
+    # 数据没收全的日子（有交易的股票数比前20日中位数少5%以上）不用
+    med = df["有交易股票数"].rolling(20, min_periods=5).median().shift(1)
+    bad = df["有交易股票数"] < med * 0.95
+    df.attrs["不全的日子"] = list(df.loc[bad, "date"])
+    return df[~bad]
 
 
-def sse_amount(date):
+def _unused_sse_amount(date):
     """上交所当日股票成交金额（亿元）。返回 None 表示取不到。"""
     url = ("https://query.sse.com.cn/commonQuery.do?jsonCallBack=&sqlId=COMMON_SSE_SJ_GPSJ_CJGK_DAYCJGK_C"
            f"&PRODUCT_CODE=01%2C02%2C03%2C11%2C17&type=inParams&SEARCH_DATE={date}")
@@ -155,46 +164,34 @@ def main():
 
     q = qlib_daily(a.since)
     q.to_csv(os.path.join(OUT, "回补_qlib.csv"), index=False)
-    report["qlib"] = f"{len(q)} 天，{q['date'].iloc[0]} 至 {q['date'].iloc[-1]}"
+    report["qlib"] = f"{len(q)} 天，{q['date'].iloc[0]} 至 {q['date'].iloc[-1]}；数据不全未用：{q.attrs.get('不全的日子') or '无'}"
 
-    # 校准：取 qlib 最近 8 个交易日中的几天对照上交所
-    samples = {}
-    raw = {}
-    for d in list(q["date"].iloc[-8:]) + list(q["date"].iloc[-260:-250]):
-        try:
-            js = sse_amount(d)
-            raw[d] = js.get("result")
-            res = js.get("result") or []
-            # 产品 01=主板A、03=科创板（以返回里的 PRODUCT_NAME 为准，记录原文以便核对）
-            amt = 0.0
-            used = []
-            for it in res:
-                name = str(it.get("PRODUCT_NAME", ""))
-                if any(k in name for k in ("主板A", "科创板")) or it.get("PRODUCT_CODE") in ("01", "03"):
-                    v = it.get("TRADE_AMT")
-                    if v not in (None, "", "-"):
-                        amt += float(v)
-                        used.append(name or it.get("PRODUCT_CODE"))
-            if amt > 0:
-                ql = float(q.loc[q["date"] == d, "qlib沪市成交额"].iloc[0])
-                samples[d] = {"上交所": amt, "qlib沪市": ql, "系数": amt / ql, "产品": used}
-        except Exception as e:
-            samples[d] = {"错误": f"{type(e).__name__}: {e}"[:120]}
-        time.sleep(0.4)
-    with open(os.path.join(ROOT, "logs", "市场状态_回补校准原文.json"), "w", encoding="utf-8") as f:
-        json.dump(raw, f, ensure_ascii=False, indent=1)
-    ks = [v["系数"] for v in samples.values() if "系数" in v]
-    calib = {"样本": samples}
-    ok = len(ks) >= 4 and (max(ks) / min(ks) - 1) < 0.03
-    if ks:
-        calib["系数_中位数"] = float(np.median(ks))
-    calib["可用"] = bool(ok)
+    # 校准
+    smp = pd.read_csv(os.path.join(OUT, "回补_校准样本.csv"), dtype={"date": str})
+    mm = smp.merge(q, on="date")
+    ks = (mm["成交额亿"] / mm["qlib成交额"]).dropna()
+    k = float(ks.median())
+    cv = float(ks.std() / ks.mean())
+    zcols = [c for c in q.columns if c.startswith("炸板_")]
+    zz = mm.dropna(subset=["炸板"])
+    err = {c: float((zz[c] - zz["炸板"]).abs().mean()) for c in zcols} if len(zz) else {}
+    best = min(err, key=err.get) if err else "炸板_0.002"
+    q["炸板"] = q[best]
+    ok = len(ks) >= 20 and cv < 0.05
+    calib = {"成交额样本天数": int(len(ks)), "系数_中位数": k, "系数_离散度": round(cv, 4),
+             "炸板容差_各档平均误差": {c: round(v, 2) for c, v in err.items()}, "炸板容差_选用": best,
+             "可用": bool(ok)}
+    for col in ("涨停", "跌停", "最高连板"):
+        z = smp.merge(q[["date", col]], on="date", suffixes=("", "_q")).dropna(subset=[col])
+        if len(z):
+            calib[f"{col}_样本天数"] = int(len(z))
+            calib[f"{col}_平均误差"] = round(float((z[col + "_q"] - z[col]).abs().mean()), 2)
     with open(os.path.join(OUT, "回补_校准.json"), "w", encoding="utf-8") as f:
         json.dump(calib, f, ensure_ascii=False, indent=1)
-    report["校准"] = f"{len(ks)} 个样本，系数 {calib.get('系数_中位数')}，{'可用' if ok else '不可用，未写日指标'}"
+    report["校准"] = json.dumps(calib, ensure_ascii=False)
+    q.drop(columns=zcols).to_csv(os.path.join(OUT, "回补_qlib.csv"), index=False)
 
     if ok:
-        k = calib["系数_中位数"]  # 上交所金额单位为亿元
         ind_p = os.path.join(OUT, "日指标.csv")
         ind = pd.read_csv(ind_p, dtype={"date": str}) if os.path.exists(ind_p) else pd.DataFrame(
             columns=["date", "成交额亿", "涨停", "跌停", "炸板", "最高连板", "来源"])
@@ -209,7 +206,6 @@ def main():
     with open(os.path.join(ROOT, "logs", "市场状态_回补.md"), "w", encoding="utf-8") as f:
         f.write("# 市场状态历史回补\n\n" + "\n".join(f"- {k}：{v}" for k, v in report.items()) + "\n")
     print(json.dumps(report, ensure_ascii=False, indent=1))
-    print(json.dumps(samples, ensure_ascii=False)[:1500])
 
 
 if __name__ == "__main__":

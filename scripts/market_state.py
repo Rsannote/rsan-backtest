@@ -287,6 +287,11 @@ def old_verdict(amt, avg20, pct, zt, dtn, zbl, mg, hsd):
     return {"结论": v, "冷热": heat}
 
 
+def short(name):
+    """“养殖ETF国泰” → “养殖”。"""
+    return name.split("ETF")[0] or name
+
+
 def sector_part(date):
     R = RULES
     lst = sector_list()
@@ -296,9 +301,10 @@ def sector_part(date):
         if df is None or date not in df.index:
             continue
         df = df.loc[:date].iloc[-300:]
-        closes[it["name"]] = df["adj"]
-        amts[it["name"]] = df["volume"] * df["close"]
-        meta[it["name"]] = {"code": it["code"], "风格": it["风格"], "行业": it["行业"]}
+        nm = short(it["name"])
+        closes[nm] = df["adj"]
+        amts[nm] = df["volume"] * df["close"]
+        meta[nm] = {"code": it["code"], "全称": it["name"], "风格": it["风格"], "行业": it["行业"]}
     if len(closes) < 8:
         return None, [f"行业ETF 数据不足（{len(closes)} 只有当天数据）"]
     C = pd.DataFrame(closes).sort_index().loc[:date]
@@ -343,7 +349,7 @@ def sector_part(date):
                   "偏离20日线": round(float(dev20[n]), 2), "近5日进前5天数": int(top[n].sum()),
                   "成交占比变化": round(float(flow[n]), 2), "拥挤分位": crowd.get(n)} for n in C.columns}
     warn = []
-    missing = [it["name"] for _, it in lst.iterrows() if it["name"] not in closes]
+    missing = [it["name"] for _, it in lst.iterrows() if short(it["name"]) not in closes]
     if missing:
         warn.append("这些行业ETF 当天无数据：" + "、".join(missing))
     return {"行业数": len(C.columns), "主线": main, "新启动": new, "过热板块": hotb, "拥挤": crowded,
