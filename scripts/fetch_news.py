@@ -390,7 +390,9 @@ def main():
         seen_id.add(r["id"])
         k = norm_key(r)
         if r["kind"] == "快讯" and k in seen_key:
-            r["dup_of"] = seen_key[k]
+            # 重复转载只留索引，不存正文，省空间
+            r = {f: r[f] for f in ("id", "time", "date", "source", "level", "kind", "title", "flag")}
+            r["text"], r["url"], r["dup_of"] = "", "", seen_key[k]
         else:
             seen_key[k] = r["id"]
         new.append(tag(r))
