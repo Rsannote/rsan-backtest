@@ -1,0 +1,45 @@
+name: 市场状态
+
+# 每个交易日行情库更新完成后自动运行：取两市成交额、涨跌停炸板、融资余额，结合行情库的沪深300和行业ETF，
+# 按 system/市场状态规则.md 算出攻守、冷热、主线和资金流向。结果：data/市场状态/最新.md、最新.json。
+# 也可以在 Actions 页面手动运行（可选强制重算）。
+
+on:
+  workflow_run:
+    workflows: ["行情库自动更新"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "强制重算最新交易日"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: repo-writer
+  cancel-in-progress: false
+
+jobs:
+  state:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: 安装依赖
+        run: pip install pandas numpy
+      - name: 计算市场状态
+        run: python3 scripts/market_state.py ${{ inputs.force && '--force' || '' }}
+      - name: 提交
+        if: always()
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/市场状态
+          git commit -m "市场状态 $(TZ=Asia/Shanghai date +%Y-%m-%d)" || exit 0
+          for i in 1 2 3; do git pull --rebase origin main && git push && exit 0; sleep 5; done
+          exit 1

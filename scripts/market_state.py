@@ -29,8 +29,12 @@ RULES = {
     "热_分位": 90, "冷_分位": 10, "热_偏离": 6.0, "冷_偏离": -6.0,
     "热_连板": 7, "冷_跌停": 50, "热_涨停": 120, "冷_涨停": 20,
     "主线_天数": 3, "主线_窗口": 5, "前N": 5,
-    "新启动_量倍": 1.5, "过热_5日": 15.0, "过热_偏离": 15.0, "拥挤_分位": 90,
+    "新启动_量倍": 1.5, "过热_5日": 15.0, "过热_偏离": 15.0, "过热_20日": 25.0, "拥挤_分位": 90,
+    "热_炸板率": 35.0, "热_炸板率需成交分位": 60, "热_两融5日": 3.0,
 }
+# 旧版（Mac 股票助理 assistant.py）的进/守/空，只作对照，不参与新版结论
+OLD = {"过热_成交额分位": 90, "过热_涨停家数": 100, "过热_沪深300偏离20日线": 6, "过热_炸板率": 35,
+       "过热_两融5日增幅": 3, "偏冷_成交额低于20日均": 0.8, "偏冷_涨停家数": 30}
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HQ = os.path.join(ROOT, "data", "行情库")
@@ -222,6 +226,12 @@ def market_part(date, ind, hs, margin):
         hot.append(f"涨停 {zt} 家")
     if zt is not None and zt <= R["冷_涨停"]:
         cold.append(f"涨停仅 {zt} 家")
+    if zbl is not None and zbl >= R["热_炸板率"] and (pct or 0) >= R["热_炸板率需成交分位"]:
+        hot.append(f"炸板率 {zbl}%（放量下追涨开始亏钱）")
+    if mg and mg["5日变化"] >= R["热_两融5日"]:
+        hot.append(f"融资余额5日 +{mg['5日变化']}%（杠杆快速加仓）")
+    if zt is not None and dtn is not None and dtn > zt:
+        cold.append(f"跌停 {dtn} 多于涨停 {zt}")
     if hot and cold:
         temp = "正常（冷热分歧）"
     elif len(hot) >= 2:
@@ -235,6 +245,7 @@ def market_part(date, ind, hs, margin):
     else:
         temp = "正常"
 
+    old = old_verdict(amt, avg20, pct, zt, dtn, zbl, mg, hsd)
     basis = []
     if amt is not None:
         basis.append(f"两市成交 {amt:.0f} 亿（5日均 {avg5:.0f}，20日均 {avg20:.0f}，近一年分位 {pct}%）"
@@ -249,7 +260,31 @@ def market_part(date, ind, hs, margin):
             "信号": [{"组": a, "信号": b, "分": s} for a, b, s in sig], "依据": basis,
             "沪深300": hsd, "成交额": amt, "成交额5日均": avg5 and round(avg5, 1), "成交额20日均": avg20 and round(avg20, 1),
             "成交额分位": pct, "量比": ratio and round(ratio, 3), "涨停": zt, "跌停": dtn, "炸板": zb,
-            "炸板率": zbl, "最高连板": lb, "两融": mg}
+            "炸板率": zbl, "最高连板": lb, "两融": mg, "旧版对照": old}
+
+
+def old_verdict(amt, avg20, pct, zt, dtn, zbl, mg, hsd):
+    """旧版 Mac 股票助理的判定，原样照搬（沪深300 用价格指数），只作对照。"""
+    O = OLD
+    hot, cold = 0, []
+    hot += pct is not None and pct >= O["过热_成交额分位"]
+    hot += zt is not None and zt >= O["过热_涨停家数"]
+    hot += hsd["dev20"] >= O["过热_沪深300偏离20日线"]
+    hot += zbl is not None and zbl >= O["过热_炸板率"] and (pct or 0) >= 60
+    hot += mg is not None and mg["5日变化"] >= O["过热_两融5日增幅"]
+    if amt and avg20 and amt < avg20 * O["偏冷_成交额低于20日均"]:
+        cold.append(1)
+    if zt is not None and dtn is not None and dtn > zt:
+        cold.append(1)
+    if zt is not None and zt < O["偏冷_涨停家数"]:
+        cold.append(1)
+    if hsd["dev20"] < 0 and not hsd["above60"]:
+        cold.append(1)
+    up = hsd["dev20"] > 0
+    vol_ok = bool(amt and avg20 and amt >= avg20 * 0.95)
+    v = "进" if up and vol_ok and not cold else ("空" if not up and len(cold) >= 2 else "守")
+    heat = "过热" if hot >= 2 else "偏热" if hot == 1 else "偏冷" if len(cold) >= 2 else "正常"
+    return {"结论": v, "冷热": heat}
 
 
 def sector_part(date):
@@ -288,8 +323,9 @@ def sector_part(date):
 
     main = [n for n in C.columns if top[n].sum() >= R["主线_天数"] and ret5[n] > 0]
     main.sort(key=lambda n: -ret5[n])
-    new = [n for n in today.index[:R["前N"]] if vol_mult[n] >= R["新启动_量倍"] and n not in main]
-    hotb = [n for n in C.columns if ret5[n] >= R["过热_5日"] or dev20[n] >= R["过热_偏离"]]
+    ret20 = (C.iloc[-1] / C.iloc[-21] - 1) * 100
+    new = [n for n in today.index[:R["前N"]] if vol_mult[n] >= R["新启动_量倍"] and not top[n].iloc[:-1].any()]
+    hotb = [n for n in C.columns if ret5[n] >= R["过热_5日"] or dev20[n] >= R["过热_偏离"] or ret20[n] >= R["过热_20日"]]
     crowded = sorted([n for n, p in crowd.items() if p >= R["拥挤_分位"]], key=lambda n: -crowd[n])
 
     styles = {}
@@ -303,7 +339,7 @@ def sector_part(date):
     style_txt = ("资金在往" + "".join(f"「{s}」" for s in ins[:2]) + "流" if ins else "风格间没有明显的资金迁移") + \
                 ("，从" + "".join(f"「{s}」" for s in outs[:2]) + "流出" if outs else "") + "（近5日成交占比 vs 之前20日）"
 
-    detail = {n: {**meta[n], "今日": round(float(ret.iloc[-1][n]), 2), "5日": round(float(ret5[n]), 2),
+    detail = {n: {**meta[n], "今日": round(float(ret.iloc[-1][n]), 2), "5日": round(float(ret5[n]), 2), "20日": round(float(ret20[n]), 2),
                   "偏离20日线": round(float(dev20[n]), 2), "近5日进前5天数": int(top[n].sum()),
                   "成交占比变化": round(float(flow[n]), 2), "拥挤分位": crowd.get(n)} for n in C.columns}
     warn = []
@@ -317,7 +353,7 @@ def sector_part(date):
 
 
 def compose_text(date, mk, sec):
-    L = [f"市场：{mk['结论']} · {mk['冷热']}（{date}，规则{VERSION}，总分 {mk['总分']:+d}）"]
+    L = [f"市场：{mk['结论']} · {mk['冷热']}（{date}，规则{VERSION}，总分 {mk['总分']:+d}；旧版对照：{mk['旧版对照']['结论']} · {mk['旧版对照']['冷热']}）"]
     L += [f"- {b}" for b in mk["依据"]]
     if mk["热信号"] or mk["冷信号"]:
         L.append("- 冷热信号：" + "；".join(mk["热信号"] + mk["冷信号"]))
@@ -335,7 +371,8 @@ def write_md(res):
     mk, sec = res["市场"], res["板块"]
     L = [f"# 市场状态 · {res['数据日期']}", "", f"规则 {VERSION}（`system/市场状态规则.md`）；生成于 {res['生成时间']}。"
          "这是程序按规则归纳的指标，不是判断，也不构成投资建议。", "",
-         f"## 大盘：{mk['结论']} · {mk['冷热']}（总分 {mk['总分']:+d}）", ""]
+         f"## 大盘：{mk['结论']} · {mk['冷热']}（总分 {mk['总分']:+d}）", "",
+         f"旧版（Mac 股票助理）规则对照：{mk['旧版对照']['结论']} · {mk['旧版对照']['冷热']}", ""]
     L += [f"- {b}" for b in mk["依据"]]
     L += ["", "| 组 | 信号 | 分 |", "|---|---|---|"] + [f"| {s['组']} | {s['信号']} | {s['分']:+d} |" for s in mk["信号"]]
     if mk["热信号"] or mk["冷信号"]:
