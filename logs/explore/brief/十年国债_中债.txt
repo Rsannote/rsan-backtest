@@ -1,0 +1,107 @@
+{"ok": true, "bytes": 24386, "s": 1.58}
+https://yield.chinabond.com.cn/cbweb-czb-web/czb/moreInfo?locale=cn_ZH&nameType=1
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<meta http-equiv="Cache-Control" content="no-store" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+	
+
+
+
+
+
+
+
+
+
+ <script type="text/javascript" >
+        var ctx="/cbweb-czb-web";
+        var ctxStatics="/cbweb-czb-web/statics";
+ </script>
+
+
+
+	<title>财政部-中国国债收益率曲线</title>
+
+	<script type="text/javascript" src="/cbweb-czb-web/statics/js/jquery/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript">
+		if (!Array.prototype.indexOf){
+			Array.prototype.indexOf = function(elt /*, from*/){
+				var len = this.length >>> 0;
+
+				var from = Number(arguments[1]) || 0;
+				from = (from < 0)
+						? Math.ceil(from)
+						: Math.floor(from);
+				if (from < 0)
+					from += len;
+
+				for (; from < len; from++){
+					if (from in this && this[from] === elt)
+						return from;
+				}
+				return -1;
+			};
+		}
+	</script>
+	<script src="/cbweb-czb-web/statics/js/higcharts/highstock_init.js"></script>
+	<script src="/cbweb-czb-web/statics/js/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
+	<script src="/cbweb-czb-web/statics/js/custom/statusCheck.js" type="text/javascript"></script>
+	<script src="/cbweb-czb-web/statics/js/czbChart/xyChart.js"></script>
+	<script src="/cbweb-czb-web/statics/js/czbChart/yzChart.js"></script>
+	<script src="/cbweb-czb-web/statics/js/czbChart/colorArr.js"></script>
+	<script src="/cbweb-czb-web/statics/js/czbChart/offline-exporting_ly.js"type="text/javascript"></script>
+	<script type="text/javascript" src="/cbweb-czb-web/statics/js/czbChart/tableUtil.js"></script>
+	<link rel="stylesheet" href="/cbweb-czb-web/statics/js/dist/css/checkbox.css">
+	<link rel="stylesheet" href="/cbweb-czb-web/statics/css/moreInfo.css">
+
+	<script type="text/javascript">
+		window.onload=function() {
+			var option=document.getElementById("zblx").options;
+			option[0].selected=true;
+		}
+
+		Highcharts.wrap(Highcharts.Series.prototype, 'drawLegendSymbol', function(
+				proceed, legend) {
+			proceed.call(this, legend);
+			this.legendLine.attr(
+					{
+						d : [ 'M', 5, 12, 'L', 5, 22, 'L', 15, 22, 'L', 15, 12,
+							'L', 5, 12, 'Z' ],
+						fill : this.color
+					}).add(this.legendGroup);
+		});
+
+		var chart;
+		var xData=[];
+		var options={
+			chart : {
+				animation : false,
+				exporting : {
+					enabled : false //用来设置是否显示‘打印’,'导出'等功能按钮，不设置时默认为显示
+				},
+				renderTo : 'containerChart',
+				type : 'spline',
+			},
+			rangeSelector: { //范围选择器
+				enabled: false
+			},
+			title:{
+				text:''
+			},
+			colors : ['#185482','#e64d00','#b0de09','#0d8ecf','#2a0cd0'],
+			xAxis : {
+				crosshair: {
+					width: 1,
+					color: '#CC0000'
+				},
+				categories:xData,
+				//tickPositions: [0,10, 20,30, 50,70, 110],
+				tickWidth : 1,
+				gridLineWidt

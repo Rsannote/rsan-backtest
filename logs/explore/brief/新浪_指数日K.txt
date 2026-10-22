@@ -1,0 +1,5 @@
+{"ok": true, "bytes": 640, "s": 1.96}
+https://quotes.sina.cn/cn/api/jsonp_v2.php/var%20_x=/CN_MarketDataService.getKLineData?symbol=sh000001&scale=240&ma=no&datalen=5
+
+/*<script>location.href='//sina.com';</script>*/
+var _x=([{"day":"2026-10-15","open":"3710.695","high":"3724.561","low":"3674.817","close":"3707.476","volume":"51016318900"},{"day":"2026-10-16","open":"3723.797","high":"3750.770","low":"3681.283","close":"3716.284","volume":"47263215800"},{"day":"2026-10-19","open":"3694.118","high":"3743.799","low":"3692.290","close":"3730.920","volume":"41779124800"},{"day":"2026-10-20","open":"3718.436","high":"3740.072","low":"3702.444","close":"3735.370","volume":"40869306200"},{"day":"2026-10-21","open":"3740.568","high":"3743.085","low":"3703.125","close":"3713.028","volume":"37828638900"}]);

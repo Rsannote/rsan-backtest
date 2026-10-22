@@ -1,0 +1,3 @@
+{"ok": false, "error": "URLError: <urlopen error [Errno 104] Connection reset by peer>", "s": 3.45}
+https://www.szse.cn/api/report/ShowReport/data?SHOWTYPE=JSON&CATALOGID=1837_xxpl&TABKEY=tab1
+
