@@ -1,0 +1,3 @@
+{"ok": false, "error": "HTTPError: HTTP Error 403: Forbidden", "s": 1.25}
+https://query.sse.com.cn/security/stock/queryCompanyBulletin.do?isPagination=true&productId=600900&pageHelp.pageSize=10&pageHelp.pageNo=1
+

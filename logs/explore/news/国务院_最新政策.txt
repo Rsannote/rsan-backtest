@@ -1,0 +1,93 @@
+{"ok": true, "status": 200, "bytes": 21484, "s": 1.26}
+https://www.gov.cn/zhengce/zuixin/
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+   <link href="../../images/trs_favicon.ico" rel="shortcut icon" type="image/x-icon">
+    
+  
+  
+    <title>最新政策_政策_中国政府网</title>
+<meta name="others" content="页面生成时间 2026-10-21 18:32:33" />
+<meta name="keywords" content="政策,最新">
+<meta name="description" content="中共中央和国务院最近发布的政策">
+
+
+  <meta name="lanmu" content="最新政策">
+
+<meta name="filepath" content="https://www.gov.cn/zhengce/zuixin/">
+<META name="catalog" content="c148211">
+<META name="filetype" content="0">
+<META name="publishedtype" content="1">
+<META name="pagetype" content="2">
+  
+    <link rel="stylesheet" type="text/css" href="../../images/trs_public.css">
+    <link rel="stylesheet" type="text/css" href="../../images/trs_tylb_latest.css">
+    <link rel="stylesheet" type="text/css" href="../../images/trs_mobile_pub.css" media="screen and (max-width:767px) and (orientation:portrait)" />
+    <link rel="stylesheet" type="text/css" href="../../images/trs_tylb_mobile_latest.css" media="screen and (max-width:767px) and (orientation:portrait)" />
+    <script src="../../images/trs_jquery.min.js"></script>
+    <script src="../../images/trs_h5.js"></script>
+    <script src="../../images/trs_tylb_resize.js"></script>
+    <!-- <script src="../../images/trs_resize.js" id="resizeJs" data-css="trs_tylb_mobile.css"></script> -->
+</head>
+
+
+<body>
+
+<!--公共头开始-->
+<link rel="stylesheet" type="text/css" href="/images/trs_FZYouHK_512B.css">
+<link rel="stylesheet" type="text/css" href="/images/trs_FZZHUNYSK.css">
+<style>
+  /* 20231023添加无障碍代码 */
+  .header_toolbar li {
+    font-size: 16px;
+  }
+
+  .header_toolbar li.split {
+    margin: 0 9px;
+  }
+</style>
+<div class="header">
+  <div class="container mhide">
+    <div class="padding pos_r">
+      <div class="header_logo"><a href="https://www.gov.cn/" target="_blank" aria-label="中国政府网"><img src="/images/gtrs_logo_lt.png" alt="" /><img src="/images/gtrs_logo_rt.png" alt="" class="wordlogo" /></a></div>
+      <div class="header_search">
+        <form>
+          <input type="hidden" name="t" value="govall" />
+          <input class="header_search_txt" name="headSearchword" type="text" autocomplete="off" value="" onkeydown="listenerKeyUpEventFn()" />
+          <button class="header_search_btn" type="button" value="&nbsp;" onClick="goSearch(this)" />
+        </form>
+      </div>
+      <ul class="header_toolbar">
+        <li><a href="https://www.gov.cn/" target="_blank">首页</a></li>
+        <li class="split">|</li>
+        <li><a href="../../" target="_blank">简</a></li>
+        <li class="split">|</li>
+        <li><a href="http://big5.www.gov.cn/gate/big5/www.gov.cn/" target="_blank">繁</a></li>
+        <li class="split">|</li>
+        <li><a href="http://english.www.gov.cn/" target="_blank">EN</a></li>
+        <li class="split">|</li>
+        <li class="nologin"><a id="userlogin" href="javascript:void(0);">登录</a></li>
+        <li class="yeslogin hide">
+          <a id="showname" href="javascript:void(0);"></a>
+          <ul>
+            <li class="usercenter"><a id="usercenter" href="javascript:void(0);">个人中心</a></li>
+            <li><a id="logout" href="javascript:void(0);">退出</a></li>
+          </ul>
+        </li>
+        <li class="split">|</li>
+        <li><a target="_blank" href="https://mail.www.gov.cn/nsmail/index.html">邮箱</a></li>
+        <li class="split">|</li>
+        <li><a href="javascript:;" onclick="aria.start()" clickhide="false">无障碍</a></li>
+
+      </ul>
+    </div>
+  </div>
+  <div class="container pchide">
+    <a href="https://www.gov.cn/" class="logo" target="_blank"><img src="/images/newlogo19ysp_lt.png" /><img src="/images/newlogo19ysp_rt.png" class="wordlogo" /></a>
+    <a class="lang" href="https://english.www.gov.cn/">EN</a>
+    <a

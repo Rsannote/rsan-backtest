@@ -1,0 +1,62 @@
+{"ok": true, "status": 200, "bytes": 38394, "s": 2.8}
+http://www.pbc.gov.cn/goutongjiaoliu/113456/113469/index.html
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>新闻 </title>
+<meta  name="createDate" content="2026-10-21 17:20:29" />
+<meta name=renderer content=webkit>
+<link rel="shortcut icon" type="image/x-icon" href="/uiFramework/images/huilan.ico" />
+<script type="text/javascript">var _speedMark = new Date();</script>
+<meta name="ColumnName" content="新闻" >
+<meta name="ColumnType"  content="工作动态" >
+<meta name="SiteName" content="沟通交流"><!--网站名称-->
+<meta name="SiteDomain" content=""><!--网站域名-->
+<meta name="SiteIDCode" content="goutongjiaoliu"><!--网站标识-->
+<meta name="ColumnDescription" content="初始化频道：新闻"><!--栏目描述-->
+<meta name="ColumnKeywords" content=""><!--栏目关键词--><link rel="stylesheet" type="text/css"  href="/uiFramework/huilan-jquery-ui/css/huilan-jquery-ui.css" />
+
+<script type="text/javascript" src="/uiFramework/huilan-jquery-ui/js/huilan-jquery-ui.js?self=true&skin=default&random=15658"></script>
+<script src="/uiFramework/commonResource/aisitetheme/js/goutongjiaoliu-theme.js" type="text/javascript"></script>  <link rel="stylesheet" type="text/css" href="/goutongjiaoliu/template/goutongjiaoliu.css" />
+  <script type="text/javascript" src="/goutongjiaoliu/template/goutongjiaoliu.js"></script>
+ </head>
+ <body>
+  <link rel="stylesheet" type="text/css" href="/goutongjiaoliu/template/page/news/skin.css" /><div style="display:none" easysite="easysiteHiddenDiv">
+	<input id="contextPath" value="/eportal" type="hidden"/>
+	<input id="isOnlyUseCkeditorSourceMode" value="$isOnlyUseCkeditorSourceMode" type="hidden"/>
+	<input id="eprotalCurrentPageId" value="113469" type="hidden"/>
+	<input id="eprotalCurrentPageName" value="新闻" type="hidden"/>
+	<input id="eprotalCurrentPageUrl" value="" type="hidden"/>
+	<input id="eprotalCurrentPageOutLink" value="" type="hidden"/>
+	<input id="eprotalCurrentSiteId" value="113450" type="hidden"/>
+	<input id="eprotalCurrentSiteName" value="沟通交流" type="hidden"/>
+	<input id="eprotalCurrentSiteEnname" value="goutongjiaoliu" type="hidden"/>
+	<input id="eprotalCurrentSiteType" value="WEB" type="hidden"/>
+	<input id="eprotalCurrentSiteHideMaskLayer" value="" type="hidden"/>
+	<input id="eprotalCurrentArticleKey"  value=""  type="hidden"/>
+	<input id="eprotalCurrentArticleTitle"  value=""  type="hidden"/>
+	<input id="eprotalCurrentColumnId"  value=""  type="hidden"/>
+	<input id="eprotalCurrentArticleUrl" value="" type="hidden"/>
+	<input id="isStaticRequest" value="yes" type="hidden"/>
+	<input id="isOpenStaticPageList" value="no" type="hidden"/>
+	<input id="defaultPublishPage" value="3" type="hidden"/>
+	<input id="eprotalMsgDataId"  value=""  type="hidden"/>
+	<input id="eprotalMsgboardId"  value=""  type="hidden"/>
+	<input type='hidden' id='eportalappPortletId' value="3">
+	<input type="hidden" id="currentLoginMemberId"  value="" />
+	<input type="hidden" id="currentLoginMemberName"  value="" />
+			<input type="hidden" id="portalLastRequestUrl"  value="" />
+	<input type="hidden" id="easysiteParamKey" value="1781096573973"/>
+    <input type="hidden" id="isOpenEasysiteToken" value="true"/>
+    <input type="hidden" id="isOpenFormParmaValidate" value="false"/>
+    <input type="hidden" id="isOpenSiteVisitHotClick" value="yes"/>
+    <input type="hidden" id="aisiteViewArticleIds"  value="" />
+    <input type="hidden" id="openWeixinJsShare" value="off"/>
+</div><style>
+/*导航css*/
+body{margin:0;padding:0;}
+a{ text-decoration:none; color:#333333;font-size: 12px;}
+.header{ width:950px; height:auto; clear:both; margin:0 auto;font-size: 12px;font-family: "宋体";}
+#logo{ width:950px; margin:auto; text-align:center; font-size:13px;font-weight:bold; }
+#logo .logo1{ width:950px; height:25px;background-color:#f0f0f0;}
+#biaotou{font-size:18px;

@@ -1,0 +1,124 @@
+{
+  "新浪_7x24直播": {
+    "ok": true,
+    "status": 200,
+    "bytes": 114989,
+    "s": 2.2
+  },
+  "新浪_财经滚动": {
+    "ok": true,
+    "status": 200,
+    "bytes": 106338,
+    "s": 2.14
+  },
+  "新浪_证券滚动": {
+    "ok": true,
+    "status": 200,
+    "bytes": 100541,
+    "s": 1.63
+  },
+  "财联社_电报": {
+    "ok": false,
+    "error": "HTTPError: HTTP Error 404: Not Found",
+    "s": 1.16
+  },
+  "财联社_电报2": {
+    "ok": false,
+    "error": "HTTPError: HTTP Error 404: Not Found",
+    "s": 0.84
+  },
+  "华尔街见闻_快讯": {
+    "ok": true,
+    "status": 200,
+    "bytes": 89925,
+    "s": 1.36
+  },
+  "华尔街见闻_全球": {
+    "ok": true,
+    "status": 200,
+    "bytes": 74282,
+    "s": 1.06
+  },
+  "东财_快讯": {
+    "ok": true,
+    "status": 200,
+    "bytes": 60730,
+    "s": 1.92
+  },
+  "东财_7x24": {
+    "ok": true,
+    "status": 200,
+    "bytes": 28522,
+    "s": 1.36
+  },
+  "金十_快讯": {
+    "ok": true,
+    "status": 200,
+    "bytes": 17112,
+    "s": 1.16
+  },
+  "同花顺_快讯": {
+    "ok": true,
+    "status": 200,
+    "bytes": 75611,
+    "s": 2.13
+  },
+  "第一财经_快讯": {
+    "ok": true,
+    "status": 200,
+    "bytes": 41894,
+    "s": 4.51
+  },
+  "国务院_最新政策": {
+    "ok": true,
+    "status": 200,
+    "bytes": 21484,
+    "s": 1.26
+  },
+  "国务院_政策JSON": {
+    "ok": true,
+    "status": 200,
+    "bytes": 266183,
+    "s": 0.2
+  },
+  "人民银行_新闻": {
+    "ok": true,
+    "status": 200,
+    "bytes": 38394,
+    "s": 2.8
+  },
+  "证监会_要闻": {
+    "ok": true,
+    "status": 200,
+    "bytes": 16174,
+    "s": 3.08
+  },
+  "发改委_新闻": {
+    "ok": true,
+    "status": 200,
+    "bytes": 11017,
+    "s": 0.3
+  },
+  "统计局_最新发布": {
+    "ok": true,
+    "status": 200,
+    "bytes": 72872,
+    "s": 3.94
+  },
+  "巨潮_搜索代码": {
+    "ok": false,
+    "error": "HTTPError: HTTP Error 500: 500",
+    "s": 3.88
+  },
+  "上交所_公告": {
+    "ok": false,
+    "error": "HTTPError: HTTP Error 403: Forbidden",
+    "s": 1.25
+  },
+  "巨潮_公告查询": {
+    "ok": true,
+    "status": 200,
+    "bytes": 24071,
+    "s": 1.47
+  }
+}
