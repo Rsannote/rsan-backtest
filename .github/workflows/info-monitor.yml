@@ -1,0 +1,42 @@
+name: 信息源监控
+
+# 抓今日热榜（tophub）上选中的榜单（名单见 system/信息源白名单.json 的 tophub 部分），
+# 新条目存到 data/信息源/tophub/，再生成当天简报 data/信息源/简报/<日期>.md 和 最新.md。
+# 每个榜单单独容错，失败原因写在 data/信息源/tophub/运行记录.txt。
+
+on:
+  schedule:
+    - cron: "7 0 * * *"    # 北京时间 08:07
+    - cron: "7 4 * * *"    # 北京时间 12:07
+    - cron: "7 8 * * *"    # 北京时间 16:07
+    - cron: "7 13 * * *"   # 北京时间 21:07
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: repo-writer
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: 抓取榜单
+        run: python3 scripts/fetch_tophub.py
+      - name: 生成简报
+        if: always()
+        continue-on-error: true
+        run: python3 scripts/info_brief.py
+      - name: 提交
+        if: always()
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/信息源
+          git commit -m "信息源 $(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M')" || exit 0
+          for i in 1 2 3; do git pull --rebase origin main && git push && exit 0; sleep 5; done
+          exit 1
