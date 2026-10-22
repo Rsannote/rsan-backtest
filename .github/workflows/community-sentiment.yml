@@ -1,0 +1,36 @@
+name: 每日社区情绪数据
+
+# 工作日收盘后抓东财人气榜、飙升榜和雪球关注/讨论/交易榜，存到 data/社区情绪/日期/。
+# 每个榜单独容错，失败原因写在当天目录的 运行记录.txt。
+
+on:
+  schedule:
+    - cron: "37 7 * * 1-5"   # 北京时间 15:37
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: repo-writer
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: 安装依赖
+        run: pip install pandas numpy akshare
+      - name: 抓取情绪数据
+        run: python3 scripts/fetch_sentiment.py
+      - name: 提交
+        if: always()
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/社区情绪
+          git commit -m "社区情绪 $(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M')" || exit 0
+          for i in 1 2 3; do git pull --rebase origin main && git push && exit 0; sleep 5; done
+          exit 1
