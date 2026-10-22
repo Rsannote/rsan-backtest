@@ -9,7 +9,7 @@
 - 东财飙升榜.csv       前50名
 - 同花顺热股榜.csv     前100名，含热度值、涨跌幅、标签
 - 同花顺热门概念.csv   前20个概念
-- 股吧上证吧帖子.csv   上证指数吧最新帖子标题、阅读、评论
+- 股吧上证吧帖子.csv   上证指数吧最新帖子标题、阅读、评论、多空标记
 - tophub财经热榜.csv   tophub 财经分类页：股吧热榜、雪球今日话题、集思录、格隆汇、华尔街见闻等
 - 微博热搜.csv         实时热搜（看大众情绪和财经话题有没有出圈）
 - 运行记录.txt         每个源成功几行、失败原因
@@ -85,14 +85,17 @@ def guba_sh():
     txt = get("https://guba.eastmoney.com/list,zssh000001,99.html",
               referer="https://guba.eastmoney.com/")
     rows = []
-    for m in re.finditer(r'\{[^{}]*?"post_title":"[^{}]*?\}', txt):
-        try:
-            o = json.loads(m.group(0))
-        except ValueError:
-            continue
+    i = txt.find("var article_list=")
+    arts = json.JSONDecoder().raw_decode(txt[txt.find("{", i):])[0].get("re", []) if i >= 0 else []
+    for o in arts:
         rows.append({"标题": clean(o.get("post_title")),
                      "阅读": o.get("post_click_count"),
                      "评论": o.get("post_comment_count"),
+                     "转发": o.get("post_forward_count"),
+                     "多空标记": o.get("bullish_bearish"),
+                     "作者": o.get("user_nickname"),
+                     "所在吧": o.get("stockbar_name"),
+                     "置顶": o.get("post_top_status"),
                      "发帖时间": o.get("post_publish_time"),
                      "最后回复": o.get("post_last_time"),
                      "帖子id": o.get("post_id")})
