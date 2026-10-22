@@ -28,17 +28,20 @@ jobs:
           line=$(grep -v '^\s*#' jobs/run.txt | grep -v '^\s*$' | head -1)
           script=$(echo "$line" | awk '{print $1}')
           args=$(echo "$line" | cut -s -d' ' -f2-)
-          case "$script" in *[!A-Za-z0-9_.]*|"") echo "脚本名不合法：$script"; exit 1;; esac
+          if [ -z "$script" ]; then echo "run.txt 里没有任务，跳过"; echo "script=" >> "$GITHUB_OUTPUT"; exit 0; fi
+          case "$script" in *[!A-Za-z0-9_.]*) echo "脚本名不合法：$script"; exit 1;; esac
           case "$args" in *[!A-Za-z0-9_.,=:\ -]*) echo "参数含不允许的字符：$args"; exit 1;; esac
           test -f "scripts/$script"
           echo "script=$script" >> "$GITHUB_OUTPUT"
           echo "args=$args" >> "$GITHUB_OUTPUT"
       - name: 安装依赖
+        if: steps.job.outputs.script != ''
         run: pip install pandas numpy
       - name: 运行
+        if: steps.job.outputs.script != ''
         run: python3 "scripts/${{ steps.job.outputs.script }}" ${{ steps.job.outputs.args }}
       - name: 把产出存回仓库
-        if: always()
+        if: always() && steps.job.outputs.script != ''
         run: |
           git config user.name "github-actions"
           git config user.email "actions@users.noreply.github.com"

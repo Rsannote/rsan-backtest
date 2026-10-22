@@ -399,14 +399,57 @@ def write_md(res):
         f.write("\n".join(L) + "\n")
 
 
+def capture(today):
+    """记下今天收盘后的实时指标（两市成交额、涨跌停、炸板、连板）到 日指标.csv。
+    不依赖行情库：GitHub 定时任务常常推迟几个小时，过了午夜就取不到当天的实时数据了，
+    所以新闻库 16:23、21:11 两次运行时也会顺手调用（--capture）。已经记全的不重复取。"""
+    now = dt.datetime.now(BJ)
+    if now.strftime("%Y-%m-%d") != today or now.hour * 60 + now.minute < 15 * 60 + 10:
+        return ["收盘前或日期不符，没有记录实时指标"]
+    ind = read_ind()
+    old = ind[(ind["date"] == today) & (ind["来源"] == "实时")]
+    keys = ["成交额亿", "涨停", "跌停", "炸板", "最高连板"]
+    if not old.empty and old[keys].notna().all(axis=1).iloc[0]:
+        return []
+    warn = []
+    try:
+        pools = live_pools(today)
+    except Exception as e:
+        pools = {}
+        warn.append(f"涨跌停池未取到：{type(e).__name__}")
+    amt, src = live_amount(today)
+    if amt is None and all(pools.get(k) is None for k in ("涨停", "跌停", "炸板")):
+        return warn + ["今天不是交易日，或数据源都没有今天的数据"]
+    if amt is None:
+        warn.append(f"两市成交额未取到（{src}）")
+    for k in ("涨停", "跌停", "炸板"):
+        if pools.get(k) is None:
+            warn.append(f"{k}数据未取到")
+    row = {"date": today, "成交额亿": amt, "涨停": pools.get("涨停"), "跌停": pools.get("跌停"),
+           "炸板": pools.get("炸板"), "最高连板": pools.get("最高连板"), "来源": "实时"}
+    if not old.empty:  # 只补缺的字段
+        for k in keys:
+            if row[k] is None and pd.notna(old[k].iloc[0]):
+                row[k] = old[k].iloc[0]
+    ind = pd.concat([ind[ind["date"] != today], pd.DataFrame([row])]).sort_values("date")
+    ind[IND_COLS].to_csv(IND, index=False)
+    print("已记录实时指标：", row)
+    return warn
+
+
 def main():
     ap = argparse.ArgumentParser()
+    ap.add_argument("--capture", action="store_true", help="只记录今天的实时指标，不算市场状态")
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--date", default="")
     a = ap.parse_args()
     os.makedirs(OUT, exist_ok=True)
-    hs = read_hq("指数", "sh000300")
     today = dt.datetime.now(BJ).strftime("%Y-%m-%d")
+    if a.capture:
+        w = capture(today)
+        print("；".join(w) or "实时指标已齐")
+        return
+    hs = read_hq("指数", "sh000300")
     date = a.date or hs.index[-1]
     if date not in hs.index:
         sys.exit(f"{date} 不是行情库里的交易日")
@@ -424,25 +467,12 @@ def main():
         except Exception as e:
             warn.append(f"融资余额更新失败：{type(e).__name__}")
             margin = pd.read_csv(MARGIN, dtype={"date": str}) if os.path.exists(MARGIN) else pd.DataFrame(columns=["date", "融资余额亿"])
+        if date == today:
+            warn += capture(today)
+            ind = read_ind()
         have = ind[(ind["date"] == date) & (ind["来源"] == "实时")]
-        if date == today and have.empty:
-            amt, src = live_amount(date)
-            if amt is None:
-                warn.append(f"两市成交额未取到（{src}）")
-            try:
-                pools = live_pools(date)
-            except Exception as e:
-                pools = {}
-                warn.append(f"涨跌停池未取到：{type(e).__name__}")
-            for k in ("涨停", "跌停", "炸板"):
-                if pools.get(k) is None:
-                    warn.append(f"{k}数据未取到")
-            row = {"date": date, "成交额亿": amt, "涨停": pools.get("涨停"), "跌停": pools.get("跌停"),
-                   "炸板": pools.get("炸板"), "最高连板": pools.get("最高连板"), "来源": "实时"}
-            ind = pd.concat([ind[ind["date"] != date], pd.DataFrame([row])]).sort_values("date")
-            ind[IND_COLS].to_csv(IND, index=False)
-        elif date != today and have.empty:
-            warn.append(f"处理的是 {date}，不是今天，当天的成交额和涨跌停只能用已有记录")
+        if have.empty:
+            warn.append(f"{date} 没有实时记录的成交额和涨跌停（只能用回补估算或缺失）")
     else:
         margin = pd.read_csv(MARGIN, dtype={"date": str}) if os.path.exists(MARGIN) else pd.DataFrame(columns=["date", "融资余额亿"])
     for c in ("成交额亿", "涨停", "跌停", "炸板", "最高连板"):
