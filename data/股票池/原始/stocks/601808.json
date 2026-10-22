@@ -1,0 +1,87 @@
+{
+  "code": "601808",
+  "falsify": [
+    "中海油资本开支下调"
+  ],
+  "flags": [],
+  "l1": {
+    "amt": 1.6,
+    "buyCheck": [],
+    "date": "2026-10-01",
+    "effType": "成长",
+    "fails": [
+      "成长股ROE 8.54%<10%"
+    ],
+    "listDate": "2007-09-28",
+    "mcap": 584,
+    "notes": [],
+    "np": [
+      30.1,
+      31.4,
+      38.4
+    ],
+    "ocf": [
+      131,
+      110.2,
+      112.9
+    ],
+    "pend": [],
+    "pledge": null,
+    "roe": 8.5,
+    "rules": "v1·2万阶段(市值≥150亿,成交额≥0.5亿;周期/拐点加质量门槛)",
+    "status": "淘汰"
+  },
+  "lastReview": "2026-09-27",
+  "latest": "2026年上半年：营收237.87亿（+2.0%），净利润20.09亿（+2.3%）",
+  "legacyV13": {
+    "gates": {
+      "future": null,
+      "note": "2025年ROE约8.5%，未过业绩关。",
+      "perf": false,
+      "price": null
+    },
+    "tier": "观察",
+    "upgrade": "ROE回到10%以上。",
+    "valuation": {
+      "buy": 11.33,
+      "eps25": 0.81,
+      "eps26": 0.94,
+      "eps27": 1.03,
+      "epsNtm": 1.007,
+      "fair": 15.11,
+      "fairPE": 15,
+      "growth": 12.8,
+      "growthUsed": 10.9,
+      "margin": 0.25,
+      "method": "成长型方法：合理市盈率×未来12个月每股收益，每股收益取同花顺一致预期均值（截至2026-09-25），股价为2026-09-24收盘。",
+      "peNtm": 12,
+      "price": 12.17,
+      "priceDate": "2026-09-28",
+      "trim": 20.4,
+      "vsFair": -19,
+      "zone": "合理偏低"
+    }
+  },
+  "name": "中海油服",
+  "node": "5.1",
+  "nodeName": "海上工程与油服",
+  "scores": {
+    "growth": 3,
+    "quality": 3,
+    "trend": 3,
+    "value": 3
+  },
+  "sector": "油气",
+  "sources": [
+    {
+      "t": "一致预期",
+      "u": "https://basic.10jqka.com.cn/601808/worth.html"
+    }
+  ],
+  "thesis": "国内海上油服龙头，受益于中海油增储上产。",
+  "trackers": [
+    "海上工程在手订单",
+    "布伦特原油"
+  ],
+  "type": "成长"
+}

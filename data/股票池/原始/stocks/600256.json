@@ -1,0 +1,71 @@
+{
+  "code": "600256",
+  "falsify": [
+    "煤炭产量继续下降、LNG国际业务继续萎缩"
+  ],
+  "flags": [],
+  "l1": {
+    "amt": 9.7,
+    "buyCheck": [],
+    "date": "2026-10-01",
+    "effType": "周期",
+    "fails": [
+      "利润较2023年下滑74%>20%",
+      "ROE 5.09%<8%"
+    ],
+    "listDate": "2000-05-26",
+    "mcap": 427,
+    "notes": [
+      "原标\"拐点\"，按周期股质量门槛审核"
+    ],
+    "np": [
+      51.6,
+      29.6,
+      13.4
+    ],
+    "ocf": [
+      66,
+      56.8,
+      48.8
+    ],
+    "pend": [],
+    "pledge": null,
+    "roe": 5.1,
+    "rules": "v1·2万阶段(市值≥150亿,成交额≥0.5亿;周期/拐点加质量门槛)",
+    "status": "淘汰"
+  },
+  "lastReview": "2026-09-27",
+  "latest": "2026年上半年：营收142.41亿（−9.6%），净利润12.78亿（+49.8%）",
+  "legacyV13": {
+    "gates": {
+      "future": null,
+      "note": "2024–2025年利润连续下滑，拐点型观察。",
+      "perf": false,
+      "price": null
+    },
+    "tier": "观察",
+    "upgrade": "全年利润恢复增长且ROE回到10%以上。",
+    "valuation": {}
+  },
+  "name": "广汇能源",
+  "node": "2.2",
+  "nodeName": "LNG进口与贸易",
+  "scores": {
+    "growth": 3,
+    "quality": 2,
+    "trend": 3
+  },
+  "sector": "油气",
+  "sources": [
+    {
+      "t": "半年报",
+      "u": "https://www.huxiu.com/moment/1272835.html"
+    }
+  ],
+  "thesis": "煤炭、煤化工、LNG多业务，拥有启东LNG接收站；上半年利润+50%。",
+  "trackers": [
+    "亚洲LNG现货价（JKM）",
+    "秦港5500大卡动力煤"
+  ],
+  "type": "拐点"
+}

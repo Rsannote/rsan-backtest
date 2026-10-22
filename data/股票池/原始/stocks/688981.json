@@ -1,0 +1,95 @@
+{
+  "code": "688981",
+  "falsify": [
+    "先进制程设备获取进一步受限",
+    "产能利用率回落"
+  ],
+  "flags": [
+    "估值很高",
+    "出口管制",
+    "折旧压力大"
+  ],
+  "l1": {
+    "amt": 32.6,
+    "buyCheck": [],
+    "date": "2026-10-01",
+    "effType": "成长",
+    "fails": [
+      "成长股ROE 3.4%<10%"
+    ],
+    "listDate": "2004-03",
+    "mcap": 9595.8,
+    "notes": [],
+    "np": [
+      48.2,
+      37,
+      50.4
+    ],
+    "ocf": [
+      230.5,
+      226.6,
+      200.8
+    ],
+    "pend": [],
+    "pledge": null,
+    "roe": 3.4,
+    "rules": "v1·2万阶段(市值≥150亿,成交额≥0.5亿;周期/拐点加质量门槛)",
+    "status": "淘汰"
+  },
+  "lastReview": "2026-09-28",
+  "latest": "2026年上半年：营收386.35亿（+19.4%），归母净利润44.67亿（+94.2%），扣非29.94亿（+57.3%）",
+  "legacyV13": {
+    "gates": {
+      "future": true,
+      "note": "2024年利润下滑、ROE 3.4%，未过业绩关；前瞻约111倍。",
+      "perf": false,
+      "price": false
+    },
+    "tier": "观察",
+    "upgrade": "ROE回到10%以上，且股价回到合理价附近。",
+    "valuation": {
+      "buy": 20.9,
+      "eps25": 0.602,
+      "eps26": 0.88,
+      "eps27": 1.1,
+      "epsNtm": 1.045,
+      "fair": 26.13,
+      "fairPE": 25,
+      "growth": 35.1,
+      "growthUsed": 25,
+      "margin": 0.2,
+      "method": "成长型方法：合理市盈率×未来12个月每股收益，每股收益取同花顺一致预期均值（截至2026-09-25；最近实际年度按净利润÷当前股本折算），股价为2026-09-28午盘。",
+      "peNtm": 111.2,
+      "price": 116.56,
+      "priceDate": "2026-09-28",
+      "trim": 35.27,
+      "vsFair": 346,
+      "zone": "明显高估"
+    }
+  },
+  "name": "中芯国际",
+  "node": "5.1",
+  "nodeName": "晶圆代工",
+  "scores": {
+    "growth": 4,
+    "quality": 3,
+    "trend": 4,
+    "value": 1
+  },
+  "sector": "算力",
+  "sources": [
+    {
+      "t": "一致预期",
+      "u": "https://basic.10jqka.com.cn/688981/worth.html"
+    },
+    {
+      "t": "半年报",
+      "u": "https://finance.sina.com.cn/stock/aiassist/yjbg/2026-08-27/doc-inipucsr9143949.shtml"
+    }
+  ],
+  "thesis": "国内最大、制程最先进的晶圆代工厂，是国产AI芯片的产能瓶颈。",
+  "trackers": [
+    "英伟达对华供货"
+  ],
+  "type": "成长"
+}

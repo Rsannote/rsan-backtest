@@ -1,0 +1,78 @@
+{
+  "code": "000998",
+  "falsify": [
+    "2026年全年亏损",
+    "转基因推广明显放缓"
+  ],
+  "flags": [
+    "去库存"
+  ],
+  "l1": {
+    "amt": 5.2,
+    "buyCheck": [],
+    "date": "2026-10-01",
+    "effType": "周期",
+    "fails": [
+      "市值128亿<150",
+      "ROE 2.88%<8%"
+    ],
+    "listDate": "2000-12",
+    "mcap": 127.5,
+    "notes": [
+      "原标\"拐点\"，按周期股质量门槛审核"
+    ],
+    "np": [
+      2,
+      1.1,
+      1.7
+    ],
+    "ocf": [
+      7.2,
+      4.9,
+      7.5
+    ],
+    "pend": [],
+    "pledge": null,
+    "roe": 2.9,
+    "rules": "v1·2万阶段(市值≥150亿,成交额≥0.5亿;周期/拐点加质量门槛)",
+    "status": "淘汰"
+  },
+  "lastReview": "2026-09-28",
+  "latest": "2026年上半年：营收17.10亿（−21.1%），归母净利润−2.73亿，亏损扩大66%",
+  "legacyV13": {
+    "gates": {
+      "future": null,
+      "note": "ROE 2.9%、2024年利润下滑、上半年亏损，按拐点型处理。",
+      "perf": false,
+      "price": null
+    },
+    "tier": "观察",
+    "upgrade": "种子库存消化、全年扣非利润明显转正且ROE回到8%以上；届时按成长型定价。",
+    "valuation": {}
+  },
+  "name": "隆平高科",
+  "node": "4.1",
+  "nodeName": "种子",
+  "scores": {
+    "growth": 2,
+    "quality": 2,
+    "trend": 1,
+    "value": 2
+  },
+  "sector": "粮食农业",
+  "sources": [
+    {
+      "t": "一致预期",
+      "u": "https://basic.10jqka.com.cn/000998/worth.html"
+    },
+    {
+      "t": "半年报",
+      "u": "https://www.aigbk.com/article/longping_2026_h1_loss_widens_66_pct/"
+    }
+  ],
+  "thesis": "国内最大的种业公司，转基因玉米推广的主要受益者之一。",
+  "trackers": [
+    "粮食产量"
+  ],
+  "type": "拐点"
+}

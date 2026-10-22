@@ -1,0 +1,77 @@
+{
+  "code": "600872",
+  "falsify": [
+    "2026年全年利润低于2025年"
+  ],
+  "flags": [],
+  "l1": {
+    "amt": 1.5,
+    "buyCheck": [],
+    "date": "2026-10-01",
+    "effType": "周期",
+    "fails": [
+      "市值132亿<150",
+      "利润较2023年下滑68%>20%"
+    ],
+    "listDate": "1995-01",
+    "mcap": 132.5,
+    "notes": [
+      "原标\"拐点\"，按周期股质量门槛审核"
+    ],
+    "np": [
+      17,
+      8.9,
+      5.4
+    ],
+    "ocf": [
+      8.4,
+      10.9,
+      6.4
+    ],
+    "pend": [
+      "ROE"
+    ],
+    "pledge": null,
+    "roe": null,
+    "rules": "v1·2万阶段(市值≥150亿,成交额≥0.5亿;周期/拐点加质量门槛)",
+    "status": "淘汰"
+  },
+  "lastReview": "2026-09-29",
+  "latest": "2026年上半年：营收25.42亿（+19.2%），归母净利润4.14亿（+61.3%）",
+  "legacyV13": {
+    "gates": {
+      "future": null,
+      "note": "利润2024年−47%、2025年−40%，2025年ROE 9.4%，未过业绩关，按拐点型观察。",
+      "perf": false,
+      "price": null
+    },
+    "tier": "观察",
+    "upgrade": "利润连续两年增长且ROE回到10%以上后，按成长型定价。",
+    "valuation": {}
+  },
+  "name": "中炬高新",
+  "node": "2.2",
+  "nodeName": "调味品与配料",
+  "scores": {
+    "growth": 4,
+    "quality": 3,
+    "trend": 4,
+    "value": 3
+  },
+  "sector": "日常消费",
+  "sources": [
+    {
+      "t": "一致预期",
+      "u": "https://basic.10jqka.com.cn/600872/worth.html"
+    },
+    {
+      "t": "半年报",
+      "u": "https://www.stcn.com/article/detail/4088543.html"
+    }
+  ],
+  "thesis": "厨邦酱油母公司，2024、2025年利润连续下滑后，2026年上半年回升61%。",
+  "trackers": [
+    "社会消费品零售总额"
+  ],
+  "type": "拐点"
+}

@@ -1,0 +1,90 @@
+{
+  "code": "301165",
+  "falsify": [
+    "互联网客户交换机采购放缓"
+  ],
+  "flags": [],
+  "l1": {
+    "amt": 14.7,
+    "buyCheck": [],
+    "date": "2026-10-01",
+    "effType": "成长",
+    "fails": [
+      "上市仅3.8年<5"
+    ],
+    "listDate": "2022-11",
+    "mcap": 1126.8,
+    "notes": [],
+    "np": [
+      4,
+      5.7,
+      7
+    ],
+    "ocf": [
+      8.7,
+      2.2,
+      18.3
+    ],
+    "pend": [],
+    "pledge": null,
+    "roe": 14.7,
+    "rules": "v1·2万阶段(市值≥150亿,成交额≥0.5亿;周期/拐点加质量门槛)",
+    "status": "淘汰"
+  },
+  "lastReview": "2026-09-27",
+  "latest": "2026年上半年：营收约88亿，净利润6.94亿（+53.5%）",
+  "legacyV13": {
+    "gates": {
+      "future": true,
+      "note": "2023年利润下滑；前瞻约52倍，明显高估。",
+      "perf": false,
+      "price": false
+    },
+    "tier": "观察",
+    "upgrade": "股价回到约46元以下，且利润连续增长。",
+    "valuation": {
+      "buy": 34.39,
+      "eps25": 0.626,
+      "eps26": 1.46,
+      "eps27": 2.39,
+      "epsNtm": 2.157,
+      "fair": 45.85,
+      "fairPE": 21.2,
+      "growth": 95.4,
+      "growthUsed": 21.2,
+      "margin": 0.25,
+      "method": "成长型方法：合理市盈率×未来12个月每股收益，每股收益取同花顺一致预期均值（截至2026-09-25；最近实际年度按净利润÷当前股本折算），股价为2026-09-24收盘。",
+      "peNtm": 51.8,
+      "price": 102.37,
+      "priceDate": "2026-09-28",
+      "trim": 61.89,
+      "vsFair": 123,
+      "zone": "明显高估"
+    }
+  },
+  "name": "锐捷网络",
+  "node": "3.2",
+  "nodeName": "数通设备",
+  "scores": {
+    "growth": 5,
+    "quality": 4,
+    "trend": 5,
+    "value": 1
+  },
+  "sector": "通信",
+  "sources": [
+    {
+      "t": "一致预期",
+      "u": "https://basic.10jqka.com.cn/301165/worth.html"
+    },
+    {
+      "t": "半年报",
+      "u": "https://m.c114.com.cn/w3542-1315740.html"
+    }
+  ],
+  "thesis": "数据中心交换机主力之一，海外业务+85%。",
+  "trackers": [
+    "运营商资本开支"
+  ],
+  "type": "成长"
+}

@@ -1,0 +1,93 @@
+{
+  "code": "300394",
+  "falsify": [
+    "光模块客户自研替代光器件"
+  ],
+  "flags": [],
+  "l1": {
+    "amt": 95.2,
+    "bucket": "波段",
+    "buyCheck": [
+      "控股股东质押"
+    ],
+    "date": "2026-10-01",
+    "effType": "成长",
+    "fails": [],
+    "listDate": "2015-02-17",
+    "mcap": 2851.6,
+    "notes": [
+      "买入前必查：控股股东质押"
+    ],
+    "np": [
+      7.3,
+      13.4,
+      20.2
+    ],
+    "ocf": [
+      9,
+      12.6,
+      18.7
+    ],
+    "pend": [],
+    "pledge": null,
+    "roe": 41.9,
+    "rules": "v1·2万阶段(市值≥150亿,成交额≥0.5亿;周期/拐点加质量门槛)",
+    "status": "通过"
+  },
+  "lastReview": "2026-09-27",
+  "latest": "2026年上半年：营收28.28亿（+15.2%），净利润12.04亿（+33.9%）",
+  "legacyV13": {
+    "gates": {
+      "future": true,
+      "note": "前瞻市盈率约57倍，较合理价高约135%。",
+      "perf": true,
+      "price": false
+    },
+    "tier": "观察",
+    "upgrade": "股价回到约114元（合理价）以下。",
+    "valuation": {
+      "buy": 91.03,
+      "eps25": 1.849,
+      "eps26": 3.29,
+      "eps27": 5.16,
+      "epsNtm": 4.692,
+      "fair": 113.79,
+      "fairPE": 24.2,
+      "growth": 67,
+      "growthUsed": 21.2,
+      "margin": 0.2,
+      "method": "成长型方法：合理市盈率×未来12个月每股收益，每股收益取同花顺一致预期均值（截至2026-09-25；最近实际年度按净利润÷当前股本折算），股价为2026-09-24收盘。",
+      "peNtm": 57.1,
+      "price": 244.8,
+      "priceDate": "2026-09-28",
+      "trim": 153.62,
+      "vsFair": 115,
+      "zone": "明显高估"
+    }
+  },
+  "name": "天孚通信",
+  "node": "4.2",
+  "nodeName": "光器件",
+  "scores": {
+    "growth": 4,
+    "quality": 5,
+    "trend": 4,
+    "value": 1
+  },
+  "sector": "通信",
+  "sources": [
+    {
+      "t": "一致预期",
+      "u": "https://basic.10jqka.com.cn/300394/worth.html"
+    },
+    {
+      "t": "光模块半年报",
+      "u": "https://www.jwview.com/jingwei/html/08-24/684875.shtml"
+    }
+  ],
+  "thesis": "光器件龙头，ROE 42%，业绩连续高增。",
+  "trackers": [
+    "光模块三巨头利润"
+  ],
+  "type": "成长"
+}

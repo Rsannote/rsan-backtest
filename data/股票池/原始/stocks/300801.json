@@ -1,0 +1,79 @@
+{
+  "code": "300801",
+  "falsify": [
+    "下半年扣非利润同比转为下降",
+    "重回价格战导致毛利率下滑"
+  ],
+  "flags": [
+    "无机构预测"
+  ],
+  "l1": {
+    "amt": 0.6,
+    "buyCheck": [],
+    "date": "2026-10-01",
+    "effType": "周期",
+    "fails": [
+      "市值29亿<150"
+    ],
+    "listDate": null,
+    "mcap": 29.4,
+    "notes": [
+      "原标\"拐点\"，按周期股质量门槛审核"
+    ],
+    "np": [
+      null,
+      null,
+      null
+    ],
+    "ocf": [
+      null,
+      null,
+      null
+    ],
+    "pend": [
+      "上市日期",
+      "三年净利润",
+      "经营现金流"
+    ],
+    "pledge": null,
+    "roe": null,
+    "rules": "v1·2万阶段(市值≥150亿,成交额≥0.5亿;周期/拐点加质量门槛)",
+    "status": "淘汰"
+  },
+  "lastReview": "2026-09-27",
+  "latest": "2026年上半年：营收13.72亿（−1.4%），归母净利润1.39亿（+148%），扣非1.34亿（+242%）",
+  "legacyV13": {
+    "gates": {
+      "future": null,
+      "note": "2024、2025年利润连续下滑，ROE 3.1%，按拐点型处理。",
+      "perf": false,
+      "price": null
+    },
+    "tier": "观察",
+    "upgrade": "2026年全年扣非利润超过2.5亿元且ROE达到10%以上；届时按成长型定价。",
+    "valuation": {}
+  },
+  "name": "泰和科技",
+  "node": "4.2",
+  "nodeName": "水处理药剂",
+  "scores": {
+    "growth": 4,
+    "quality": 2,
+    "trend": 4,
+    "value": 2
+  },
+  "sector": "水务",
+  "sources": [
+    {
+      "t": "一致预期",
+      "u": "https://basic.10jqka.com.cn/300801/worth.html"
+    },
+    {
+      "t": "半年报",
+      "u": "https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?stockid=300801&id=12520747"
+    }
+  ],
+  "thesis": "水处理剂主要生产商，2026年上半年扣非利润+242%，已超过2025年全年，靠销量和降本而不是涨价。",
+  "trackers": [],
+  "type": "拐点"
+}

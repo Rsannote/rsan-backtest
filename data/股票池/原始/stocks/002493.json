@@ -1,0 +1,74 @@
+{
+  "code": "002493",
+  "falsify": [
+    "价差回落，季度利润重回低位"
+  ],
+  "flags": [],
+  "l1": {
+    "amt": 6.7,
+    "buyCheck": [],
+    "date": "2026-10-01",
+    "effType": "周期",
+    "fails": [
+      "利润较2023年下滑27%>20%",
+      "ROE 1.94%<8%"
+    ],
+    "listDate": "2010-11-02",
+    "mcap": 1330.6,
+    "notes": [
+      "原标\"拐点\"，按周期股质量门槛审核"
+    ],
+    "np": [
+      11.6,
+      7.2,
+      8.5
+    ],
+    "ocf": [
+      280.8,
+      346.1,
+      454.1
+    ],
+    "pend": [],
+    "pledge": null,
+    "roe": 1.9,
+    "rules": "v1·2万阶段(市值≥150亿,成交额≥0.5亿;周期/拐点加质量门槛)",
+    "status": "淘汰"
+  },
+  "lastReview": "2026-09-27",
+  "latest": "2026年上半年：业绩预告净利润50–52亿（+730%至+764%）",
+  "legacyV13": {
+    "gates": {
+      "future": null,
+      "note": "2023–2025年ROE约2%，未过业绩关。",
+      "perf": false,
+      "price": null
+    },
+    "tier": "观察",
+    "upgrade": "连续两个季度利润维持高位，全年ROE回到10%以上。",
+    "valuation": {}
+  },
+  "name": "荣盛石化",
+  "node": "3.2",
+  "nodeName": "民营大炼化",
+  "scores": {
+    "growth": 4,
+    "quality": 1,
+    "trend": 4
+  },
+  "sector": "油气",
+  "sources": [
+    {
+      "t": "一致预期",
+      "u": "https://basic.10jqka.com.cn/002493/worth.html"
+    },
+    {
+      "t": "四大炼化半年报",
+      "u": "https://chem.jgvogel.cn/c1607623.shtml"
+    }
+  ],
+  "thesis": "炼化一体化龙头之一，利润从低谷大幅反弹，上半年预增7倍以上。",
+  "trackers": [
+    "民营炼化利润"
+  ],
+  "type": "拐点"
+}

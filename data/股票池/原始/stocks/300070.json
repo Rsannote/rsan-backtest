@@ -1,0 +1,82 @@
+{
+  "code": "300070",
+  "falsify": [
+    "再计提大额减值",
+    "营收继续下滑"
+  ],
+  "flags": [
+    "应收账款极高",
+    "无机构预测"
+  ],
+  "l1": {
+    "amt": 1,
+    "buyCheck": [],
+    "date": "2026-10-01",
+    "effType": "周期",
+    "fails": [
+      "市值119亿<150"
+    ],
+    "listDate": null,
+    "mcap": 118.9,
+    "notes": [
+      "原标\"拐点\"，按周期股质量门槛审核"
+    ],
+    "np": [
+      7.7,
+      0.6,
+      null
+    ],
+    "ocf": [
+      null,
+      null,
+      null
+    ],
+    "pend": [
+      "上市日期",
+      "三年净利润",
+      "经营现金流"
+    ],
+    "pledge": null,
+    "roe": null,
+    "rules": "v1·2万阶段(市值≥150亿,成交额≥0.5亿;周期/拐点加质量门槛)",
+    "status": "淘汰"
+  },
+  "lastReview": "2026-09-27",
+  "latest": "2026年上半年：营收27.95亿（−4.6%），归母净利润0.30亿（+128%），二季度单季亏损",
+  "legacyV13": {
+    "gates": {
+      "future": null,
+      "note": "ROE 0.2%，2024年利润−92%，按拐点型处理。",
+      "perf": false,
+      "price": null
+    },
+    "tier": "观察",
+    "upgrade": "应收账款占营收比例连续两年下降，且全年扣非利润回到3亿元以上。",
+    "valuation": {}
+  },
+  "name": "碧水源",
+  "node": "4.1",
+  "nodeName": "膜处理技术",
+  "scores": {
+    "growth": 2,
+    "quality": 1,
+    "trend": 2,
+    "value": 2
+  },
+  "sector": "水务",
+  "sources": [
+    {
+      "t": "一致预期",
+      "u": "https://basic.10jqka.com.cn/300070/worth.html"
+    },
+    {
+      "t": "半年报",
+      "u": "https://news.qq.com/rain/a/20260826A02XGI00"
+    }
+  ],
+  "thesis": "国内膜法水处理龙头，控股股东中国交建；再生水和提标改造需要膜技术。",
+  "trackers": [
+    "水务企业现金回款"
+  ],
+  "type": "拐点"
+}

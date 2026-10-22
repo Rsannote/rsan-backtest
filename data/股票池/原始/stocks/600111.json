@@ -1,0 +1,82 @@
+{
+  "code": "600111",
+  "falsify": [
+    "稀土出口管制放松导致价格下跌",
+    "开采配额大幅增加"
+  ],
+  "flags": [],
+  "l1": {
+    "amt": 11.1,
+    "bucket": "波段",
+    "buyCheck": [
+      "立案/非标审计",
+      "控股股东质押"
+    ],
+    "date": "2026-10-01",
+    "effType": "周期",
+    "fails": [],
+    "listDate": "1997-09-24",
+    "mcap": 1271.8,
+    "notes": [
+      "原标\"拐点\"，按周期股质量门槛审核",
+      "买入前必查：立案/非标审计、控股股东质押"
+    ],
+    "np": [
+      23.7,
+      10,
+      22.5
+    ],
+    "ocf": [
+      24.3,
+      10.3,
+      11.2
+    ],
+    "pend": [],
+    "pledge": null,
+    "roe": 9.6,
+    "rules": "v1·2万阶段(市值≥150亿,成交额≥0.5亿;周期/拐点加质量门槛)",
+    "status": "通过"
+  },
+  "lastReview": "2026-09-29",
+  "latest": "2026年上半年：营收257.99亿（+36.8%），归母净利润20.53亿（+120.5%）",
+  "legacyV13": {
+    "gates": {
+      "future": false,
+      "note": "三年平均ROE约8.5%，低于10%；派息率约21%，未过周期型业绩关，按拐点型处理。",
+      "perf": false,
+      "price": null
+    },
+    "tier": "观察",
+    "upgrade": "三年平均ROE回到10%以上、派息率提高到40%以上时按周期型定价。",
+    "valuation": {
+      "method": "拐点型不定价，仅记录参考股价。",
+      "price": 37.06,
+      "priceDate": "2026-09-24"
+    }
+  },
+  "name": "北方稀土",
+  "node": "3.2",
+  "nodeName": "稀土",
+  "scores": {
+    "growth": 5,
+    "quality": 3,
+    "trend": 4,
+    "value": 2
+  },
+  "sector": "有色",
+  "sources": [
+    {
+      "t": "一致预期",
+      "u": "https://basic.10jqka.com.cn/600111/worth.html"
+    },
+    {
+      "t": "半年报",
+      "u": "https://finance.sina.com.cn/stock/aigc/stockfs/2026-08-19/doc-ininwawr9346428.shtml"
+    }
+  ],
+  "thesis": "全国约三分之二的轻稀土开采指标在它手里；但2023–2025年平均ROE约8.5%，派息率约21%。",
+  "trackers": [
+    "稀土出口管制"
+  ],
+  "type": "拐点"
+}

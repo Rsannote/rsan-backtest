@@ -1,0 +1,77 @@
+{
+  "code": "600161",
+  "falsify": [
+    "采浆量下降"
+  ],
+  "flags": [],
+  "l1": {
+    "amt": 1.2,
+    "bucket": "波段",
+    "buyCheck": [
+      "立案/非标审计",
+      "控股股东质押"
+    ],
+    "date": "2026-10-01",
+    "effType": "周期",
+    "fails": [],
+    "listDate": "1998-06-16",
+    "mcap": 249.1,
+    "notes": [
+      "原标\"拐点\"，按周期股质量门槛审核",
+      "买入前必查：立案/非标审计、控股股东质押"
+    ],
+    "np": [
+      11.1,
+      15.5,
+      10.9
+    ],
+    "ocf": [
+      23.9,
+      8.2,
+      3.4
+    ],
+    "pend": [],
+    "pledge": null,
+    "roe": 9.5,
+    "rules": "v1·2万阶段(市值≥150亿,成交额≥0.5亿;周期/拐点加质量门槛)",
+    "status": "通过"
+  },
+  "lastReview": "2026-09-28",
+  "latest": "2026年上半年：营收25.95亿（−16.6%），归母净利润2.99亿（−52.8%）",
+  "legacyV13": {
+    "gates": {
+      "future": null,
+      "note": "2025年利润−30%、上半年再−53%，按拐点型处理。",
+      "perf": false,
+      "price": null
+    },
+    "tier": "观察",
+    "upgrade": "毛利率企稳、利润恢复增长。",
+    "valuation": {}
+  },
+  "name": "天坛生物",
+  "node": "2.3",
+  "nodeName": "血液制品",
+  "scores": {
+    "growth": 1,
+    "quality": 3,
+    "trend": 1,
+    "value": 2
+  },
+  "sector": "医药医疗",
+  "sources": [
+    {
+      "t": "一致预期",
+      "u": "https://basic.10jqka.com.cn/600161/worth.html"
+    },
+    {
+      "t": "半年报",
+      "u": "https://news.qq.com/rain/a/20260828A0CVAS00"
+    }
+  ],
+  "thesis": "国内采浆量第一的血液制品企业，浆站资源稀缺。",
+  "trackers": [
+    "医保基金收支"
+  ],
+  "type": "拐点"
+}

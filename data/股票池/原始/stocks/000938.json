@@ -1,0 +1,95 @@
+{
+  "code": "000938",
+  "falsify": [
+    "国内AI算力投资放缓"
+  ],
+  "flags": [],
+  "l1": {
+    "amt": 41.4,
+    "buyCheck": [],
+    "date": "2026-10-01",
+    "effType": "成长",
+    "fails": [
+      "成长股三年利润未增长[21.0, 15.7, 16.9]"
+    ],
+    "listDate": null,
+    "mcap": 889.8,
+    "notes": [],
+    "np": [
+      21,
+      15.7,
+      16.9
+    ],
+    "ocf": [
+      null,
+      null,
+      null
+    ],
+    "pend": [
+      "上市日期",
+      "经营现金流",
+      "ROE"
+    ],
+    "pledge": null,
+    "roe": null,
+    "rules": "v1·2万阶段(市值≥150亿,成交额≥0.5亿;周期/拐点加质量门槛)",
+    "status": "淘汰"
+  },
+  "lastReview": "2026-09-27",
+  "latest": "2026年上半年：净利润21.67亿（+108.2%）",
+  "legacyV13": {
+    "gates": {
+      "future": true,
+      "note": "2023、2024年利润下滑，未过业绩关；价格合理偏低。",
+      "perf": false,
+      "price": true
+    },
+    "tier": "观察",
+    "upgrade": "2026年、2027年利润持续增长，使三年窗口内不再有下滑年份。",
+    "valuation": {
+      "buy": 28.25,
+      "eps25": 0.591,
+      "eps26": 1.12,
+      "eps27": 1.51,
+      "epsNtm": 1.413,
+      "fair": 35.31,
+      "fairPE": 25,
+      "growth": 59.9,
+      "growthUsed": 25,
+      "margin": 0.2,
+      "method": "成长型方法：合理市盈率×未来12个月每股收益，每股收益取同花顺一致预期均值（截至2026-09-25；最近实际年度按净利润÷当前股本折算），股价为2026-09-24收盘。",
+      "peNtm": 23.6,
+      "price": 31.46,
+      "priceDate": "2026-09-28",
+      "trim": 47.67,
+      "vsFair": -11,
+      "zone": "合理偏低"
+    }
+  },
+  "name": "紫光股份",
+  "node": "3.2",
+  "nodeName": "数通设备",
+  "scores": {
+    "growth": 5,
+    "quality": 3,
+    "trend": 5,
+    "value": 4
+  },
+  "sector": "通信",
+  "sources": [
+    {
+      "t": "一致预期",
+      "u": "https://basic.10jqka.com.cn/000938/worth.html"
+    },
+    {
+      "t": "半年报",
+      "u": "https://news.qq.com/rain/a/20260828A0B3BK00"
+    }
+  ],
+  "thesis": "新华三是国内数据中心交换机和服务器主力，上半年利润翻倍，海外+53%。",
+  "trackers": [
+    "运营商资本开支",
+    "北美四大云厂商资本开支"
+  ],
+  "type": "成长"
+}

@@ -1,0 +1,90 @@
+{
+  "code": "300999",
+  "falsify": [
+    "大豆等原料成本大幅上涨导致毛利下滑"
+  ],
+  "flags": [],
+  "l1": {
+    "amt": 3,
+    "buyCheck": [],
+    "date": "2026-10-01",
+    "effType": "成长",
+    "fails": [
+      "成长股ROE 3.32%<10%"
+    ],
+    "listDate": "2020-10",
+    "mcap": 1309.3,
+    "notes": [],
+    "np": [
+      28.5,
+      25,
+      31.5
+    ],
+    "ocf": [
+      149.2,
+      49.9,
+      154.4
+    ],
+    "pend": [],
+    "pledge": null,
+    "roe": 3.3,
+    "rules": "v1·2万阶段(市值≥150亿,成交额≥0.5亿;周期/拐点加质量门槛)",
+    "status": "淘汰"
+  },
+  "lastReview": "2026-09-28",
+  "latest": "2026年上半年：营收1228.52亿（+6.2%），归母净利润22.94亿（+30.7%），含出售股权收益2.63亿",
+  "legacyV13": {
+    "gates": {
+      "future": true,
+      "note": "ROE 3.3%、2024年利润下滑，未过业绩关；现价略高于合理价。",
+      "perf": false,
+      "price": false
+    },
+    "tier": "观察",
+    "upgrade": "ROE回到8%以上，且股价回到合理价22.75元以下。",
+    "valuation": {
+      "buy": 18.2,
+      "eps25": 0.581,
+      "eps26": 0.79,
+      "eps27": 0.95,
+      "epsNtm": 0.91,
+      "fair": 22.75,
+      "fairPE": 25,
+      "growth": 27.9,
+      "growthUsed": 25,
+      "margin": 0.2,
+      "method": "成长型方法：合理市盈率×未来12个月每股收益，每股收益取同花顺一致预期均值（截至2026-09-25；最近实际年度按净利润÷当前股本折算），股价为2026-09-28午盘。",
+      "peNtm": 26.6,
+      "price": 24.18,
+      "priceDate": "2026-09-28",
+      "trim": 30.71,
+      "vsFair": 6,
+      "zone": "偏贵"
+    }
+  },
+  "name": "金龙鱼",
+  "node": "1.1",
+  "nodeName": "粮油加工",
+  "scores": {
+    "growth": 3,
+    "quality": 2,
+    "trend": 3,
+    "value": 2
+  },
+  "sector": "粮食农业",
+  "sources": [
+    {
+      "t": "一致预期",
+      "u": "https://basic.10jqka.com.cn/300999/worth.html"
+    },
+    {
+      "t": "半年报",
+      "u": "https://www.stcn.com/article/detail/4072360.html"
+    }
+  ],
+  "thesis": "国内最大的粮油企业，食用油、米、面规模第一，刚需属性最强。",
+  "trackers": [
+    "大豆进口量"
+  ],
+  "type": "成长"
+}

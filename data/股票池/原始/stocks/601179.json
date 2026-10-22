@@ -1,0 +1,86 @@
+{
+  "code": "601179",
+  "falsify": [
+    "ROE长期低于8%"
+  ],
+  "flags": [],
+  "l1": {
+    "amt": 7,
+    "buyCheck": [],
+    "date": "2026-10-01",
+    "effType": "成长",
+    "fails": [
+      "成长股ROE 5.64%<10%"
+    ],
+    "listDate": "2010-01-28",
+    "mcap": 595.1,
+    "notes": [],
+    "np": [
+      8.8,
+      10.5,
+      12.7
+    ],
+    "ocf": [
+      12.2,
+      35,
+      27.4
+    ],
+    "pend": [],
+    "pledge": null,
+    "roe": 5.6,
+    "rules": "v1·2万阶段(市值≥150亿,成交额≥0.5亿;周期/拐点加质量门槛)",
+    "status": "淘汰"
+  },
+  "lastReview": "2026-09-27",
+  "latest": "2026年上半年：研报口径业绩约+15%，毛利率24.5%",
+  "legacyV13": {
+    "gates": {
+      "future": null,
+      "note": "ROE仅5.6%，未过业绩关；前瞻市盈率约33倍，也明显高估。",
+      "perf": false,
+      "price": null
+    },
+    "tier": "观察",
+    "upgrade": "ROE回到10%以上，且股价回落到合理价附近。",
+    "valuation": {
+      "buy": 6.15,
+      "eps25": 0.25,
+      "eps26": 0.31,
+      "eps27": 0.37,
+      "epsNtm": 0.355,
+      "fair": 7.69,
+      "fairPE": 21.7,
+      "growth": 21.7,
+      "growthUsed": 21.7,
+      "margin": 0.2,
+      "method": "成长型方法：合理市盈率×未来12个月每股收益，每股收益取同花顺一致预期均值（截至2026-09-25），股价为2026-09-24收盘。",
+      "peNtm": 33.1,
+      "price": 11.48,
+      "priceDate": "2026-09-28",
+      "trim": 10.38,
+      "vsFair": 49,
+      "zone": "明显高估"
+    }
+  },
+  "name": "中国西电",
+  "node": "2.3",
+  "nodeName": "一次设备",
+  "scores": {
+    "growth": 4,
+    "quality": 2,
+    "trend": 5,
+    "value": 1
+  },
+  "sector": "电力",
+  "sources": [
+    {
+      "t": "一致预期",
+      "u": "https://basic.10jqka.com.cn/601179/worth.html"
+    }
+  ],
+  "thesis": "输变电全品类央企，特高压变压器、开关、换流阀都有布局，直接受益电网投资。",
+  "trackers": [
+    "特高压设备招标"
+  ],
+  "type": "成长"
+}

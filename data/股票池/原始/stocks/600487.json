@@ -1,0 +1,74 @@
+{
+  "code": "600487",
+  "falsify": [
+    "光纤价格从高点回落超过30%"
+  ],
+  "flags": [
+    "周期高位"
+  ],
+  "l1": {
+    "amt": 107.7,
+    "buyCheck": [],
+    "date": "2026-10-01",
+    "effType": "周期",
+    "fails": [
+      "控股股东质押62%≥30%"
+    ],
+    "listDate": "2003-08",
+    "mcap": 1356,
+    "notes": [],
+    "np": [
+      21.5,
+      27.7,
+      26.8
+    ],
+    "ocf": [
+      18.6,
+      32.6,
+      28.1
+    ],
+    "pend": [],
+    "pledge": 62.09,
+    "roe": 9,
+    "rules": "v1·2万阶段(市值≥150亿,成交额≥0.5亿;周期/拐点加质量门槛)",
+    "status": "淘汰"
+  },
+  "lastReview": "2026-09-27",
+  "latest": "2026年上半年：净利润约30–36亿（+87%至+121%，业绩预告）",
+  "legacyV13": {
+    "gates": {
+      "future": null,
+      "note": "2025年利润−3.2%、ROE约9%，未过业绩关。",
+      "perf": false,
+      "price": null
+    },
+    "tier": "观察",
+    "upgrade": "近三年平均ROE回到10%以上。",
+    "valuation": {}
+  },
+  "name": "亨通光电",
+  "node": "2.2",
+  "nodeName": "光纤光缆",
+  "scores": {
+    "growth": 4,
+    "quality": 3,
+    "trend": 4
+  },
+  "sector": "通信",
+  "sources": [
+    {
+      "t": "一致预期",
+      "u": "https://basic.10jqka.com.cn/600487/worth.html"
+    },
+    {
+      "t": "业绩预告",
+      "u": "https://www.c114.com.cn/news/6564/a1313903.html"
+    }
+  ],
+  "thesis": "光纤+海缆双主业，受益光纤涨价与海上风电。",
+  "trackers": [
+    "光纤价格",
+    "海上风电并网"
+  ],
+  "type": "周期"
+}

@@ -1,0 +1,74 @@
+{
+  "code": "600522",
+  "falsify": [
+    "光纤价格从高点回落超过30%"
+  ],
+  "flags": [
+    "周期高位"
+  ],
+  "l1": {
+    "amt": 67.8,
+    "buyCheck": [],
+    "date": "2026-10-01",
+    "effType": "周期",
+    "fails": [
+      "ROE 7.73%<8%"
+    ],
+    "listDate": "2002-10",
+    "mcap": 1064.2,
+    "notes": [],
+    "np": [
+      31.2,
+      28.4,
+      29
+    ],
+    "ocf": [
+      45.4,
+      41.3,
+      47.5
+    ],
+    "pend": [],
+    "pledge": null,
+    "roe": 7.7,
+    "rules": "v1·2万阶段(市值≥150亿,成交额≥0.5亿;周期/拐点加质量门槛)",
+    "status": "淘汰"
+  },
+  "lastReview": "2026-09-27",
+  "latest": "2026年上半年：净利润约23.5–25.1亿（+50%至+60%，业绩预告）",
+  "legacyV13": {
+    "gates": {
+      "future": null,
+      "note": "2023、2024年利润下滑，ROE约8%，未过业绩关。",
+      "perf": false,
+      "price": null
+    },
+    "tier": "观察",
+    "upgrade": "近三年平均ROE回到10%以上。",
+    "valuation": {}
+  },
+  "name": "中天科技",
+  "node": "2.2",
+  "nodeName": "光纤光缆",
+  "scores": {
+    "growth": 4,
+    "quality": 3,
+    "trend": 4
+  },
+  "sector": "通信",
+  "sources": [
+    {
+      "t": "一致预期",
+      "u": "https://basic.10jqka.com.cn/600522/worth.html"
+    },
+    {
+      "t": "业绩预告",
+      "u": "https://www.c114.com.cn/news/6564/a1313903.html"
+    }
+  ],
+  "thesis": "光纤、海缆、电网线缆多元布局，受益光纤涨价。",
+  "trackers": [
+    "光纤价格",
+    "海上风电并网"
+  ],
+  "type": "周期"
+}

@@ -1,0 +1,79 @@
+{
+  "code": "600030",
+  "falsify": [
+    "A股日均成交额回落到1.5万亿元以下"
+  ],
+  "flags": [
+    "周期高位"
+  ],
+  "l1": {
+    "amt": 24.5,
+    "bucket": "波段",
+    "buyCheck": [
+      "立案/非标审计",
+      "控股股东质押"
+    ],
+    "date": "2026-10-01",
+    "effType": "周期",
+    "fails": [],
+    "listDate": "2003-01-06(A股上交所；H股2011年港交所上市，具体日新浪未列)",
+    "mcap": 4043.6,
+    "notes": [
+      "原标\"拐点\"，按周期股质量门槛审核",
+      "买入前必查：立案/非标审计、控股股东质押"
+    ],
+    "np": [
+      197.2,
+      217,
+      300.8
+    ],
+    "ocf": [
+      null,
+      null,
+      null
+    ],
+    "pend": [],
+    "pledge": null,
+    "roe": 10.6,
+    "rules": "v1·2万阶段(市值≥150亿,成交额≥0.5亿;周期/拐点加质量门槛)",
+    "status": "通过"
+  },
+  "lastReview": "2026-09-29",
+  "latest": "2026年上半年：营收496.92亿（+50.0%），归母净利润233.43亿（+69.6%）",
+  "legacyV13": {
+    "gates": {
+      "future": false,
+      "note": "周期型：近三年平均ROE约8.8%低于10%，派息率约36%低于40%，按拐点型处理。",
+      "perf": false,
+      "price": null
+    },
+    "tier": "观察",
+    "upgrade": "近三年平均ROE回到10%以上且派息率提高到40%以上；届时按周期型定价。",
+    "valuation": {}
+  },
+  "name": "中信证券",
+  "node": "4.1",
+  "nodeName": "证券",
+  "scores": {
+    "growth": 4,
+    "quality": 4,
+    "trend": 5,
+    "value": 3
+  },
+  "sector": "金融",
+  "sources": [
+    {
+      "t": "一致预期",
+      "u": "https://basic.10jqka.com.cn/600030/worth.html"
+    },
+    {
+      "t": "半年报",
+      "u": "https://www.21jingji.com/article/20260820/herald/1d0160baff0236835f63061601f223fe.html"
+    }
+  ],
+  "thesis": "国内综合实力最强的券商，经纪、投行、自营全面受益成交额放大。",
+  "trackers": [
+    "A股日均成交额"
+  ],
+  "type": "拐点"
+}
