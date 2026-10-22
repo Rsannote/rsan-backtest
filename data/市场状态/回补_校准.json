@@ -1,0 +1,8 @@
+{
+ "样本": {
+  "2026-10-12": {
+   "错误": "URLError: <urlopen error [Errno 101] Network is unreachable>"
+  }
+ },
+ "可用": false
+}
