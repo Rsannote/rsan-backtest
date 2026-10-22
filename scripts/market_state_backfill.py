@@ -120,6 +120,7 @@ def qlib_daily(since):
     # 数据没收全的日子（有交易的股票数比前20日中位数少5%以上）不用
     med = df["有交易股票数"].rolling(20, min_periods=5).median().shift(1)
     bad = df["有交易股票数"] < med * 0.95
+    bad.iloc[-1] = True  # 数据集最新一天常常没收全（2026-10-21 核对：成交额少了一成多），一律不用
     df.attrs["不全的日子"] = list(df.loc[bad, "date"])
     return df[~bad]
 
