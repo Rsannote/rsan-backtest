@@ -13,7 +13,7 @@
 - tophub财经热榜.csv   tophub 财经分类页：股吧热榜、雪球今日话题、集思录、格隆汇、华尔街见闻等
 - 微博热搜.csv         实时热搜（看大众情绪和财经话题有没有出圈）
 - 运行记录.txt         每个源成功几行、失败原因
-每个源单独容错，一个失败不影响其他。每天只请求一次，频率很低。
+每个源单独容错，失败会隔 10–20 秒重试，最多 3 次，一个失败不影响其他。每天只请求一次，频率很低。
 
 已验证不可用（2026-10-22 探测，见 logs/情绪源探测.txt）：雪球直连接口、财联社电报、淘股吧、百度股市通。
 雪球内容改从 tophub 的“雪球今日话题”拿。
@@ -133,11 +133,22 @@ sources = [
 ]
 
 ok, failed = [], []
+def with_retry(fn, tries=3):
+    for i in range(tries):
+        try:
+            df = fn()
+            if df is None or df.empty:
+                raise ValueError("返回空数据")
+            return df
+        except Exception:  # noqa: BLE001
+            if i == tries - 1:
+                raise
+            time.sleep(10 * (i + 1))
+
+
 for name, fn in sources:
     try:
-        df = fn()
-        if df is None or df.empty:
-            raise ValueError("返回空数据")
+        df = with_retry(fn)
         df.to_csv(os.path.join(out_dir, f"{name}.csv"), index=False, encoding="utf-8-sig")
         ok.append(f"{name}（{len(df)}行）")
     except Exception as e:  # noqa: BLE001
