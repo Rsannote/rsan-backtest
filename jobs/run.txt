@@ -1,4 +1,4 @@
 # 一行：脚本名 [参数]，推送后由 GitHub 服务器运行（见 .github/workflows/push-task.yml）
 # 同样的命令再跑一次时，改一下下面这行时间，否则推送不会触发
-# 2026-10-22 14:55
-explore_brief.py
+# 2026-10-22 15:05
+explore_state.py
