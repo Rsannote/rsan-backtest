@@ -57,13 +57,24 @@ def clean(s):
     return re.sub(r"\s+", " ", html.unescape(s)).strip()
 
 
-ROW = re.compile(r'<tr>\s*<td align="center">(\d+)\.</td>\s*<td><a href="([^"]*)"[^>]*itemid="(\d+)"[^>]*>(.*?)</a></td>'
-                 r'\s*<td class="ws">(.*?)</td>', re.S)
-
-
 def parse_node(page):
-    return [{"排名": int(rk), "链接": html.unescape(url), "itemid": iid, "标题": clean(t), "热度": clean(heat)}
-            for rk, url, iid, t, heat in ROW.findall(page)]
+    """榜单页是一张表，一行一条。两种行：纯文字行（标题+热度列）和带缩略图的行（标题下有作者或摘要、播放量）。"""
+    out = []
+    for tr in re.findall(r"(?s)<tr>(.*?)</tr>", page):
+        rk = re.search(r'<td align="center">(\d+)\.</td>', tr)
+        a = re.search(r'<a href="([^"]*)"[^>]*itemid="(\d+)"[^>]*>(.*?)</a>', tr, re.S)
+        if not rk or not a or not clean(a.group(3)):
+            continue
+        heat = re.search(r'<td class="ws">(.*?)</td>', tr, re.S)
+        extra = re.search(r'class="item-extra">(.*?)</div>', tr, re.S)
+        desc = re.search(r'class="item-desc">(.*?)</div>', tr, re.S)
+        row = {"排名": int(rk.group(1)), "链接": html.unescape(a.group(1)), "itemid": a.group(2),
+               "标题": clean(a.group(3)),
+               "热度": clean(heat.group(1)) if heat else clean(extra.group(1)) if extra else ""}
+        if desc and clean(desc.group(1)):
+            row["描述"] = clean(desc.group(1))[:80]
+        out.append(row)
+    return out
 
 
 def body_text(url):

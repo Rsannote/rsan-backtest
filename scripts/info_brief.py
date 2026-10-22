@@ -88,8 +88,9 @@ def hits(title, terms):
 
 def line(r, body=None, n=110):
     s = f"- [{r['标题'][:80]}]({r['链接']})"
-    if r.get("热度"):
-        s += f"（{r['热度']}）"
+    tag = r.get("热度") or r.get("描述", "")[:30]
+    if tag:
+        s += f"（{tag}）"
     if body:
         txt = body["正文"].replace("\n", " ")[:n]
         s += f"\n  > {txt}…"
