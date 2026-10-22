@@ -1,0 +1,1 @@
+engine/backtest.py --data data/日线_2026-10-21 --strategy strategies/qingxu_wendu/wd_a_bond.py strategies/qingxu_wendu/wd_b_div.py strategies/qingxu_wendu/wd_c_guard.py strategies/qingxu_wendu/hold_510300.py --capital 1000000 --out archive/2026-10-22_情绪温度计_v1.2_100万
