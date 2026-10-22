@@ -34,7 +34,7 @@ def read_days(day, n):
     for i in range(n + 1):
         d = (day - dt.timedelta(days=i)).strftime("%Y-%m-%d")
         rows = []
-        for p in glob.glob(os.path.join(BASE, "*", d + ".jsonl")):
+        for p in glob.glob(os.path.join(BASE, "[0-9][0-9][0-9][0-9]-[0-9][0-9]", d + ".jsonl")):
             with open(p, encoding="utf-8") as f:
                 rows += [json.loads(l) for l in f if l.strip()]
         out[d] = rows
