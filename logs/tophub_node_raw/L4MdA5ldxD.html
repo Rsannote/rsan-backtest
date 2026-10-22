@@ -1,0 +1,1543 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<link rel="preconnect" href="https://file.ipadown.com/tophub">
+<link rel="preconnect" href="https://s4.zstatic.net/ajax/libs">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="applicable-device" content="pc,mobile">
+<meta name="title" content="小红书热榜 - 今日热榜">
+<meta name="keywords" content="今日热榜,Tophub,热门新闻,今日头条,热搜,热词,新闻聚合">
+<meta name="description" content="今日热榜提供各站热榜聚合：微信、今日头条、百度、知乎、V2EX、微博、贴吧、豆瓣、天涯、虎扑、Github、抖音...追踪全网热点、简单高效阅读。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="小红书热榜 - 今日热榜">
+<meta property="og:description" content="今日热榜提供各站热榜聚合：微信、今日头条、百度、知乎、V2EX、微博、贴吧、豆瓣、天涯、虎扑、Github、抖音...追踪全网热点、简单高效阅读。">
+<meta property="og:url" content="https://tophub.today">
+<title>小红书热榜 - 今日热榜</title>
+<link rel="stylesheet" href="https://file.ipadown.com/tophub/assets/css/app.2025.css?202505150004">
+<link rel="stylesheet" href="https://file.ipadown.com/tophub/assets/css/filter.2025.css?202505150004">
+<script src="https://s4.zstatic.net/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/layer/2.3/layer.js"></script>
+<link href="https://s4.zstatic.net/ajax/libs/webui-popover/1.2.18/jquery.webui-popover.min.css" rel="stylesheet">
+<script src="https://s4.zstatic.net/ajax/libs/webui-popover/1.2.18/jquery.webui-popover.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/js-cookie/latest/js.cookie.min.js"></script>
+<script type="text/javascript" src="https://file.ipadown.com/tophub/assets/js/jquery.range.js"></script>
+<script src="https://file.ipadown.com/tophub/assets/js/sshare.js?202505150004"></script>
+<script src="https://file.ipadown.com/tophub/assets/js/export.popover.js?202505150004"></script>
+<script src="https://file.ipadown.com/tophub/assets/js/notify.popover.js?202505150004"></script>
+<script src="https://file.ipadown.com/tophub/assets/js/app.2025.js?202505150004"></script>
+<style>
+.time-machine-header{display:flex;justify-content:space-between;align-items:center;margin:15px 0;padding:10px 0;border-bottom:1px solid #f0f0f0}
+.time-machine-tabs .tabs-container{display:flex;background-color:#fff;border-radius:8px;padding:3px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.time-machine-tabs .tab-sort-item{display:flex;align-items:center;padding:6px 10px;border-radius:8px;color:#666;font-size:13px;transition:all .2s ease;margin:5px}
+.time-machine-tabs .tab-sort-item.active{background-color:#f5f5f5;color:#333;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.time-machine-tabs .tab-sort-item i.m-n{font-size:14px;margin-right:6px;color:#ccc;font-weight:600}
+.time-machine-tabs .vip-badge{display:inline-flex;align-items:center;margin-left:4px;padding:1px 4px;border-radius:3px;background:linear-gradient(135deg,#f5c518,#e6a700);color:#fff;font-size:10px;font-weight:700}
+.vip-badge{display:inline-block;background-color:#ff9800;color:#fff;font-size:12px;padding:1px 4px;border-radius:3px;margin-left:5px;vertical-align:middle}
+.snapshot-selector{display:flex;}
+.snapshot-time-list{width:100%}
+.snapshot-time-header{margin-bottom:15px}
+.snapshot-time-header h3{font-size:16px;margin:10px;font-weight:600}
+.snapshot-time-header p{margin:0;color:#666;font-size:14px}
+.snapshot-time-container{position:relative;min-height:100px}
+.snapshot-loading , .snapshot-content-loading{text-align:center;padding:20px 0}
+.snapshot-loading p, .snapshot-content-loading p{color:#c9c9c9;font-size:14px;}
+.snapshot-empty{text-align:center;padding:20px 0;color:#999}
+.snapshot-hours{display:flex;flex-wrap:wrap}
+.snapshot-hour-block{width:25%;padding:0 10px 15px 0;box-sizing:border-box}
+.snapshot-hour-header{font-weight:600;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid #eee}
+.snapshot-time-item{display:inline-block;padding:3px 8px;margin:0 5px 5px 0;background-color:#f5f5f5;border-radius:3px;cursor:pointer;transition:all .2s}
+.snapshot-time-item:hover{background-color:#e9e9e9}
+.snapshot-time-item.active{background-color:#4e6ef2;color:#fff}
+.snapshot-info{margin-bottom:15px;background-color:#f9f9f9}
+.snapshot-time{padding:12px 15px;background:#f9f9f9;border-left:3px solid #4e6ef2;font-size:14px;color:#333;font-weight:500}
+.snapshot-hour{margin:20px 0 12px;padding:0 0 5px 12px;border-left:3px solid #4e6ef2;position:relative}
+.snapshot-hour h4{margin:0;font-size:16px;color:#333;font-weight:600}
+.snapshot-hour-items{display:flex;flex-wrap:wrap;gap:12px;padding:10px 0 10px 24px;margin-bottom:15px}
+.snapshot-item{cursor:pointer;transition:all .25s ease;position:relative}
+.snapshot-item:after{content:'';position:absolute;left:-12px;top:50%;width:6px;height:6px;background:#ddd;border-radius:50%;transform:translateY(-50%);transition:all .25s ease}
+.snapshot-item:hover:after{background:#4e6ef2}
+.snapshot-item.active:after{background:#4e6ef2;width:8px;height:8px}
+.snapshot-item .time-badge{background:#f5f5f5;padding:6px 12px;border-radius:30px;color:#333;font-size:14px;display:inline-block;transition:all .25s ease;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.snapshot-item:hover .time-badge{background:#eef2fd;color:#4e6ef2;transform:translateY(-1px);box-shadow:0 2px 6px rgba(78,110,242,.15)}
+.snapshot-item.active .time-badge{background:#4e6ef2;color:#fff;transform:translateY(-1px);box-shadow:0 2px 8px rgba(78,110,242,.25)}
+.text-center{text-align:center}
+.snapshot-time-wrapper{background:#f9f9f9;position:relative}
+.snapshot-timeline{position:relative;padding:10px 0}
+.time-group-header{display:flex;align-items:center;color:#333;font-weight:600;padding:10px 0;border-bottom:1px solid #eee}
+.time-group-header .m-n{font-size:18px;margin-right:8px;color:#4e6ef2}
+.time-group{padding:5px 0}
+.hour-group{display:flex;margin:15px 0;align-items:flex-start}
+.hour-label{width:50px;text-align:right;padding-right:15px;font-weight:600;color:#555;font-size:13px}
+.time-points{display:flex;flex-wrap:wrap;gap:12px;position:relative;padding-left:15px;border-left:1px dashed #ddd;flex:1;min-height:30px}
+.snapshot-item{position:relative;margin-bottom:5px}
+.snapshot-item:before{content:'';position:absolute;top:50%;left:-19px;width:8px;height:8px;border-radius:50%;background:#ddd;transform:translateY(-50%);transition:all .2s ease}
+.snapshot-item:hover:before{background:#4e6ef2;box-shadow:0 0 0 2px rgba(78,110,242,.2)}
+.snapshot-item.active:before{background:#4e6ef2;box-shadow:0 0 0 3px rgba(78,110,242,.3)}
+.time-badge{background:#f5f5f5;padding:5px 10px;border-radius:30px;font-size:13px;color:#333;display:inline-block;transition:all .2s ease}
+.snapshot-item:hover .time-badge{background:#eef2fd;color:#4e6ef2;transform:translateY(-1px);box-shadow:0 2px 6px rgba(78,110,242,.15)}
+.snapshot-item.active .time-badge{background:#4e6ef2;color:#fff;transform:translateY(-1px);box-shadow:0 2px 8px rgba(78,110,242,.25)}
+.snapshot-time-container{position:relative;padding-left:12px;}
+@media (max-width:768px){.snapshot-hour-block{width:50%}
+}
+@media (max-width:480px){.snapshot-hour-block{width:100%}
+}
+.snapshot-back-btn{position:absolute;right:15px;top:12px;display:flex;align-items:center;color:#4e6ef2;font-size:13px;transition:all .2s ease}
+.snapshot-back-btn .m-n{margin-right:4px;font-size:14px}
+.snapshot-back-btn:hover{color:#2d4cd7;text-decoration:none}
+
+.dark .snapshot-time{background:#252729;color:#ddd;border-left-color:#177ddc}
+.dark .snapshot-time-item{background-color:#252729;color:#ddd}
+.dark .snapshot-time-item:hover{background-color:#2d3032}
+.dark .snapshot-time-item.active{background-color:#177ddc}
+.dark .snapshot-info{background-color:#191a1b}
+.dark .snapshot-hour-header{border-bottom-color:#2d2e2f;color:#ddd}
+.dark .snapshot-item .time-badge{background:#252729;color:#ddd}
+.dark .time-machine-header{border-bottom-color:#2d2e2f}
+.dark .time-machine-tabs .tabs-container{background-color:#191a1b;border-color:#2d2e2f;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.dark .time-machine-tabs .tab-sort-item{color:#aaa}
+.dark .time-machine-tabs .tab-sort-item i.m-n{color:#666}
+.dark .time-machine-tabs .tab-sort-item.active{background-color:#252729;color:#ddd;box-shadow:0 1px 2px rgba(0,0,0,.15)}
+.dark .snapshot-time-header h3{color:#ddd}
+.dark .snapshot-time-header p{color:#888}
+.dark .snapshot-empty{color:#888}
+.dark .time-group-header{color:#ddd;border-bottom-color:#2d2e2f}
+.dark .time-group-header .m-n{color:#177ddc}
+.dark .hour-label{color:#888}
+.dark .time-points{border-left-color:#3e3e3e}
+.dark .snapshot-item:before{background:#3e3e3e}
+.dark .snapshot-item:hover:before{background:#177ddc;box-shadow:0 0 0 2px rgba(23,125,220,.2)}
+.dark .snapshot-item.active:before{background:#177ddc;box-shadow:0 0 0 3px rgba(23,125,220,.3)}
+.dark .time-badge{background:#252729;color:#ddd}
+.dark .snapshot-item:hover .time-badge{background:#2d3032;color:#177ddc;box-shadow:0 2px 6px rgba(23,125,220,.15)}
+.dark .snapshot-item.active .time-badge{background:#177ddc;color:#fff;box-shadow:0 2px 8px rgba(23,125,220,.25)}
+.dark .snapshot-back-btn{color:#177ddc}
+.dark .snapshot-back-btn:hover{color:#3390dc}
+.dark .snapshot-hour{border-left-color:#177ddc}
+.dark .snapshot-hour h4{color:#ddd}
+.dark .snapshot-time-wrapper{background:#191a1b}
+</style>
+</head>
+<body class="">
+<div id="page" class="page">
+	<div id="appbar" class="O">
+    <div class="O-c b b-xc">
+        <div class="O-status-vd"></div>
+        <div class="O-c-Q">
+            <a class="O-j b-L" href="/"><div class="O-j-R"><img src="https://file.ipadown.com/tophub/assets/images/logo.png"/></div>今日热榜</a>
+
+            <div id="tabbar" class="eb b-xc ">
+                <div class="kb-lb-ib">
+                    <div class="kb-lb-ib-hb">
+                        <div class="kb-lb-ib-c">
+                            <a class="F-gb" href="/"><div class="gb-c">首页</div></a>
+                            <a class="F-gb" href="/daily"><div class="gb-c">日报</div></a>
+                            <a class="F-gb" href="/dashboard"><div class="gb-c">动态</div></a>
+                            <a class="F-gb" href="/alerts"><div class="gb-c">追踪</div></a>
+                            <a class="F-gb" href="/hot"><div class="gb-c">榜中榜</div></a>
+                            <a class="F-gb" href="/trending"><div class="gb-c">热文库</div></a>
+                            <a class="F-gb" href="/topics"><div class="gb-c">话题</div></a>
+                            <a class="F-gb" href="/calendar"><div class="gb-c">日历</div></a>
+                            
+                            <div style="width: 1px; height: 16px; background-color: #ccc; margin: 16px 8px; display: inline-block; vertical-align: middle; position: relative; float: left;"></div>
+
+                            <a class="F-gb" href="/c/news"><div class="gb-c">综合</div></a>
+                            <a class="F-gb" href="/c/tech"><div class="gb-c">科技</div></a>
+                            <a class="F-gb" href="/c/ent"><div class="gb-c">娱乐</div></a>
+                            <a class="F-gb" href="/c/community"><div class="gb-c">社区</div></a>
+                            <a class="F-gb" href="/c/shopping"><div class="gb-c">购物</div></a>
+                            <a class="F-gb" href="/c/finance"><div class="gb-c">财经</div></a>
+                            <a class="F-gb" href="/c/developer"><div class="gb-c">开发</div></a>
+                            <a class="F-gb" href="/c/brief"><div class="gb-c">简报</div></a>
+                            <a class="F-gb" href="/c/ai"><div class="gb-c">AI</div></a>
+                            <a class="F-gb" href="javascript:void(0)" id="more-button"><div class="gb-c">更多<i class="m-n">&#xe9c0;</i></div></a>
+
+                            <div class="kb-lb-ib-pb-qb"></div>
+                        </div>
+                    </div>
+                    <div class="kb-lb-ib-k">
+                        <div class="m-n">&#xE408;</div>
+                    </div>
+                    <div class="kb-lb-ib-l">
+                        <div class="m-n">&#xE409;</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="I-J" style="display: none;">
+                <div class="I">
+                    <form class="I-form" action="/search" method="get">
+                        <div class="I-n"><i class="m-n">&#xe616;</i></div>
+                        <div class="I-K"><input class="I-K-L b-L" placeholder="聚合搜索热点内容、节点、隐藏优惠券、内部线报等" autocomplete="off" value="" name="q"></div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="bb-T b-L" style="display:flex;gap:30px;">
+                <div id="search-button" title="搜索">
+                    <i class="m-n">&#xe608;</i>
+                </div>
+                <a id="vip-button" title="充值成为会员" href="/pay">
+                    <i class="m-n">&#xe611;</i>
+                </a>
+                <div id="products-button" title="更多作品推荐">
+                    <i class="m-n">&#xe600;</i>
+                </div>
+            </div>
+            
+            <div id="accounts-button" class="S-T b-L" title="更多">
+                <img src="https://file.ipadown.com/tophub/assets/images/noavatar.png" class="account-i" onerror="this.onerror=null;this.src='https://file.ipadown.com/tophub/assets/images/noavatar.png'" />
+            </div>
+            
+        </div>
+        
+
+<style>
+.tag-group{padding:5px 0;margin-bottom:5px;text-align:left}
+.tag-group .F-gb{padding:2px 5px;margin:2px;overflow:hidden;color:#4a4a4a;opacity:.8;height:auto;line-height:20px;text-align:center;font-size:13px;display:inline-block!important;position:relative;border-radius:8px;background-color:#f5f5f5;transition:all .2s ease;float:none;font-weight:500}
+.tag-group .F-gb:hover{opacity:1;background-color:#e8e8e8;color:#333}
+.tag-group .F-gb-jb{background-color:#1e88e5;color:#fff;opacity:1;font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.tag-hr{height:1px;background-color:#f4f4f4;margin:2px 0}
+.kb-more-dropdown{left:40%}
+/* 深色模式样式 */
+.dark .tag-group .F-gb{color:#e0e0e0;background-color:#333;opacity:.9}
+.dark .tag-group .F-gb:hover{background-color:#444;color:#fff}
+.dark .tag-group .F-gb-jb{background-color:#0d47a1;color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.dark .tag-hr{background-color:#444}
+</style>
+
+        <div class="kb-more-dropdown" id="more-dropdown">
+            <div class="tag-group">
+                <a class="F-gb" href="/c/epaper">报刊</a>
+                <a class="F-gb" href="/c/design">设计</a>
+                <a class="F-gb" href="/c/university">校务</a>
+                <a class="F-gb" href="/c/organization">政务</a>
+                <a class="F-gb" href="/c/blog">专栏</a>
+                <a class="F-gb" href="/apple">苹果</a>
+                <a class="F-gb" href="/c/wxmp">公众号</a>
+                <a class="F-gb" href="/c/widget">小部件</a>
+                <a class="F-gb" href="/manage">自定义分组</a>
+            </div>
+                                </div>
+        
+        <div class="H-B">
+          <div class="H-B-T">
+            <h3>更多作品推荐</h3>
+          </div>
+          <div class="H-I-C">
+            <div class="H-I">
+                <a href="https://idaily.today/" target="_blank" class="H-I-I">
+                      <div class="H-I-I-I"><img src="https://file.ipadown.com/tophub/assets/images/logo-idailytoday.svg" /></div>
+                      <span class="H-I-I-T">今日简报 AI</span>
+                      <span class="H-I-I-D">总结全网10000+热榜，让阅读更高效！</span>
+                  </a>
+                  <a href="https://www.jishixiezuo.com/" target="_blank" class="H-I-I">
+                        <div class="H-I-I-I"><img src="https://file.ipadown.com/tophub/assets/images/logo-jishixiezuo.png" /></div>
+                        <span class="H-I-I-T">即时写作 AI</span>
+                        <span class="H-I-I-D">人工智能让每个人都可以自信地写作！</span>
+                    </a>
+              <a href="https://apps.apple.com/cn/app/%E4%BB%8A%E6%97%A5%E5%8E%86/id1622990821?mt=8" target="_blank" class="H-I-I">
+                  <div class="H-I-I-I"><img src="https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/9b/f8/b2/9bf8b27d-0992-9816-545a-46170865aed1/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg" /></div>
+                  <span class="H-I-I-T">今日历</span>
+                  <span class="H-I-I-D">全球最全的日历，日历届的航空母舰！</span>
+              </a>
+              <a href="https://apps.apple.com/cn/app/%E4%BB%8A%E6%97%A5%E8%A7%A3%E5%BF%A7/id6471419586?mt=8" target="_blank" class="H-I-I">
+                    <div class="H-I-I-I"><img src="https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/5d/2c/f7/5d2cf78e-1bee-dcb4-7598-298c403e804b/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/492x0w.png" /></div>
+                    <span class="H-I-I-T">今日解忧</span>
+                    <span class="H-I-I-D">赛博修行，舒缓静心，21世纪解压神器！</span>
+               </a>
+               <a href="https://remai.today/" target="_blank" class="H-I-I">
+                       <div class="H-I-I-I"><img src="https://file.ibmwclub.com/remai/assets/images/favicon/android-icon-192x192.png" /></div>
+                       <span class="H-I-I-T">今日热卖</span>
+                       <span class="H-I-I-D">淘宝京东拼多多等热卖热榜线报聚合</span>
+                  </a>
+              <a href="https://www.iambxs.com/" target="_blank" class="H-I-I">
+                      <div class="H-I-I-I"><img src="https://is3-ssl.mzstatic.com/image/thumb/Purple116/v4/59/c0/0f/59c00f2b-e526-617d-712e-fba710c2e8c3/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg" /></div>
+                      <span class="H-I-I-T">百晓生 AI</span>
+                      <span class="H-I-I-D">人工智能聊天兼全能创作助手</span>
+                 </a>
+                 <a href="https://www.tophubdata.com/" target="_blank" class="H-I-I">
+                         <div class="H-I-I-I"><img src="https://file.ipadown.com/tophub/assets/images/logo-tophubdata.svg" /></div>
+                         <span class="H-I-I-T">榜眼数据</span>
+                         <span class="H-I-I-D">今日热榜官方数据 API 开放平台</span>
+                    </a>
+            </div>
+          </div>
+        </div>
+        
+        <ul class="item-list">
+            <!-- <li class="item section"><div class="title">用户中心</div></li> -->
+                        <li class="item"><i class="m-n">&#xe6bd;</i><a href="javascript:void(0)" onclick="redirectToLogin()" rel="nofollow" class="title">登录</a></li>
+                        <li class="item divider"></li>
+            <!-- <li class="item section"><div class="title">设置选项</div></li> -->
+            <li class="item darkmode"><div class="title"><i class="m-n">&#xe6d4;</i>夜间模式</div><div class="switch "></div></li>
+            <li class="item divider"></li>
+            <!-- <li class="item section"><div class="title">关于我们</div></li> -->
+            <li class="item"><i class="m-n">&#xe605;</i><a href="/about" class="title">关于我们</a></li>
+            <li class="item"><i class="m-n">&#xe643;</i><a href="/app" class="title">App 下载</a></li>
+            <li class="item"><i class="m-n">&#xe69e;</i><a href="/help" class="title">使用指南</a></li>
+            <li class="item divider"></li>
+            <li class="item"><i class="m-n">&#xe64a;</i><a href="/sponsors" class="title">赞助商广告</a></li>
+            <li class="item"><i class="m-n">&#xe63d;</i><a href="https://www.tophubdata.com/" target="_blank"  class="title">API 开放平台</a></li>
+            <!-- <li class="item"><i class="m-n">&#xe60e;</i><a href="/union" class="title">联盟计划</a></li> -->
+                    </ul>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    // 点击搜索按钮时
+    $("#search-button").click(function() {
+        // 隐藏导航栏
+        $(".kb-lb-ib-c").hide();
+        // 显示搜索框
+        $(".I-J").show();
+        
+        // 聚焦到搜索输入框
+        $(".I-K-L").focus();
+    });
+    
+    // 点击搜索框以外的区域或按ESC键时取消搜索
+    $(document).click(function(event) {
+        if (!$(event.target).closest('#search-button, .I-J').length) {
+            $(".kb-lb-ib-c").show();
+            $(".I-J").hide();
+        }
+    });
+    
+    $(document).keyup(function(e) {
+        if (e.key === "Escape") {
+            $(".kb-lb-ib-c").show();
+            $(".I-J").hide();
+        }
+    });
+    
+    // 阻止点击搜索框时触发document的click事件
+    $(".I-J").click(function(event) {
+        event.stopPropagation();
+    });
+});
+</script>	<div class="eb-fb"></div>
+	<div class="c-d c-d-e">
+		<div class="p-c p-c-f">
+			<div class="p-c-l">
+
+								<div class="cb sd">
+					<div class="st">小红书</div>
+					<ul>
+																		<li><a href="/n/L4MdA5ldxD" title="小红书 ‧ 热榜">小红书 ‧ 热榜</a></li>
+											</ul>
+				</div>
+								
+								<div style="clear: both; padding: 5px;"></div>
+				<div class="cb sd">
+					<div class="st">猜你喜欢</div>
+					<ul>
+																		<li><a href="/n/aqeE50Me9R" title="小红唇 ‧ 首页推荐">小红唇 ‧ 首页推荐</a></li>
+											</ul>
+				</div>
+												
+				<div style="clear: both;padding:5px;"></div>
+				<div class="cb s-t-l">
+					<div class="hh">追踪机器人</div>
+					<div class="section">
+						<div class="tt hidden">兴趣追踪</div>
+						<div class="dd">自定义追踪你感兴趣的信息。</div>
+						<a href="/alerts">创建追踪器</a>
+					</div>
+				</div>
+			</div>
+			
+			<div class="p-c-m">
+
+				<div class="p-c-m-r" data-key="sidebar" data-limit="4" data-sponsors-status="1">                    
+    <div class="m-b-mo">
+        <a href="/sponsors">成为赞助商</a>
+    </div>
+
+        <!-- 非VIP用户显示广告 -->
+    <div class="adsense-sidebar-container" style="max-height:300px;margin-top:10px;overflow:hidden;">
+            </div>
+    </div>
+
+
+
+
+				<div class="p-c-m-l">
+
+					<div class="c-m-l">
+						<div class="c-m">
+							<div class="c-i">
+								<div class="c-i-b" style="background-image: url(&quot;https://file.ipadown.com/tophub/assets/images/bb.png&quot;);"></div>
+								<div class="c-i-c">
+									<div class="ii"><img src="https://file.ipadown.com/tophub/assets/images/media/xiaohongshu.com.png_160x160.png"/></div>
+									<div class="tt">
+										<h3>小红书 ‧ 热榜</h3>
+										<p>订阅数：2万+ </p>
+									</div>
+									<div class="at">
+										<a class="btn btn-node Ib-T Ib-T-yc" href="javascript:;" nodeid="331" is_follow="">
+											<div class="Ib-T-n n-yc"><i class="m-n">&#xe64c;</i>订阅</div>
+											<div class="Ib-T-n n-xc"><i class="m-n">&#xe64b;</i>取消订阅</div>
+										</a>
+									</div>
+								</div>
+							</div>
+							<div class="c-m-tab">
+								<div class="tab-classify">
+									<button type="button" class="action-search" id="search-in-node"><i class="m-n">&#xe616;</i></button>
+									<button type="button" class="action-export has-popover" export-title="导出榜单内容" export-desc="将当前榜单内容导出为文件，方便离线浏览或数据分析" export-params='{"module":"node","nodeid":331,"type":"rank"}'><i class="m-n">&#xe617;</i></button>
+									<button type="button" class="action-notify has-popover" notify-channel="1" notify-channel-id="331" notify-title="订阅 小红书热榜 更新通知" notify-desc="订阅后可通过多种方式接收 小红书热榜 的最新更新通知"><i class="m-n">&#xe683;</i></button>
+									<button type="button" class="action-share"><i class="m-n">&#xe7f9;</i></button>
+								</div>
+								<div class="tab-sort">
+									<a href="javascript:;" class="tab-sort-item active" id="latest">最新热榜<span>2026-06-07更新</span></a>
+									<a href="javascript:;" class="tab-sort-item" id="time-machine">历史快照<span>时光机</span></a>
+								</div>
+
+							</div>
+						</div>
+						
+					</div>	
+
+										<div class="f-t-l">
+						<div class="jc rank-all-item">
+							<div class="jc-c">
+								<table class="table" width="100%" border="0" cellpadding="0" cellspacing="0">
+									<tbody>
+																			<tr>
+											<td align="center">1.</td>
+											<td><a href="https://www.xiaohongshu.com/search_result?keyword=%E7%94%A8%E4%B8%87%E8%83%BD%E6%97%85%E8%A1%8C%E6%8B%8D%E7%85%A7%E5%A7%BF%E5%8A%BF%E7%BE%8E%E7%BE%8E%E5%87%BA%E7%89%87&type=51" target="_blank" rel="nofollow" itemid="231139944">用万能旅行拍照姿势美美出片</a></td>
+											<td class="ws">918.6w</td>
+											<td align="right"><a href="https://www.xiaohongshu.com/search_result?keyword=%E7%94%A8%E4%B8%87%E8%83%BD%E6%97%85%E8%A1%8C%E6%8B%8D%E7%85%A7%E5%A7%BF%E5%8A%BF%E7%BE%8E%E7%BE%8E%E5%87%BA%E7%89%87&type=51" title="查看详细" target="_blank" rel="nofollow" itemid="231139944"><i class="m-n">&#xe652;</i></a></td>
+										</tr>
+																				<tr>
+											<td align="center">2.</td>
+											<td><a href="https://www.xiaohongshu.com/search_result?keyword=%E8%80%97%E6%97%B6%E4%B8%89%E5%B9%B4%E6%8B%8D%E4%B8%8B%E5%8F%A4%E8%AF%97%E8%AF%8D%E9%87%8C%E7%9A%84%E4%B8%AD%E5%9B%BD&type=51" target="_blank" rel="nofollow" itemid="230858183">耗时三年拍下古诗词里的中国</a></td>
+											<td class="ws">907w</td>
+											<td align="right"><a href="https://www.xiaohongshu.com/search_result?keyword=%E8%80%97%E6%97%B6%E4%B8%89%E5%B9%B4%E6%8B%8D%E4%B8%8B%E5%8F%A4%E8%AF%97%E8%AF%8D%E9%87%8C%E7%9A%84%E4%B8%AD%E5%9B%BD&type=51" title="查看详细" target="_blank" rel="nofollow" itemid="230858183"><i class="m-n">&#xe652;</i></a></td>
+										</tr>
+																				<tr>
+											<td align="center">3.</td>
+											<td><a href="https://www.xiaohongshu.com/search_result?keyword=%E6%88%91%E6%8B%8D%E5%88%B0%E4%BA%86%E6%B5%B7%E9%B8%A5%E9%9B%A8&type=51" target="_blank" rel="nofollow" itemid="231141374">我拍到了海鸥雨</a></td>
+											<td class="ws">887.5w</td>
+											<td align="right"><a href="https://www.xiaohongshu.com/search_result?keyword=%E6%88%91%E6%8B%8D%E5%88%B0%E4%BA%86%E6%B5%B7%E9%B8%A5%E9%9B%A8&type=51" title="查看详细" target="_blank" rel="nofollow" itemid="231141374"><i class="m-n">&#xe652;</i></a></td>
+										</tr>
+																				<tr>
+											<td align="center">4.</td>
+											<td><a href="https://www.xiaohongshu.com/search_result?keyword=%E8%B6%85%E6%97%A5%E5%B8%B8%E7%BE%8E%E9%A3%9F%E6%95%99%E7%A8%8B%E9%80%9F%E6%9D%A5get&type=51" target="_blank" rel="nofollow" itemid="232970934">超日常美食教程速来get</a></td>
+											<td class="ws">867.6w</td>
+											<td align="right"><a href="https://www.xiaohongshu.com/search_result?keyword=%E8%B6%85%E6%97%A5%E5%B8%B8%E7%BE%8E%E9%A3%9F%E6%95%99%E7%A8%8B%E9%80%9F%E6%9D%A5get&type=51" title="查看详细" target="_blank" rel="nofollow" itemid="232970934"><i class="m-n">&#xe652;</i></a></td>
+										</tr>
+																				<tr>
+											<td align="center">5.</td>
+											<td><a href="https://www.xiaohongshu.com/search_result?keyword=%E5%AE%9A%E6%A0%BC%E8%BF%99%E4%B8%80%E5%88%BB%E7%9A%84%E6%97%A5%E7%85%A7%E9%87%91%E5%B1%B1&type=51" target="_blank" rel="nofollow" itemid="231141372">定格这一刻的日照金山</a></td>
+											<td class="ws">857w</td>
+											<td align="right"><a href="https://www.xiaohongshu.com/search_result?keyword=%E5%AE%9A%E6%A0%BC%E8%BF%99%E4%B8%80%E5%88%BB%E7%9A%84%E6%97%A5%E7%85%A7%E9%87%91%E5%B1%B1&type=51" title="查看详细" target="_blank" rel="nofollow" itemid="231141372"><i class="m-n">&#xe652;</i></a></td>
+										</tr>
+																				<tr>
+											<td align="center">6.</td>
+											<td><a href="https://www.xiaohongshu.com/search_result?keyword=%E4%BD%A0%E5%8F%AF%E4%BB%A5%E6%B0%B8%E8%BF%9C%E7%9B%B8%E4%BF%A1%E8%B5%9B%E9%87%8C%E6%9C%A8%E6%B9%96%E7%9A%84%E7%BE%8E%E6%99%AF&type=51" target="_blank" rel="nofollow" itemid="231141371">你可以永远相信赛里木湖的美景</a></td>
+											<td class="ws">846w</td>
+											<td align="right"><a href="https://www.xiaohongshu.com/search_result?keyword=%E4%BD%A0%E5%8F%AF%E4%BB%A5%E6%B0%B8%E8%BF%9C%E7%9B%B8%E4%BF%A1%E8%B5%9B%E9%87%8C%E6%9C%A8%E6%B9%96%E7%9A%84%E7%BE%8E%E6%99%AF&type=51" title="查看详细" target="_blank" rel="nofollow" itemid="231141371"><i class="m-n">&#xe652;</i></a></td>
+										</tr>
+																				<tr>
+											<td align="center">7.</td>
+											<td><a href="https://www.xiaohongshu.com/search_result?keyword=%E6%8B%BC%E8%B1%86%E4%B8%8A%E4%B9%9F%E5%8F%AF%E4%BB%A5%E4%BD%9C%E7%94%BB%E4%BA%86&type=51" target="_blank" rel="nofollow" itemid="231142256">拼豆上也可以作画了</a></td>
+											<td class="ws">833.1w</td>
+											<td align="right"><a href="https://www.xiaohongshu.com/search_result?keyword=%E6%8B%BC%E8%B1%86%E4%B8%8A%E4%B9%9F%E5%8F%AF%E4%BB%A5%E4%BD%9C%E7%94%BB%E4%BA%86&type=51" title="查看详细" target="_blank" rel="nofollow" itemid="231142256"><i class="m-n">&#xe652;</i></a></td>
+										</tr>
+																				<tr>
+											<td align="center">8.</td>
+											<td><a href="https://www.xiaohongshu.com/search_result?keyword=%E6%88%91%E7%9A%84%E5%AE%B6%E5%BA%AD%E6%97%85%E8%A1%8C%E6%9B%B4%E5%83%8F%E6%98%AF%E6%89%93%E5%89%AF%E6%9C%AC&type=51" target="_blank" rel="nofollow" itemid="231142255">我的家庭旅行更像是打副本</a></td>
+											<td class="ws">812w</td>
+											<td align="right"><a href="https://www.xiaohongshu.com/search_result?keyword=%E6%88%91%E7%9A%84%E5%AE%B6%E5%BA%AD%E6%97%85%E8%A1%8C%E6%9B%B4%E5%83%8F%E6%98%AF%E6%89%93%E5%89%AF%E6%9C%AC&type=51" title="查看详细" target="_blank" rel="nofollow" itemid="231142255"><i class="m-n">&#xe652;</i></a></td>
+										</tr>
+																				<tr>
+											<td align="center">9.</td>
+											<td><a href="https://www.xiaohongshu.com/search_result?keyword=%E5%8E%9F%E6%9D%A5%E5%8F%A4%E8%AF%97%E8%AF%8D%E9%87%8C%E7%9A%84%E6%B2%B3%E5%8D%97%E7%9C%9F%E7%9A%84%E5%AD%98%E5%9C%A8&type=51" target="_blank" rel="nofollow" itemid="231142254">原来古诗词里的河南真的存在</a></td>
+											<td class="ws">801.7w</td>
+											<td align="right"><a href="https://www.xiaohongshu.com/search_result?keyword=%E5%8E%9F%E6%9D%A5%E5%8F%A4%E8%AF%97%E8%AF%8D%E9%87%8C%E7%9A%84%E6%B2%B3%E5%8D%97%E7%9C%9F%E7%9A%84%E5%AD%98%E5%9C%A8&type=51" title="查看详细" target="_blank" rel="nofollow" itemid="231142254"><i class="m-n">&#xe652;</i></a></td>
+										</tr>
+																				<tr>
+											<td align="center">10.</td>
+											<td><a href="https://www.xiaohongshu.com/search_result?keyword=%E8%92%B8%E5%87%BA%E4%BA%86%E5%A5%B6%E9%A6%99%E7%88%86%E7%B1%B3%E8%8A%B1%E9%A6%92%E5%A4%B4&type=51" target="_blank" rel="nofollow" itemid="231007329">蒸出了奶香爆米花馒头</a></td>
+											<td class="ws">788.2w</td>
+											<td align="right"><a href="https://www.xiaohongshu.com/search_result?keyword=%E8%92%B8%E5%87%BA%E4%BA%86%E5%A5%B6%E9%A6%99%E7%88%86%E7%B1%B3%E8%8A%B1%E9%A6%92%E5%A4%B4&type=51" title="查看详细" target="_blank" rel="nofollow" itemid="231007329"><i class="m-n">&#xe652;</i></a></td>
+										</tr>
+																				<tr>
+											<td align="center">11.</td>
+											<td><a href="https://www.xiaohongshu.com/search_result?keyword=%E8%BF%99%E5%8F%AF%E8%83%BD%E6%98%AF%E6%B1%9F%E8%A5%BF%E6%9C%80%E8%A2%AB%E4%BD%8E%E4%BC%B0%E7%9A%84%E4%B8%80%E5%BA%A7%E5%B1%B1&type=51" target="_blank" rel="nofollow" itemid="231142253">这可能是江西最被低估的一座山</a></td>
+											<td class="ws">773.6w</td>
+											<td align="right"><a href="https://www.xiaohongshu.com/search_result?keyword=%E8%BF%99%E5%8F%AF%E8%83%BD%E6%98%AF%E6%B1%9F%E8%A5%BF%E6%9C%80%E8%A2%AB%E4%BD%8E%E4%BC%B0%E7%9A%84%E4%B8%80%E5%BA%A7%E5%B1%B1&type=51" title="查看详细" target="_blank" rel="nofollow" itemid="231142253"><i class="m-n">&#xe652;</i></a></td>
+										</tr>
+																				<tr>
+											<td align="center">12.</td>
+											<td><a href="https://www.xiaohongshu.com/search_result?keyword=%E6%B5%B7%E8%BE%B9%E6%97%A5%E8%90%BD%E8%B5%B4%E4%B8%80%E5%9C%BA%E6%B8%A9%E6%9F%94%E7%BA%A6%E4%BC%9A&type=51" target="_blank" rel="nofollow" itemid="231142252">海边日落赴一场温柔约会</a></td>
+											<td class="ws">760.1w</td>
+											<td align="right"><a href="https://www.xiaohongshu.com/search_result?keyword=%E6%B5%B7%E8%BE%B9%E6%97%A5%E8%90%BD%E8%B5%B4%E4%B8%80%E5%9C%BA%E6%B8%A9%E6%9F%94%E7%BA%A6%E4%BC%9A&type=51" title="查看详细" target="_blank" rel="nofollow" itemid="231142252"><i class="m-n">&#xe652;</i></a></td>
+										</tr>
+																				<tr>
+											<td align="center">13.</td>
+											<td><a href="https://www.xiaohongshu.com/search_result?keyword=%E6%8B%BC%E8%B1%86%E4%B9%9F%E8%83%BD%E5%BD%93%E7%81%AB%E6%BC%86%E5%8D%B0%E7%AB%A0%E7%8E%A9&type=51" target="_blank" rel="nofollow" itemid="231142870">拼豆也能当火漆印章玩</a></td>
+											<td class="ws">750.8w</td>
+											<td align="right"><a href="https://www.xiaohongshu.com/search_result?keyword=%E6%8B%BC%E8%B1%86%E4%B9%9F%E8%83%BD%E5%BD%93%E7%81%AB%E6%BC%86%E5%8D%B0%E7%AB%A0%E7%8E%A9&type=51" title="查看详细" target="_blank" rel="nofollow" itemid="231142870"><i class="m-n">&#xe652;</i></a></td>
+										</tr>
+																				<tr>
+											<td align="center">14.</td>
+											<td><a href="https://www.xiaohongshu.com/search_result?keyword=%E6%88%91%E5%88%9B%E9%80%A0%E4%BA%86%E6%96%B0%E5%9E%8B%E9%81%9B%E7%8B%97%E6%B3%95&type=51" target="_blank" rel="nofollow" itemid="231142869">我创造了新型遛狗法</a></td>
+											<td class="ws">732.5w</td>
+											<td align="right"><a href="https://www.xiaohongshu.com/search_result?keyword=%E6%88%91%E5%88%9B%E9%80%A0%E4%BA%86%E6%96%B0%E5%9E%8B%E9%81%9B%E7%8B%97%E6%B3%95&type=51" title="查看详细" target="_blank" rel="nofollow" itemid="231142869"><i class="m-n">&#xe652;</i></a></td>
+										</tr>
+																				<tr>
+											<td align="center">15.</td>
+											<td><a href="https://www.xiaohongshu.com/search_result?keyword=%E7%94%A8%E9%95%9C%E5%A4%B4%E6%8D%95%E6%8D%89%E5%9B%9B%E5%AD%A3%E5%A6%82%E7%94%BB&type=51" target="_blank" rel="nofollow" itemid="231142868">用镜头捕捉四季如画</a></td>
+											<td class="ws">717.6w</td>
+											<td align="right"><a href="https://www.xiaohongshu.com/search_result?keyword=%E7%94%A8%E9%95%9C%E5%A4%B4%E6%8D%95%E6%8D%89%E5%9B%9B%E5%AD%A3%E5%A6%82%E7%94%BB&type=51" title="查看详细" target="_blank" rel="nofollow" itemid="231142868"><i class="m-n">&#xe652;</i></a></td>
+										</tr>
+																				<tr>
+											<td align="center">16.</td>
+											<td><a href="https://www.xiaohongshu.com/search_result?keyword=%E7%AC%94%E5%A2%A8%E9%87%8D%E7%8E%B0%E8%AF%BE%E6%9C%AC%E8%AF%97%E6%84%8F&type=51" target="_blank" rel="nofollow" itemid="231142867">笔墨重现课本诗意</a></td>
+											<td class="ws">707.6w</td>
+											<td align="right"><a href="https://www.xiaohongshu.com/search_result?keyword=%E7%AC%94%E5%A2%A8%E9%87%8D%E7%8E%B0%E8%AF%BE%E6%9C%AC%E8%AF%97%E6%84%8F&type=51" title="查看详细" target="_blank" rel="nofollow" itemid="231142867"><i class="m-n">&#xe652;</i></a></td>
+										</tr>
+																				<tr>
+											<td align="center">17.</td>
+											<td><a href="https://www.xiaohongshu.com/search_result?keyword=%E6%8B%8D%E5%88%B0%E4%BA%86%E6%B4%B1%E6%B5%B7%E7%9A%84%E4%B8%81%E8%BE%BE%E5%B0%94%E6%95%88%E5%BA%94&type=51" target="_blank" rel="nofollow" itemid="231003625">拍到了洱海的丁达尔效应</a></td>
+											<td class="ws">695.5w</td>
+											<td align="right"><a href="https://www.xiaohongshu.com/search_result?keyword=%E6%8B%8D%E5%88%B0%E4%BA%86%E6%B4%B1%E6%B5%B7%E7%9A%84%E4%B8%81%E8%BE%BE%E5%B0%94%E6%95%88%E5%BA%94&type=51" title="查看详细" target="_blank" rel="nofollow" itemid="231003625"><i class="m-n">&#xe652;</i></a></td>
+										</tr>
+																				<tr>
+											<td align="center">18.</td>
+											<td><a href="https://www.xiaohongshu.com/search_result?keyword=%E7%8F%A0%E5%9C%86%E7%8E%89%E6%B6%A6%E5%A6%86%E5%AE%8C%E5%85%A8%E6%98%AF%E6%B7%A1%E9%A2%9C%E5%A4%A9%E8%8F%9C&type=51" target="_blank" rel="nofollow" itemid="231142866">珠圆玉润妆完全是淡颜天菜</a></td>
+											<td class="ws">684.7w</td>
+											<td align="right"><a href="https://www.xiaohongshu.com/search_result?keyword=%E7%8F%A0%E5%9C%86%E7%8E%89%E6%B6%A6%E5%A6%86%E5%AE%8C%E5%85%A8%E6%98%AF%E6%B7%A1%E9%A2%9C%E5%A4%A9%E8%8F%9C&type=51" title="查看详细" target="_blank" rel="nofollow" itemid="231142866"><i class="m-n">&#xe652;</i></a></td>
+										</tr>
+																				<tr>
+											<td align="center">19.</td>
+											<td><a href="https://www.xiaohongshu.com/search_result?keyword=%E7%A2%8E%E9%92%BB%E7%BE%8E%E7%94%B2%E6%8C%87%E5%B0%96%E8%97%8F%E7%9D%80%E7%BB%86%E7%A2%8E%E6%98%9F%E5%85%89&type=51" target="_blank" rel="nofollow" itemid="231140632">碎钻美甲指尖藏着细碎星光</a></td>
+											<td class="ws">652w</td>
+											<td align="right"><a href="https://www.xiaohongshu.com/search_result?keyword=%E7%A2%8E%E9%92%BB%E7%BE%8E%E7%94%B2%E6%8C%87%E5%B0%96%E8%97%8F%E7%9D%80%E7%BB%86%E7%A2%8E%E6%98%9F%E5%85%89&type=51" title="查看详细" target="_blank" rel="nofollow" itemid="231140632"><i class="m-n">&#xe652;</i></a></td>
+										</tr>
+																				<tr>
+											<td align="center">20.</td>
+											<td><a href="https://www.xiaohongshu.com/search_result?keyword=%E6%88%91%E6%9D%A5%E5%BD%93%E6%97%85%E8%A1%8C%E4%B8%AD%E7%9A%84%E9%A2%9C%E8%89%B2%E7%8C%8E%E6%89%8B&type=51" target="_blank" rel="nofollow" itemid="231142865">我来当旅行中的颜色猎手</a></td>
+											<td class="ws">642.3w</td>
+											<td align="right"><a href="https://www.xiaohongshu.com/search_result?keyword=%E6%88%91%E6%9D%A5%E5%BD%93%E6%97%85%E8%A1%8C%E4%B8%AD%E7%9A%84%E9%A2%9C%E8%89%B2%E7%8C%8E%E6%89%8B&type=51" title="查看详细" target="_blank" rel="nofollow" itemid="231142865"><i class="m-n">&#xe652;</i></a></td>
+										</tr>
+										
+																		<!-- 非VIP用户显示广告 -->
+																											</tbody>
+								</table>
+								
+							</div>
+							<div class="o"></div>
+						</div>
+					</div>
+					
+					<div class="f-t-l cc-dc">
+					
+						<div class="cc-dc-ec">
+							<h2 class="cc-dc-Cb">时光机<small>历史上榜快讯，全部快讯按上榜时间归类筛选</small></h2>
+							
+							<!-- 日期选择器（公共部分） -->
+							<div class="filter clearfix time-machine-filter">
+								<div class="btn-group year_group fl">
+									<button data-toggle="dropdown" class="btn dropdown-toggle" type="button"><span id="year">2026年</span><i
+											class="caret"></i></button>
+									<ul class="dropdown-menu">
+										<li><a>2026年</a></li><li><a>2025年</a></li><li><a>2024年</a></li><li><a>2023年</a></li><li><a>2022年</a></li><li><a>2021年</a></li><li><a>2020年</a></li><li><a>2019年</a></li>									</ul>
+								</div>
+								<div class="btn-group mon_group fl">
+									<button data-toggle="dropdown" class="btn dropdown-toggle" type="button"><span id="month">
+											10月
+										</span><i class="caret"></i></button>
+									<ul class="dropdown-menu">
+										<li><a>01月</a></li>
+										<li><a>02月</a></li>
+										<li><a>03月</a></li>
+										<li><a>04月</a></li>
+										<li><a>05月</a></li>
+										<li><a>06月</a></li>
+										<li><a>07月</a></li>
+										<li><a>08月</a></li>
+										<li><a>09月</a></li>
+										<li><a>10月</a></li>
+										<li><a>11月</a></li>
+										<li><a>12月</a></li>
+									</ul>
+								</div>
+								<div class="slider fl">
+									<input type="hidden" value="22" class="single-slider none">
+								</div>
+							</div>
+							
+							<!-- 内容切换标签 -->
+							<div class="time-machine-header">
+							<div class="tab-sort time-machine-tabs">
+								<div class="tabs-container">
+									<a href="javascript:;" class="tab-sort-item active" id="history-tab">
+										<i class="m-n">&#xe66d;</i>
+										<span>历史记录</span>
+									</a>
+																		<a href="javascript:;" class="tab-sort-item" id="snapshot-tab">
+										<i class="m-n">&#xe62e;</i>
+										<span>榜单快照</span>
+																				<span class="vip-badge">VIP</span>
+																			</a>
+																	</div>
+							</div>
+								
+								<!-- 导出按钮 -->
+								<div class="time-machine-actions export-popup">
+									<button type="button" class="action-export has-popover btn-export-styled history-export" export-title="导出历史榜单数据" export-desc="将当日上榜数据导出为文件，方便离线浏览或数据分析" export-params='{"module":"node","nodeid":331,"type":"history","date":"2026-10-22"}' id="export-date-btn">
+										<i class="m-n">&#xe617;</i>
+										<span id="export-date-text">导出当日上榜数据</span>
+									</button>
+									<button type="button" class="action-export has-popover btn-export-styled snapshot-export hidden" export-title="导出榜单快照数据" export-desc="将当前快照数据导出为文件，方便离线浏览或数据分析" export-params='{"module":"node","nodeid":331,"type":"snapshot","snapshot_id":"0"}' id="export-snapshot-btn">
+										<i class="m-n">&#xe617;</i>
+										<span>导出快照数据</span>
+									</button>
+								</div>
+							</div>
+
+						</div>
+					
+					
+					
+					
+						<div class="jc rank-all-item history-content">
+							<div class="jc-c">
+				
+								<table class="table" width="100%" border="0" cellpadding="0" cellspacing="0">
+									<tbody class="filter-data"></tbody>
+								</table>
+				
+							</div>
+							<div class="o"></div>
+						</div>
+
+						<!-- 榜单快照内容区域 -->
+						<div class="jc rank-all-item snapshot-content hidden">
+							<div class="snapshot-selector">
+								<div class="snapshot-time-list">
+									<div class="snapshot-time-header">
+										<h3>快照时间点</h3>
+										<p class="snapshot-date-display"></p>
+									</div>
+									<div class="snapshot-time-container">
+										<!-- 快照时间点列表将通过AJAX加载 -->
+										<div class="snapshot-loading"><div class="loading"><div></div><div></div><div></div><div></div></div><p>加载快照列表...</p></div>
+										<div class="snapshot-empty hidden">该日期暂无快照</div>
+										<div class="snapshot-hours"></div>
+									</div>
+								</div>
+							</div>
+							<div class="jc-c">
+								<div class="snapshot-info hidden">
+									<div class="snapshot-time-wrapper">
+										<div class="snapshot-time"></div>
+										<a href="javascript:;" class="snapshot-back-btn"><i class="m-n">&#xe61a;</i> 返回快照时间点选择</a>
+									</div>
+								</div>
+								<div class="snapshot-content-loading hidden"><div class="loading"><div></div><div></div><div></div><div></div></div><p>加载快照数据...</p></div>
+								<table class="table" width="100%" border="0" cellpadding="0" cellspacing="0">
+									<tbody class="snapshot-data"></tbody>
+								</table>
+							</div>
+							<div class="o"></div>
+						</div>
+
+						<div id="no-data" class="p-s hidden">
+							<div class="p-i"><div class="m-n">&#xe69e;</div></div>
+							<div class="p-t">该时间段暂无数据</div>
+							<div class="p-d">请尝试选择其他日期查看历史数据</div>
+							<a href="javascript:;" class="p-b" id="back-to-latest">
+								<span>返回最新</span>
+								<div class="m-n">&#xe61a;</div>
+							</a>
+						</div>
+
+						<div id="no-snapshot" class="p-s hidden">
+							<div class="p-i"><div class="m-n">&#xe69e;</div></div>
+							<div class="p-t">暂无榜单快照</div>
+							<div class="p-d">该节点暂无榜单快照数据，请稍后再试</div>
+							<a href="javascript:;" class="p-b" id="back-to-latest-snapshot">
+								<span>返回最新</span>
+								<div class="m-n">&#xe61a;</div>
+							</a>
+						</div>
+
+						<div id="to-pay" class="p-s hidden">
+							<div class="p-i"><div class="m-n">&#xe69e;</div></div>
+							<div class="p-t">开通会员，体验完整服务</div>
+							<div class="p-d">解锁全部高级功能，探索信息无限可能</div>
+							<a href="/pay" class="p-b">
+								<span>立即开通</span>
+								<div class="m-n">&#xe61a;</div>
+							</a>
+						</div>
+										
+						<div class="scroller-status" style="display:block;">
+							<div class="infinite-scroll-request"><div class="loading"><div></div><div></div><div></div><div></div></div><p>🧙‍♂️ 魔法正在凝聚中，请耐心等待~</p></div>
+							<p class="infinite-scroll-last"><span class="loadmore-line"></span>没有更多了<span class="loadmore-line"></span></p>
+							<p class="infinite-scroll-error"><span class="loadmore-line"></span>加载失败，刷新页面试试<span
+									class="loadmore-line"></span></p>
+							<p class="infinite-scroll-loadmore"><span id="loadmore">点击加载更多</span></p>
+						</div>
+						
+												<!-- 非VIP用户显示广告 -->
+						<div class="adsense-sidebar-container" style="margin:20px auto;max-width:100%;max-height:120px;">
+													</div>
+											
+					</div>
+					
+				</div>			
+			</div>
+		</div>
+	</div>	
+</div>
+
+<div class="daily-menu">
+	<div class="title">目录导航</div>
+	<ul>
+		<li>最新热榜</li>
+		<li>历史快照</li>
+	</ul>
+	<div class="close">×</div>
+</div>
+
+<script type="text/javascript">
+	window.nodeId = "331";
+	window.nodeHashId = "L4MdA5ldxD";
+	window.isVip = false;
+	window.nodeUpdateType = "1";
+	window.nodeTemplate = "6";
+</script>
+<script type="text/javascript">
+
+// 获取当前筛选日期
+function getCurrentFilterDate() {
+	// 获取年份
+	var year = $('#year').text().replace(/[^0-9]/ig,"");
+	
+	// 获取月份并确保两位数格式
+	var month = $('#month').text().replace(/[^0-9]/ig,"");
+	month = month.padStart(2, '0'); // 确保月份是两位数
+	
+	// 获取日期并确保两位数格式
+	var day = $('.single-slider').val().replace(/[^0-9]/ig,"");
+	day = day.padStart(2, '0'); // 确保日期是两位数
+	
+	// 获取当前日期
+	var today = new Date().getFullYear() + "-" + (new Date().getMonth() + 1).toString().padStart(2, '0') + "-" + new Date().getDate().toString().padStart(2, '0');
+	
+	// 构建选中的日期
+	var selectedDate = year + "-" + month + "-" + day;
+	
+	// 返回日期信息对象
+	return {
+		year: year,
+		month: month,
+		day: day,
+		selectedDate: selectedDate,
+		today: today,
+		isToday: (selectedDate === today)
+	};
+}
+
+$(document).ready(function(){
+	
+	var p = 1;
+	var isloading = 0;
+	var isend = 0;
+
+	loadDataByDate();
+
+	// 更新导出按钮的函数
+	function updateExportDate() {
+		// 获取当前选中的年月日
+		var year = $('#year').text().replace(/[^0-9]/ig,"");
+		var month = $('#month').text().replace(/[^0-9]/ig,"").padStart(2, '0');
+		var day = $('.single-slider').val().replace(/[^0-9]/ig,"").padStart(2, '0');
+		var dateStr = year + '-' + month + '-' + day;
+		
+		// 更新导出按钮属性
+		var $exportBtn = $('#export-date-btn');
+		if ($exportBtn.length > 0) {
+			$exportBtn.attr({
+				'export-desc': '将 ' + dateStr + ' 当日上榜数据导出为文件，方便离线浏览或数据分析',
+				'export-params': JSON.stringify({module: 'node', nodeid: window.nodeId, type: 'history', date: dateStr})
+			});
+			
+			// 更新按钮文本
+			$('#export-date-text').text('导出 ' + dateStr + ' 上榜数据');
+		}
+	}
+
+	
+	$('.dropdown-toggle').click(function(){
+		$(this).parent().toggleClass("open");
+	});
+	
+	// 点击页面空白区域关闭dropdown
+	$(document).click(function(e){
+		if(!$(e.target).closest('.dropdown-menu').length && !$(e.target).hasClass('dropdown-toggle') && !$(e.target).parent().hasClass('dropdown-toggle')){
+			$('.dropdown-menu').parent().removeClass("open");
+		}
+	});
+	
+	$('#loadmore').click(function(){
+		loadDataByDate();
+	});
+	
+	changeY();
+	$('.dropdown-menu li').click(function(){
+		var name=$('a',this).text();
+		$(this).parents('.btn-group').toggleClass("open");
+		$(this).parents('.btn-group').find('.dropdown-toggle span').text(name);
+		changeY();
+		updateExportDate(); // 更新导出按钮文本
+	});
+
+	function changeY(){
+		var year=$('#year').text().replace(/[^0-9]/ig,"")
+		var month=$('#month').text().replace(/[^0-9]/ig,"")
+		var d = new Date(year, month, 0);
+		var days=d.getDate();
+		var dayArr=[];
+		for(var i=1;i<=days;i++)
+		{
+			dayArr.push(i+'');
+		}
+		var last=parseInt(dayArr[dayArr.length-1]);
+		//$('.slider-container').remove();	
+		if($('.slider-container').length > 0 ){
+			$('.slider').children().remove();
+			$('.slider').html('<input type="hidden" value="" class="single-slider none">');
+		}
+		
+		p = 1;//第一页
+		isloading = 0;
+		isend = 0;
+
+		$('.single-slider').jRange({
+		    from:1,
+		    to:last,
+		    step: 1,
+		    scale: dayArr,
+		    format: '%s',
+		    width:$('.slider').outerWidth()-20,
+		    showLabels: true,
+		    snap: true,
+		    onstatechange:function () {
+				p = 1;
+				isloading = 0;
+				isend = 0;
+				$(".filter-data").empty();
+				$('.snapshot-hours').empty();
+				$('.snapshot-back-btn').click();
+				
+				// 获取当前筛选日期
+				var dateInfo = getCurrentFilterDate();
+				
+				// 更新导出按钮
+				updateExportDate();
+				
+				// 非会员用户只能查看当天数据
+				if (!window.isVip && !dateInfo.isToday) {
+					showVipTip();
+					return;
+				}
+					
+				// 根据当前激活的标签加载相应内容
+				if ($('#history-tab').hasClass('active')) {
+					loadDataByDate();
+				} else {
+					loadSnapshotList();
+				}
+            }
+		});
+	}
+
+	// 显示会员提醒
+	function showVipTip(){
+		// 隐藏所有内容区域
+		$(".p-s").addClass("hidden");
+		$('.history-content').addClass("hidden");
+		$('.snapshot-content').addClass("hidden");
+		// 显示会员提示
+		$("#to-pay").removeClass("hidden");
+	}
+	
+	function loadDataByDate(){
+		// 获取当前筛选日期
+		var dateInfo = getCurrentFilterDate();
+		
+		// 非会员用户只能查看当天数据
+		if(!window.isVip && !dateInfo.isToday) {
+			showVipTip();
+			return;
+		}
+		
+		if(isloading || isend){
+			return ;
+		}
+
+		$.ajax({
+			method: "POST",
+		    url: "/node-items-by-date",
+		    data: {
+		      p: p,
+		      date : dateInfo.selectedDate,
+		      nodeid : window.nodeId
+		    },
+		    dataType: 'json',
+		    beforeSend: function () {
+				isloading = 1;
+				$(".infinite-scroll-request").removeClass('hidden');
+				$(".infinite-scroll-last").addClass('hidden');
+				$(".infinite-scroll-error").addClass('hidden');
+				$(".infinite-scroll-loadmore").addClass('hidden');
+
+				if(p == 1){
+					$(".p-s").addClass("hidden");
+					$(".history-content").addClass("hidden");
+				}
+		    },
+		    success: function ( data ) {
+				$(".infinite-scroll-request").addClass('hidden');
+				
+				if(!data.error){
+					// 检查数据是否为空
+					if(data.data.items.length === 0) {
+						if(p == 1){
+							// 向上查找最近的 rank-all-item 并添加 hidden 类
+							$(".history-content").addClass("hidden");
+							// 显示提示信息区域
+							$("#no-data").removeClass("hidden");
+							// 添加返回最新榜单的点击事件
+							$(document).on('click', '#back-to-latest', function() {
+								$('.stt').click();
+							});
+						}
+					} else {
+						// 有内容时正常显示数据
+						// 隐藏提示信息区域
+						$(".p-s").addClass("hidden");
+						// 确保表格显示
+						$(".history-content").removeClass("hidden");
+						var s = '';
+						$.each(data.data.items, function(i, v) {
+							var index = i + 1;
+							s += '<tr><td align="center" width="80px">' + v.time + '</td>';
+														s += '<td><a href="' + v.url + '" target="_blank" rel="nofollow" itemid="' + v.ID + '">' + v.title + '</a></td><td class="ws">' + v.extra + '</td><td align="right"><a href="' + v.url + '" title="查看详细" target="_blank" rel="nofollow" itemid="' + v.ID + '"><i class="m-n">&#xe652;</i></a></td></tr>';
+						});
+						$(".filter-data").append(s);						
+					}
+					
+					if( data.data.items.length <= 1 ) {
+						$(".infinite-scroll-last").removeClass('hidden');
+						isend = 1;
+					}
+					else {
+						$(".infinite-scroll-loadmore").removeClass('hidden');
+					}
+					p++;
+				}
+				else {
+					if(data.msg.match("会员")) {
+						$("#to-pay").removeClass("hidden");
+					}
+					else {
+						layer.msg(data.msg);
+					}
+				}
+				isloading = 0;
+			},
+			error: function () {
+				isloading = 0;
+				layer.msg('加载失败，请重试');
+			}
+		});		
+	}
+	
+	// 初始化时更新导出按钮
+	updateExportDate();
+
+	
+	// 初始化节点内搜索弹窗
+	$('#search-in-node').webuiPopover({
+		trigger: 'click',
+		title: false,
+		content: `
+			<div class="search-popover-content" style="padding: 20px; width: 300px;">
+				<h4 style="margin-top: 0; margin-bottom: 10px; font-size: 16px; font-weight: 600;">节点内搜索</h4>
+				<div class="search-input-container" style="margin-bottom: 15px;">
+					<input type="text" id="node-search-input" class="form-control" placeholder="输入搜索关键词" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+				</div>
+				<div class="search-btn-container" style="text-align: right;">
+					<button id="cancel-search" class="btn btn-default" style="padding: 6px 12px; margin-right: 10px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 4px;">取消</button>
+					<button id="submit-search" class="btn btn-primary" style="padding: 6px 12px; background: #4e6ef2; color: #fff; border: none; border-radius: 4px;">搜索</button>
+				</div>
+			</div>
+		`,
+		width: '340px',
+		multi: false,
+		closeable: false,
+		style: (Cookies.get('darkmode') ? 'inverse' : ''),
+		padding: false,
+		backdrop: false,
+		arrow: true,
+		animation: 'pop',
+		onShow: function($element) {
+			// 弹窗显示后自动聚焦到输入框
+			setTimeout(function() {
+				$('#node-search-input').focus();
+			}, 100);
+			
+			// 绑定取消按钮事件
+			$('#cancel-search').off('click').on('click', function() {
+				$('#search-in-node').webuiPopover('hide');
+			});
+			
+			// 绑定搜索按钮事件
+			$('#submit-search').off('click').on('click', function() {
+				var searchQuery = $('#node-search-input').val().trim();
+				if (searchQuery) {
+					window.location.href = "/search?e=item&q=" + encodeURIComponent(searchQuery) + "&nodeid=" + window.nodeHashId;
+				}
+			});
+			
+			// 绑定回车键事件
+			$('#node-search-input').off('keypress').on('keypress', function(e) {
+				if (e.which === 13) { // 回车键的keyCode是13
+					var searchQuery = $(this).val().trim();
+					if (searchQuery) {
+						window.location.href = "/search?e=item&q=" + encodeURIComponent(searchQuery) + "&nodeid=" + window.nodeHashId;
+					}
+				}
+			});
+		}
+	});
+	
+	$('body').on('click', '#time-machine', function (){
+		// 获取时光机部分的位置
+        var targetElement = $('.cc-dc-ec h2:contains("时光机")');
+        if (targetElement.length > 0) {
+            // 计算目标位置（减去一些偏移量，使滚动更加合适）
+            var targetPosition = targetElement.offset().top - 80;
+            // 平滑滚动到目标位置
+            $('html, body').animate({
+                scrollTop: targetPosition
+            }, 500);            
+        }
+		
+		// 默认显示历史记录标签
+		$('#history-tab').click();
+	});
+	
+	// 切换历史记录和榜单快照标签
+	$('.time-machine-tabs .tab-sort-item').on('click', function() {
+		var $this = $(this);
+		if ($this.hasClass('active')) return;
+		
+		// 切换标签激活状态
+		$('.time-machine-tabs .tab-sort-item').removeClass('active');
+		$this.addClass('active');
+		
+		// 切换导出按钮
+		if ($this.attr('id') === 'history-tab') {
+			$('.history-export').removeClass('hidden');
+			$('.snapshot-export').addClass('hidden');
+		} else {
+			$('.history-export').addClass('hidden');
+			$('.snapshot-export').removeClass('hidden');
+		}
+		
+		// 获取当前筛选日期
+		var dateInfo = getCurrentFilterDate();
+		
+		// 非会员用户只能查看当天数据
+		if (!window.isVip && !dateInfo.isToday) {
+			showVipTip();
+			return;
+		}
+		
+		// 隐藏提示
+		$(".p-s").addClass("hidden");
+		
+		// 根据标签ID显示对应内容
+		if ($this.attr('id') === 'history-tab') {
+			// 切换到历史记录标签
+			$('.history-content').removeClass('hidden');
+			$('.snapshot-content').addClass('hidden');
+			$('.scroller-status').removeClass('hidden');
+			
+			// 如果有历史数据，显示历史数据
+			if ($('.filter-data').children().length > 0) {
+				return ;
+			}
+			
+			// 加载历史数据
+			p = 1; // 重置页码
+			$(".filter-data").empty(); // 清空现有数据
+			loadDataByDate();
+		} else {
+			// 切换到榜单快照标签
+			$('.history-content').addClass('hidden');
+			$('.snapshot-content').removeClass('hidden');
+			$('.scroller-status').addClass('hidden');
+			
+			// 如果有数据直接显示
+			if ($('.snapshot-hours').children().length > 0) {
+				return ;
+			}
+
+			// 加载快照列表
+			loadSnapshotList();
+		}
+	});
+	
+	// 加载快照列表
+	function loadSnapshotList(){
+		// 获取当前筛选日期
+		var dateInfo = getCurrentFilterDate();
+		
+		// 非会员用户只能查看当天数据
+		if (!window.isVip && !dateInfo.isToday) {
+			showVipTip();
+			return;
+		}
+		
+		// 更新导出按钮参数
+		var exportParams = {
+			module: "node",
+			nodeid: window.nodeId,
+			type: "snapshot",
+			date: dateInfo.selectedDate
+		};
+		$('.snapshot-export').attr('export-params', JSON.stringify(exportParams));
+		
+		// 显示加载中
+		$('.snapshot-loading').removeClass('hidden');
+		$('.snapshot-hours').empty();
+		$('.snapshot-empty').addClass('hidden');
+		$('.snapshot-hours').removeClass('hidden');
+		
+		// 发送请求获取快照列表
+		$.ajax({
+			url: '/node-snapshot-list',
+			type: 'POST',
+			data: {
+				nodeid: window.nodeId,
+				date: dateInfo.selectedDate
+			},
+			dataType: 'json',
+			success: function(res) {
+				$('.snapshot-loading').addClass('hidden');
+				
+				if (res.error) {
+				// 显示错误信息
+				$('.snapshot-empty').removeClass('hidden');
+				$('.snapshot-hours').addClass('hidden');
+				$('.snapshot-loading').addClass('hidden');
+				return;
+			}
+			
+			// 现在我们知道 res.data.snapshots 是一个对象，其中键是小时，值是数组
+			var data = res.data.snapshots || {};
+			if (!data || Object.keys(data).length === 0) {
+				// 没有快照数据
+				$('.snapshot-empty').removeClass('hidden');
+				$('.snapshot-hours').addClass('hidden');
+				return;
+			}
+			
+			// 数据已经是按小时分组的，直接使用
+			var snapshotsByHour = data;
+				// 渲染快照列表
+				var hours = Object.keys(snapshotsByHour).sort(function(a, b) {
+					return a - b;
+				});
+				
+				// 按时间段分组
+				var timeGroups = {
+					'morning': { label: '凌晨', hours: [], icon: '&#xe604;' },
+					'noon': { label: '上午', hours: [], icon: '&#xe7f2;' },
+					'afternoon': { label: '下午', hours: [], icon: '&#xe7f3;' },
+					'evening': { label: '晚上', hours: [], icon: '&#xe731;' }
+				};
+				
+				// 将小时分到各个时间段
+				hours.forEach(function(hour) {
+					var hourInt = parseInt(hour);
+					if (hourInt >= 0 && hourInt < 6) {
+						timeGroups.morning.hours.push(hour);
+					} else if (hourInt >= 6 && hourInt < 12) {
+						timeGroups.noon.hours.push(hour);
+					} else if (hourInt >= 12 && hourInt < 18) {
+						timeGroups.afternoon.hours.push(hour);
+					} else {
+						timeGroups.evening.hours.push(hour);
+					}
+				});
+				
+				// 生成时间点HTML
+				// 添加标题
+			var timelineHtml = '<div class="snapshot-timeline">';
+				
+				// 遍历时间段
+				for (var group in timeGroups) {
+					var groupData = timeGroups[group];
+					if (groupData.hours.length > 0) {
+						// 添加时间段标题
+						timelineHtml += '<div class="time-group-header"><i class="m-n">' + groupData.icon + '</i><span>' + groupData.label + '</span></div>';
+						timelineHtml += '<div class="time-group">';
+						
+						// 按小时分组
+						groupData.hours.sort(function(a, b) { return parseInt(a) - parseInt(b); }).forEach(function(hour) {							
+							// 添加小时分组
+							timelineHtml += '<div class="hour-group">';
+							timelineHtml += '<div class="hour-label"><span>' + hour + ':00</span></div>';
+							timelineHtml += '<div class="time-points">';
+							
+							// 添加快照时间点
+							if (Array.isArray(snapshotsByHour[hour])) {
+								snapshotsByHour[hour].forEach(function(snapshot) {
+									var snapshotUniqueId = 'snapshot-' + hour + '-' + snapshot.time.replace(':', '');
+									timelineHtml += '<div id="' + snapshotUniqueId + '" class="snapshot-item" data-id="' + snapshot.id + '" data-timestamp="' + snapshot.timestamp + '">';
+									timelineHtml += '<span class="time-badge">' + snapshot.time + '</span>';
+									timelineHtml += '</div>';
+								});
+							}
+							
+							timelineHtml += '</div>'; // time-points
+							timelineHtml += '</div>'; // hour-group
+						});
+						
+						timelineHtml += '</div>'; // time-group
+					}
+				}
+				
+				timelineHtml += '</div>'; // snapshot-timeline
+				
+				// 渲染到页面
+				$('.snapshot-hours').html(timelineHtml);
+				
+				// 显示提示信息
+				$('.snapshot-info').addClass('hidden');
+			},
+			error: function() {
+				$('.snapshot-loading').addClass('hidden');
+				$('.snapshot-empty').removeClass('hidden');
+				$('.snapshot-hours').addClass('hidden');
+				layer.msg('加载快照列表失败，请重试');
+			}
+		});
+		
+	}
+	
+	// 初始化时绑定快照点击事件，在外部只绑定一次
+	$('body').on('click', '.snapshot-item', function() {
+		var $this = $(this);
+		var snapshotId = $this.data('id');
+		
+		// 显示加载中状态
+		$('.snapshot-content-loading').removeClass('hidden');
+		
+		// 选中状态
+		$('.snapshot-item').removeClass('active');
+		$this.addClass('active');
+		
+		// 更新快照时间显示
+		var snapshotTime = $this.find('.time-badge').text();
+		var hourLabel = $this.closest('.hour-group').find('.hour-label span').text().split(':')[0];
+		var dateText = $('.snapshot-date-display').text();
+		
+		// 隐藏日期选择器，显示快照信息
+		$('.snapshot-selector').addClass('hidden');
+		$('.snapshot-info').removeClass('hidden');
+		
+		// 加载快照内容
+		loadSnapshotItems(snapshotId);
+		
+		// 更新导出按钮参数，加入快照ID
+		var exportParams = JSON.parse($('.snapshot-export').attr('export-params'));
+		exportParams.snapshot_id = snapshotId;
+		$('.snapshot-export').attr('export-params', JSON.stringify(exportParams));
+	});
+	
+	// 绑定返回按钮点击事件
+	$('body').on('click', '.snapshot-back-btn', function(e) {
+		e.preventDefault();
+		// 隐藏快照信息，显示日期选择器
+		$('.snapshot-info').addClass('hidden');
+		$('.snapshot-data').empty(); // 清空快照数据
+		$('.snapshot-selector').removeClass('hidden');
+		// 清除选中状态
+		$('.snapshot-item').removeClass('active');
+	});
+	
+	// 加载快照内容
+	// 渲染快照内容
+	function loadSnapshotItems(snapshotId) {
+		if (!snapshotId) {
+			$('.snapshot-data').html('<tr><td colspan="2" class="no-items">无效的快照ID</td></tr>');
+			return;
+		}
+		
+		// 显示加载中
+		$('.snapshot-content-loading').removeClass('hidden');
+		$('.snapshot-data').empty();
+		
+		// 发送请求获取快照内容
+		$.ajax({
+			url: '/node-snapshot-items',
+			type: 'POST',
+			data: {
+				snapshot_id: snapshotId
+			},
+			dataType: 'json',
+			success: function(res) {
+				$('.snapshot-content-loading').addClass('hidden');
+				
+				// 检查错误情况
+				if (res.error) {
+					$('.snapshot-data').html('<tr><td colspan="2" class="no-items">加载失败</td></tr>');
+					return;
+				}
+
+				$('.snapshot-time').text('快照时间: ' + res.data.snapshot_time);
+				
+				// 检查数据是否存在
+				if (!res.data) {
+					$('.snapshot-data').html('<tr><td colspan="2" class="no-items">暂无快照数据</td></tr>');
+					return;
+				}
+				
+				// 先检查items属性
+				var items = [];
+				if (res.data.items && Array.isArray(res.data.items)) {
+					items = res.data.items;
+				} else if (Array.isArray(res.data)) {
+					// 如果数据直接就是数组
+					items = res.data;
+				}
+				
+				if (items.length === 0) {
+					$('.snapshot-data').html('<tr><td colspan="2" class="no-items">暂无快照数据</td></tr>');
+					return;
+				}
+				
+				// 渲染榜单快照内容
+				var tableHtml = '';
+				
+				// 复用与最新榜单相同的模板逻辑
+				items.forEach(function(item, index) {
+					var rank = index + 1;
+					var extra = item.extra || '';
+					
+					// 辅助函数，用于检查值是否为空
+					function empty(val) {
+						return val === undefined || val === null || val === '';
+					}
+					
+					// 确保item.extra存在
+					if (!item.extra) item.extra = '';
+					
+					// 使用与最新榜单相同的模板类型
+					switch(window.nodeTemplate) {
+						case '0': // 默认排版（左边title，右边显示extra）
+							tableHtml += '<tr>' +
+								'<td align="center">' + rank + '.</td>' +
+								'<td><a href="' + item.url + '" target="_blank" rel="nofollow" itemid="' + item.ID + '">' + item.title + '</a></td>' +
+								'<td class="ws">' + extra + '</td>' +
+								'<td align="right"><a href="' + item.url + '" title="查看详细" target="_blank" rel="nofollow" itemid="' + item.ID + '"><i class="m-n">&#xe652;</i></a></td>' +
+							'</tr>';
+							break;
+						
+						case '1': // 4:3 标准长方形 文章缩略图
+							var desc1 = !empty(item.extra) ? item.extra : item.description;
+							tableHtml += '<tr>' +
+								'<td align="center">' + rank + '.</td>' +
+								'<td class="al" align="center"><img src="' + (item.thumbnail || '') + '" onerror="this.onerror=null;this.src="https://file.ipadown.com/tophub/assets/images/placeholder-lazyload.png"" width="100" height="64" style="object-fit: cover;" referrerPolicy="no-referrer" /></td>' +
+								'<td class="al">' +
+									'<div><a href="' + item.url + '" target="_blank" rel="nofollow" itemid="' + item.ID + '">' + item.title + '</a></div>' +
+									'<div class="item-desc">' + desc1 + '</div>' +
+								'</td>' +
+								'<td align="right"><a href="' + item.url + '" title="查看详细" target="_blank" rel="nofollow" itemid="' + item.ID + '"><i class="m-n">&#xe652;</i></a></td>' +
+							'</tr>';
+							break;
+						
+						case '2': // 1:1 标准正方形 文章缩略图
+							var desc2 = !empty(item.description) ? item.description : item.extra;
+							tableHtml += '<tr>' +
+								'<td align="center">' + rank + '.</td>' +
+								'<td class="al" align="center"><img src="' + (item.thumbnail || '') + '" onerror="this.onerror=null;this.src=\"https://file.ipadown.com/tophub/assets/images/placeholder-lazyload.png\"" width="80" height="80" style="object-fit: cover;" referrerPolicy="no-referrer" /></td>' +
+								'<td class="al">' +
+									'<div><a href="' + item.url + '" target="_blank" rel="nofollow" itemid="' + item.ID + '">' + item.title + '</a></div>' +
+									'<div class="item-desc">' + desc2 + '</div>' +
+								'</td>' +
+								'<td align="right"><a href="' + item.url + '" title="查看详细" target="_blank" rel="nofollow" itemid="' + item.ID + '"><i class="m-n">&#xe652;</i></a></td>' +
+							'</tr>';
+							break;
+						
+						case '3': // 1:1 圆角正方形 app图标
+							var desc3 = !empty(item.description) ? item.description : item.extra;
+							tableHtml += '<tr>' +
+								'<td align="center">' + rank + '.</td>' +
+								'<td class="al" align="center"><img src="' + (item.thumbnail || '') + '" onerror="this.onerror=null;this.src=\"https://file.ipadown.com/tophub/assets/images/placeholder-lazyload.png\"" width="80" height="80" style="border-radius: 15px; object-fit: cover;" referrerPolicy="no-referrer" /></td>' +
+								'<td class="al">' +
+									'<div><a href="' + item.url + '" target="_blank" rel="nofollow" itemid="' + item.ID + '">' + item.title + '</a></div>' +
+									'<div class="item-desc">' + desc3 + '</div>' +
+								'</td>' +
+								'<td align="right"><a href="' + item.url + '" title="查看详细" target="_blank" rel="nofollow" itemid="' + item.ID + '"><i class="m-n">&#xe652;</i></a></td>' +
+							'</tr>';
+							break;
+						
+						case '4': // 160:220 影视海报,小说封面,短视频
+							tableHtml += '<tr>' +
+								'<td align="center">' + rank + '.</td>' +
+								'<td class="al" align="center"><img src="' + (item.thumbnail || '') + '" onerror="this.onerror=null;this.src=\"https://file.ipadown.com/tophub/assets/images/placeholder-lazyload.png\"" width="80" height="110" style="object-fit: cover;" referrerPolicy="no-referrer" /></td>' +
+								'<td class="al">' +
+									'<div><a href="' + item.url + '" target="_blank" rel="nofollow" itemid="' + item.ID + '">' + item.title + '</a></div>' +
+									'<div class="item-desc">' + (item.description || '') + '</div>' +
+									'<div class="item-extra">' + (item.extra || '') + '</div>' +
+								'</td>' +
+								'<td align="right"><a href="' + item.url + '" title="查看详细" target="_blank" rel="nofollow" itemid="' + item.ID + '"><i class="m-n">&#xe652;</i></a></td>' +
+							'</tr>';
+							break;
+						
+						case '5': // 1:1 购物大图
+							var desc5 = !empty(item.description) ? item.description : item.extra;
+							tableHtml += '<tr>' +
+								'<td align="center">' + rank + '.</td>' +
+								'<td class="al" align="center"><img src="' + (item.thumbnail || '') + '" onerror="this.onerror=null;this.src=\"https://file.ipadown.com/tophub/assets/images/placeholder-lazyload.png\"" width="100" height="100" style="object-fit: cover;" referrerPolicy="no-referrer" /></td>' +
+								'<td class="al">' +
+									'<div><a href="' + item.url + '" target="_blank" rel="nofollow" itemid="' + item.ID + '">' + item.title + '</a></div>' +
+									'<div class="item-desc">' + desc5 + '</div>' +
+								'</td>' +
+								'<td align="right"><a href="' + item.url + '" title="查看详细" target="_blank" rel="nofollow" itemid="' + item.ID + '"><i class="m-n">&#xe652;</i></a></td>' +
+							'</tr>';
+							break;
+						
+						case '6': // 无图一行 关键词类
+							tableHtml += '<tr>' +
+								'<td align="center">' + rank + '.</td>' +
+								'<td><a href="' + item.url + '" target="_blank" rel="nofollow" itemid="' + item.ID + '">' + item.title + '</a></td>' +
+								'<td class="ws">' + (item.extra || '') + '</td>' +
+								'<td align="right"><a href="' + item.url + '" title="查看详细" target="_blank" rel="nofollow" itemid="' + item.ID + '"><i class="m-n">&#xe652;</i></a></td>' +
+							'</tr>';
+							break;
+						
+						default: // 默认排版
+							tableHtml += '<tr>' +
+								'<td align="center">' + rank + '.</td>' +
+								'<td><a href="' + item.url + '" target="_blank" rel="nofollow" itemid="' + item.ID + '">' + item.title + '</a></td>' +
+								'<td class="ws">' + (item.extra || '') + '</td>' +
+								'<td align="right"><a href="' + item.url + '" title="查看详细" target="_blank" rel="nofollow" itemid="' + item.ID + '"><i class="m-n">&#xe652;</i></a></td>' +
+							'</tr>';
+					}
+				});
+				
+				// 表格已经存在，不需要再创建
+				$('.snapshot-data').html(tableHtml);
+				// 显示快照信息区域
+				$('.snapshot-info').removeClass('hidden');
+			},
+			error: function() {
+				$('.snapshot-content-loading').addClass('hidden');
+				$('.snapshot-data').html('<tr><td colspan="2" class="no-items">加载失败，请重试</td></tr>');
+			}
+		});
+		
+	}
+	
+	// 返回最新榜单（快照版）
+	$(document).on('click', '#back-to-latest-snapshot', function() {
+		$('.stt').click();
+	});
+});
+
+/**
+ * 初始化导航菜单
+ */
+function initNavigationMenu() {
+    // 获取菜单容器
+    var $menuContainer = $('.daily-menu');
+    
+    // 清空现有菜单项（保留第一个"最新"和第二个"历史快照"）
+    var $menuList = $menuContainer.find('ul');
+    var $firstItems = $menuList.find('li').slice(0, 2).clone();
+    $menuList.empty().append($firstItems);
+    
+    // 第一个菜单项点击事件（最新）
+    $menuList.find('li').eq(0).click(function() {
+        $('html, body').animate({
+            scrollTop: $('.tab-sort-item#latest').offset().top - 84
+        }, 500);
+        $menuContainer.hide();
+    });
+    
+    // 第二个菜单项点击事件（历史快照）
+    $menuList.find('li').eq(1).click(function() {
+        $('html, body').animate({
+            scrollTop: $('.cc-dc-ec h2:contains("时光机")').offset().top - 84
+        }, 500);
+        $menuContainer.hide();
+    });
+    
+    // 获取所有标题元素并添加到菜单
+    $('.header span span.before').each(function(index) {
+        var $header = $(this).parent();
+        var headerText = $header.text().replace('【', '').replace('】', '');
+        
+        // 创建菜单项
+        var $menuItem = $('<li></li>').text(headerText);
+        
+        // 点击菜单项时滚动到对应标题，考虑64px的固定导航高度
+        $menuItem.click(function() {
+            $('html, body').animate({
+                scrollTop: $header.parent().offset().top - 84 // 64px导航高度 + 20px额外偏移
+            }, 500);
+            $menuContainer.hide(); // 点击后隐藏菜单
+        });
+        
+        $menuList.append($menuItem);
+    });
+    
+    // 添加关闭按钮事件
+    $menuContainer.find('.close').click(function() {
+        $menuContainer.hide();
+    });
+    
+    // 监听滚动事件，控制菜单显示和隐藏
+    var windowHeight = $(window).height();
+    var showMenuThreshold = windowHeight; // 滚动一屏后显示
+    
+    $(window).scroll(function() {
+        var scrollTop = $(window).scrollTop();
+        
+        // 滚动超过一屏显示菜单，回到顶部隐藏菜单
+        if (scrollTop > showMenuThreshold) {
+            $menuContainer.fadeIn(300);
+        } else {
+            $menuContainer.fadeOut(300);
+        }
+    });
+}
+
+// 页面加载完成后初始化导航菜单
+$(document).ready(function() {
+    initNavigationMenu();
+});
+</script>
+
+
+
+<script src="https://file.ipadown.com/tophub/assets/js/stt.js" type="text/javascript"></script>
+<script src="https://file.ipadown.com/tophub/assets/js/statistics.js" type="text/javascript"></script>
+</body>
+</html>
