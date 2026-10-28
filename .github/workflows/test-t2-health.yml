@@ -4,12 +4,21 @@ on:
   push:
     branches: [gpt/T2-health]
     paths:
-      - scripts/probe_health_calendar.py
-      - .github/workflows/test-t2-health.yml
+      - scripts/health_check.py
+      - scripts/health_alert.py
+      - scripts/update_trade_calendar.py
+      - scripts/verify_t2_health.py
+      - system/运行清单.json
+      - tests/test_health*.py
+      - tests/test_trade_calendar.py
+      - tests/test_workflow_alerts.py
+      - .github/workflows/**
   workflow_dispatch:
 
 permissions:
   contents: write
+  issues: write
+  actions: read
 
 concurrency:
   group: repo-writer
@@ -24,22 +33,43 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: 探测官方交易日历
-        run: python3 scripts/probe_health_calendar.py
-      - name: 导出 main Git 镜像供本机同步
-        run: git bundle create /tmp/rsan-main.bundle refs/remotes/origin/main
-      - uses: actions/upload-artifact@v4
-        with:
-          name: rsan-main-git-bootstrap
-          path: /tmp/rsan-main.bundle
-          retention-days: 1
-      - name: 保存探测证据
+      - name: 核验官方全年日历
+        run: python3 scripts/update_trade_calendar.py --force
+      - name: 离线测试与引擎校验
+        run: |
+          mkdir -p logs/test/T2
+          python3 -m unittest discover -s tests -v 2>&1 | tee logs/test/T2/离线测试.txt
+          md5sum -c engine/ENGINE_MD5.txt | tee logs/test/T2/引擎校验.txt
+      - name: 生成真实健康报告（不发送生产告警）
+        run: |
+          python3 scripts/health_check.py --json-out logs/健康检查_最新.json
+          cp logs/健康检查_最新.md logs/test/T2/真实健康检查.md
+          cp logs/健康检查_最新.json logs/test/T2/真实健康检查.json
+      - name: 真实 Issue 开启、同日去重与恢复关闭
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 scripts/verify_t2_health.py
+      - name: 验证 checkout 不可用时的 API 脚本下载
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          HEALTH_ITEM_ID: workflow:test-t2-health.yml
+          HEALTH_ITEM_NAME: 分支验收回退路径（只读演练）
+          HEALTH_WORKFLOW_FILE: .github/workflows/test-t2-health.yml
+        run: |
+          curl --fail --silent --show-error -H "Authorization: Bearer ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.raw+json' "https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/scripts/health_alert.py?ref=${GITHUB_SHA}" -o "$RUNNER_TEMP/health_alert_fallback.py"
+          python3 "$RUNNER_TEMP/health_alert_fallback.py" --workflow-failure --dry-run > logs/test/T2/checkout回退自检.json
+      - name: 正式数据与回测口径保护
+        if: always()
+        run: git diff --exit-code -- data engine archive judgments graph
+      - name: 保存验收证据
         if: always()
         run: |
           git config user.name github-actions
           git config user.email actions@users.noreply.github.com
-          git add logs/test/T2
+          for path in logs/test/T2 logs/健康检查_最新.md logs/健康检查_最新.json system/交易所休市.json; do
+            if [ -e "$path" ]; then git add "$path"; fi
+          done
           git diff --cached --quiet && exit 0
-          git commit -m "T2：保存官方日历探测证据"
+          git commit -m "T2：保存健康检查与告警开关验收证据"
           git pull --rebase origin "$GITHUB_REF_NAME"
           git push origin "HEAD:$GITHUB_REF_NAME"

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "timezone": "Asia/Shanghai",
+  "calendar": {"history": "data/行情库/指数/sh000300.csv", "closures": "system/交易所休市.json"},
+  "说明": "时间均为北京时间。截止=计划时刻+宽限；宽限取工作流超时，依赖任务顺延。新闻和热榜按最近一个已到截止的时段检查，不能用当日日期代替运行时刻。正常包含未到运行窗口；无法确认交易日列失败，不猜休市。",
+  "items": [
+    {"id":"hangqing","name":"行情库","workflow":".github/workflows/update-hangqing.yml","kind":"hangqing","trading_days_only":true,"times":["16:40"],"grace_minutes":90,"extra_schedule":{"weekdays":[5],"time":"10:17","grace_minutes":90},"outputs":["data/行情库/状态.csv","logs/行情库_最新.md"],"说明":"周六另核验轮换全量运行时间；原始数据日期仍应为最近交易日。"},
+    {"id":"market_state","name":"市场状态","workflow":".github/workflows/market-state.yml","kind":"market_state","trigger":"workflow_run:行情库自动更新","trading_days_only":true,"times":["16:40"],"grace_minutes":110,"outputs":["data/市场状态/最新.json","data/市场状态/最新.md"]},
+    {"id":"news","name":"新闻库（每日四次）","workflow":".github/workflows/fetch-news.yml","kind":"news","trading_days_only":false,"times":["07:47","12:13","16:23","21:11"],"grace_minutes":30,"outputs":["data/新闻/状态.json","data/新闻/最新.md"],"说明":"状态只保留最近一次运行，核验最近已到截止的slot；没有历史运行记录时不声称四次均已成功。零新增本身不判失败。"},
+    {"id":"community","name":"社区情绪","workflow":".github/workflows/community-sentiment.yml","kind":"community","trading_days_only":true,"times":["15:37"],"grace_minutes":20,"outputs":["data/社区情绪/{date}/运行记录.txt","data/社区情绪/{date}/讨论原始.jsonl","data/社区情绪/{date}/讨论摘录.md"]},
+    {"id":"sentiment_index","name":"散户情绪指标","workflow":".github/workflows/sentiment-index.yml","kind":"sentiment_index","trigger":"workflow_run:市场状态","trading_days_only":true,"times":["16:40"],"grace_minutes":125,"outputs":["data/社区情绪/触发.json","data/社区情绪/温度计.csv","data/社区情绪/文本指标.csv","data/社区情绪/最新.md"]},
+    {"id":"tophub","name":"信息源监控（每日四次）","workflow":".github/workflows/info-monitor.yml","kind":"tophub","trading_days_only":false,"times":["08:07","12:07","16:07","21:07"],"grace_minutes":30,"outputs":["data/信息源/tophub/运行记录.txt","data/信息源/tophub/状态.json","data/信息源/简报/最新.md"]},
+    {"id":"pool","name":"股票池镜像","workflow":null,"kind":"pool","trigger":"外部定时任务：股票池数据库每日镜像","trading_days_only":false,"times":["21:37"],"grace_minutes":30,"outputs":["data/股票池/状态.json","data/股票池/股票.csv"]},
+    {"id":"v3","name":"业绩加速选股","workflow":".github/workflows/v3-select.yml","kind":"v3","trading_days_only":false,"months":[5,9,11],"days":[1,2,3],"times":["10:07"],"grace_minutes":180,"outputs":["data/v3/latest.json","data/v3/{date}.json","data/v3/最新名单.md","logs/v3_最新.md"],"说明":"仅换股月核验当月1日的正式名单；1日截止后缺失即延迟，2、3日重试；不自行补跑。"},
+    {"id":"calendar_refresh","name":"交易所日历刷新","workflow":".github/workflows/health-check.yml","kind":"calendar","trading_days_only":false,"times":["08:20","22:30"],"grace_minutes":0,"outputs":["system/交易所休市.json"],"说明":"覆盖不足且历史行情不能判定待检查工作日时列失败；周末与已有历史覆盖不因可选日历缺失误报。"},
+    {"id":"health_check","name":"运行健康检查","workflow":".github/workflows/health-check.yml","kind":"self","trading_days_only":false,"times":["08:20","22:30"],"grace_minutes":0,"outputs":["logs/健康检查_最新.md","logs/健康检查_最新.json"],"说明":"本次成功生成报告即为本次运行证据；整个工作流失败由GitHub Actions失败告警发现。"}
+  ]
+}
