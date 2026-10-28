@@ -19,6 +19,17 @@ class HealthTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
         self.manifest = copy.deepcopy(MANIFEST)
+        # 旧模式回归使用固定夹具，不能随正式清单的统计阈值漂移。
+        legacy_grace = {"hangqing": 90, "market_state": 110, "news": 30, "community": 20,
+                        "sentiment_index": 125, "tophub": 30, "pool": 30, "v3": 180,
+                        "calendar_refresh": 0, "health_check": 0}
+        for item in self.manifest["items"]:
+            for key in ("check_mode", "max_age_minutes", "freshness_success_paths"):
+                item.pop(key, None)
+            item["grace_minutes"] = legacy_grace[item["id"]]
+            item["trading_days_only"] = item["id"] in ("hangqing", "market_state", "community", "sentiment_index")
+            if item.get("extra_schedule"):
+                item["extra_schedule"]["grace_minutes"] = 90
         self.json("system/运行清单.json", self.manifest)
         # 明确的合成覆盖，用来验证边界，不是手填正式交易日数据。
         self.csv("data/行情库/指数/sh000300.csv", ["date", "close"], [["2026-09-30", "1"], ["2026-10-08", "1"], ["2026-10-23", "1"], ["2026-10-26", "1"], ["2026-10-27", "1"]])
@@ -59,6 +70,162 @@ class HealthTests(unittest.TestCase):
     def news(self, run="2026-10-28 21:20", sources=None):
         self.outputs("news")
         self.json("data/新闻/状态.json", {"最近运行": run, "本次新增": 0, "来源": sources or {"新浪7x24": {"ok": True, "n": 0}, "华尔街见闻A股": {"ok": True, "n": 0}}})
+
+    def mode(self, ident, mode, **kwargs):
+        self.item(ident).update(check_mode=mode, **kwargs)
+
+    def expected(self, ident, now):
+        return health.expectation(self.item(ident), health.timestamp(now), health.Calendar(self.root, self.manifest["calendar"]))
+
+    def tophub(self, runs):
+        self.outputs("tophub")
+        self.json("data/信息源/tophub/状态.json", {})
+        self.put("data/信息源/tophub/运行记录.txt", "\n\n".join(f"## {stamp}\n{body}" for stamp, body in runs))
+
+    def test_previous_mode_morning_is_strictly_previous_even_after_early_schedule(self):
+        for ident in ("hangqing", "market_state", "sentiment_index", "community", "pool"):
+            with self.subTest(item=ident):
+                self.mode(ident, "previous_trading_day", times=["00:00"], grace_minutes=0)
+                for now in ("2026-10-28T08:20:00+08:00", "2026-10-28T11:59:00+08:00"):
+                    self.assertEqual(self.expected(ident, now)["data_date"], "2026-10-27")
+                self.assertEqual(self.expected(ident, "2026-10-28T12:00:00+08:00")["data_date"], "2026-10-28")
+
+    def test_previous_mode_evening_uses_calibrated_grace_before_today_is_due(self):
+        self.mode("hangqing", "previous_trading_day", grace_minutes=420)
+        self.hangqing("2026-10-27")
+        row = self.run_item("hangqing", "2026-10-28T22:30:00+08:00")
+        self.assertEqual(row["status"], "正常", row)
+        self.assertEqual(row["expected"]["data_date"], "2026-10-27")
+        row = self.run_item("hangqing", "2026-10-28T23:40:00+08:00")
+        self.assertEqual(row["status"], "延迟", row)
+        self.assertEqual(row["expected"]["data_date"], "2026-10-28")
+
+    def test_previous_mode_seven_hour_delay_crossing_midnight_covers_source_day(self):
+        self.mode("market_state", "previous_trading_day", times=["18:30"], grace_minutes=420)
+        self.outputs("market_state")
+        self.json("data/市场状态/最新.json", {"数据日期": "2026-10-28", "生成时间": "2026-10-29 01:30", "数据告警": []})
+        row = self.run_item("market_state", "2026-10-29T08:20:00+08:00")
+        self.assertEqual(row["status"], "正常", row)
+        self.assertEqual(row["actual"]["data_date"], "2026-10-28")
+        self.assertEqual(row["expected"]["data_date"], "2026-10-28")
+
+    def test_previous_mode_weekend_holiday_and_pool_use_trading_calendar(self):
+        self.mode("pool", "previous_trading_day")
+        for now, expected in (("2026-10-25T08:20:00+08:00", "2026-10-23"),
+                              ("2026-10-07T22:30:00+08:00", "2026-09-30"),
+                              ("2026-10-28T08:20:00+08:00", "2026-10-27")):
+            with self.subTest(now=now):
+                self.assertEqual(self.expected("pool", now)["data_date"], expected)
+
+    def test_previous_mode_pool_checks_source_date_without_previous_slot_timestamp(self):
+        self.mode("pool", "previous_trading_day")
+        self.outputs("pool")
+        self.json("data/股票池/状态.json", {"数据日期": "2026-10-27", "最近检查": "2026-10-27 08:00", "文档数": {"stocks": 123}})
+        self.assertEqual(self.run_item("pool", "2026-10-28T08:20:00+08:00")["status"], "正常")
+
+    def test_previous_mode_saturday_rotation_waits_for_calibrated_deadline(self):
+        self.mode("hangqing", "previous_trading_day")
+        self.item("hangqing")["extra_schedule"]["grace_minutes"] = 420
+        self.hangqing("2026-10-23")
+        for now in ("2026-10-24T08:20:00+08:00", "2026-10-24T17:16:00+08:00"):
+            row = self.run_item("hangqing", now)
+            self.assertEqual(row["status"], "正常", row)
+            self.assertNotIn("run_after", row["expected"])
+        self.assertEqual(self.run_item("hangqing", "2026-10-24T17:17:00+08:00")["status"], "延迟")
+
+    def test_previous_mode_failure_is_not_hidden_by_evening_grace(self):
+        self.mode("hangqing", "previous_trading_day", grace_minutes=420)
+        self.hangqing("2026-10-28", [("600872", "中炬高新")])
+        row = self.run_item("hangqing")
+        self.assertEqual(row["expected"]["data_date"], "2026-10-27")
+        self.assertEqual(row["status"], "部分失败", row)
+
+    def test_previous_mode_community_latest_failure_not_hidden_in_prior_folder(self):
+        self.mode("community", "previous_trading_day", grace_minutes=420)
+        for date, failure in (("2026-10-27", "无"), ("2026-10-28", "微博：HTTP500")):
+            self.outputs("community", date)
+            self.put(f"data/社区情绪/{date}/运行记录.txt", f"抓取时间：{date} 15:40（北京时间）\n成功：股吧（80行）\n失败：\n{failure}\n")
+        row = self.run_item("community", "2026-10-28T22:30:00+08:00")
+        self.assertEqual(row["expected"]["data_date"], "2026-10-27")
+        self.assertEqual(row["actual"]["data_date"], "2026-10-28")
+        self.assertEqual(row["status"], "部分失败", row)
+
+    def test_freshness_morning_and_evening_ignore_slots_and_same_day(self):
+        self.mode("news", "freshness", max_age_minutes=720)
+        for now, last in (("2026-10-28T08:20:00+08:00", "2026-10-27 21:20"),
+                           ("2026-10-28T22:30:00+08:00", "2026-10-28 16:00")):
+            self.news(last)
+            row = self.run_item("news", now)
+            self.assertEqual(row["status"], "正常", row)
+            self.assertEqual(row["expected"]["max_age_minutes"], 720)
+            self.assertNotIn("data_date", row["expected"])
+            self.assertNotIn("scheduled_at", row["expected"])
+
+    def test_freshness_threshold_equal_is_healthy_and_one_second_over_is_delay(self):
+        self.mode("news", "freshness", max_age_minutes=420)
+        self.news("2026-10-28 01:20:00")
+        self.assertEqual(self.run_item("news", "2026-10-28T08:20:00+08:00")["status"], "正常")
+        row = self.run_item("news", "2026-10-28T08:20:01+08:00")
+        self.assertEqual(row["status"], "延迟", row)
+        self.assertGreater(row["actual"]["age_minutes"], 420)
+
+    def test_freshness_accepts_seven_hours_across_midnight(self):
+        self.mode("news", "freshness", max_age_minutes=420)
+        self.news("2026-10-28 23:30")
+        row = self.run_item("news", "2026-10-29T06:30:00+08:00")
+        self.assertEqual(row["status"], "正常", row)
+        self.assertEqual(row["actual"]["age_minutes"], 420)
+
+    def test_freshness_all_failed_never_counts_latest_attempt_as_success(self):
+        self.mode("news", "freshness", max_age_minutes=720)
+        self.news("2026-10-28 22:20", {"新浪": {"ok": False, "err": "timeout"}})
+        row = self.run_item("news")
+        self.assertEqual(row["status"], "失败", row)
+        self.assertIsNone(row["actual"]["last_success_at"])
+        self.assertIsNone(row["actual"]["age_minutes"])
+
+    def test_freshness_all_failed_can_report_explicit_older_success(self):
+        self.mode("news", "freshness", max_age_minutes=420)
+        self.news("2026-10-28 22:20", {"新浪": {"ok": False, "err": "timeout"}})
+        path = self.root / "data/新闻/状态.json"
+        value = json.loads(path.read_text())
+        value["last_success_at"] = "2026-10-28 12:00"
+        self.json("data/新闻/状态.json", value)
+        row = self.run_item("news")
+        self.assertEqual(row["status"], "失败", row)
+        self.assertEqual(row["actual"]["last_success_at"], "2026-10-28T12:00:00+08:00")
+        self.assertEqual(row["actual"]["age_minutes"], 630)
+
+    def test_freshness_partial_failures_win_even_with_recent_success(self):
+        self.mode("news", "freshness", max_age_minutes=720)
+        self.news(sources={"新浪": {"ok": True, "n": 10}, "巨潮": {"ok": False, "err": "HTTP500"}})
+        row = self.run_item("news")
+        self.assertEqual(row["status"], "部分失败", row)
+        self.assertEqual(row["actual"]["last_success_at"], "2026-10-28T21:20:00+08:00")
+
+    def test_freshness_tophub_uses_last_successful_log_block_after_total_failure(self):
+        self.mode("tophub", "freshness", max_age_minutes=720)
+        self.tophub([("2026-10-28 16:10", "旧成功\t20条\t新2"),
+                     ("2026-10-28 22:10", "新失败\t失败\ttimeout")])
+        row = self.run_item("tophub")
+        self.assertEqual(row["status"], "失败", row)
+        self.assertEqual(row["actual"]["last_success_at"], "2026-10-28T16:10:00+08:00")
+
+    def test_freshness_tophub_cross_midnight_and_configured_state_path(self):
+        self.mode("tophub", "freshness", max_age_minutes=720,
+                  freshness_success_paths=[{"path": "data/信息源/tophub/状态.json", "field": "*.最近抓取"}])
+        self.tophub([("2026-10-27 23:30", "成功\t20条\t新2")])
+        self.assertEqual(self.run_item("tophub", "2026-10-28T08:20:00+08:00")["status"], "正常")
+        self.tophub([("2026-10-28 08:10", "全挂\t失败\ttimeout")])
+        self.json("data/信息源/tophub/状态.json", {"board": {"最近抓取": "2026-10-27 23:30"}})
+        row = self.run_item("tophub", "2026-10-28T08:20:00+08:00")
+        self.assertEqual(row["status"], "失败", row)
+        self.assertEqual(row["actual"]["last_success_at"], "2026-10-27T23:30:00+08:00")
+
+    def test_invalid_freshness_threshold_is_failed_instead_of_silent_grace(self):
+        self.mode("news", "freshness", max_age_minutes=0)
+        self.news()
+        self.assertEqual(self.run_item("news")["status"], "失败")
 
     def test_weekend_uses_friday_without_optional_closures(self):
         (self.root / "system/交易所休市.json").unlink()

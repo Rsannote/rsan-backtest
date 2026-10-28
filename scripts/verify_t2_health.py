@@ -56,7 +56,7 @@ def main():
             assert archived["state"] == "closed" and health_alert.metadata(archived)["namespace"] == "test-failed-validation", archived
     original = json.loads((ROOT / "system/运行清单.json").read_text(encoding="utf-8"))
     item = copy.deepcopy(next(i for i in original["items"] if i["id"] == "market_state"))
-    item.update(id="t2-alert-drill", name="T2 健康检查演练（模拟）", times=["00:00"], grace_minutes=0, trading_days_only=False)
+    item.update(id="t2-alert-drill", name="T2 健康检查演练（模拟）", times=["00:00"], grace_minutes=0, trading_days_only=False, check_mode=None)
     with tempfile.TemporaryDirectory(prefix="T2-drill-") as temp:
         root = Path(temp)
         fixture(root, item)
@@ -83,6 +83,7 @@ def main():
         (OUT / "告警开关实测.json").write_text(json.dumps(proof, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         (OUT / "告警开关实测.md").write_text(f"# T2 告警生命周期实测\n\n时间：{now.isoformat()}（北京时间）。\n\n[测试 Issue #{number}]({final['html_url']})：旧产出为延迟后开启（首轮创建，本轮复用重开），同日重复复用 #{number} 并追加评论；恢复正常后自动关闭。\n\n最终状态：{final['state']}；关闭时间：{proof['关闭时间']}（北京时间）。\n\n首轮验收的重复 Issue #4 已由健康恢复关闭，保留失败记录并归档测试标记；本轮复用 #3 核验修复。正式数据未写入；测试命名空间与生产隔离。详细请求结果见同名 JSON。\n", encoding="utf-8")
         calendar_item = copy.deepcopy(next(i for i in original["items"] if i["id"] == "market_state"))
+        calendar_item.update(check_mode=None, grace_minutes=110)  # 隔离的旧时段规则夹具
         fixture(root, calendar_item)
         cases = []
         for checked, produced, expected in (("2026-10-01T22:30:00+08:00", "2026-09-30", "正常"),

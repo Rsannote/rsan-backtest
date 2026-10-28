@@ -5,6 +5,10 @@
 只接受交易所休市表覆盖，缺覆盖报告“无法确认”。休市表 schema：
 {coverage_start, coverage_end, closed_dates: [YYYY-MM-DD], sources: [...]}。
 
+check_mode缺省保留原时段逻辑；previous_trading_day在12:00前只核对严格
+早于今天的上一交易日，之后按计划和清单宽限；freshness只核对最近成功
+产出距今的分钟数，不要求当天日期，也不把失败运行时间当成功刷新。
+
 --now 可注入北京时间；--json-out 给告警客户端消费。异常状态不会令本脚本
 非零退出（报告生成成功为 0）；清单损坏仍生成失败报告并返回 2。
 """
@@ -111,8 +115,17 @@ def scheduled(date: dt.date, time: str) -> dt.datetime:
 
 def expectation(item: dict[str, Any], now: dt.datetime, cal: Calendar) -> dict[str, Any]:
     kind = item["kind"]
+    mode = item.get("check_mode")
+    if mode not in (None, "previous_trading_day", "freshness"):
+        raise ValueError(f"未知check_mode：{mode}")
     if kind in ("calendar", "self"):
         return {"data_date": now.date().isoformat()}
+    if mode == "freshness":
+        minutes = item["max_age_minutes"]
+        if isinstance(minutes, bool) or not isinstance(minutes, (int, float)) or not 0 < minutes < float("inf"):
+            raise ValueError("max_age_minutes须为有限正数")
+        return {"check_mode": mode, "max_age_minutes": minutes,
+                "cutoff": (now - dt.timedelta(minutes=minutes)).isoformat()}
     if kind == "v3":
         if now.month not in item["months"]:
             return {"skipped": "非换股月，无本月更新要求"}
@@ -124,18 +137,23 @@ def expectation(item: dict[str, Any], now: dt.datetime, cal: Calendar) -> dict[s
         return {"data_date": date.isoformat(), "scheduled_at": start.isoformat(), "deadline": deadline.isoformat()}
     for offset in range(370):
         date = now.date() - dt.timedelta(days=offset)
+        morning_previous = mode == "previous_trading_day" and now.hour < 12
+        if morning_previous and offset == 0:
+            continue
         for time in sorted(item["times"], reverse=True):
             start = scheduled(date, time)
             deadline = start + dt.timedelta(minutes=item.get("grace_minutes", 0))
-            if deadline > now:
+            if deadline > now and not morning_previous:
                 continue
-            if item.get("trading_days_only"):
+            if item.get("trading_days_only") or mode == "previous_trading_day":
                 opened = cal.is_open(date)
                 if opened is None:
                     return {"unknown_date": date.isoformat(), "error": f"无法确认 {date} 是否交易日：历史日历未覆盖，交易所休市表也无有效覆盖"}
                 if not opened:
                     continue
             result = {"data_date": date.isoformat(), "scheduled_at": start.isoformat(), "deadline": deadline.isoformat()}
+            if mode:
+                result["check_mode"] = mode
             extra = item.get("extra_schedule")
             if extra:
                 for back in range(7):
@@ -149,6 +167,53 @@ def expectation(item: dict[str, Any], now: dt.datetime, cal: Calendar) -> dict[s
                         break
             return result
     raise ValueError("过去370天没有可判定的运行时段")
+
+
+def success_timestamps(value: Any, field: str | None = None) -> list[dt.datetime]:
+    """提取明确的成功字段；字段路径支持*，不把普通运行时刻当成功。"""
+    if field is not None:
+        parts = field.split(".")
+        values = [value]
+        for part in parts:
+            selected = []
+            for current in values:
+                if isinstance(current, dict):
+                    selected.extend(current.values() if part == "*" else [current[part]] if part in current else [])
+                elif isinstance(current, list) and part == "*":
+                    selected.extend(current)
+            values = selected
+        return [timestamp(v) for v in values if v is not None]
+    result = []
+    if isinstance(value, dict):
+        for key, child in value.items():
+            if key in ("last_success_at", "最近成功", "最近成功运行", "最近成功时间", "最近抓取") and child:
+                result.append(timestamp(child))
+            elif isinstance(child, (dict, list)):
+                result.extend(success_timestamps(child))
+    elif isinstance(value, list):
+        for child in value:
+            result.extend(success_timestamps(child))
+    return result
+
+
+def configured_success(root: Path, item: dict[str, Any]) -> list[dt.datetime]:
+    paths = item.get("freshness_success_paths", [])
+    if not isinstance(paths, list):
+        raise ValueError("freshness_success_paths须为数组")
+    result = []
+    for entry in paths:
+        if isinstance(entry, str):
+            path, field = entry, None
+        elif isinstance(entry, dict):
+            path, field = entry["path"], entry.get("field")
+            if field is not None and not isinstance(field, str):
+                raise ValueError("成功时间字段路径须为字符串")
+        else:
+            raise ValueError("成功时间配置须为文件路径或path/field对象")
+        target = root / path
+        if target.is_file():
+            result.extend(success_timestamps(read_json(target), field))
+    return result
 
 
 def fail_sections(content: str) -> list[str]:
@@ -169,6 +234,7 @@ def load_actual(root: Path, item: dict[str, Any], expected: dict[str, Any]) -> t
     issues: list[str] = []
     actual: dict[str, Any] = {}
     success = 1
+    successful_runs: list[dt.datetime] = []
     if kind == "hangqing":
         rows = read_csv(root / "data/行情库/状态.csv")
         if not rows:
@@ -210,12 +276,18 @@ def load_actual(root: Path, item: dict[str, Any], expected: dict[str, Any]) -> t
                 raise ValueError(f"{name} 缺少有效ok布尔值")
             if not source["ok"]:
                 issues.append(f"{name}：{source.get('err', 'ok=false')}")
+        if success:
+            successful_runs.append(run)
+        # 失败运行仍会覆盖“最近运行”，只有明确的历史成功字段才能回退。
+        if item.get("check_mode") == "freshness":
+            successful_runs.extend(success_timestamps(obj))
         actual["slot_evidence"] = "状态文件只保留最近一次运行；不据此声称历史四次均成功"
     elif kind == "community":
         folder = root / "data/社区情绪" / expected["data_date"]
         report = text(folder / "运行记录.txt")
         run = first_stamp(report)
-        actual = {"data_date": run.date().isoformat(), "updated_at": run.isoformat()}
+        source_date = expected["data_date"] if item.get("check_mode") == "previous_trading_day" else run.date().isoformat()
+        actual = {"data_date": source_date, "updated_at": run.isoformat()}
         success_line = re.search(r"^成功：(.*)$", report, re.M)
         success = len(success_line.group(1).split("、")) if success_line and success_line.group(1) != "无" else 0
         block = re.search(r"^失败：\s*\n(.*?)(?=\n讨论摘录|\Z)", report, re.M | re.S)
@@ -256,6 +328,14 @@ def load_actual(root: Path, item: dict[str, Any], expected: dict[str, Any]) -> t
         actual["successful_boards"] = success
         if not success and not issues:
             issues.append("本次运行没有任何榜单条目")
+        if item.get("check_mode") == "freshness":
+            # 日志本身保留多个运行块；只选确有成功榜单条目的时间。
+            for index, candidate in enumerate(blocks):
+                stop = blocks[index + 1].start() if index + 1 < len(blocks) else len(report)
+                if re.search(r"^[^\n\t]+\t[1-9]\d*条(?:\t|$)", report[candidate.end():stop], re.M):
+                    successful_runs.append(timestamp(candidate.group(1)))
+            # 旧状态能补足被裁剪的运行记录，但失败块同一时刻的状态不算刷新。
+            successful_runs.extend(t for t in success_timestamps(state) if success or t < run)
     elif kind == "pool":
         obj = read_json(root / "data/股票池/状态.json")
         actual = {"data_date": day(obj["数据日期"]).isoformat(), "updated_at": timestamp(obj["最近检查"]).isoformat()}
@@ -280,6 +360,12 @@ def load_actual(root: Path, item: dict[str, Any], expected: dict[str, Any]) -> t
         # 新任务可用kind=json_date和字段配置接入，不必另写抓取逻辑。
         obj = read_json(root / item["outputs"][0])
         actual["data_date"] = day(obj[item.get("date_field", "date")]).isoformat()
+    if item.get("check_mode") == "freshness":
+        successful_runs.extend(configured_success(root, item))
+        if success == 0:
+            failed_run = timestamp(actual["updated_at"])
+            successful_runs = [value for value in successful_runs if value < failed_run]
+        actual["last_success_at"] = max(successful_runs).isoformat() if successful_runs else None
     return actual, issues, success
 
 
@@ -308,10 +394,20 @@ def check_item(root: Path, item: dict[str, Any], now: dt.datetime, cal: Calendar
             else:
                 row["reasons"] = ["已读取交易所日历覆盖；历史行情首末日期内仍按成员判定"]
             return row
-        missing = [p.format(date=expected["data_date"]) for p in item["outputs"] if not (root / p.format(date=expected["data_date"])).is_file()]
+        output_date = expected.get("data_date", now.date().isoformat())
+        read_expected = dict(expected, data_date=output_date)
+        if item.get("check_mode") == "previous_trading_day" and item["kind"] == "community":
+            # 宽限只降低日期要求，不能让今天已经写出的失败躲在昨天目录后。
+            base = root / "data/社区情绪"
+            available = [p.name for p in base.iterdir() if p.is_dir() and DATE.fullmatch(p.name)
+                         and p.name <= now.date().isoformat() and (p / "运行记录.txt").is_file()] if base.is_dir() else []
+            if available:
+                output_date = max(available)
+                read_expected["data_date"] = output_date
+        missing = [p.format(date=output_date) for p in item["outputs"] if not (root / p.format(date=output_date)).is_file()]
         if missing:
             # v3失败保护文件是比“缺正式名单”更具体的失败证据。
-            failure = root / "data/v3" / ("失败_" + expected["data_date"] + ".json")
+            failure = root / "data/v3" / ("失败_" + output_date + ".json")
             if item["kind"] == "v3" and failure.exists():
                 obj = read_json(failure)
                 row["actual"] = {"failure_file": str(failure.relative_to(root)), "incomplete": obj.get("incomplete"), "counts": obj.get("counts", {})}
@@ -323,28 +419,50 @@ def check_item(root: Path, item: dict[str, Any], now: dt.datetime, cal: Calendar
             # 缺其他产出时仍读已有失败证据，不被缺文件遮住。
             if item["kind"] == "hangqing" and (root / "logs/行情库_最新.md").exists():
                 row["reasons"] += fail_sections(text(root / "logs/行情库_最新.md"))
+            if item.get("check_mode") == "previous_trading_day" and item["kind"] == "community" and (root / "data/社区情绪" / output_date / "运行记录.txt").is_file():
+                actual, failures, success = load_actual(root, item, read_expected)
+                row["actual"] = actual
+                row["reasons"] += failures
+                if failures:
+                    row["status"] = "部分失败" if success else "失败"
             return row
-        actual, failures, success = load_actual(root, item, expected)
+        actual, failures, success = load_actual(root, item, read_expected)
         row["actual"] = actual
         row["reasons"] += failures
-        stale = actual["data_date"] < expected["data_date"]
         if any(value > now.date().isoformat() for key, value in actual.items() if key.endswith("_date") and isinstance(value, str)):
             raise ValueError("产出数据日期在检查时间之后")
-        # 日期一致不等于当日slot已执行，必须比较实际运行时刻。
-        if not item.get("trading_days_only") and item["kind"] != "v3":
-            stale = stale or timestamp(actual["updated_at"]) < timestamp(expected["scheduled_at"])
-        if expected.get("run_after"):
-            stale = stale or timestamp(actual["run_at"]) < timestamp(expected["run_after"])
         if actual.get("updated_at") and timestamp(actual["updated_at"]) > now:
             raise ValueError("产出运行时间在检查时间之后")
+        if item.get("check_mode") == "freshness":
+            last_success = timestamp(actual["last_success_at"]) if actual.get("last_success_at") else None
+            if last_success and last_success > now:
+                raise ValueError("最近成功时间在检查时间之后")
+            stale = last_success is None or last_success < timestamp(expected["cutoff"])
+            actual["age_minutes"] = round((now - last_success).total_seconds() / 60, 6) if last_success else None
+        else:
+            stale = actual["data_date"] < expected["data_date"]
+            # 旧模式保持按slot核验；新交易日模式只要求目标交易日已覆盖。
+            if item.get("check_mode") is None and not item.get("trading_days_only") and item["kind"] != "v3":
+                stale = stale or timestamp(actual["updated_at"]) < timestamp(expected["scheduled_at"])
+            if expected.get("run_after"):
+                stale = stale or timestamp(actual["run_at"]) < timestamp(expected["run_after"])
         if failures:
             row["status"] = "部分失败" if success > 0 else "失败"
         elif stale:
             row["status"] = "延迟"
         if stale:
-            row["reasons"].append(f"已到截止 {expected['deadline']}；实际未覆盖预期数据日期/运行时段 {expected.get('run_after', expected['scheduled_at'])}")
+            if item.get("check_mode") == "freshness":
+                if actual["last_success_at"] is None:
+                    row["status"] = "失败"
+                    row["reasons"].append("无法确认最近成功产出时间；失败运行不作为成功刷新")
+                else:
+                    row["reasons"].append(f"最近成功产出距今 {actual['age_minutes']:g} 分钟，超过阈值 {expected['max_age_minutes']} 分钟（最早应为 {expected['cutoff']}）")
+            else:
+                row["reasons"].append(f"已到截止 {expected['deadline']}；实际未覆盖预期数据日期/运行时段 {expected.get('run_after', expected['scheduled_at'])}")
         if not row["reasons"]:
-            row["reasons"] = ["产出日期及最近已到截止的运行时段符合预期"]
+            row["reasons"] = ([f"最近成功产出距今 {actual['age_minutes']:g} 分钟，未超过阈值 {expected['max_age_minutes']} 分钟"]
+                              if item.get("check_mode") == "freshness" else ["产出已覆盖要求的交易日"]
+                              if item.get("check_mode") == "previous_trading_day" else ["产出日期及最近已到截止的运行时段符合预期"])
     except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
         row["status"] = "失败"
         row["reasons"].append(f"产出无法读取或格式错误：{exc}")
@@ -376,6 +494,8 @@ def render(report: dict[str, Any]) -> str:
     for row in report["items"]:
         expected, actual = row["expected"], row["actual"]
         expectation_text = expected.get("skipped") or expected.get("error") or expected.get("data_date", "—")
+        if expected.get("check_mode") == "freshness":
+            expectation_text = f"最近成功产出不超过 {expected['max_age_minutes']} 分钟；下限 {expected['cutoff'][5:16].replace('T', ' ')}"
         if expected.get("deadline"):
             expectation_text += f"；截止 {expected['deadline'][5:16].replace('T', ' ')}"
         if expected.get("run_after"):
@@ -383,13 +503,15 @@ def render(report: dict[str, Any]) -> str:
         actual_text = actual.get("data_date", "—")
         if actual.get("updated_at"):
             actual_text += f"；运行 {actual['updated_at'][5:16].replace('T', ' ')}"
+        if "last_success_at" in actual:
+            actual_text += f"；最近成功 {actual['last_success_at'][5:16].replace('T', ' ') if actual['last_success_at'] else '无法确认'}"
         if actual.get("stale_symbols"):
             actual_text += f"；{len(actual['stale_symbols'])}只数据日期较早（详见JSON）"
         if "coverage_end" in actual:
             actual_text = f"覆盖 {actual.get('coverage_start') or '无'} 至 {actual.get('coverage_end') or '无'}"
         reasons = re.sub(r"https?://\S+", "〔请求地址略〕", "；".join(row["reasons"]))
         lines.append("| " + " | ".join(safe(v) for v in (row["name"], row["status"], expectation_text, actual_text, reasons)) + " |")
-    lines += ["", "交易日规则：周末闭市；沪深300历史首末日期内按date成员判定；范围外仅使用交易所休市表的明确覆盖。缺覆盖写失败并注明无法确认，不把缺今日行情当休市。", "", "截止为计划时刻加清单宽限。新闻/热榜核验最近一个已到截止的slot；新闻状态只保留最近一次运行，无法由其证明历史每个slot都成功。失败优先于延迟；部分成功且有既有失败证据列部分失败，原因同时保留延迟。检查只读产出，不补抓。", ""]
+    lines += ["", "交易日规则：周末闭市；沪深300历史首末日期内按date成员判定；范围外仅使用交易所休市表的明确覆盖。缺覆盖写失败并注明无法确认，不把缺今日行情当休市。", "", "previous_trading_day：12:00前只要求严格早于今天的上一交易日；之后按计划时刻加清单宽限决定是否要求今天，周六轮换亦遵守清单截止。freshness：仅核验最近成功产出距今是否超过清单阈值，跨午夜不要求当天日期；失败运行不重置成功时间。未配置check_mode的旧项仍按最近已到截止slot检查。失败优先于延迟；部分成功且有既有失败证据列部分失败，原因同时保留延迟。检查只读产出，不补抓。", ""]
     return "\n".join(lines)
 
 
