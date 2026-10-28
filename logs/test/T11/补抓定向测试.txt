@@ -1,0 +1,17 @@
+............./Users/zhangyiyi/Documents/ChatGPT/股票/rsan-backtest-T11/scripts/update_hangqing.py:531: ResourceWarning: unclosed file <_io.TextIOWrapper name='/var/folders/yt/_78jxhl55k1_9z4cbr_vkkbc0000gn/T/tmp69fr86dz/标的清单.csv' mode='r' encoding='utf-8'>
+  items = list(csv.DictReader(open(LIST, encoding="utf-8")))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhangyiyi/Documents/ChatGPT/股票/rsan-backtest-T11/scripts/update_hangqing.py:575: ResourceWarning: unclosed file <_io.TextIOWrapper name='/var/folders/yt/_78jxhl55k1_9z4cbr_vkkbc0000gn/T/tmp69fr86dz/标的清单.csv' mode='r' encoding='utf-8'>
+  order = [x["code"] for x in csv.DictReader(open(LIST, encoding="utf-8"))]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./Users/zhangyiyi/Documents/ChatGPT/股票/rsan-backtest-T11/scripts/update_hangqing.py:531: ResourceWarning: unclosed file <_io.TextIOWrapper name='/var/folders/yt/_78jxhl55k1_9z4cbr_vkkbc0000gn/T/tmpmh3qa9w9/标的清单.csv' mode='r' encoding='utf-8'>
+  items = list(csv.DictReader(open(LIST, encoding="utf-8")))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhangyiyi/Documents/ChatGPT/股票/rsan-backtest-T11/scripts/update_hangqing.py:575: ResourceWarning: unclosed file <_io.TextIOWrapper name='/var/folders/yt/_78jxhl55k1_9z4cbr_vkkbc0000gn/T/tmpmh3qa9w9/标的清单.csv' mode='r' encoding='utf-8'>
+  order = [x["code"] for x in csv.DictReader(open(LIST, encoding="utf-8"))]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+..
+----------------------------------------------------------------------
+Ran 16 tests in 0.350s
+
+OK

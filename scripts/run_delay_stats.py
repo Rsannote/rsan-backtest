@@ -31,7 +31,13 @@ SPECS = {
     "tophub": ("信息源 ", "data/信息源/tophub/运行记录.txt"),
     "v3": ("业绩加速选股 ", "data/v3/latest.json"),
 }
-DAILY = {"hangqing", "market_state", "sentiment_index", "community", "pool"}
+DAILY = {"hangqing", "market_state", "sentiment_index", "community"}
+
+
+def manual_policy(item):
+    # 股票池已改为季度同步，审核批准freshness=100天；历史每日镜像样本
+    # 不能把这项政策悄悄改回逐交易日。其他人工政策也可显式锁定。
+    return item["id"] == "pool" or item.get("calibration_policy") == "manual"
 
 
 def git(root, *args, binary=False):
@@ -171,7 +177,7 @@ def analyze(root, ref, manifest, runs_data, now):
         inception = introduced(root, ref, item["workflow"]) if item.get("workflow") else introduced(root, ref, SPECS[key][1])
         rows = []
         for commit in commits:
-            if commit["at"] > now or (key not in ("news", "tophub") and commit["at"] < begin) or commit["author"] != "github-actions" or not commit["title"].startswith(SPECS[key][0]):
+            if commit["at"] > now or commit["author"] != "github-actions" or not commit["title"].startswith(SPECS[key][0]):
                 continue
             run = run_for(commit, item, run_rows)
             if not run:
@@ -210,6 +216,7 @@ def analyze(root, ref, manifest, runs_data, now):
                 for a, b in zip(successful, successful[1:]) if hc.timestamp(b["available_at"]) >= begin]
         delay_stats, gap_stats = quantiles(delays), quantiles(gaps)
         result["items"][key] = {"name": item["name"], "introduced_at": inception.isoformat() if inception else None,
+            "first_success_at": successful[0]["available_at"] if successful else None,
             "delay": delay_stats, "grace": allowance(delay_stats), "rotation_delay": quantiles(rotations),
             "rotation_grace": allowance(quantiles(rotations)), "success_gap": gap_stats, "freshness": allowance(gap_stats),
             "samples": [r for r in rows if hc.timestamp(r["available_at"]) >= begin], "gap_definition": "下一成功产出提交可见时刻 - 上一成功产出字段时刻（含执行/提交耗时）"}
@@ -218,11 +225,12 @@ def analyze(root, ref, manifest, runs_data, now):
 
 def calibrated(manifest, stats):
     out = copy.deepcopy(manifest)
-    measured = [row["grace"]["minutes"] for row in stats["items"].values() if row["grace"]]
+    protected = {item["id"] for item in manifest["items"] if manual_policy(item)}
+    measured = [row["grace"]["minutes"] for key, row in stats["items"].items() if key not in protected and row["grace"]]
     fallback = max(measured) if measured else None
     for item in out["items"]:
         key = item["id"]
-        if key not in stats["items"]:
+        if key not in stats["items"] or manual_policy(item):
             continue
         row = stats["items"][key]
         basis = {"statistics_at": stats["checked_at"], "source_ref": stats["source_ref"], "sample_n": row["delay"]["n"],
@@ -247,8 +255,43 @@ def calibrated(manifest, stats):
             item["extra_schedule"]["grace_minutes"] = rotation["minutes"] if rotation else fallback
             basis["rotation"] = rotation or {"fallback_minutes": fallback}
         item["delay_basis"] = basis
-    out["说明"] = "时间均为北京时间。收盘相关任务08:20只核对严格上一交易日；22:30只要求计划+实测P95及余量已到的产出。新闻/信息源按最近成功产出的统计间隔检查，不核对单个slot。失败证据不被宽限掩盖。详见每项delay_basis与运行延迟统计。"
+    out["说明"] = "时间均为北京时间。收盘相关任务08:20只核对严格上一交易日；22:30只要求计划+实测P95及余量已到的产出。新闻/信息源按最近成功产出的统计间隔检查，不核对单个slot。失败证据不被宽限掩盖。股票池及显式manual政策保持审核批准参数，不自动校准。详见每项delay_basis与运行延迟统计。"
     return out
+
+
+def require_four_weeks(manifest, stats):
+    """正式应用前必须有实际四周覆盖；不能仅把请求窗口写成28天。"""
+    now = hc.timestamp(stats["checked_at"])
+    since = now - timedelta(days=28)
+    if hc.timestamp(stats["first_repository_commit"]) > since:
+        raise ValueError("可审计生产历史不足28天，拒绝--apply-manifest；清单原字节保留")
+    insufficient = []
+    for item in manifest["items"]:
+        key = item["id"]
+        if manual_policy(item) or key not in DAILY | {"news", "tophub"}:
+            continue
+        row = stats["items"].get(key, {})
+        samples = [hc.timestamp(s["available_at"]) for s in row.get("samples", []) if s.get("success")]
+        # 起点来自完整历史，不能拿裁剪后的窗口首尾要求再跨28天。
+        # 四个7日观察段均至少有一次成功产出，防止旧上线文件冒充四周样本。
+        weeks = {min(3, int((at - since).total_seconds() // (7 * 86400)))
+                 for at in samples if since <= at <= now}
+        if (not row.get("introduced_at") or hc.timestamp(row["introduced_at"]) > since
+                or not row.get("first_success_at") or hc.timestamp(row["first_success_at"]) > since
+                or weeks != {0, 1, 2, 3}):
+            insufficient.append(item.get("name", key))
+    if insufficient:
+        raise ValueError("以下任务实际成功样本未覆盖四周，拒绝--apply-manifest：" + "、".join(insufficient))
+
+
+def applicable(manifest, proposed):
+    """正式应用只更新已按四周日/高频样本验证的任务，稀疏换股任务保留。"""
+    result = copy.deepcopy(proposed)
+    original = {item["id"]: item for item in manifest["items"]}
+    for index, item in enumerate(result["items"]):
+        if manual_policy(item) or item["id"] not in DAILY | {"news", "tophub"}:
+            result["items"][index] = copy.deepcopy(original[item["id"]])
+    return result
 
 
 def render(stats):
@@ -266,7 +309,7 @@ def render(stats):
     for key in ("news", "tophub"):
         row = stats["items"][key]; d = row["success_gap"]
         lines.append(f"| {row['name']} | {d['n']} | {f(d['p50'])} | {f(d['p90'])} | {f(d['p95'])} | {f(d['max'])} | {row['freshness']['minutes'] if row['freshness'] else '缺'} |")
-    lines += ["", "成功间隔=下一次成功提交可见时刻减上一次成功字段时刻，包含执行/提交时长。无本项样本的业绩加速选股临时借用已测最大宽限，等待换股月数据；不报告不存在的P95。股票池只有一次定时样本，统计可信度低，停更仍必须告警。", "",
+    lines += ["", "成功间隔=下一次成功提交可见时刻减上一次成功字段时刻，包含执行/提交时长。无本项样本的业绩加速选股仅显示借用建议，正式apply保留原参数；不报告不存在的P95。股票池按审核批准的季度同步100天freshness政策检查，不再用历史每日镜像样本校准其政策。正式应用要求可审计历史及真实首成功满28天，且当前四个7日段都有成功样本；当前不足时拒绝应用。", "",
               "## 原始证据", "", "逐条提交SHA、数据日期、输出时间、可见时间、计划映射、Actions运行ID、排除原因和公式见同名JSON；可用固定source_ref和Actions快照离线复算。", ""]
     return "\n".join(lines)
 
@@ -367,6 +410,9 @@ def main():
     manifest = json.loads(path.read_text(encoding="utf-8"))
     stats = analyze(root, args.ref, manifest, raw, now)
     updated = calibrated(manifest, stats)
+    if args.apply_manifest:
+        require_four_weeks(manifest, stats)
+        updated = applicable(manifest, updated)
     (root / "logs").mkdir(exist_ok=True)
     (root / "logs/运行延迟统计.json").write_text(json.dumps(stats, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     (root / "logs/运行延迟统计.md").write_text(render(stats), encoding="utf-8")

@@ -26,9 +26,14 @@ import argparse
 import csv
 import hashlib
 import json
+import math
 import os
+from pathlib import Path
 import re
+import shutil
+import subprocess
 import sys
+import tempfile
 import threading
 import time
 import urllib.error
@@ -341,14 +346,187 @@ def update_one(item, full):
 
 
 # ---------------------------------------------------------------- 主程序
-def main():
+def retry_worker(config_path, result_path):
+    """隔离子进程只调用原单标的逻辑，不直接读写正式库。"""
+    global LIB, EVD, PACE
+    with open(config_path, encoding="utf-8") as f:
+        config = json.load(f)
+    LIB = config["library"]
+    EVD = os.path.join(LIB, "分红表")
+    PACE = config["pace"]
+    _next[0] = config.get("next_request_at", 0.0)
+    rep = update_one(config["item"], config["full"])
+    if rep["status"] == "ok" and config["item"]["type"] != "指数":
+        rep["events_sha256"] = sha(os.path.join(EVD, config["item"]["code"] + ".json"))
+    Path(result_path).write_text(json.dumps(rep, ensure_ascii=False), encoding="utf-8")
+    return 0
+
+
+def validate_retry_output(library, item, rep):
+    """晋升前核对完整文件及原单标的报告，坏/半写结果绝不回库。"""
+    price = Path(library) / item["type"] / (item["code"] + ".csv")
+    raw = read_store(price)
+    if raw is None or list(raw.columns) != COLS + ["factor"] or not len(raw):
+        raise ValueError("补抓CSV缺失、为空或列结构错误")
+    if raw.index.hasnans or not raw.index.is_unique or not raw.index.is_monotonic_increasing:
+        raise ValueError("补抓CSV日期缺失、重复或未排序")
+    if not np.isfinite(raw.to_numpy(dtype=float)).all() or (raw[["open", "close", "factor"]] <= 0).any().any():
+        raise ValueError("补抓CSV含无效价格/复权因子")
+    if (len(raw) != rep["rows"] or str(raw.index[0].date()) != rep["first"]
+            or str(raw.index[-1].date()) != rep["last"] or sha(price)[:16] != rep["sha256"]
+            or not math.isclose(float(raw["factor"].iloc[-1]), rep["factor_last"], rel_tol=1e-9, abs_tol=5.001e-7)):
+        raise ValueError("补抓CSV行数、日期或SHA与报告不一致")
+    files = [price]
+    if item["type"] != "指数":
+        events_path = Path(library) / "分红表" / (item["code"] + ".json")
+        with events_path.open(encoding="utf-8") as f:
+            events = json.load(f)
+        if not isinstance(events, list) or any(not isinstance(e, dict) or not isinstance(e.get("d"), str) for e in events):
+            raise ValueError("补抓分红表结构错误")
+        for event in events:
+            date.fromisoformat(event["d"])
+        if (len(events) != rep["events"] or (events[-1]["d"] if events else "") != rep["last_event"]
+                or sha(events_path) != rep["events_sha256"]):
+            raise ValueError("补抓分红表数量、末次日期或SHA与报告不一致")
+        files.append(events_path)
+    return files
+
+
+def promote_retry_files(library, files):
+    """先备齐临时文件再逐个原子替换；晋升异常时回滚已替换文件。"""
+    prepared, replaced = [], []
+    try:
+        for source in files:
+            target = Path(LIB) / source.relative_to(library)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            def temporary():
+                fd, name = tempfile.mkstemp(prefix=".t11-", dir=target.parent)
+                os.close(fd)
+                return Path(name)
+            incoming = temporary()
+            backup = temporary() if target.exists() else None
+            prepared.append((target, incoming, backup))
+            shutil.copyfile(source, incoming)
+            if backup:
+                shutil.copyfile(target, backup)
+        for target, incoming, backup in prepared:
+            os.replace(incoming, target)
+            replaced.append((target, backup))
+    except BaseException:
+        for target, backup in reversed(replaced):
+            if backup is None:
+                target.unlink(missing_ok=True)
+            else:
+                os.replace(backup, target)
+        raise
+    finally:
+        for _, incoming, backup in prepared:
+            incoming.unlink(missing_ok=True)
+            if backup:
+                backup.unlink(missing_ok=True)
+
+
+def retry_attempt(item, full, timeout, pace):
+    """父进程硬截子进程；被kill的进程仅可能污染临时副本。"""
+    deadline = time.monotonic() + timeout
+    with tempfile.TemporaryDirectory(prefix="hangqing-retry-") as folder:
+        library = Path(folder) / "行情库"
+        for relative in (Path(item["type"]) / (item["code"] + ".csv"), Path("分红表") / (item["code"] + ".json")):
+            source, target = Path(LIB) / relative, library / relative
+            if source.is_file():
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(source, target)
+        config, result = Path(folder) / "config.json", Path(folder) / "result.json"
+        config.write_text(json.dumps({"item": item, "full": full, "library": str(library), "pace": pace,
+                                      "next_request_at": _next[0]}, ensure_ascii=False), encoding="utf-8")
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise TimeoutError("隔离副本准备后已到单标的预算")
+        try:
+            process = subprocess.run([sys.executable, os.path.abspath(__file__), "--retry-worker", str(config), str(result)],
+                                     timeout=remaining, capture_output=True, text=True)
+        except subprocess.TimeoutExpired as exc:
+            raise TimeoutError(f"单标的补抓达到 {timeout:g} 秒硬截止，子进程已终止，未晋升临时数据") from exc
+        if process.returncode != 0 or not result.is_file():
+            raise RuntimeError(f"补抓子进程异常退出 {process.returncode}：{process.stderr[-300:]}")
+        rep = json.loads(result.read_text(encoding="utf-8"))
+        if rep.get("status") == "ok":
+            if any(rep.get(k) != item[k] for k in ("code", "name", "type")):
+                raise ValueError("补抓报告标的与请求不一致")
+            files = validate_retry_output(library, item, rep)
+            if time.monotonic() >= deadline:
+                raise TimeoutError("补抓结果校验后已到单标的预算，未晋升临时数据")
+            promote_retry_files(library, files)
+        return rep
+
+
+def retry_failed(items, reps, *, rounds=2, wait=60, pace=2, budget=600, item_timeout=120,
+                 attempt=None, clock=None, sleep=None):
+    """只重试本次明确失败项；单线程、最多两轮，等待也计入600秒预算。"""
+    attempt, clock, sleep = attempt or retry_attempt, clock or time.monotonic, sleep or time.sleep
+    start = clock()
+    metadata = {"initial_failed": sum(r["status"] == "失败" for r in reps), "recovered": [], "attempts": 0,
+                "rounds": 0, "budget_exhausted": False, "budget_seconds": budget}
+    by_code = {item["code"]: item for item in items}
+    for round_number in range(1, rounds + 1):
+        pending = [index for index, rep in enumerate(reps) if rep["status"] == "失败"]
+        if not pending or clock() - start >= budget:
+            break
+        sleep(min(wait, max(0, budget - (clock() - start))))
+        if clock() - start >= budget:
+            break
+        metadata["rounds"] = round_number
+        for position, index in enumerate(pending):
+            if position:
+                sleep(min(pace, max(0, budget - (clock() - start))))
+            remaining = budget - (clock() - start)
+            if remaining <= 0:
+                break
+            previous = reps[index]
+            metadata["attempts"] += 1
+            try:
+                rep = attempt(by_code[previous["code"]], previous["full"], min(item_timeout, remaining), pace)
+            except Exception as exc:
+                rep = {"status": "失败", "notes": [f"{type(exc).__name__}: {exc}"]}
+            if rep.get("status") == "ok":
+                reps[index] = rep | {"full": previous["full"], "retry_round": round_number}
+                metadata["recovered"].append({"code": previous["code"], "name": previous["name"], "round": round_number,
+                                               "full": previous["full"]})
+            else:
+                previous["notes"].append(f"补抓第 {round_number} 轮失败：{'；'.join(rep.get('notes', ['返回状态不可用']))}")
+    metadata["elapsed_seconds"] = max(0, clock() - start)
+    metadata["budget_exhausted"] = metadata["initial_failed"] > len(metadata["recovered"]) and metadata["elapsed_seconds"] >= budget
+    if metadata["budget_exhausted"]:
+        for rep in reps:
+            if rep["status"] == "失败":
+                rep["notes"].append(f"补抓阶段 {budget:g} 秒总预算已用尽，保留失败；下次正常运行继续处理")
+    return metadata
+
+
+def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--full", action="store_true", help="全量重抓")
     ap.add_argument("--codes", default="", help="只更新这些代码，逗号分隔")
     ap.add_argument("--workers", type=int, default=2)
     ap.add_argument("--budget", type=float, default=60, help="最多用多少分钟；超时后不再开始新的标的（没轮到的下次自动补上）")
     ap.add_argument("--rotate", action="store_true", help="配合 --full：只全量重抓约四分之一的标的（按周轮换，四周一轮），其余增量")
-    a = ap.parse_args()
+    ap.add_argument("--retry-rounds", type=int, choices=(0, 1, 2), default=2, help="失败补抓轮数，最多2轮，0为禁用")
+    ap.add_argument("--retry-wait", type=float, default=60, help="每轮补抓前等待秒数（草案60秒，计入补抓总预算）")
+    ap.add_argument("--retry-pace", type=float, default=2, help="补抓请求及标的间隔秒数，须慢于主循环（草案2秒）")
+    ap.add_argument("--retry-budget", type=float, default=600, help="补抓额外总预算秒数，含等待，最多600秒")
+    ap.add_argument("--retry-item-timeout", type=float, default=120, help="单标的补抓硬截止秒数（草案120秒，且不超过剩余总预算）")
+    ap.add_argument("--retry-worker", nargs=2, help=argparse.SUPPRESS)
+    a = ap.parse_args(argv)
+    if a.retry_worker:
+        return retry_worker(*a.retry_worker)
+    for key in ("budget", "retry_wait", "retry_pace", "retry_budget", "retry_item_timeout"):
+        value = getattr(a, key)
+        if not math.isfinite(value) or value < 0:
+            ap.error(f"{key}须为有限非负数")
+    if a.workers < 1 or a.budget <= 0 or a.retry_item_timeout <= 0:
+        ap.error("workers、budget与retry-item-timeout必须大于0")
+    if a.retry_budget > 600 or a.retry_pace <= PACE:
+        ap.error("补抓总预算不得超过600秒，retry-pace须慢于主循环0.8秒")
 
     items = list(csv.DictReader(open(LIST, encoding="utf-8")))
     if a.codes:
@@ -380,6 +558,9 @@ def main():
             return update_one(it, is_full(it)) | {"full": is_full(it)}
         reps = list(ex.map(job, items))
 
+    retry = retry_failed(items, reps, rounds=a.retry_rounds, wait=a.retry_wait, pace=a.retry_pace,
+                         budget=a.retry_budget, item_timeout=a.retry_item_timeout)
+
     # 状态表：保留没在本次更新范围里的旧行
     stp = os.path.join(LIB, "状态.csv")
     keep = {}
@@ -407,6 +588,9 @@ def main():
              f"- 模式：全量重抓 {sum(r['full'] for r in reps)} 个，其余增量；标的 {len(reps)} 个，成功 {len(ok)}，失败 {len(bad)}，超时未轮到 {len(skipped)}；用时 {time.time() - t0:.0f} 秒",
              f"- 最新交易日：{lasts[-1] if lasts else '无'}" + (f"（有 {sum(r['last'] != lasts[-1] for r in ok)} 个标的最后日期更早，可能停牌）" if len(lasts) > 1 else ""),
              f"- 新增行数合计：{sum(r.get('added', 0) for r in ok)}", ""]
+    lines += [f"- 主循环失败：{retry['initial_failed']}；补抓成功：{len(retry['recovered'])}；补抓轮数：{retry['rounds']}；补抓请求标的次数：{retry['attempts']}；额外用时 {retry['elapsed_seconds']:.2f} 秒（上限 {retry['budget_seconds']:g} 秒，含等待）", ""]
+    if retry["recovered"]:
+        lines += ["## 补抓成功", ""] + [f"- {r['code']} {r['name']}：第 {r['round']} 轮，{'全量' if r['full'] else '增量'}" for r in retry["recovered"]] + [""]
     if bad:
         lines += ["## 失败", ""] + [f"- {r['code']} {r['name']}：{'；'.join(r['notes'])}" for r in bad] + [""]
     if skipped:
