@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-29T06:55:56.257876+08:00",
-  "requested_since": "2026-10-01T06:55:56.257876+08:00",
+  "checked_at": "2026-10-29T06:59:53.180678+08:00",
+  "requested_since": "2026-10-01T06:59:53.180678+08:00",
   "source_ref": "05c449f3a1defed58fd89fdc0469f6767d9d83b2",
   "first_repository_commit": "2026-10-20T23:45:53+08:00",
   "formula": "ceil(P95 + max(P95-P50, 最大值-P95, 1分钟))；最近秩分位数",

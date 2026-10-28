@@ -66,6 +66,7 @@ test_margin_is_measured_and_covers_observed_maximum (test_run_delay_stats.DelayS
 test_nearest_rank_does_not_underestimate_small_tail (test_run_delay_stats.DelayStatsTests.test_nearest_rank_does_not_underestimate_small_tail) ... ok
 test_no_samples_are_not_presented_as_measured_p95 (test_run_delay_stats.DelayStatsTests.test_no_samples_are_not_presented_as_measured_p95) ... ok
 test_only_successful_scheduled_run_calibrates (test_run_delay_stats.DelayStatsTests.test_only_successful_scheduled_run_calibrates) ... ok
+test_rolling_window_does_not_reset_multislot_sequence_to_inception (test_run_delay_stats.DelayStatsTests.test_rolling_window_does_not_reset_multislot_sequence_to_inception) ... ok
 test_invalid_offline_source_does_not_overwrite_existing_file (test_trade_calendar.CalendarNoticeTests.test_invalid_offline_source_does_not_overwrite_existing_file) ... 日历失败，未写入：ValueError: 未取得 2026 年完整年度休市公告，不推测交易日
 ok
 test_official_notice_has_full_year_and_all_holidays (test_trade_calendar.CalendarNoticeTests.test_official_notice_has_full_year_and_all_holidays) ... ok
@@ -94,7 +95,7 @@ test_failure_shell_runs_with_and_without_checkout (test_workflow_alerts.Workflow
 test_health_schedule_and_recovery_access (test_workflow_alerts.WorkflowAlertTests.test_health_schedule_and_recovery_access) ... ok
 
 ----------------------------------------------------------------------
-Ran 93 tests in 0.314s
+Ran 94 tests in 0.300s
 
 OK
 健康检查 2026-10-28T22:30:00+08:00：正常3项，延迟1项，失败6项，部分失败0项

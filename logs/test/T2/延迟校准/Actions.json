@@ -1,5 +1,7 @@
 {
-  "captured_at": "2026-10-29T06:55:56.257876+08:00",
+  "captured_at": "2026-10-29T06:59:53.180678+08:00",
+  "requested_statistics_since": "2026-09-30T22:59:53.180678+00:00",
+  "说明": "保留全量Actions元数据用于多时段顺序归属；分位数仅统计近28天样本",
   "repository": "Rsannote/rsan-backtest",
   "runs": [
     {
