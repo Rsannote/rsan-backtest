@@ -1,0 +1,24 @@
+{
+  "checked_at": "2026-10-28T21:42:38.441169+08:00",
+  "items": [
+    {
+      "id": "workflow:test-t2-health.yml",
+      "name": "分支验收回退路径（只读演练）",
+      "status": "失败",
+      "expected": {
+        "工作流": "成功"
+      },
+      "actual": {
+        "run_url": "https://github.com/Rsannote/rsan-backtest/actions/runs/40698827415"
+      },
+      "reasons": [
+        "工作流 T2 健康检查分支验收 执行失败"
+      ],
+      "workflow": {
+        "file": ".github/workflows/test-t2-health.yml",
+        "run_id": 40698827415,
+        "attempt": 1
+      }
+    }
+  ]
+}

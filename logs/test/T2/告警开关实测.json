@@ -1,0 +1,102 @@
+{
+  "说明": "隔离目录模拟旧产出→恢复；只操作 test 命名空间 Issue，未修改正式数据。",
+  "检查时间": "2026-10-28T21:42:23.066272+08:00",
+  "代码": "09c09f1e1669260e9040811d4c3dc947e39412a1",
+  "Issue": "https://github.com/Rsannote/rsan-backtest/issues/3",
+  "首轮失败清理": [
+    {
+      "item": "t2-alert-drill",
+      "action": "关闭",
+      "number": 4,
+      "url": "https://github.com/Rsannote/rsan-backtest/issues/4",
+      "state": "closed",
+      "closed_at": "2026-10-28T13:42:25Z"
+    },
+    {
+      "item": "t2-alert-drill",
+      "action": "关闭",
+      "number": 3,
+      "url": "https://github.com/Rsannote/rsan-backtest/issues/3",
+      "state": "closed",
+      "closed_at": "2026-10-28T13:42:27Z"
+    }
+  ],
+  "异常报告": {
+    "schema_version": 1,
+    "checked_at": "2026-10-28T21:42:23.066272+08:00",
+    "timezone": "Asia/Shanghai",
+    "items": [
+      {
+        "id": "t2-alert-drill",
+        "name": "T2 健康检查演练（模拟）",
+        "status": "延迟",
+        "expected": {
+          "data_date": "2026-10-28",
+          "scheduled_at": "2026-10-28T00:00:00+08:00",
+          "deadline": "2026-10-28T00:00:00+08:00"
+        },
+        "actual": {
+          "data_date": "2026-10-27",
+          "updated_at": "2026-10-27T21:42:23.066272+08:00"
+        },
+        "reasons": [
+          "已到截止 2026-10-28T00:00:00+08:00；实际未覆盖预期数据日期/运行时段 2026-10-28T00:00:00+08:00"
+        ]
+      }
+    ]
+  },
+  "开启": [
+    {
+      "item": "t2-alert-drill",
+      "action": "重新打开",
+      "number": 3,
+      "url": "https://github.com/Rsannote/rsan-backtest/issues/3",
+      "state": "open"
+    }
+  ],
+  "同日重复": [
+    {
+      "item": "t2-alert-drill",
+      "action": "追加评论",
+      "number": 3,
+      "url": "https://github.com/Rsannote/rsan-backtest/issues/3",
+      "state": "open"
+    }
+  ],
+  "恢复报告": {
+    "schema_version": 1,
+    "checked_at": "2026-10-28T21:42:23.066272+08:00",
+    "timezone": "Asia/Shanghai",
+    "items": [
+      {
+        "id": "t2-alert-drill",
+        "name": "T2 健康检查演练（模拟）",
+        "status": "正常",
+        "expected": {
+          "data_date": "2026-10-28",
+          "scheduled_at": "2026-10-28T00:00:00+08:00",
+          "deadline": "2026-10-28T00:00:00+08:00"
+        },
+        "actual": {
+          "data_date": "2026-10-28",
+          "updated_at": "2026-10-28T21:42:23.066272+08:00"
+        },
+        "reasons": [
+          "产出日期及最近已到截止的运行时段符合预期"
+        ]
+      }
+    ]
+  },
+  "关闭": [
+    {
+      "item": "t2-alert-drill",
+      "action": "关闭",
+      "number": 3,
+      "url": "https://github.com/Rsannote/rsan-backtest/issues/3",
+      "state": "closed",
+      "closed_at": "2026-10-28T13:42:36Z"
+    }
+  ],
+  "最终状态": "closed",
+  "关闭时间": "2026-10-28T21:42:36+08:00"
+}

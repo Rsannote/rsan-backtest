@@ -1,5 +1,6 @@
 test_beijing_day_used_even_when_input_is_utc (test_health_alert.AlertTests.test_beijing_day_used_even_when_input_is_utc) ... ok
 test_broken_manifest_does_not_close_scheduled_output_alert (test_health_alert.AlertTests.test_broken_manifest_does_not_close_scheduled_output_alert) ... ok
+test_fresh_client_avoids_lagging_label_index_and_disables_get_cache (test_health_alert.AlertTests.test_fresh_client_avoids_lagging_label_index_and_disables_get_cache) ... ok
 test_malformed_foreign_marker_is_ignored (test_health_alert.AlertTests.test_malformed_foreign_marker_is_ignored) ... ok
 test_missing_completion_time_does_not_recover (test_health_alert.AlertTests.test_missing_completion_time_does_not_recover) ... ok
 test_namespaces_do_not_close_real_alerts_during_drill (test_health_alert.AlertTests.test_namespaces_do_not_close_real_alerts_during_drill) ... ok
@@ -7,8 +8,11 @@ test_new_day_has_one_issue_and_recovery_closes_previous_days (test_health_alert.
 test_old_run_rerun_cannot_be_recovered_by_earlier_higher_id_success (test_health_alert.AlertTests.test_old_run_rerun_cannot_be_recovered_by_earlier_higher_id_success) ... ok
 test_recover_closes_then_same_day_relapse_reopens_same_issue (test_health_alert.AlertTests.test_recover_closes_then_same_day_relapse_reopens_same_issue) ... ok
 test_running_success_not_a_recovery (test_health_alert.AlertTests.test_running_success_not_a_recovery) ... ok
+test_same_client_reuses_created_issue_when_entire_list_lags (test_health_alert.AlertTests.test_same_client_reuses_created_issue_when_entire_list_lags) ... ok
 test_same_day_repeat_comments_without_duplicate_issue (test_health_alert.AlertTests.test_same_day_repeat_comments_without_duplicate_issue) ... ok
+test_stale_list_snapshot_cannot_undo_successful_patch (test_health_alert.AlertTests.test_stale_list_snapshot_cannot_undo_successful_patch) ... ok
 test_successful_rerun_same_id_higher_attempt_recovers (test_health_alert.AlertTests.test_successful_rerun_same_id_higher_attempt_recovers) ... ok
+test_unfiltered_pagination_keeps_issue_on_second_page (test_health_alert.AlertTests.test_unfiltered_pagination_keeps_issue_on_second_page) ... ok
 test_workflow_failure_needs_new_success_not_just_old_output (test_health_alert.AlertTests.test_workflow_failure_needs_new_success_not_just_old_output) ... ok
 test_all_failed_is_failure (test_health_check.HealthTests.test_all_failed_is_failure) ... ok
 test_before_close_deadline_still_expects_previous_day (test_health_check.HealthTests.test_before_close_deadline_still_expects_previous_day) ... ok
@@ -44,30 +48,31 @@ ok
 test_official_notice_has_full_year_and_all_holidays (test_trade_calendar.CalendarNoticeTests.test_official_notice_has_full_year_and_all_holidays) ... ok
 test_script_text_cannot_override_visible_notice (test_trade_calendar.CalendarNoticeTests.test_script_text_cannot_override_visible_notice) ... ok
 test_wrong_year_and_missing_holiday_rejected (test_trade_calendar.CalendarNoticeTests.test_wrong_year_and_missing_holiday_rejected) ... ok
-test_update_hangqing (unittest.loader._FailedTest.test_update_hangqing) ... ERROR
+test_501_after_valid_history_is_failure (test_update_hangqing.HistoryTests.test_501_after_valid_history_is_failure) ... ok
+test_all_empty_fails_without_writing (test_update_hangqing.HistoryTests.test_all_empty_fails_without_writing) ... ok
+test_existing_file_survives_network_failure (test_update_hangqing.HistoryTests.test_existing_file_survives_network_failure) ... ok
+test_full_starts_at_stored_tencent_first_year (test_update_hangqing.HistoryTests.test_full_starts_at_stored_tencent_first_year) ... ok
+test_incremental_501_is_failure (test_update_hangqing.HistoryTests.test_incremental_501_is_failure) ... ok
+test_non_501_errors_and_bad_json_are_not_swallowed (test_update_hangqing.HistoryTests.test_non_501_errors_and_bad_json_are_not_swallowed) ... ok
+test_unknown_year_skips_501_and_empty_prefix (test_update_hangqing.HistoryTests.test_unknown_year_skips_501_and_empty_prefix) ... ok
+test_unknown_year_uses_prefix_fallback (test_update_hangqing.HistoryTests.test_unknown_year_uses_prefix_fallback) ... ok
+test_reprobe_empty_or_exhausted_501_is_uncertain_and_fails (test_update_hangqing.PrefixGuardTests.test_reprobe_empty_or_exhausted_501_is_uncertain_and_fails) ... ok
+test_reprobe_keeps_going_back_if_recovered_data_also_touches_boundary (test_update_hangqing.PrefixGuardTests.test_reprobe_keeps_going_back_if_recovered_data_also_touches_boundary) ... ok
+test_reprobe_recovers_previous_segment (test_update_hangqing.PrefixGuardTests.test_reprobe_recovers_previous_segment) ... ok
+test_ten_day_boundary_is_inclusive (test_update_hangqing.PrefixGuardTests.test_ten_day_boundary_is_inclusive) ... ok
+test_uncertain_prefix_does_not_write_price_or_events (test_update_hangqing.PrefixGuardTests.test_uncertain_prefix_does_not_write_price_or_events) ... ok
+test_mixed_network_errors_never_become_empty_prefix (test_update_hangqing.RetryTests.test_mixed_network_errors_never_become_empty_prefix) ... ok
+test_normal_501_still_retries_five_times_then_fails (test_update_hangqing.RetryTests.test_normal_501_still_retries_five_times_then_fails) ... ok
+test_prefix_501_only_escapes_after_three_backoff_attempts (test_update_hangqing.RetryTests.test_prefix_501_only_escapes_after_three_backoff_attempts) ... ok
+test_transient_prefix_501_retries_same_segment_and_keeps_history (test_update_hangqing.RetryTests.test_transient_prefix_501_retries_same_segment_and_keeps_history) ... ok
 test_all_production_workflows_have_failure_alert_and_permissions (test_workflow_alerts.WorkflowAlertTests.test_all_production_workflows_have_failure_alert_and_permissions) ... ok
 test_every_cron_workflow_is_in_manifest (test_workflow_alerts.WorkflowAlertTests.test_every_cron_workflow_is_in_manifest) ... ok
 test_failure_shell_runs_with_and_without_checkout (test_workflow_alerts.WorkflowAlertTests.test_failure_shell_runs_with_and_without_checkout) ... ok
 test_health_schedule_and_recovery_access (test_workflow_alerts.WorkflowAlertTests.test_health_schedule_and_recovery_access) ... ok
 
-======================================================================
-ERROR: test_update_hangqing (unittest.loader._FailedTest.test_update_hangqing)
 ----------------------------------------------------------------------
-ImportError: Failed to import test module: test_update_hangqing
-Traceback (most recent call last):
-  File "/usr/lib/python3.12/unittest/loader.py", line 394, in _find_test_path
-    module = self._get_module_from_name(name)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.12/unittest/loader.py", line 337, in _get_module_from_name
-    __import__(name)
-  File "/home/runner/work/rsan-backtest/rsan-backtest/tests/test_update_hangqing.py", line 12, in <module>
-    import pandas as pd
-ModuleNotFoundError: No module named 'pandas'
+Ran 70 tests in 0.184s
 
-
-----------------------------------------------------------------------
-Ran 50 tests in 0.186s
-
-FAILED (errors=1)
+OK
 健康检查 2026-10-28T22:30:00+08:00：正常3项，延迟1项，失败6项，部分失败0项
 健康检查 2026-10-28T22:30:00+08:00：正常0项，延迟0项，失败1项，部分失败0项
