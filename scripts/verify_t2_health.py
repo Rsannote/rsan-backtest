@@ -36,6 +36,24 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     now = datetime.now(health_check.BJ)
     api = health_alert.GitHub(os.environ["GITHUB_REPOSITORY"], os.environ["GITHUB_TOKEN"])
+    # 首轮验收发现标签列表存在读写延迟，留下两条同日测试告警。
+    # 只清理本演练命名空间：真实健康恢复关闭全部，再将多余旧标记归档；保留正文和评论审计。
+    prior = sorted((i for i in api.issues() if (health_alert.metadata(i) or {}).get("namespace") == "test"
+                    and health_alert.metadata(i).get("item") == "t2-alert-drill"
+                    and health_alert.metadata(i).get("date") == now.date().isoformat()), key=lambda i: i["number"])
+    cleanup = []
+    if len(prior) > 1:
+        cleanup = health_alert.sync_report(api, {"checked_at": now.isoformat(), "items": [
+            {"id": "t2-alert-drill", "name": "T2 健康检查演练（模拟）", "status": "正常"}]}, "test")
+        for old in prior[1:]:
+            meta = health_alert.metadata(old)
+            meta["namespace"] = "test-failed-validation"
+            marker = "<!-- rsan-health-v1 " + json.dumps(meta, ensure_ascii=False, separators=(",", ":")) + " -->"
+            api.request("POST", f"issues/{old['number']}/comments", {"body":
+                f"首轮验收发现标签列表读写延迟导致重复，现保留此失败记录并归档测试标记；后续演练复用 #{prior[0]['number']}。未触及生产告警。"})
+            api.request("PATCH", f"issues/{old['number']}", {"body": health_alert.MARKER.sub(lambda _: marker, old["body"], count=1)})
+            archived = api.request("GET", f"issues/{old['number']}")
+            assert archived["state"] == "closed" and health_alert.metadata(archived)["namespace"] == "test-failed-validation", archived
     original = json.loads((ROOT / "system/运行清单.json").read_text(encoding="utf-8"))
     item = copy.deepcopy(next(i for i in original["items"] if i["id"] == "market_state"))
     item.update(id="t2-alert-drill", name="T2 健康检查演练（模拟）", times=["00:00"], grace_minutes=0, trading_days_only=False)
@@ -48,6 +66,8 @@ def main():
         opened = health_alert.sync_report(api, failed, "test")
         number = opened[0]["number"]
         assert api.request("GET", f"issues/{number}")["state"] == "open"
+        # 新建客户端模拟下次独立定时进程，不能依赖本进程写入缓存才去重成功。
+        api = health_alert.GitHub(os.environ["GITHUB_REPOSITORY"], os.environ["GITHUB_TOKEN"])
         repeated = health_alert.sync_report(api, failed, "test")
         assert repeated[0]["number"] == number and repeated[0]["action"] == "追加评论", repeated
         output(root, now.date().isoformat(), now.isoformat())
@@ -58,10 +78,10 @@ def main():
         assert final["state"] == "closed" and final["closed_at"], final
         proof = {"说明": "隔离目录模拟旧产出→恢复；只操作 test 命名空间 Issue，未修改正式数据。",
                  "检查时间": now.isoformat(), "代码": os.environ["GITHUB_SHA"], "Issue": final["html_url"],
-                 "异常报告": failed, "开启": opened, "同日重复": repeated, "恢复报告": healthy,
+                 "首轮失败清理": cleanup, "异常报告": failed, "开启": opened, "同日重复": repeated, "恢复报告": healthy,
                  "关闭": recovered, "最终状态": final["state"], "关闭时间": health_check.timestamp(final["closed_at"]).isoformat()}
         (OUT / "告警开关实测.json").write_text(json.dumps(proof, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-        (OUT / "告警开关实测.md").write_text(f"# T2 告警生命周期实测\n\n时间：{now.isoformat()}（北京时间）。\n\n[测试 Issue #{number}]({final['html_url']})：旧产出为延迟后开出，同日重复复用 #{number} 并追加评论；恢复正常后自动关闭。\n\n最终状态：{final['state']}；关闭时间：{proof['关闭时间']}（北京时间）。\n\n正式数据未写入；测试命名空间与生产隔离。详细请求结果见同名 JSON。\n", encoding="utf-8")
+        (OUT / "告警开关实测.md").write_text(f"# T2 告警生命周期实测\n\n时间：{now.isoformat()}（北京时间）。\n\n[测试 Issue #{number}]({final['html_url']})：旧产出为延迟后开启（首轮创建，本轮复用重开），同日重复复用 #{number} 并追加评论；恢复正常后自动关闭。\n\n最终状态：{final['state']}；关闭时间：{proof['关闭时间']}（北京时间）。\n\n首轮验收的重复 Issue #4 已由健康恢复关闭，保留失败记录并归档测试标记；本轮复用 #3 核验修复。正式数据未写入；测试命名空间与生产隔离。详细请求结果见同名 JSON。\n", encoding="utf-8")
         calendar_item = copy.deepcopy(next(i for i in original["items"] if i["id"] == "market_state"))
         fixture(root, calendar_item)
         cases = []

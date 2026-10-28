@@ -44,19 +44,30 @@ class GitHub:
         if not token:
             raise ValueError("缺少 GITHUB_TOKEN")
         self.repository, self.token = repository, token
+        # 标签索引/列表可能暂未反映刚写入的Issue；保留服务端成功写入响应，
+        # 让同一进程的后续同步至少能看到自己已经创建/修改的Issue。
+        self._written_issues = {}
 
     def request(self, method, path, payload=None):
         if os.environ.get("GITHUB_ACTIONS") != "true":
             raise RuntimeError("GitHub 联网告警只能在 Actions 执行")
         url = f"https://api.github.com/repos/{self.repository}/" + path
         data = json.dumps(payload, ensure_ascii=False).encode() if payload is not None else None
-        req = urllib.request.Request(url, data=data, method=method, headers={
+        headers = {
             "Authorization": "Bearer " + self.token, "Accept": "application/vnd.github+json",
             "Content-Type": "application/json", "X-GitHub-Api-Version": "2022-11-28",
-            "User-Agent": "rsan-health-check"})
+            "User-Agent": "rsan-health-check"}
+        if method == "GET":
+            headers.update({"Cache-Control": "no-cache", "Pragma": "no-cache"})
+        req = urllib.request.Request(url, data=data, method=method, headers=headers)
         with urllib.request.urlopen(req, timeout=30) as response:
             body = response.read()
-        return json.loads(body) if body else {}
+        result = json.loads(body) if body else {}
+        if ((method == "POST" and path == "issues")
+                or (method == "PATCH" and re.fullmatch(r"issues/\d+", path))):
+            if isinstance(result, dict) and type(result.get("number")) is int:
+                self._written_issues[result["number"]] = dict(result)
+        return result
 
     def ensure_label(self):
         try:
@@ -69,11 +80,20 @@ class GitHub:
     def issues(self):
         rows, page = [], 1
         while True:
-            query = urllib.parse.urlencode({"state": "all", "labels": "告警", "per_page": 100, "page": page})
+            # 用完整Issue列表并在sync_report按协议标记筛选；标签查询依赖
+            # 索引，刚创建成功的Issue可能暂时不可见，不能作为去重依据。
+            query = urllib.parse.urlencode({"state": "all", "per_page": 100, "page": page})
             batch = self.request("GET", "issues?" + query)
             rows.extend(i for i in batch if "pull_request" not in i)
             if len(batch) < 100:
-                return rows
+                by_number = {issue["number"]: issue for issue in rows}
+                for number, written in self._written_issues.items():
+                    listed = by_number.get(number)
+                    # 同一秒内的多次写入时间可能相等，优先刚收到的写响应；
+                    # 列表若已有更晚更新则接受它，保留其他客户端的新变化。
+                    if listed is None or str(written.get("updated_at", "")) >= str(listed.get("updated_at", "")):
+                        by_number[number] = dict(written)
+                return list(by_number.values())
             page += 1
 
 

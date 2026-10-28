@@ -1,8 +1,12 @@
 """离线验证 Issue 生命周期、同日去重和工作流恢复边界；不访问 GitHub。"""
 import copy
+import io
 import importlib.util
+import json
 from pathlib import Path
 import unittest
+from unittest.mock import patch
+from urllib.parse import parse_qs, urlsplit
 
 spec = importlib.util.spec_from_file_location("health_alert", Path(__file__).resolve().parents[1] / "scripts/health_alert.py")
 alerts = importlib.util.module_from_spec(spec)
@@ -38,6 +42,44 @@ class FakeGitHub:
         return copy.deepcopy(row)
 
 
+class IssueTransport:
+    """模拟标签索引/完整列表的读后写延迟，仍走真正的GitHub客户端。"""
+    def __init__(self, lag_all=False):
+        self.rows, self.requests, self.comments = [], [], []
+        self.lag_all = lag_all
+        self.list_override = None
+
+    def __call__(self, request, timeout):
+        method = request.get_method()
+        path = request.full_url.split("/repos/example/repo/", 1)[1]
+        self.requests.append((method, path, {key.lower(): value for key, value in request.header_items()}))
+        payload = json.loads(request.data) if request.data else None
+        if method == "GET" and path.startswith("labels/"):
+            result = {"name": "告警"}
+        elif method == "GET" and path.startswith("issues?"):
+            query = parse_qs(urlsplit(path).query)
+            # 标签索引持续落后；完整列表可独立模拟暂时漏掉本进程写入。
+            result = [] if "labels" in query or self.lag_all else copy.deepcopy(self.rows if self.list_override is None else self.list_override)
+        elif method == "POST" and path == "issues":
+            number = len(self.rows) + 1
+            result = {"number": number, "html_url": f"https://github.com/example/repo/issues/{number}", "state": "open", "updated_at": "2026-10-28T12:00:00Z", **payload}
+            self.rows.append(copy.deepcopy(result))
+        else:
+            number = int(path.split("/")[1])
+            row = self.rows[number - 1]
+            if path.endswith("/comments"):
+                self.comments.append((number, payload["body"]))
+                result = {}
+            elif method == "PATCH":
+                row.update(payload)
+                if payload.get("state") == "closed":
+                    row["closed_at"] = "2026-10-28T12:00:00Z"
+                result = copy.deepcopy(row)
+            else:
+                result = copy.deepcopy(row)
+        return io.BytesIO(json.dumps(result, ensure_ascii=False).encode())
+
+
 def report(status, checked="2026-10-28T20:00:00+08:00", workflow=None, item="hangqing"):
     row = {"id": item, "name": "行情库", "status": status, "reasons": ["模拟故障" if status != "正常" else "已恢复"]}
     if workflow:
@@ -46,6 +88,64 @@ def report(status, checked="2026-10-28T20:00:00+08:00", workflow=None, item="han
 
 
 class AlertTests(unittest.TestCase):
+    def test_same_client_reuses_created_issue_when_entire_list_lags(self):
+        transport = IssueTransport(lag_all=True)
+        with patch.dict("os.environ", {"GITHUB_ACTIONS": "true"}), patch.object(alerts.urllib.request, "urlopen", transport):
+            api = alerts.GitHub("example/repo", "fixture-token")
+            first = alerts.sync_report(api, report("失败"), "test")
+            second = alerts.sync_report(api, report("失败"), "test")
+            self.assertEqual(second[0]["number"], first[0]["number"])
+            self.assertEqual(second[0]["action"], "追加评论")
+            self.assertEqual(len(transport.rows), 1)
+            restored = alerts.sync_report(api, report("正常"), "test")
+            self.assertEqual(restored[0]["state"], "closed")
+            relapse = alerts.sync_report(api, report("失败"), "test")
+            self.assertEqual(relapse[0]["action"], "重新打开")
+            self.assertEqual(len(transport.rows), 1)
+
+    def test_fresh_client_avoids_lagging_label_index_and_disables_get_cache(self):
+        transport = IssueTransport()
+        with patch.dict("os.environ", {"GITHUB_ACTIONS": "true"}), patch.object(alerts.urllib.request, "urlopen", transport):
+            first = alerts.sync_report(alerts.GitHub("example/repo", "fixture-token"), report("失败"), "test")
+            second = alerts.sync_report(alerts.GitHub("example/repo", "fixture-token"), report("失败"), "test")
+        self.assertEqual(first[0]["number"], second[0]["number"])
+        self.assertEqual(len(transport.rows), 1)
+        for method, path, headers in transport.requests:
+            if method == "GET":
+                self.assertEqual(headers["cache-control"], "no-cache")
+                self.assertEqual(headers["pragma"], "no-cache")
+            if path.startswith("issues?"):
+                self.assertNotIn("labels", parse_qs(urlsplit(path).query))
+
+    def test_stale_list_snapshot_cannot_undo_successful_patch(self):
+        transport = IssueTransport()
+        with patch.dict("os.environ", {"GITHUB_ACTIONS": "true"}), patch.object(alerts.urllib.request, "urlopen", transport):
+            api = alerts.GitHub("example/repo", "fixture-token")
+            alerts.sync_report(api, report("失败"), "test")
+            transport.list_override = copy.deepcopy(transport.rows)
+            alerts.sync_report(api, report("正常"), "test")
+            self.assertEqual(api.issues()[0]["state"], "closed")
+            # 有更新时刻更晚的外部修改时，接受列表返回的新状态。
+            transport.list_override[0].update(state="open", updated_at="2026-10-28T12:01:00Z")
+            self.assertEqual(api.issues()[0]["state"], "open")
+
+    def test_unfiltered_pagination_keeps_issue_on_second_page(self):
+        pages = []
+        def respond(request, timeout):
+            path = request.full_url.split("/repos/example/repo/", 1)[1]
+            query = parse_qs(urlsplit(path).query)
+            pages.append(query)
+            if query["page"] == ["1"]:
+                rows = [{"number": i, "pull_request": {}} for i in range(1, 101)]
+            else:
+                rows = [{"number": 101, "body": "完整Issue", "state": "open"}]
+            return io.BytesIO(json.dumps(rows).encode())
+        with patch.dict("os.environ", {"GITHUB_ACTIONS": "true"}), patch.object(alerts.urllib.request, "urlopen", respond):
+            result = alerts.GitHub("example/repo", "fixture-token").issues()
+        self.assertEqual([i["number"] for i in result], [101])
+        self.assertEqual([q["page"] for q in pages], [["1"], ["2"]])
+        self.assertTrue(all("labels" not in query for query in pages))
+
     def test_same_day_repeat_comments_without_duplicate_issue(self):
         api = FakeGitHub()
         first = alerts.sync_report(api, report("部分失败"))

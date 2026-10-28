@@ -33,10 +33,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: 安装既有测试依赖
+        run: python3 -m pip install pandas numpy requests
       - name: 核验官方全年日历
         run: python3 scripts/update_trade_calendar.py --force
       - name: 离线测试与引擎校验
         run: |
+          set -o pipefail
           mkdir -p logs/test/T2
           python3 -m unittest discover -s tests -v 2>&1 | tee logs/test/T2/离线测试.txt
           md5sum -c engine/ENGINE_MD5.txt | tee logs/test/T2/引擎校验.txt
