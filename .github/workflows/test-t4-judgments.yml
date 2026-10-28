@@ -1,0 +1,93 @@
+name: T4 判断落档与复核分支验收
+
+on:
+  push:
+    branches: [gpt/T4-auto-judgments]
+    paths:
+      - scripts/auto*.py
+      - scripts/check_judgments.py
+      - scripts/health_check.py
+      - system/自动判断规则.json
+      - system/判断记录格式.md
+      - system/运行清单.json
+      - tests/test_auto_judgments.py
+      - .github/workflows/test-t4-judgments.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: repo-writer
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    if: github.ref == 'refs/heads/gpt/T4-auto-judgments'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: 安装既有依赖
+        run: python3 -m pip install pandas numpy requests
+      - name: 保存正式判断字节基线
+        run: |
+          mkdir -p logs/test/T4/CI
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          rows = {str(p): hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('judgments').glob('*.jsonl')}
+          count = sum(sum(bool(line.strip()) for line in p.read_text().splitlines()) for p in Path('judgments').glob('*.jsonl'))
+          Path('logs/test/T4/CI/正式判断_基线.json').write_text(json.dumps({'files':rows,'records':count},ensure_ascii=False,indent=2)+'\n')
+          PY
+      - name: 完整测试及固定引擎校验
+        run: |
+          set -o pipefail
+          python3 -m unittest discover -s tests -v 2>&1 | tee logs/test/T4/CI/离线测试.txt
+          md5sum -c engine/ENGINE_MD5.txt | tee logs/test/T4/CI/引擎校验.txt
+      - name: 正式入口与草案隔离回放
+        run: |
+          set -o pipefail
+          python3 scripts/auto_judgments.py --module 市场状态
+          python3 scripts/auto_judgments.py --module 散户情绪
+          python3 scripts/auto_review.py
+          python3 scripts/check_judgments.py --stats | tee logs/test/T4/CI/正式格式与统计.txt
+          python3 scripts/auto_judgments.py --replay --include-drafts --out-dir logs/test/T4/CI回放
+          python3 scripts/check_judgments.py --directory logs/test/T4/CI回放/judgments --stats | tee logs/test/T4/CI/隔离格式与统计.txt
+          python3 - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          files={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('logs/test/T4/CI回放/judgments').glob('*.jsonl')}
+          Path('logs/test/T4/CI/回放_第一次.json').write_text(json.dumps(files,ensure_ascii=False,indent=2)+'\n')
+          PY
+          python3 scripts/auto_judgments.py --replay --include-drafts --out-dir logs/test/T4/CI回放
+      - name: 核验幂等、七条手写判断与数据保护
+        run: |
+          python3 - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          before=json.loads(Path('logs/test/T4/CI/正式判断_基线.json').read_text())
+          after={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('judgments').glob('*.jsonl')}
+          assert before['files']==after, '正式判断字节或文件集合改变'
+          replay={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('logs/test/T4/CI回放/judgments').glob('*.jsonl')}
+          assert replay==json.loads(Path('logs/test/T4/CI/回放_第一次.json').read_text()), '回放重复产生变动'
+          result={'正式判断条数':before['records'],'正式判断字节保持':True,'草案回放幂等':True}
+          Path('logs/test/T4/CI/保护与幂等.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+          print(json.dumps(result,ensure_ascii=False))
+          PY
+          git diff --exit-code -- data engine archive judgments graph
+      - name: 保存验收输出
+        if: always()
+        run: |
+          git config user.name github-actions
+          git config user.email actions@users.noreply.github.com
+          git add logs/test/T4
+          for path in logs/程序判断_市场状态_最新.json logs/程序判断_市场状态_最新.md logs/程序判断_散户情绪_最新.json logs/程序判断_散户情绪_最新.md logs/自动复核_最新.json logs/自动复核_最新.md; do
+            if [ -f "$path" ]; then git add "$path"; fi
+          done
+          git diff --cached --quiet && exit 0
+          git commit -m "T4：保存隔离回放、手写保护与分支验收证据"
+          git pull --rebase origin "$GITHUB_REF_NAME"
+          git push origin "HEAD:$GITHUB_REF_NAME"

@@ -302,6 +302,78 @@
         "logs/健康检查_最新.json"
       ],
       "说明": "本次成功生成报告即为本次运行证据；整个工作流失败由GitHub Actions失败告警发现。"
+    },
+    {
+      "workflow": ".github/workflows/market-state.yml",
+      "times": [
+        "16:40"
+      ],
+      "grace_minutes": 477,
+      "trading_days_only": true,
+      "check_mode": "previous_trading_day",
+      "id": "auto_market",
+      "name": "程序判断·市场状态",
+      "kind": "judgment_report",
+      "trigger": "随market_state指标完成后运行",
+      "outputs": [
+        "logs/程序判断_市场状态_最新.json",
+        "logs/程序判断_市场状态_最新.md"
+      ],
+      "说明": "草案未批准可零新增；日志必须每日生成。沿用上游已批准宽限，新步骤尚无独立运行样本，不声称单独校准；待复核缺固定窗口行情须告警。",
+      "delay_basis": {
+        "inherit_from": "market_state",
+        "grace_minutes": 477,
+        "report": "logs/运行延迟统计.md",
+        "说明": "新步骤无样本，暂继承上游已审核宽限；后续用实际Actions样本单独校准"
+      }
+    },
+    {
+      "workflow": ".github/workflows/sentiment-index.yml",
+      "times": [
+        "16:40"
+      ],
+      "grace_minutes": 478,
+      "trading_days_only": true,
+      "check_mode": "previous_trading_day",
+      "id": "auto_sentiment",
+      "name": "程序判断·散户情绪",
+      "kind": "judgment_report",
+      "trigger": "随sentiment_index指标完成后运行",
+      "outputs": [
+        "logs/程序判断_散户情绪_最新.json",
+        "logs/程序判断_散户情绪_最新.md"
+      ],
+      "说明": "草案未批准可零新增；日志必须每日生成。沿用上游已批准宽限，新步骤尚无独立运行样本，不声称单独校准；待复核缺固定窗口行情须告警。",
+      "delay_basis": {
+        "inherit_from": "sentiment_index",
+        "grace_minutes": 478,
+        "report": "logs/运行延迟统计.md",
+        "说明": "新步骤无样本，暂继承上游已审核宽限；后续用实际Actions样本单独校准"
+      }
+    },
+    {
+      "workflow": ".github/workflows/sentiment-index.yml",
+      "times": [
+        "16:40"
+      ],
+      "grace_minutes": 478,
+      "trading_days_only": true,
+      "check_mode": "previous_trading_day",
+      "id": "auto_review",
+      "name": "程序判断·自动复核",
+      "kind": "judgment_report",
+      "trigger": "随sentiment_index指标完成后运行",
+      "outputs": [
+        "logs/自动复核_最新.json",
+        "logs/自动复核_最新.md"
+      ],
+      "说明": "草案未批准可零新增；日志必须每日生成。沿用上游已批准宽限，新步骤尚无独立运行样本，不声称单独校准；待复核缺固定窗口行情须告警。",
+      "delay_basis": {
+        "inherit_from": "sentiment_index",
+        "grace_minutes": 478,
+        "report": "logs/运行延迟统计.md",
+        "说明": "新步骤无样本，暂继承上游已审核宽限；后续用实际Actions样本单独校准"
+      }
     }
   ]
 }

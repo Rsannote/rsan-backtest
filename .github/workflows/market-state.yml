@@ -35,13 +35,24 @@ jobs:
         run: pip install pandas numpy
       - name: 计算市场状态
         run: python3 scripts/market_state.py ${{ inputs.force && '--force' || '' }}
+      - name: 程序判断落档（未批准草案只记日志）
+        run: python3 scripts/auto_judgments.py --module 市场状态
+      - name: 到期判断自动复核
+        run: python3 scripts/auto_review.py
+      - name: 校验判断档案
+        run: python3 scripts/check_judgments.py --stats
       - name: 提交
         if: always()
         run: |
           git config user.name "github-actions"
           git config user.email "actions@users.noreply.github.com"
           git add data/市场状态
-          git commit -m "市场状态 $(TZ=Asia/Shanghai date +%Y-%m-%d)" || exit 0
+          git add judgments
+          for file in logs/程序判断_市场状态_最新.json logs/程序判断_市场状态_最新.md logs/自动复核_最新.json logs/自动复核_最新.md; do
+            if [ -f "$file" ]; then git add "$file"; fi
+          done
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "市场状态与程序判断 $(TZ=Asia/Shanghai date +%Y-%m-%d)"
           for i in 1 2 3; do git pull --rebase origin main && git push && exit 0; sleep 5; done
           exit 1
       - name: 工作流失败告警

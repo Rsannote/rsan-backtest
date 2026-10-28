@@ -263,6 +263,18 @@ def load_actual(root: Path, item: dict[str, Any], expected: dict[str, Any]) -> t
         if not isinstance(warnings, list):
             raise ValueError("数据告警须为数组")
         issues.extend(str(w) for w in warnings)
+    elif kind == "judgment_report":
+        obj = read_json(root / item["outputs"][0])
+        actual = {"data_date": day(obj["data_date"]).isoformat(), "updated_at": timestamp(obj["generated_at"]).isoformat()}
+        if obj.get("status") not in ("正常", "失败") or not isinstance(obj.get("errors"), list):
+            raise ValueError("程序判断报告缺少有效status/errors")
+        issues.extend(str(error) for error in obj["errors"])
+        if obj["status"] == "失败":
+            success = 0
+            if not issues:
+                issues.append("程序判断报告标记失败")
+        # 草案未启用不算失败；到期后固定窗口缺行情需暴露，不能顺延抹掉。
+        issues.extend(str(item) for item in obj.get("pending", []))
     elif kind == "news":
         obj = read_json(root / "data/新闻/状态.json")
         run = timestamp(obj["最近运行"])
