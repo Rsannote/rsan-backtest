@@ -12,7 +12,15 @@
         "vote": "公司与某个驱动家族的连线强度≥2时，该家族记1票；同一家族内的多个驱动只算1票",
         "strength": "1=间接/占比小，2=明显受益，3=核心驱动",
         "lag": "从驱动变化到公司业绩体现的大致时滞",
-        "pricing": "定价层取自命脉股票池 plans：status 与距52周高点回撤"
+        "pricing": "定价层取自命脉股票池 plans：status 与距52周高点回撤",
+        "state_weights": {
+          "高位放缓": 0.5,
+          "加速": 1.5,
+          "增强": 1.25,
+          "强": 1
+        },
+        "pricing_drawdown": 0.2,
+        "pricing_note": "回撤≥20%只是“价格尚未反映”的近似，不是估值判断；计划状态只展示不参与条件（2026-10-28 T7 审核定）"
       }
     }
   ],
@@ -103,12 +111,17 @@
     },
     {
       "path": "graph/驱动图谱_v0.json",
-      "sha256_text": "9dfb17784369841d872e811b3f8875002932901449e9681b4cb5469bd9597616"
+      "sha256_text": "cfe072b865ac8533cf577645df3ade4e699a48016374b7a09b57332b81eb12b0"
     }
   ],
   "rules": {
     "vote_strength_threshold": 2,
-    "state_weights": null,
+    "state_weights": {
+      "高位放缓": 0.5,
+      "加速": 1.5,
+      "增强": 1.25,
+      "强": 1
+    },
     "state_weights_source": "图谱rules或缺失",
     "score_aggregation": "合格边强度×状态权重，家族内取最大值，家族间求和",
     "drawdown_threshold": null,
@@ -117,7 +130,7 @@
     "pricing_drafts_enabled": false
   },
   "warnings": [
-    "正式状态权重：缺失，待审核",
+    "正式状态权重：显式配置",
     "未被定价阈值：未配置，待审核",
     "图谱日期：2026-10-22；股票池快照日期：2026-10-22",
     "传导强度继承、家族最大值聚合与状态权重由审核确认；JSON 保留逐边证据。",
@@ -199,38 +212,26 @@
         }
       ],
       "strength_score": 7,
-      "weighted_score": null,
+      "weighted_score": 8.5,
       "weighted_detail": {
-        "score": null,
-        "known_family_subtotal": 0.0,
-        "missing_states": [
-          "加速",
-          "增强",
-          "强",
-          "高位放缓"
-        ],
+        "score": 8.5,
+        "known_family_subtotal": 8.5,
+        "missing_states": [],
         "families": [
           {
             "family": "AI",
-            "score": null,
-            "missing_states": [
-              "加速",
-              "高位放缓"
-            ]
+            "score": 3.0,
+            "missing_states": []
           },
           {
             "family": "GRID",
-            "score": null,
-            "missing_states": [
-              "增强"
-            ]
+            "score": 2.5,
+            "missing_states": []
           },
           {
             "family": "OVERSEA",
-            "score": null,
-            "missing_states": [
-              "强"
-            ]
+            "score": 3,
+            "missing_states": []
           }
         ]
       },
@@ -323,6 +324,286 @@
       }
     },
     {
+      "code": "600941",
+      "name": "中国移动",
+      "node": "运营商",
+      "votes": 2,
+      "families": [
+        {
+          "family": "AI",
+          "vote": 1,
+          "max_strength": 2,
+          "components": [
+            {
+              "driver": "D2",
+              "state": "加速",
+              "strength": 2,
+              "lag": "2–4季",
+              "path": [
+                "D2"
+              ],
+              "vote_eligible": true,
+              "note": null
+            }
+          ]
+        },
+        {
+          "family": "RATE",
+          "vote": 1,
+          "max_strength": 3,
+          "components": [
+            {
+              "driver": "D6",
+              "state": "强",
+              "strength": 3,
+              "lag": "即时",
+              "path": [
+                "D6"
+              ],
+              "vote_eligible": true,
+              "note": null
+            }
+          ]
+        }
+      ],
+      "strength_score": 5,
+      "weighted_score": 6.0,
+      "weighted_detail": {
+        "score": 6.0,
+        "known_family_subtotal": 6.0,
+        "missing_states": [],
+        "families": [
+          {
+            "family": "AI",
+            "score": 3.0,
+            "missing_states": []
+          },
+          {
+            "family": "RATE",
+            "score": 3,
+            "missing_states": []
+          }
+        ]
+      },
+      "weight_drafts": {
+        "等权草案": {
+          "score": 5.0,
+          "known_family_subtotal": 5.0,
+          "missing_states": [],
+          "families": [
+            {
+              "family": "AI",
+              "score": 2,
+              "missing_states": []
+            },
+            {
+              "family": "RATE",
+              "score": 3,
+              "missing_states": []
+            }
+          ]
+        },
+        "趋势草案": {
+          "score": 6.0,
+          "known_family_subtotal": 6.0,
+          "missing_states": [],
+          "families": [
+            {
+              "family": "AI",
+              "score": 3.0,
+              "missing_states": []
+            },
+            {
+              "family": "RATE",
+              "score": 3,
+              "missing_states": []
+            }
+          ]
+        }
+      },
+      "pricing": {
+        "source": "data/行情库/股票/600941.csv",
+        "status": "完整",
+        "reason": null,
+        "price_date": "2026-10-27",
+        "drawdown_52w": 0.03578611,
+        "latest_close": 100.7,
+        "high_52w_adjusted": 132.77094309434,
+        "window_start": "2025-10-29",
+        "window_end": "2026-10-27",
+        "observations": 241,
+        "missing_dates": []
+      },
+      "pool": {
+        "source": "data/股票池/股票.csv",
+        "snapshot_date": "2026-10-22",
+        "status": "已匹配",
+        "reason": null,
+        "plan_status": "等待",
+        "plan_price_date": "2026-10-12",
+        "l1_status": "通过"
+      },
+      "unpriced": null,
+      "cross_candidate": null,
+      "pricing_drafts": {
+        "回撤10%草案": {
+          "threshold": 0.1,
+          "unpriced_condition": false,
+          "cross_candidate": false
+        },
+        "回撤20%草案": {
+          "threshold": 0.2,
+          "unpriced_condition": false,
+          "cross_candidate": false
+        },
+        "回撤30%草案": {
+          "threshold": 0.3,
+          "unpriced_condition": false,
+          "cross_candidate": false
+        }
+      }
+    },
+    {
+      "code": "600406",
+      "name": "国电南瑞",
+      "node": "二次设备",
+      "votes": 2,
+      "families": [
+        {
+          "family": "GRID",
+          "vote": 1,
+          "max_strength": 3,
+          "components": [
+            {
+              "driver": "D3",
+              "state": "增强",
+              "strength": 3,
+              "lag": "1–2季",
+              "path": [
+                "D3"
+              ],
+              "vote_eligible": true,
+              "note": null
+            }
+          ]
+        },
+        {
+          "family": "NE",
+          "vote": 1,
+          "max_strength": 2,
+          "components": [
+            {
+              "driver": "D5",
+              "state": "强",
+              "strength": 2,
+              "lag": "2–4季",
+              "path": [
+                "D5"
+              ],
+              "vote_eligible": true,
+              "note": null
+            }
+          ]
+        }
+      ],
+      "strength_score": 5,
+      "weighted_score": 5.75,
+      "weighted_detail": {
+        "score": 5.75,
+        "known_family_subtotal": 5.75,
+        "missing_states": [],
+        "families": [
+          {
+            "family": "GRID",
+            "score": 3.75,
+            "missing_states": []
+          },
+          {
+            "family": "NE",
+            "score": 2,
+            "missing_states": []
+          }
+        ]
+      },
+      "weight_drafts": {
+        "等权草案": {
+          "score": 5.0,
+          "known_family_subtotal": 5.0,
+          "missing_states": [],
+          "families": [
+            {
+              "family": "GRID",
+              "score": 3,
+              "missing_states": []
+            },
+            {
+              "family": "NE",
+              "score": 2,
+              "missing_states": []
+            }
+          ]
+        },
+        "趋势草案": {
+          "score": 5.75,
+          "known_family_subtotal": 5.75,
+          "missing_states": [],
+          "families": [
+            {
+              "family": "GRID",
+              "score": 3.75,
+              "missing_states": []
+            },
+            {
+              "family": "NE",
+              "score": 2,
+              "missing_states": []
+            }
+          ]
+        }
+      },
+      "pricing": {
+        "source": "data/行情库/股票/600406.csv",
+        "status": "完整",
+        "reason": null,
+        "price_date": "2026-10-27",
+        "drawdown_52w": 0.2474942,
+        "latest_close": 23.48,
+        "high_52w_adjusted": 1669.9190608170002,
+        "window_start": "2025-10-29",
+        "window_end": "2026-10-27",
+        "observations": 241,
+        "missing_dates": []
+      },
+      "pool": {
+        "source": "data/股票池/股票.csv",
+        "snapshot_date": "2026-10-22",
+        "status": "已匹配",
+        "reason": null,
+        "plan_status": "接近",
+        "plan_price_date": "2026-10-15",
+        "l1_status": "通过"
+      },
+      "unpriced": null,
+      "cross_candidate": null,
+      "pricing_drafts": {
+        "回撤10%草案": {
+          "threshold": 0.1,
+          "unpriced_condition": true,
+          "cross_candidate": true
+        },
+        "回撤20%草案": {
+          "threshold": 0.2,
+          "unpriced_condition": true,
+          "cross_candidate": true
+        },
+        "回撤30%草案": {
+          "threshold": 0.3,
+          "unpriced_condition": false,
+          "cross_candidate": false
+        }
+      }
+    },
+    {
       "code": "002270",
       "name": "华明装备",
       "node": "分接开关",
@@ -397,28 +678,21 @@
         }
       ],
       "strength_score": 5,
-      "weighted_score": null,
+      "weighted_score": 5.5,
       "weighted_detail": {
-        "score": null,
-        "known_family_subtotal": 0.0,
-        "missing_states": [
-          "增强",
-          "强"
-        ],
+        "score": 5.5,
+        "known_family_subtotal": 5.5,
+        "missing_states": [],
         "families": [
           {
             "family": "GRID",
-            "score": null,
-            "missing_states": [
-              "增强"
-            ]
+            "score": 2.5,
+            "missing_states": []
           },
           {
             "family": "OVERSEA",
-            "score": null,
-            "missing_states": [
-              "强"
-            ]
+            "score": 3,
+            "missing_states": []
           }
         ]
       },
@@ -501,316 +775,6 @@
       }
     },
     {
-      "code": "600406",
-      "name": "国电南瑞",
-      "node": "二次设备",
-      "votes": 2,
-      "families": [
-        {
-          "family": "GRID",
-          "vote": 1,
-          "max_strength": 3,
-          "components": [
-            {
-              "driver": "D3",
-              "state": "增强",
-              "strength": 3,
-              "lag": "1–2季",
-              "path": [
-                "D3"
-              ],
-              "vote_eligible": true,
-              "note": null
-            }
-          ]
-        },
-        {
-          "family": "NE",
-          "vote": 1,
-          "max_strength": 2,
-          "components": [
-            {
-              "driver": "D5",
-              "state": "待补",
-              "strength": 2,
-              "lag": "2–4季",
-              "path": [
-                "D5"
-              ],
-              "vote_eligible": true,
-              "note": null
-            }
-          ]
-        }
-      ],
-      "strength_score": 5,
-      "weighted_score": null,
-      "weighted_detail": {
-        "score": null,
-        "known_family_subtotal": 0.0,
-        "missing_states": [
-          "增强",
-          "待补"
-        ],
-        "families": [
-          {
-            "family": "GRID",
-            "score": null,
-            "missing_states": [
-              "增强"
-            ]
-          },
-          {
-            "family": "NE",
-            "score": null,
-            "missing_states": [
-              "待补"
-            ]
-          }
-        ]
-      },
-      "weight_drafts": {
-        "等权草案": {
-          "score": null,
-          "known_family_subtotal": 3.0,
-          "missing_states": [
-            "待补"
-          ],
-          "families": [
-            {
-              "family": "GRID",
-              "score": 3,
-              "missing_states": []
-            },
-            {
-              "family": "NE",
-              "score": null,
-              "missing_states": [
-                "待补"
-              ]
-            }
-          ]
-        },
-        "趋势草案": {
-          "score": null,
-          "known_family_subtotal": 3.75,
-          "missing_states": [
-            "待补"
-          ],
-          "families": [
-            {
-              "family": "GRID",
-              "score": 3.75,
-              "missing_states": []
-            },
-            {
-              "family": "NE",
-              "score": null,
-              "missing_states": [
-                "待补"
-              ]
-            }
-          ]
-        }
-      },
-      "pricing": {
-        "source": "data/行情库/股票/600406.csv",
-        "status": "完整",
-        "reason": null,
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.2474942,
-        "latest_close": 23.48,
-        "high_52w_adjusted": 1669.9190608170002,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
-        "observations": 241,
-        "missing_dates": []
-      },
-      "pool": {
-        "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
-        "status": "已匹配",
-        "reason": null,
-        "plan_status": "接近",
-        "plan_price_date": "2026-10-15",
-        "l1_status": "通过"
-      },
-      "unpriced": null,
-      "cross_candidate": null,
-      "pricing_drafts": {
-        "回撤10%草案": {
-          "threshold": 0.1,
-          "unpriced_condition": true,
-          "cross_candidate": true
-        },
-        "回撤20%草案": {
-          "threshold": 0.2,
-          "unpriced_condition": true,
-          "cross_candidate": true
-        },
-        "回撤30%草案": {
-          "threshold": 0.3,
-          "unpriced_condition": false,
-          "cross_candidate": false
-        }
-      }
-    },
-    {
-      "code": "600941",
-      "name": "中国移动",
-      "node": "运营商",
-      "votes": 2,
-      "families": [
-        {
-          "family": "AI",
-          "vote": 1,
-          "max_strength": 2,
-          "components": [
-            {
-              "driver": "D2",
-              "state": "加速",
-              "strength": 2,
-              "lag": "2–4季",
-              "path": [
-                "D2"
-              ],
-              "vote_eligible": true,
-              "note": null
-            }
-          ]
-        },
-        {
-          "family": "RATE",
-          "vote": 1,
-          "max_strength": 3,
-          "components": [
-            {
-              "driver": "D6",
-              "state": "待补",
-              "strength": 3,
-              "lag": "即时",
-              "path": [
-                "D6"
-              ],
-              "vote_eligible": true,
-              "note": null
-            }
-          ]
-        }
-      ],
-      "strength_score": 5,
-      "weighted_score": null,
-      "weighted_detail": {
-        "score": null,
-        "known_family_subtotal": 0.0,
-        "missing_states": [
-          "加速",
-          "待补"
-        ],
-        "families": [
-          {
-            "family": "AI",
-            "score": null,
-            "missing_states": [
-              "加速"
-            ]
-          },
-          {
-            "family": "RATE",
-            "score": null,
-            "missing_states": [
-              "待补"
-            ]
-          }
-        ]
-      },
-      "weight_drafts": {
-        "等权草案": {
-          "score": null,
-          "known_family_subtotal": 2.0,
-          "missing_states": [
-            "待补"
-          ],
-          "families": [
-            {
-              "family": "AI",
-              "score": 2,
-              "missing_states": []
-            },
-            {
-              "family": "RATE",
-              "score": null,
-              "missing_states": [
-                "待补"
-              ]
-            }
-          ]
-        },
-        "趋势草案": {
-          "score": null,
-          "known_family_subtotal": 3.0,
-          "missing_states": [
-            "待补"
-          ],
-          "families": [
-            {
-              "family": "AI",
-              "score": 3.0,
-              "missing_states": []
-            },
-            {
-              "family": "RATE",
-              "score": null,
-              "missing_states": [
-                "待补"
-              ]
-            }
-          ]
-        }
-      },
-      "pricing": {
-        "source": "data/行情库/股票/600941.csv",
-        "status": "完整",
-        "reason": null,
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.03578611,
-        "latest_close": 100.7,
-        "high_52w_adjusted": 132.77094309434,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
-        "observations": 241,
-        "missing_dates": []
-      },
-      "pool": {
-        "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
-        "status": "已匹配",
-        "reason": null,
-        "plan_status": "等待",
-        "plan_price_date": "2026-10-12",
-        "l1_status": "通过"
-      },
-      "unpriced": null,
-      "cross_candidate": null,
-      "pricing_drafts": {
-        "回撤10%草案": {
-          "threshold": 0.1,
-          "unpriced_condition": false,
-          "cross_candidate": false
-        },
-        "回撤20%草案": {
-          "threshold": 0.2,
-          "unpriced_condition": false,
-          "cross_candidate": false
-        },
-        "回撤30%草案": {
-          "threshold": 0.3,
-          "unpriced_condition": false,
-          "cross_candidate": false
-        }
-      }
-    },
-    {
       "code": "601126",
       "name": "四方股份",
       "node": "二次设备",
@@ -841,7 +805,7 @@
           "components": [
             {
               "driver": "D5",
-              "state": "待补",
+              "state": "强",
               "strength": 2,
               "lag": "2–4季",
               "path": [
@@ -854,38 +818,29 @@
         }
       ],
       "strength_score": 4,
-      "weighted_score": null,
+      "weighted_score": 4.5,
       "weighted_detail": {
-        "score": null,
-        "known_family_subtotal": 0.0,
-        "missing_states": [
-          "增强",
-          "待补"
-        ],
+        "score": 4.5,
+        "known_family_subtotal": 4.5,
+        "missing_states": [],
         "families": [
           {
             "family": "GRID",
-            "score": null,
-            "missing_states": [
-              "增强"
-            ]
+            "score": 2.5,
+            "missing_states": []
           },
           {
             "family": "NE",
-            "score": null,
-            "missing_states": [
-              "待补"
-            ]
+            "score": 2,
+            "missing_states": []
           }
         ]
       },
       "weight_drafts": {
         "等权草案": {
-          "score": null,
-          "known_family_subtotal": 2.0,
-          "missing_states": [
-            "待补"
-          ],
+          "score": 4.0,
+          "known_family_subtotal": 4.0,
+          "missing_states": [],
           "families": [
             {
               "family": "GRID",
@@ -894,19 +849,15 @@
             },
             {
               "family": "NE",
-              "score": null,
-              "missing_states": [
-                "待补"
-              ]
+              "score": 2,
+              "missing_states": []
             }
           ]
         },
         "趋势草案": {
-          "score": null,
-          "known_family_subtotal": 2.5,
-          "missing_states": [
-            "待补"
-          ],
+          "score": 4.5,
+          "known_family_subtotal": 4.5,
+          "missing_states": [],
           "families": [
             {
               "family": "GRID",
@@ -915,10 +866,8 @@
             },
             {
               "family": "NE",
-              "score": null,
-              "missing_states": [
-                "待补"
-              ]
+              "score": 2,
+              "missing_states": []
             }
           ]
         }
@@ -991,20 +940,16 @@
         }
       ],
       "strength_score": 3,
-      "weighted_score": null,
+      "weighted_score": 4.5,
       "weighted_detail": {
-        "score": null,
-        "known_family_subtotal": 0.0,
-        "missing_states": [
-          "加速"
-        ],
+        "score": 4.5,
+        "known_family_subtotal": 4.5,
+        "missing_states": [],
         "families": [
           {
             "family": "AI",
-            "score": null,
-            "missing_states": [
-              "加速"
-            ]
+            "score": 4.5,
+            "missing_states": []
           }
         ]
       },
@@ -1077,350 +1022,6 @@
       }
     },
     {
-      "code": "002463",
-      "name": "沪电股份",
-      "node": "高端PCB",
-      "votes": 1,
-      "families": [
-        {
-          "family": "AI",
-          "vote": 1,
-          "max_strength": 3,
-          "components": [
-            {
-              "driver": "D1",
-              "state": "高位放缓",
-              "strength": 3,
-              "lag": "0–1季",
-              "path": [
-                "D1"
-              ],
-              "vote_eligible": true,
-              "note": null
-            },
-            {
-              "driver": "D2",
-              "state": "加速",
-              "strength": 1,
-              "lag": "1–2季",
-              "path": [
-                "D2"
-              ],
-              "vote_eligible": false,
-              "note": null
-            }
-          ]
-        }
-      ],
-      "strength_score": 3,
-      "weighted_score": null,
-      "weighted_detail": {
-        "score": null,
-        "known_family_subtotal": 0.0,
-        "missing_states": [
-          "高位放缓"
-        ],
-        "families": [
-          {
-            "family": "AI",
-            "score": null,
-            "missing_states": [
-              "高位放缓"
-            ]
-          }
-        ]
-      },
-      "weight_drafts": {
-        "等权草案": {
-          "score": 3.0,
-          "known_family_subtotal": 3.0,
-          "missing_states": [],
-          "families": [
-            {
-              "family": "AI",
-              "score": 3,
-              "missing_states": []
-            }
-          ]
-        },
-        "趋势草案": {
-          "score": 1.5,
-          "known_family_subtotal": 1.5,
-          "missing_states": [],
-          "families": [
-            {
-              "family": "AI",
-              "score": 1.5,
-              "missing_states": []
-            }
-          ]
-        }
-      },
-      "pricing": {
-        "source": "data/行情库/股票/002463.csv",
-        "status": "完整",
-        "reason": null,
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.37294564,
-        "latest_close": 99.2,
-        "high_52w_adjusted": 515.4671594366,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
-        "observations": 241,
-        "missing_dates": []
-      },
-      "pool": {
-        "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
-        "status": "已匹配",
-        "reason": null,
-        "plan_status": "远期",
-        "plan_price_date": "2026-10-12",
-        "l1_status": "通过"
-      },
-      "unpriced": null,
-      "cross_candidate": null,
-      "pricing_drafts": {
-        "回撤10%草案": {
-          "threshold": 0.1,
-          "unpriced_condition": true,
-          "cross_candidate": false
-        },
-        "回撤20%草案": {
-          "threshold": 0.2,
-          "unpriced_condition": true,
-          "cross_candidate": false
-        },
-        "回撤30%草案": {
-          "threshold": 0.3,
-          "unpriced_condition": true,
-          "cross_candidate": false
-        }
-      }
-    },
-    {
-      "code": "300308",
-      "name": "中际旭创",
-      "node": "光模块",
-      "votes": 1,
-      "families": [
-        {
-          "family": "AI",
-          "vote": 1,
-          "max_strength": 3,
-          "components": [
-            {
-              "driver": "D1",
-              "state": "高位放缓",
-              "strength": 3,
-              "lag": "0–1季",
-              "path": [
-                "D1"
-              ],
-              "vote_eligible": true,
-              "note": null
-            }
-          ]
-        }
-      ],
-      "strength_score": 3,
-      "weighted_score": null,
-      "weighted_detail": {
-        "score": null,
-        "known_family_subtotal": 0.0,
-        "missing_states": [
-          "高位放缓"
-        ],
-        "families": [
-          {
-            "family": "AI",
-            "score": null,
-            "missing_states": [
-              "高位放缓"
-            ]
-          }
-        ]
-      },
-      "weight_drafts": {
-        "等权草案": {
-          "score": 3.0,
-          "known_family_subtotal": 3.0,
-          "missing_states": [],
-          "families": [
-            {
-              "family": "AI",
-              "score": 3,
-              "missing_states": []
-            }
-          ]
-        },
-        "趋势草案": {
-          "score": 1.5,
-          "known_family_subtotal": 1.5,
-          "missing_states": [],
-          "families": [
-            {
-              "family": "AI",
-              "score": 1.5,
-              "missing_states": []
-            }
-          ]
-        }
-      },
-      "pricing": {
-        "source": "data/行情库/股票/300308.csv",
-        "status": "完整",
-        "reason": null,
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.59213912,
-        "latest_close": 577.0,
-        "high_52w_adjusted": 9354.341747804721,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
-        "observations": 241,
-        "missing_dates": []
-      },
-      "pool": {
-        "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
-        "status": "已匹配",
-        "reason": null,
-        "plan_status": "等待回落",
-        "plan_price_date": "2026-10-12",
-        "l1_status": "通过"
-      },
-      "unpriced": null,
-      "cross_candidate": null,
-      "pricing_drafts": {
-        "回撤10%草案": {
-          "threshold": 0.1,
-          "unpriced_condition": true,
-          "cross_candidate": false
-        },
-        "回撤20%草案": {
-          "threshold": 0.2,
-          "unpriced_condition": true,
-          "cross_candidate": false
-        },
-        "回撤30%草案": {
-          "threshold": 0.3,
-          "unpriced_condition": true,
-          "cross_candidate": false
-        }
-      }
-    },
-    {
-      "code": "300394",
-      "name": "天孚通信",
-      "node": "光器件",
-      "votes": 1,
-      "families": [
-        {
-          "family": "AI",
-          "vote": 1,
-          "max_strength": 3,
-          "components": [
-            {
-              "driver": "D1",
-              "state": "高位放缓",
-              "strength": 3,
-              "lag": "0–1季",
-              "path": [
-                "D1"
-              ],
-              "vote_eligible": true,
-              "note": null
-            }
-          ]
-        }
-      ],
-      "strength_score": 3,
-      "weighted_score": null,
-      "weighted_detail": {
-        "score": null,
-        "known_family_subtotal": 0.0,
-        "missing_states": [
-          "高位放缓"
-        ],
-        "families": [
-          {
-            "family": "AI",
-            "score": null,
-            "missing_states": [
-              "高位放缓"
-            ]
-          }
-        ]
-      },
-      "weight_drafts": {
-        "等权草案": {
-          "score": 3.0,
-          "known_family_subtotal": 3.0,
-          "missing_states": [],
-          "families": [
-            {
-              "family": "AI",
-              "score": 3,
-              "missing_states": []
-            }
-          ]
-        },
-        "趋势草案": {
-          "score": 1.5,
-          "known_family_subtotal": 1.5,
-          "missing_states": [],
-          "families": [
-            {
-              "family": "AI",
-              "score": 1.5,
-              "missing_states": []
-            }
-          ]
-        }
-      },
-      "pricing": {
-        "source": "data/行情库/股票/300394.csv",
-        "status": "完整",
-        "reason": null,
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.49521963,
-        "latest_close": 188.62,
-        "high_52w_adjusted": 5208.5037086249995,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
-        "observations": 241,
-        "missing_dates": []
-      },
-      "pool": {
-        "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
-        "status": "已匹配",
-        "reason": null,
-        "plan_status": "远期",
-        "plan_price_date": "2026-10-12",
-        "l1_status": "通过"
-      },
-      "unpriced": null,
-      "cross_candidate": null,
-      "pricing_drafts": {
-        "回撤10%草案": {
-          "threshold": 0.1,
-          "unpriced_condition": true,
-          "cross_candidate": false
-        },
-        "回撤20%草案": {
-          "threshold": 0.2,
-          "unpriced_condition": true,
-          "cross_candidate": false
-        },
-        "回撤30%草案": {
-          "threshold": 0.3,
-          "unpriced_condition": true,
-          "cross_candidate": false
-        }
-      }
-    },
-    {
       "code": "300442",
       "name": "润泽科技",
       "node": "数据中心",
@@ -1446,20 +1047,16 @@
         }
       ],
       "strength_score": 3,
-      "weighted_score": null,
+      "weighted_score": 4.5,
       "weighted_detail": {
-        "score": null,
-        "known_family_subtotal": 0.0,
-        "missing_states": [
-          "加速"
-        ],
+        "score": 4.5,
+        "known_family_subtotal": 4.5,
+        "missing_states": [],
         "families": [
           {
             "family": "AI",
-            "score": null,
-            "missing_states": [
-              "加速"
-            ]
+            "score": 4.5,
+            "missing_states": []
           }
         ]
       },
@@ -1539,117 +1136,6 @@
       }
     },
     {
-      "code": "300502",
-      "name": "新易盛",
-      "node": "光模块",
-      "votes": 1,
-      "families": [
-        {
-          "family": "AI",
-          "vote": 1,
-          "max_strength": 3,
-          "components": [
-            {
-              "driver": "D1",
-              "state": "高位放缓",
-              "strength": 3,
-              "lag": "0–1季",
-              "path": [
-                "D1"
-              ],
-              "vote_eligible": true,
-              "note": null
-            }
-          ]
-        }
-      ],
-      "strength_score": 3,
-      "weighted_score": null,
-      "weighted_detail": {
-        "score": null,
-        "known_family_subtotal": 0.0,
-        "missing_states": [
-          "高位放缓"
-        ],
-        "families": [
-          {
-            "family": "AI",
-            "score": null,
-            "missing_states": [
-              "高位放缓"
-            ]
-          }
-        ]
-      },
-      "weight_drafts": {
-        "等权草案": {
-          "score": 3.0,
-          "known_family_subtotal": 3.0,
-          "missing_states": [],
-          "families": [
-            {
-              "family": "AI",
-              "score": 3,
-              "missing_states": []
-            }
-          ]
-        },
-        "趋势草案": {
-          "score": 1.5,
-          "known_family_subtotal": 1.5,
-          "missing_states": [],
-          "families": [
-            {
-              "family": "AI",
-              "score": 1.5,
-              "missing_states": []
-            }
-          ]
-        }
-      },
-      "pricing": {
-        "source": "data/行情库/股票/300502.csv",
-        "status": "完整",
-        "reason": null,
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.61609062,
-        "latest_close": 237.59,
-        "high_52w_adjusted": 10363.434405718801,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
-        "observations": 241,
-        "missing_dates": []
-      },
-      "pool": {
-        "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
-        "status": "已匹配",
-        "reason": null,
-        "plan_status": "接近",
-        "plan_price_date": "2026-10-12",
-        "l1_status": "通过"
-      },
-      "unpriced": null,
-      "cross_candidate": null,
-      "pricing_drafts": {
-        "回撤10%草案": {
-          "threshold": 0.1,
-          "unpriced_condition": true,
-          "cross_candidate": false
-        },
-        "回撤20%草案": {
-          "threshold": 0.2,
-          "unpriced_condition": true,
-          "cross_candidate": false
-        },
-        "回撤30%草案": {
-          "threshold": 0.3,
-          "unpriced_condition": true,
-          "cross_candidate": false
-        }
-      }
-    },
-    {
       "code": "600312",
       "name": "平高电气",
       "node": "特高压开关",
@@ -1675,20 +1161,16 @@
         }
       ],
       "strength_score": 3,
-      "weighted_score": null,
+      "weighted_score": 3.75,
       "weighted_detail": {
-        "score": null,
-        "known_family_subtotal": 0.0,
-        "missing_states": [
-          "增强"
-        ],
+        "score": 3.75,
+        "known_family_subtotal": 3.75,
+        "missing_states": [],
         "families": [
           {
             "family": "GRID",
-            "score": null,
-            "missing_states": [
-              "增强"
-            ]
+            "score": 3.75,
+            "missing_states": []
           }
         ]
       },
@@ -1804,7 +1286,7 @@
           "components": [
             {
               "driver": "D6",
-              "state": "待补",
+              "state": "强",
               "strength": 3,
               "lag": "即时",
               "path": [
@@ -1817,53 +1299,41 @@
         }
       ],
       "strength_score": 3,
-      "weighted_score": null,
+      "weighted_score": 3.0,
       "weighted_detail": {
-        "score": null,
-        "known_family_subtotal": 0.0,
-        "missing_states": [
-          "待补"
-        ],
+        "score": 3.0,
+        "known_family_subtotal": 3.0,
+        "missing_states": [],
         "families": [
           {
             "family": "RATE",
-            "score": null,
-            "missing_states": [
-              "待补"
-            ]
+            "score": 3,
+            "missing_states": []
           }
         ]
       },
       "weight_drafts": {
         "等权草案": {
-          "score": null,
-          "known_family_subtotal": 0.0,
-          "missing_states": [
-            "待补"
-          ],
+          "score": 3.0,
+          "known_family_subtotal": 3.0,
+          "missing_states": [],
           "families": [
             {
               "family": "RATE",
-              "score": null,
-              "missing_states": [
-                "待补"
-              ]
+              "score": 3,
+              "missing_states": []
             }
           ]
         },
         "趋势草案": {
-          "score": null,
-          "known_family_subtotal": 0.0,
-          "missing_states": [
-            "待补"
-          ],
+          "score": 3.0,
+          "known_family_subtotal": 3.0,
+          "missing_states": [],
           "families": [
             {
               "family": "RATE",
-              "score": null,
-              "missing_states": [
-                "待补"
-              ]
+              "score": 3,
+              "missing_states": []
             }
           ]
         }
@@ -1911,128 +1381,6 @@
       }
     },
     {
-      "code": "601138",
-      "name": "工业富联",
-      "node": "AI服务器",
-      "votes": 1,
-      "families": [
-        {
-          "family": "AI",
-          "vote": 1,
-          "max_strength": 3,
-          "components": [
-            {
-              "driver": "D1",
-              "state": "高位放缓",
-              "strength": 3,
-              "lag": "0–1季",
-              "path": [
-                "D1"
-              ],
-              "vote_eligible": true,
-              "note": null
-            },
-            {
-              "driver": "D2",
-              "state": "加速",
-              "strength": 1,
-              "lag": "1–2季",
-              "path": [
-                "D2"
-              ],
-              "vote_eligible": false,
-              "note": null
-            }
-          ]
-        }
-      ],
-      "strength_score": 3,
-      "weighted_score": null,
-      "weighted_detail": {
-        "score": null,
-        "known_family_subtotal": 0.0,
-        "missing_states": [
-          "高位放缓"
-        ],
-        "families": [
-          {
-            "family": "AI",
-            "score": null,
-            "missing_states": [
-              "高位放缓"
-            ]
-          }
-        ]
-      },
-      "weight_drafts": {
-        "等权草案": {
-          "score": 3.0,
-          "known_family_subtotal": 3.0,
-          "missing_states": [],
-          "families": [
-            {
-              "family": "AI",
-              "score": 3,
-              "missing_states": []
-            }
-          ]
-        },
-        "趋势草案": {
-          "score": 1.5,
-          "known_family_subtotal": 1.5,
-          "missing_states": [],
-          "families": [
-            {
-              "family": "AI",
-              "score": 1.5,
-              "missing_states": []
-            }
-          ]
-        }
-      },
-      "pricing": {
-        "source": "data/行情库/股票/601138.csv",
-        "status": "完整",
-        "reason": null,
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.45317805,
-        "latest_close": 45.92,
-        "high_52w_adjusted": 101.1454332573,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
-        "observations": 241,
-        "missing_dates": []
-      },
-      "pool": {
-        "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
-        "status": "已匹配",
-        "reason": null,
-        "plan_status": "等待回落",
-        "plan_price_date": "2026-10-12",
-        "l1_status": "通过"
-      },
-      "unpriced": null,
-      "cross_candidate": null,
-      "pricing_drafts": {
-        "回撤10%草案": {
-          "threshold": 0.1,
-          "unpriced_condition": true,
-          "cross_candidate": false
-        },
-        "回撤20%草案": {
-          "threshold": 0.2,
-          "unpriced_condition": true,
-          "cross_candidate": false
-        },
-        "回撤30%草案": {
-          "threshold": 0.3,
-          "unpriced_condition": true,
-          "cross_candidate": false
-        }
-      }
-    },
-    {
       "code": "601728",
       "name": "中国电信",
       "node": "运营商",
@@ -2063,7 +1411,7 @@
           "components": [
             {
               "driver": "D6",
-              "state": "待补",
+              "state": "强",
               "strength": 3,
               "lag": "即时",
               "path": [
@@ -2076,53 +1424,41 @@
         }
       ],
       "strength_score": 3,
-      "weighted_score": null,
+      "weighted_score": 3.0,
       "weighted_detail": {
-        "score": null,
-        "known_family_subtotal": 0.0,
-        "missing_states": [
-          "待补"
-        ],
+        "score": 3.0,
+        "known_family_subtotal": 3.0,
+        "missing_states": [],
         "families": [
           {
             "family": "RATE",
-            "score": null,
-            "missing_states": [
-              "待补"
-            ]
+            "score": 3,
+            "missing_states": []
           }
         ]
       },
       "weight_drafts": {
         "等权草案": {
-          "score": null,
-          "known_family_subtotal": 0.0,
-          "missing_states": [
-            "待补"
-          ],
+          "score": 3.0,
+          "known_family_subtotal": 3.0,
+          "missing_states": [],
           "families": [
             {
               "family": "RATE",
-              "score": null,
-              "missing_states": [
-                "待补"
-              ]
+              "score": 3,
+              "missing_states": []
             }
           ]
         },
         "趋势草案": {
-          "score": null,
-          "known_family_subtotal": 0.0,
-          "missing_states": [
-            "待补"
-          ],
+          "score": 3.0,
+          "known_family_subtotal": 3.0,
+          "missing_states": [],
           "families": [
             {
               "family": "RATE",
-              "score": null,
-              "missing_states": [
-                "待补"
-              ]
+              "score": 3,
+              "missing_states": []
             }
           ]
         }
@@ -2182,7 +1518,7 @@
           "components": [
             {
               "driver": "D5",
-              "state": "待补",
+              "state": "强",
               "strength": 3,
               "lag": "2–4季",
               "path": [
@@ -2213,53 +1549,41 @@
         }
       ],
       "strength_score": 3,
-      "weighted_score": null,
+      "weighted_score": 3.0,
       "weighted_detail": {
-        "score": null,
-        "known_family_subtotal": 0.0,
-        "missing_states": [
-          "待补"
-        ],
+        "score": 3.0,
+        "known_family_subtotal": 3.0,
+        "missing_states": [],
         "families": [
           {
             "family": "NE",
-            "score": null,
-            "missing_states": [
-              "待补"
-            ]
+            "score": 3,
+            "missing_states": []
           }
         ]
       },
       "weight_drafts": {
         "等权草案": {
-          "score": null,
-          "known_family_subtotal": 0.0,
-          "missing_states": [
-            "待补"
-          ],
+          "score": 3.0,
+          "known_family_subtotal": 3.0,
+          "missing_states": [],
           "families": [
             {
               "family": "NE",
-              "score": null,
-              "missing_states": [
-                "待补"
-              ]
+              "score": 3,
+              "missing_states": []
             }
           ]
         },
         "趋势草案": {
-          "score": null,
-          "known_family_subtotal": 0.0,
-          "missing_states": [
-            "待补"
-          ],
+          "score": 3.0,
+          "known_family_subtotal": 3.0,
+          "missing_states": [],
           "families": [
             {
               "family": "NE",
-              "score": null,
-              "missing_states": [
-                "待补"
-              ]
+              "score": 3,
+              "missing_states": []
             }
           ]
         }
@@ -2343,20 +1667,16 @@
         }
       ],
       "strength_score": 2,
-      "weighted_score": null,
+      "weighted_score": 3.0,
       "weighted_detail": {
-        "score": null,
-        "known_family_subtotal": 0.0,
-        "missing_states": [
-          "加速"
-        ],
+        "score": 3.0,
+        "known_family_subtotal": 3.0,
+        "missing_states": [],
         "families": [
           {
             "family": "AI",
-            "score": null,
-            "missing_states": [
-              "加速"
-            ]
+            "score": 3.0,
+            "missing_states": []
           }
         ]
       },
@@ -2459,7 +1779,7 @@
           "components": [
             {
               "driver": "D6",
-              "state": "待补",
+              "state": "强",
               "strength": 2,
               "lag": "即时",
               "path": [
@@ -2472,53 +1792,41 @@
         }
       ],
       "strength_score": 2,
-      "weighted_score": null,
+      "weighted_score": 2.0,
       "weighted_detail": {
-        "score": null,
-        "known_family_subtotal": 0.0,
-        "missing_states": [
-          "待补"
-        ],
+        "score": 2.0,
+        "known_family_subtotal": 2.0,
+        "missing_states": [],
         "families": [
           {
             "family": "RATE",
-            "score": null,
-            "missing_states": [
-              "待补"
-            ]
+            "score": 2,
+            "missing_states": []
           }
         ]
       },
       "weight_drafts": {
         "等权草案": {
-          "score": null,
-          "known_family_subtotal": 0.0,
-          "missing_states": [
-            "待补"
-          ],
+          "score": 2.0,
+          "known_family_subtotal": 2.0,
+          "missing_states": [],
           "families": [
             {
               "family": "RATE",
-              "score": null,
-              "missing_states": [
-                "待补"
-              ]
+              "score": 2,
+              "missing_states": []
             }
           ]
         },
         "趋势草案": {
-          "score": null,
-          "known_family_subtotal": 0.0,
-          "missing_states": [
-            "待补"
-          ],
+          "score": 2.0,
+          "known_family_subtotal": 2.0,
+          "missing_states": [],
           "families": [
             {
               "family": "RATE",
-              "score": null,
-              "missing_states": [
-                "待补"
-              ]
+              "score": 2,
+              "missing_states": []
             }
           ]
         }
@@ -2561,6 +1869,563 @@
         "回撤30%草案": {
           "threshold": 0.3,
           "unpriced_condition": false,
+          "cross_candidate": false
+        }
+      }
+    },
+    {
+      "code": "002463",
+      "name": "沪电股份",
+      "node": "高端PCB",
+      "votes": 1,
+      "families": [
+        {
+          "family": "AI",
+          "vote": 1,
+          "max_strength": 3,
+          "components": [
+            {
+              "driver": "D1",
+              "state": "高位放缓",
+              "strength": 3,
+              "lag": "0–1季",
+              "path": [
+                "D1"
+              ],
+              "vote_eligible": true,
+              "note": null
+            },
+            {
+              "driver": "D2",
+              "state": "加速",
+              "strength": 1,
+              "lag": "1–2季",
+              "path": [
+                "D2"
+              ],
+              "vote_eligible": false,
+              "note": null
+            }
+          ]
+        }
+      ],
+      "strength_score": 3,
+      "weighted_score": 1.5,
+      "weighted_detail": {
+        "score": 1.5,
+        "known_family_subtotal": 1.5,
+        "missing_states": [],
+        "families": [
+          {
+            "family": "AI",
+            "score": 1.5,
+            "missing_states": []
+          }
+        ]
+      },
+      "weight_drafts": {
+        "等权草案": {
+          "score": 3.0,
+          "known_family_subtotal": 3.0,
+          "missing_states": [],
+          "families": [
+            {
+              "family": "AI",
+              "score": 3,
+              "missing_states": []
+            }
+          ]
+        },
+        "趋势草案": {
+          "score": 1.5,
+          "known_family_subtotal": 1.5,
+          "missing_states": [],
+          "families": [
+            {
+              "family": "AI",
+              "score": 1.5,
+              "missing_states": []
+            }
+          ]
+        }
+      },
+      "pricing": {
+        "source": "data/行情库/股票/002463.csv",
+        "status": "完整",
+        "reason": null,
+        "price_date": "2026-10-27",
+        "drawdown_52w": 0.37294564,
+        "latest_close": 99.2,
+        "high_52w_adjusted": 515.4671594366,
+        "window_start": "2025-10-29",
+        "window_end": "2026-10-27",
+        "observations": 241,
+        "missing_dates": []
+      },
+      "pool": {
+        "source": "data/股票池/股票.csv",
+        "snapshot_date": "2026-10-22",
+        "status": "已匹配",
+        "reason": null,
+        "plan_status": "远期",
+        "plan_price_date": "2026-10-12",
+        "l1_status": "通过"
+      },
+      "unpriced": null,
+      "cross_candidate": null,
+      "pricing_drafts": {
+        "回撤10%草案": {
+          "threshold": 0.1,
+          "unpriced_condition": true,
+          "cross_candidate": false
+        },
+        "回撤20%草案": {
+          "threshold": 0.2,
+          "unpriced_condition": true,
+          "cross_candidate": false
+        },
+        "回撤30%草案": {
+          "threshold": 0.3,
+          "unpriced_condition": true,
+          "cross_candidate": false
+        }
+      }
+    },
+    {
+      "code": "300308",
+      "name": "中际旭创",
+      "node": "光模块",
+      "votes": 1,
+      "families": [
+        {
+          "family": "AI",
+          "vote": 1,
+          "max_strength": 3,
+          "components": [
+            {
+              "driver": "D1",
+              "state": "高位放缓",
+              "strength": 3,
+              "lag": "0–1季",
+              "path": [
+                "D1"
+              ],
+              "vote_eligible": true,
+              "note": null
+            }
+          ]
+        }
+      ],
+      "strength_score": 3,
+      "weighted_score": 1.5,
+      "weighted_detail": {
+        "score": 1.5,
+        "known_family_subtotal": 1.5,
+        "missing_states": [],
+        "families": [
+          {
+            "family": "AI",
+            "score": 1.5,
+            "missing_states": []
+          }
+        ]
+      },
+      "weight_drafts": {
+        "等权草案": {
+          "score": 3.0,
+          "known_family_subtotal": 3.0,
+          "missing_states": [],
+          "families": [
+            {
+              "family": "AI",
+              "score": 3,
+              "missing_states": []
+            }
+          ]
+        },
+        "趋势草案": {
+          "score": 1.5,
+          "known_family_subtotal": 1.5,
+          "missing_states": [],
+          "families": [
+            {
+              "family": "AI",
+              "score": 1.5,
+              "missing_states": []
+            }
+          ]
+        }
+      },
+      "pricing": {
+        "source": "data/行情库/股票/300308.csv",
+        "status": "完整",
+        "reason": null,
+        "price_date": "2026-10-27",
+        "drawdown_52w": 0.59213912,
+        "latest_close": 577.0,
+        "high_52w_adjusted": 9354.341747804721,
+        "window_start": "2025-10-29",
+        "window_end": "2026-10-27",
+        "observations": 241,
+        "missing_dates": []
+      },
+      "pool": {
+        "source": "data/股票池/股票.csv",
+        "snapshot_date": "2026-10-22",
+        "status": "已匹配",
+        "reason": null,
+        "plan_status": "等待回落",
+        "plan_price_date": "2026-10-12",
+        "l1_status": "通过"
+      },
+      "unpriced": null,
+      "cross_candidate": null,
+      "pricing_drafts": {
+        "回撤10%草案": {
+          "threshold": 0.1,
+          "unpriced_condition": true,
+          "cross_candidate": false
+        },
+        "回撤20%草案": {
+          "threshold": 0.2,
+          "unpriced_condition": true,
+          "cross_candidate": false
+        },
+        "回撤30%草案": {
+          "threshold": 0.3,
+          "unpriced_condition": true,
+          "cross_candidate": false
+        }
+      }
+    },
+    {
+      "code": "300394",
+      "name": "天孚通信",
+      "node": "光器件",
+      "votes": 1,
+      "families": [
+        {
+          "family": "AI",
+          "vote": 1,
+          "max_strength": 3,
+          "components": [
+            {
+              "driver": "D1",
+              "state": "高位放缓",
+              "strength": 3,
+              "lag": "0–1季",
+              "path": [
+                "D1"
+              ],
+              "vote_eligible": true,
+              "note": null
+            }
+          ]
+        }
+      ],
+      "strength_score": 3,
+      "weighted_score": 1.5,
+      "weighted_detail": {
+        "score": 1.5,
+        "known_family_subtotal": 1.5,
+        "missing_states": [],
+        "families": [
+          {
+            "family": "AI",
+            "score": 1.5,
+            "missing_states": []
+          }
+        ]
+      },
+      "weight_drafts": {
+        "等权草案": {
+          "score": 3.0,
+          "known_family_subtotal": 3.0,
+          "missing_states": [],
+          "families": [
+            {
+              "family": "AI",
+              "score": 3,
+              "missing_states": []
+            }
+          ]
+        },
+        "趋势草案": {
+          "score": 1.5,
+          "known_family_subtotal": 1.5,
+          "missing_states": [],
+          "families": [
+            {
+              "family": "AI",
+              "score": 1.5,
+              "missing_states": []
+            }
+          ]
+        }
+      },
+      "pricing": {
+        "source": "data/行情库/股票/300394.csv",
+        "status": "完整",
+        "reason": null,
+        "price_date": "2026-10-27",
+        "drawdown_52w": 0.49521963,
+        "latest_close": 188.62,
+        "high_52w_adjusted": 5208.5037086249995,
+        "window_start": "2025-10-29",
+        "window_end": "2026-10-27",
+        "observations": 241,
+        "missing_dates": []
+      },
+      "pool": {
+        "source": "data/股票池/股票.csv",
+        "snapshot_date": "2026-10-22",
+        "status": "已匹配",
+        "reason": null,
+        "plan_status": "远期",
+        "plan_price_date": "2026-10-12",
+        "l1_status": "通过"
+      },
+      "unpriced": null,
+      "cross_candidate": null,
+      "pricing_drafts": {
+        "回撤10%草案": {
+          "threshold": 0.1,
+          "unpriced_condition": true,
+          "cross_candidate": false
+        },
+        "回撤20%草案": {
+          "threshold": 0.2,
+          "unpriced_condition": true,
+          "cross_candidate": false
+        },
+        "回撤30%草案": {
+          "threshold": 0.3,
+          "unpriced_condition": true,
+          "cross_candidate": false
+        }
+      }
+    },
+    {
+      "code": "300502",
+      "name": "新易盛",
+      "node": "光模块",
+      "votes": 1,
+      "families": [
+        {
+          "family": "AI",
+          "vote": 1,
+          "max_strength": 3,
+          "components": [
+            {
+              "driver": "D1",
+              "state": "高位放缓",
+              "strength": 3,
+              "lag": "0–1季",
+              "path": [
+                "D1"
+              ],
+              "vote_eligible": true,
+              "note": null
+            }
+          ]
+        }
+      ],
+      "strength_score": 3,
+      "weighted_score": 1.5,
+      "weighted_detail": {
+        "score": 1.5,
+        "known_family_subtotal": 1.5,
+        "missing_states": [],
+        "families": [
+          {
+            "family": "AI",
+            "score": 1.5,
+            "missing_states": []
+          }
+        ]
+      },
+      "weight_drafts": {
+        "等权草案": {
+          "score": 3.0,
+          "known_family_subtotal": 3.0,
+          "missing_states": [],
+          "families": [
+            {
+              "family": "AI",
+              "score": 3,
+              "missing_states": []
+            }
+          ]
+        },
+        "趋势草案": {
+          "score": 1.5,
+          "known_family_subtotal": 1.5,
+          "missing_states": [],
+          "families": [
+            {
+              "family": "AI",
+              "score": 1.5,
+              "missing_states": []
+            }
+          ]
+        }
+      },
+      "pricing": {
+        "source": "data/行情库/股票/300502.csv",
+        "status": "完整",
+        "reason": null,
+        "price_date": "2026-10-27",
+        "drawdown_52w": 0.61609062,
+        "latest_close": 237.59,
+        "high_52w_adjusted": 10363.434405718801,
+        "window_start": "2025-10-29",
+        "window_end": "2026-10-27",
+        "observations": 241,
+        "missing_dates": []
+      },
+      "pool": {
+        "source": "data/股票池/股票.csv",
+        "snapshot_date": "2026-10-22",
+        "status": "已匹配",
+        "reason": null,
+        "plan_status": "接近",
+        "plan_price_date": "2026-10-12",
+        "l1_status": "通过"
+      },
+      "unpriced": null,
+      "cross_candidate": null,
+      "pricing_drafts": {
+        "回撤10%草案": {
+          "threshold": 0.1,
+          "unpriced_condition": true,
+          "cross_candidate": false
+        },
+        "回撤20%草案": {
+          "threshold": 0.2,
+          "unpriced_condition": true,
+          "cross_candidate": false
+        },
+        "回撤30%草案": {
+          "threshold": 0.3,
+          "unpriced_condition": true,
+          "cross_candidate": false
+        }
+      }
+    },
+    {
+      "code": "601138",
+      "name": "工业富联",
+      "node": "AI服务器",
+      "votes": 1,
+      "families": [
+        {
+          "family": "AI",
+          "vote": 1,
+          "max_strength": 3,
+          "components": [
+            {
+              "driver": "D1",
+              "state": "高位放缓",
+              "strength": 3,
+              "lag": "0–1季",
+              "path": [
+                "D1"
+              ],
+              "vote_eligible": true,
+              "note": null
+            },
+            {
+              "driver": "D2",
+              "state": "加速",
+              "strength": 1,
+              "lag": "1–2季",
+              "path": [
+                "D2"
+              ],
+              "vote_eligible": false,
+              "note": null
+            }
+          ]
+        }
+      ],
+      "strength_score": 3,
+      "weighted_score": 1.5,
+      "weighted_detail": {
+        "score": 1.5,
+        "known_family_subtotal": 1.5,
+        "missing_states": [],
+        "families": [
+          {
+            "family": "AI",
+            "score": 1.5,
+            "missing_states": []
+          }
+        ]
+      },
+      "weight_drafts": {
+        "等权草案": {
+          "score": 3.0,
+          "known_family_subtotal": 3.0,
+          "missing_states": [],
+          "families": [
+            {
+              "family": "AI",
+              "score": 3,
+              "missing_states": []
+            }
+          ]
+        },
+        "趋势草案": {
+          "score": 1.5,
+          "known_family_subtotal": 1.5,
+          "missing_states": [],
+          "families": [
+            {
+              "family": "AI",
+              "score": 1.5,
+              "missing_states": []
+            }
+          ]
+        }
+      },
+      "pricing": {
+        "source": "data/行情库/股票/601138.csv",
+        "status": "完整",
+        "reason": null,
+        "price_date": "2026-10-27",
+        "drawdown_52w": 0.45317805,
+        "latest_close": 45.92,
+        "high_52w_adjusted": 101.1454332573,
+        "window_start": "2025-10-29",
+        "window_end": "2026-10-27",
+        "observations": 241,
+        "missing_dates": []
+      },
+      "pool": {
+        "source": "data/股票池/股票.csv",
+        "snapshot_date": "2026-10-22",
+        "status": "已匹配",
+        "reason": null,
+        "plan_status": "等待回落",
+        "plan_price_date": "2026-10-12",
+        "l1_status": "通过"
+      },
+      "unpriced": null,
+      "cross_candidate": null,
+      "pricing_drafts": {
+        "回撤10%草案": {
+          "threshold": 0.1,
+          "unpriced_condition": true,
+          "cross_candidate": false
+        },
+        "回撤20%草案": {
+          "threshold": 0.2,
+          "unpriced_condition": true,
+          "cross_candidate": false
+        },
+        "回撤30%草案": {
+          "threshold": 0.3,
+          "unpriced_condition": true,
           "cross_candidate": false
         }
       }
