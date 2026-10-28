@@ -1,0 +1,1344 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-10-29T06:55:56.257876+08:00",
+  "source_ref": "05c449f3a1defed58fd89fdc0469f6767d9d83b2",
+  "false_positive": [],
+  "unresolved": [],
+  "checks": [
+    {
+      "at": "2026-10-16T08:20:00+08:00",
+      "coverage": "仓库尚无历史，不伪造检查结果"
+    },
+    {
+      "at": "2026-10-16T22:30:00+08:00",
+      "coverage": "仓库尚无历史，不伪造检查结果"
+    },
+    {
+      "at": "2026-10-17T08:20:00+08:00",
+      "coverage": "仓库尚无历史，不伪造检查结果"
+    },
+    {
+      "at": "2026-10-17T22:30:00+08:00",
+      "coverage": "仓库尚无历史，不伪造检查结果"
+    },
+    {
+      "at": "2026-10-18T08:20:00+08:00",
+      "coverage": "仓库尚无历史，不伪造检查结果"
+    },
+    {
+      "at": "2026-10-18T22:30:00+08:00",
+      "coverage": "仓库尚无历史，不伪造检查结果"
+    },
+    {
+      "at": "2026-10-19T08:20:00+08:00",
+      "coverage": "仓库尚无历史，不伪造检查结果"
+    },
+    {
+      "at": "2026-10-19T22:30:00+08:00",
+      "coverage": "仓库尚无历史，不伪造检查结果"
+    },
+    {
+      "at": "2026-10-20T08:20:00+08:00",
+      "coverage": "仓库尚无历史，不伪造检查结果"
+    },
+    {
+      "at": "2026-10-20T22:30:00+08:00",
+      "coverage": "仓库尚无历史，不伪造检查结果"
+    },
+    {
+      "at": "2026-10-21T08:20:00+08:00",
+      "coverage": "按当时可见的Git快照检查；仅已上线且有首份产出的项",
+      "sha": "049dd9d1a80af39f28280a054a490af9ef15cdce",
+      "checked_items": [
+        "hangqing"
+      ],
+      "issues": [
+        {
+          "id": "hangqing",
+          "name": "行情库",
+          "status": "失败",
+          "expected": {
+            "data_date": "2026-10-20",
+            "scheduled_at": "2026-10-20T16:40:00+08:00",
+            "deadline": "2026-10-21T01:24:00+08:00",
+            "check_mode": "previous_trading_day"
+          },
+          "actual": {},
+          "reasons": [
+            "缺少产出：data/行情库/状态.csv",
+            "000598 兴蓉环境：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz000598,day,2026-01-01,2026-10-21,900, -> <HTTPError 501: 'Not Implemented'>",
+            "000651 格力电器：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz000651,day,2008-01-01,2010-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "000792 盐湖股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz000792,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "000807 云铝股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz000807,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "000895 双汇发展：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz000895,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "000938 紫光股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz000938,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "000977 浪潮信息：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz000977,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "000983 山西焦煤：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz000983,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "000998 隆平高科：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz000998,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "001965 招商公路：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz001965,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002028 思源电气：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002028,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002142 宁波银行：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002142,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002270 华明装备：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002270,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002311 海大集团：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002311,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002335 科华数据：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002335,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002352 顺丰控股：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002352,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002353 杰瑞股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002353,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002372 伟星新材：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002372,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002460 赣锋锂业：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002460,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002463 沪电股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002463,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002493 荣盛石化：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002493,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002714 牧原股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002714,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002837 英维克：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002837,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002911 佛燃能源：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002911,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "003816 中国广核：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz003816,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "300015 爱尔眼科：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz300015,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "300059 东方财富：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz300059,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "300070 碧水源：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz300070,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "300308 中际旭创：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz300308,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "300383 光环新网：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz300383,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "300394 天孚通信：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz300394,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "300442 润泽科技：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz300442,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "300498 温氏股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz300498,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "300502 新易盛：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz300502,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "300760 迈瑞医疗：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz300760,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "300801 泰和科技：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz300801,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "300999 金龙鱼：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz300999,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "301165 锐捷网络：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz301165,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600008 首创环保：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600008,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600009 上海机场：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600009,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600018 上港集团：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600018,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600028 中国石化：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600028,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600030 中信证券：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600030,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600036 招商银行：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600036,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600050 中国联通：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600050,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600096 云天化：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600096,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600111 北方稀土：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600111,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600161 天坛生物：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600161,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600188 兖矿能源：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600188,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600233 圆通速递：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600233,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600256 广汇能源：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600256,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600276 恒瑞医药：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600276,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600298 安琪酵母：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600298,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600312 平高电气：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600312,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600323 瀚蓝环境：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600323,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600346 恒力石化：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600346,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600377 宁沪高速：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600377,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600406 国电南瑞：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600406,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600436 片仔癀：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600436,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600438 通威股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600438,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600461 洪城环境：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600461,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600486 扬农化工：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600486,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600487 亨通光电：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600487,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600522 中天科技：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600522,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600547 山东黄金：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600547,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600583 海油工程：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600583,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600598 北大荒：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600598,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600690 海尔智家：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600690,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600803 新奥股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600803,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600872 中炬高新：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600872,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600874 创业环保：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600874,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600875 东方电气：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600875,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600887 伊利股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600887,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600900 长江电力：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600900,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600919 江苏银行：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600919,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600938 中国海油：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600938,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600941 中国移动：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600941,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600995 南网储能：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600995,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601006 大秦铁路：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601006,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601088 中国神华：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601088,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601111 中国国航：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601111,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601126 四方股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601126,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601138 工业富联：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601138,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601139 深圳燃气：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601139,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601158 重庆水务：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601158,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601179 中国西电：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601179,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601225 陕西煤业：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601225,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601318 中国平安：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601318,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601398 工商银行：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601398,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601600 中国铝业：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601600,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601628 中国人寿：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601628,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601669 中国电建：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601669,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601728 中国电信：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601728,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601766 中国中车：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601766,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601808 中海油服：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601808,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601816 京沪高铁：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601816,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601857 中国石油：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601857,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601869 长飞光纤：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601869,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601898 中煤能源：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601898,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601899 紫金矿业：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601899,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601919 中远海控：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601919,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601939 建设银行：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601939,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "603019 中科曙光：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh603019,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "603191 望变电气：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh603191,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "603195 公牛集团：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh603195,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "603233 大参林：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh603233,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "603259 药明康德：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh603259,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "603288 海天味业：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh603288,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "603606 东方电缆：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh603606,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "603700 宁水集团：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh603700,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "603881 数据港：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh603881,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "603939 益丰药房：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh603939,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "603993 洛阳钼业：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh603993,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "605090 九丰能源：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh605090,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "688041 海光信息：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh688041,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "688235 百济神州：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh688235,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "688256 寒武纪：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh688256,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "688271 联影医疗：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh688271,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "688498 源杰科技：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh688498,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "688981 中芯国际：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh688981,day,1999-01-01,2001-12-31,900, -> <HTTPError 501: 'Not Implemented'>"
+          ],
+          "classification": "既有失败证据"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-21T22:30:00+08:00",
+      "coverage": "按当时可见的Git快照检查；仅已上线且有首份产出的项",
+      "sha": "d5d312de87b4015b0eb8ee2b52bf7e000006baf0",
+      "checked_items": [
+        "hangqing"
+      ],
+      "issues": []
+    },
+    {
+      "at": "2026-10-22T08:20:00+08:00",
+      "coverage": "按当时可见的Git快照检查；仅已上线且有首份产出的项",
+      "sha": "3b33eabaf6b7ff4d67dc3597c37ce54f80ab5baf",
+      "checked_items": [
+        "hangqing"
+      ],
+      "issues": [
+        {
+          "id": "hangqing",
+          "name": "行情库",
+          "status": "部分失败",
+          "expected": {
+            "data_date": "2026-10-21",
+            "scheduled_at": "2026-10-21T16:40:00+08:00",
+            "deadline": "2026-10-22T01:24:00+08:00",
+            "check_mode": "previous_trading_day"
+          },
+          "actual": {
+            "data_date": "2026-10-21",
+            "updated_at": "2026-10-21T22:42:00+08:00",
+            "run_at": "2026-10-21T22:42:00+08:00",
+            "stale_symbols": [
+              {
+                "code": "688256",
+                "name": "寒武纪",
+                "date": "2026-10-20"
+              },
+              {
+                "code": "688271",
+                "name": "联影医疗",
+                "date": "2026-10-20"
+              },
+              {
+                "code": "688498",
+                "name": "源杰科技",
+                "date": "2026-10-20"
+              },
+              {
+                "code": "688981",
+                "name": "中芯国际",
+                "date": "2026-10-20"
+              }
+            ],
+            "failed": [
+              "688256 寒武纪：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh688256,day,2026-09-10,2026-10-22,900, -> <HTTPError 501: 'Not Implemented'>",
+              "688271 联影医疗：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh688271,day,2026-09-10,2026-10-22,900, -> <HTTPError 501: 'Not Implemented'>",
+              "688498 源杰科技：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh688498,day,2026-09-10,2026-10-22,900, -> <HTTPError 501: 'Not Implemented'>",
+              "688981 中芯国际：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh688981,day,2026-09-10,2026-10-22,900, -> <HTTPError 501: 'Not Implemented'>"
+            ]
+          },
+          "reasons": [
+            "688256 寒武纪：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh688256,day,2026-09-10,2026-10-22,900, -> <HTTPError 501: 'Not Implemented'>",
+            "688271 联影医疗：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh688271,day,2026-09-10,2026-10-22,900, -> <HTTPError 501: 'Not Implemented'>",
+            "688498 源杰科技：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh688498,day,2026-09-10,2026-10-22,900, -> <HTTPError 501: 'Not Implemented'>",
+            "688981 中芯国际：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh688981,day,2026-09-10,2026-10-22,900, -> <HTTPError 501: 'Not Implemented'>"
+          ],
+          "classification": "既有失败证据"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-22T22:30:00+08:00",
+      "coverage": "按当时可见的Git快照检查；仅已上线且有首份产出的项",
+      "sha": "737f6069a15df3c80726d5903cceb2c8a649a94b",
+      "checked_items": [
+        "hangqing",
+        "market_state",
+        "news",
+        "community",
+        "sentiment_index",
+        "pool"
+      ],
+      "issues": [
+        {
+          "id": "hangqing",
+          "name": "行情库",
+          "status": "部分失败",
+          "expected": {
+            "data_date": "2026-10-21",
+            "scheduled_at": "2026-10-21T16:40:00+08:00",
+            "deadline": "2026-10-22T01:24:00+08:00",
+            "check_mode": "previous_trading_day"
+          },
+          "actual": {
+            "data_date": "2026-10-21",
+            "updated_at": "2026-10-22T15:29:00+08:00",
+            "run_at": "2026-10-22T15:29:00+08:00",
+            "stale_symbols": [
+              {
+                "code": "688256",
+                "name": "寒武纪",
+                "date": "2026-10-20"
+              },
+              {
+                "code": "688271",
+                "name": "联影医疗",
+                "date": "2026-10-20"
+              },
+              {
+                "code": "688498",
+                "name": "源杰科技",
+                "date": "2026-10-20"
+              },
+              {
+                "code": "688981",
+                "name": "中芯国际",
+                "date": "2026-10-20"
+              }
+            ],
+            "failed": [
+              "512200 房地产ETF南方：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh512200,day,2023-01-01,2025-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+              "516950 基建ETF银华：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh516950,day,2023-01-01,2025-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+              "159930 能源ETF汇添富：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz159930,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+              "159611 电力ETF广发：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz159611,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>"
+            ]
+          },
+          "reasons": [
+            "512200 房地产ETF南方：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh512200,day,2023-01-01,2025-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "516950 基建ETF银华：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh516950,day,2023-01-01,2025-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "159930 能源ETF汇添富：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz159930,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "159611 电力ETF广发：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz159611,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>"
+          ],
+          "classification": "既有失败证据"
+        },
+        {
+          "id": "market_state",
+          "name": "市场状态",
+          "status": "部分失败",
+          "expected": {
+            "data_date": "2026-10-21",
+            "scheduled_at": "2026-10-21T16:40:00+08:00",
+            "deadline": "2026-10-22T00:37:00+08:00",
+            "check_mode": "previous_trading_day"
+          },
+          "actual": {
+            "data_date": "2026-10-21",
+            "updated_at": "2026-10-22T15:35:00+08:00"
+          },
+          "reasons": [
+            "这些行业ETF 当天无数据：房地产ETF南方、基建ETF银华、能源ETF汇添富、电力ETF广发"
+          ],
+          "classification": "既有失败证据"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-23T08:20:00+08:00",
+      "coverage": "按当时可见的Git快照检查；仅已上线且有首份产出的项",
+      "sha": "a70064c9f1b875424d2d14834e8a48967fda672b",
+      "checked_items": [
+        "hangqing",
+        "market_state",
+        "news",
+        "community",
+        "sentiment_index",
+        "tophub",
+        "pool"
+      ],
+      "issues": [
+        {
+          "id": "hangqing",
+          "name": "行情库",
+          "status": "部分失败",
+          "expected": {
+            "data_date": "2026-10-22",
+            "scheduled_at": "2026-10-22T16:40:00+08:00",
+            "deadline": "2026-10-23T01:24:00+08:00",
+            "check_mode": "previous_trading_day"
+          },
+          "actual": {
+            "data_date": "2026-10-22",
+            "updated_at": "2026-10-22T22:42:00+08:00",
+            "run_at": "2026-10-22T22:42:00+08:00",
+            "stale_symbols": [
+              {
+                "code": "600547",
+                "name": "山东黄金",
+                "date": "2026-10-21"
+              },
+              {
+                "code": "600583",
+                "name": "海油工程",
+                "date": "2026-10-21"
+              },
+              {
+                "code": "600598",
+                "name": "北大荒",
+                "date": "2026-10-21"
+              },
+              {
+                "code": "600690",
+                "name": "海尔智家",
+                "date": "2026-10-21"
+              }
+            ],
+            "failed": [
+              "600547 山东黄金：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600547,day,2026-09-11,2026-10-23,900, -> <HTTPError 501: 'Not Implemented'>",
+              "600583 海油工程：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600583,day,2026-09-11,2026-10-23,900, -> <HTTPError 501: 'Not Implemented'>",
+              "600598 北大荒：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600598,day,2026-09-11,2026-10-23,900, -> <HTTPError 501: 'Not Implemented'>",
+              "600690 海尔智家：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600690,day,2026-09-11,2026-10-23,900, -> <HTTPError 501: 'Not Implemented'>"
+            ]
+          },
+          "reasons": [
+            "600547 山东黄金：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600547,day,2026-09-11,2026-10-23,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600583 海油工程：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600583,day,2026-09-11,2026-10-23,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600598 北大荒：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600598,day,2026-09-11,2026-10-23,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600690 海尔智家：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600690,day,2026-09-11,2026-10-23,900, -> <HTTPError 501: 'Not Implemented'>"
+          ],
+          "classification": "既有失败证据"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-23T22:30:00+08:00",
+      "coverage": "按当时可见的Git快照检查；仅已上线且有首份产出的项",
+      "sha": "c62882cdf590300dc27ef615fe0530d96cf42ac2",
+      "checked_items": [
+        "hangqing",
+        "market_state",
+        "news",
+        "community",
+        "sentiment_index",
+        "tophub",
+        "pool"
+      ],
+      "issues": [
+        {
+          "id": "hangqing",
+          "name": "行情库",
+          "status": "部分失败",
+          "expected": {
+            "data_date": "2026-10-22",
+            "scheduled_at": "2026-10-22T16:40:00+08:00",
+            "deadline": "2026-10-23T01:24:00+08:00",
+            "check_mode": "previous_trading_day"
+          },
+          "actual": {
+            "data_date": "2026-10-23",
+            "updated_at": "2026-10-23T22:24:00+08:00",
+            "run_at": "2026-10-23T22:24:00+08:00",
+            "stale_symbols": [],
+            "failed": [
+              "601816 京沪高铁：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601816,day,2026-09-12,2026-10-24,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601857 中国石油：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601857,day,2026-09-12,2026-10-24,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601869 长飞光纤：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601869,day,2026-09-12,2026-10-24,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601898 中煤能源：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601898,day,2026-09-12,2026-10-24,900, -> <HTTPError 501: 'Not Implemented'>"
+            ]
+          },
+          "reasons": [
+            "601816 京沪高铁：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601816,day,2026-09-12,2026-10-24,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601857 中国石油：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601857,day,2026-09-12,2026-10-24,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601869 长飞光纤：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601869,day,2026-09-12,2026-10-24,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601898 中煤能源：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601898,day,2026-09-12,2026-10-24,900, -> <HTTPError 501: 'Not Implemented'>"
+          ],
+          "classification": "既有失败证据"
+        },
+        {
+          "id": "pool",
+          "name": "股票池镜像",
+          "status": "延迟",
+          "expected": {
+            "data_date": "2026-10-23",
+            "scheduled_at": "2026-10-23T21:37:00+08:00",
+            "deadline": "2026-10-23T21:41:00+08:00",
+            "check_mode": "previous_trading_day"
+          },
+          "actual": {
+            "data_date": "2026-10-22",
+            "updated_at": "2026-10-22T21:39:00+08:00"
+          },
+          "reasons": [
+            "已到截止 2026-10-23T21:41:00+08:00；实际未覆盖预期数据日期/运行时段 2026-10-23T21:37:00+08:00"
+          ],
+          "classification": "产出缺失/过旧"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-24T08:20:00+08:00",
+      "coverage": "按当时可见的Git快照检查；仅已上线且有首份产出的项",
+      "sha": "c629b6771061c3365cde2761124e8e66cbabe734",
+      "checked_items": [
+        "hangqing",
+        "market_state",
+        "news",
+        "community",
+        "sentiment_index",
+        "tophub",
+        "pool"
+      ],
+      "issues": [
+        {
+          "id": "hangqing",
+          "name": "行情库",
+          "status": "部分失败",
+          "expected": {
+            "data_date": "2026-10-23",
+            "scheduled_at": "2026-10-23T16:40:00+08:00",
+            "deadline": "2026-10-24T01:24:00+08:00",
+            "check_mode": "previous_trading_day"
+          },
+          "actual": {
+            "data_date": "2026-10-23",
+            "updated_at": "2026-10-23T22:24:00+08:00",
+            "run_at": "2026-10-23T22:24:00+08:00",
+            "stale_symbols": [
+              {
+                "code": "601816",
+                "name": "京沪高铁",
+                "date": "2026-10-22"
+              },
+              {
+                "code": "601857",
+                "name": "中国石油",
+                "date": "2026-10-22"
+              },
+              {
+                "code": "601869",
+                "name": "长飞光纤",
+                "date": "2026-10-22"
+              },
+              {
+                "code": "601898",
+                "name": "中煤能源",
+                "date": "2026-10-22"
+              }
+            ],
+            "failed": [
+              "601816 京沪高铁：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601816,day,2026-09-12,2026-10-24,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601857 中国石油：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601857,day,2026-09-12,2026-10-24,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601869 长飞光纤：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601869,day,2026-09-12,2026-10-24,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601898 中煤能源：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601898,day,2026-09-12,2026-10-24,900, -> <HTTPError 501: 'Not Implemented'>"
+            ]
+          },
+          "reasons": [
+            "601816 京沪高铁：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601816,day,2026-09-12,2026-10-24,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601857 中国石油：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601857,day,2026-09-12,2026-10-24,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601869 长飞光纤：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601869,day,2026-09-12,2026-10-24,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601898 中煤能源：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601898,day,2026-09-12,2026-10-24,900, -> <HTTPError 501: 'Not Implemented'>"
+          ],
+          "classification": "既有失败证据"
+        },
+        {
+          "id": "pool",
+          "name": "股票池镜像",
+          "status": "延迟",
+          "expected": {
+            "data_date": "2026-10-23",
+            "scheduled_at": "2026-10-23T21:37:00+08:00",
+            "deadline": "2026-10-23T21:41:00+08:00",
+            "check_mode": "previous_trading_day"
+          },
+          "actual": {
+            "data_date": "2026-10-22",
+            "updated_at": "2026-10-22T21:39:00+08:00"
+          },
+          "reasons": [
+            "已到截止 2026-10-23T21:41:00+08:00；实际未覆盖预期数据日期/运行时段 2026-10-23T21:37:00+08:00"
+          ],
+          "classification": "产出缺失/过旧"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-24T22:30:00+08:00",
+      "coverage": "按当时可见的Git快照检查；仅已上线且有首份产出的项",
+      "sha": "018b0cdd064674748761b431f67ecb2efa6c7106",
+      "checked_items": [
+        "hangqing",
+        "market_state",
+        "news",
+        "community",
+        "sentiment_index",
+        "tophub",
+        "pool"
+      ],
+      "issues": [
+        {
+          "id": "hangqing",
+          "name": "行情库",
+          "status": "部分失败",
+          "expected": {
+            "data_date": "2026-10-23",
+            "scheduled_at": "2026-10-23T16:40:00+08:00",
+            "deadline": "2026-10-24T01:24:00+08:00",
+            "check_mode": "previous_trading_day",
+            "run_after": "2026-10-24T10:17:00+08:00"
+          },
+          "actual": {
+            "data_date": "2026-10-23",
+            "updated_at": "2026-10-24T16:22:00+08:00",
+            "run_at": "2026-10-24T16:22:00+08:00",
+            "stale_symbols": [],
+            "failed": [
+              "002463 沪电股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002463,day,2014-01-01,2016-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+              "002837 英维克：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002837,day,2026-09-13,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+              "002911 佛燃能源：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002911,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601318 中国平安：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601318,day,2026-01-01,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601628 中国人寿：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601628,day,2008-01-01,2010-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601669 中国电建：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601669,day,2026-09-13,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601728 中国电信：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601728,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601766 中国中车、601808 中海油服、601899 紫金矿业、601919 中远海控、601939 建设银行、603019 中科曙光、603191 望变电气、603195 公牛集团、603233 大参林、603259 药明康德、603288 海天味业、603606 东方电缆、603700 宁水集团、603881 数据港、603939 益丰药房、603993 洛阳钼业、605090 九丰能源、688041 海光信息、688235 百济神州、688256 寒武纪、688271 联影医疗、688498 源杰科技、688981 中芯国际、512480 半导体ETF国联安、515880 通信ETF国泰、512720 计算机ETF国泰、159819 人工智能ETF易方达、512980 传媒ETF广发、159869 游戏ETF华夏、562500 机器人ETF华夏、515030 新能源车ETF华夏、159755 电池ETF广发、515790 光伏ETF华泰柏瑞、512660 军工ETF国泰、159992 创新药ETF银华、512880 证券ETF国泰、512800 银行ETF华宝、512070 证券保险ETF易方达、512010 医药ETF易方达、512170 医疗ETF华宝、512690 酒ETF鹏华、515170 食品饮料ETF华夏、159996 家电ETF国泰、516110 汽车ETF国泰、159766 旅游ETF富国、159865 养殖ETF国泰、159825 农业ETF富国、515220 煤炭ETF国泰、512400 有色金属ETF南方、515210 钢铁ETF国泰、159870 化工ETF鹏华、512200 房地产ETF南方、516950 基建ETF银华、159930 能源ETF汇添富、159611 电力ETF广发、159301 公用事业ETF华夏、159666 交通运输ETF华夏"
+            ]
+          },
+          "reasons": [
+            "002463 沪电股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002463,day,2014-01-01,2016-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002837 英维克：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002837,day,2026-09-13,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002911 佛燃能源：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002911,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601318 中国平安：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601318,day,2026-01-01,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601628 中国人寿：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601628,day,2008-01-01,2010-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601669 中国电建：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601669,day,2026-09-13,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601728 中国电信：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601728,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601766 中国中车、601808 中海油服、601899 紫金矿业、601919 中远海控、601939 建设银行、603019 中科曙光、603191 望变电气、603195 公牛集团、603233 大参林、603259 药明康德、603288 海天味业、603606 东方电缆、603700 宁水集团、603881 数据港、603939 益丰药房、603993 洛阳钼业、605090 九丰能源、688041 海光信息、688235 百济神州、688256 寒武纪、688271 联影医疗、688498 源杰科技、688981 中芯国际、512480 半导体ETF国联安、515880 通信ETF国泰、512720 计算机ETF国泰、159819 人工智能ETF易方达、512980 传媒ETF广发、159869 游戏ETF华夏、562500 机器人ETF华夏、515030 新能源车ETF华夏、159755 电池ETF广发、515790 光伏ETF华泰柏瑞、512660 军工ETF国泰、159992 创新药ETF银华、512880 证券ETF国泰、512800 银行ETF华宝、512070 证券保险ETF易方达、512010 医药ETF易方达、512170 医疗ETF华宝、512690 酒ETF鹏华、515170 食品饮料ETF华夏、159996 家电ETF国泰、516110 汽车ETF国泰、159766 旅游ETF富国、159865 养殖ETF国泰、159825 农业ETF富国、515220 煤炭ETF国泰、512400 有色金属ETF南方、515210 钢铁ETF国泰、159870 化工ETF鹏华、512200 房地产ETF南方、516950 基建ETF银华、159930 能源ETF汇添富、159611 电力ETF广发、159301 公用事业ETF华夏、159666 交通运输ETF华夏"
+          ],
+          "classification": "既有失败证据"
+        },
+        {
+          "id": "pool",
+          "name": "股票池镜像",
+          "status": "延迟",
+          "expected": {
+            "data_date": "2026-10-23",
+            "scheduled_at": "2026-10-23T21:37:00+08:00",
+            "deadline": "2026-10-23T21:41:00+08:00",
+            "check_mode": "previous_trading_day"
+          },
+          "actual": {
+            "data_date": "2026-10-22",
+            "updated_at": "2026-10-22T21:39:00+08:00"
+          },
+          "reasons": [
+            "已到截止 2026-10-23T21:41:00+08:00；实际未覆盖预期数据日期/运行时段 2026-10-23T21:37:00+08:00"
+          ],
+          "classification": "产出缺失/过旧"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-25T08:20:00+08:00",
+      "coverage": "按当时可见的Git快照检查；仅已上线且有首份产出的项",
+      "sha": "6f8054199cefaf0b163cd9ea91895c400f4741f9",
+      "checked_items": [
+        "hangqing",
+        "market_state",
+        "news",
+        "community",
+        "sentiment_index",
+        "tophub",
+        "pool"
+      ],
+      "issues": [
+        {
+          "id": "hangqing",
+          "name": "行情库",
+          "status": "部分失败",
+          "expected": {
+            "data_date": "2026-10-23",
+            "scheduled_at": "2026-10-23T16:40:00+08:00",
+            "deadline": "2026-10-24T01:24:00+08:00",
+            "check_mode": "previous_trading_day",
+            "run_after": "2026-10-24T10:17:00+08:00"
+          },
+          "actual": {
+            "data_date": "2026-10-23",
+            "updated_at": "2026-10-24T16:22:00+08:00",
+            "run_at": "2026-10-24T16:22:00+08:00",
+            "stale_symbols": [],
+            "failed": [
+              "002463 沪电股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002463,day,2014-01-01,2016-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+              "002837 英维克：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002837,day,2026-09-13,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+              "002911 佛燃能源：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002911,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601318 中国平安：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601318,day,2026-01-01,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601628 中国人寿：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601628,day,2008-01-01,2010-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601669 中国电建：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601669,day,2026-09-13,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601728 中国电信：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601728,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601766 中国中车、601808 中海油服、601899 紫金矿业、601919 中远海控、601939 建设银行、603019 中科曙光、603191 望变电气、603195 公牛集团、603233 大参林、603259 药明康德、603288 海天味业、603606 东方电缆、603700 宁水集团、603881 数据港、603939 益丰药房、603993 洛阳钼业、605090 九丰能源、688041 海光信息、688235 百济神州、688256 寒武纪、688271 联影医疗、688498 源杰科技、688981 中芯国际、512480 半导体ETF国联安、515880 通信ETF国泰、512720 计算机ETF国泰、159819 人工智能ETF易方达、512980 传媒ETF广发、159869 游戏ETF华夏、562500 机器人ETF华夏、515030 新能源车ETF华夏、159755 电池ETF广发、515790 光伏ETF华泰柏瑞、512660 军工ETF国泰、159992 创新药ETF银华、512880 证券ETF国泰、512800 银行ETF华宝、512070 证券保险ETF易方达、512010 医药ETF易方达、512170 医疗ETF华宝、512690 酒ETF鹏华、515170 食品饮料ETF华夏、159996 家电ETF国泰、516110 汽车ETF国泰、159766 旅游ETF富国、159865 养殖ETF国泰、159825 农业ETF富国、515220 煤炭ETF国泰、512400 有色金属ETF南方、515210 钢铁ETF国泰、159870 化工ETF鹏华、512200 房地产ETF南方、516950 基建ETF银华、159930 能源ETF汇添富、159611 电力ETF广发、159301 公用事业ETF华夏、159666 交通运输ETF华夏"
+            ]
+          },
+          "reasons": [
+            "002463 沪电股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002463,day,2014-01-01,2016-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002837 英维克：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002837,day,2026-09-13,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002911 佛燃能源：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002911,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601318 中国平安：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601318,day,2026-01-01,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601628 中国人寿：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601628,day,2008-01-01,2010-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601669 中国电建：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601669,day,2026-09-13,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601728 中国电信：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601728,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601766 中国中车、601808 中海油服、601899 紫金矿业、601919 中远海控、601939 建设银行、603019 中科曙光、603191 望变电气、603195 公牛集团、603233 大参林、603259 药明康德、603288 海天味业、603606 东方电缆、603700 宁水集团、603881 数据港、603939 益丰药房、603993 洛阳钼业、605090 九丰能源、688041 海光信息、688235 百济神州、688256 寒武纪、688271 联影医疗、688498 源杰科技、688981 中芯国际、512480 半导体ETF国联安、515880 通信ETF国泰、512720 计算机ETF国泰、159819 人工智能ETF易方达、512980 传媒ETF广发、159869 游戏ETF华夏、562500 机器人ETF华夏、515030 新能源车ETF华夏、159755 电池ETF广发、515790 光伏ETF华泰柏瑞、512660 军工ETF国泰、159992 创新药ETF银华、512880 证券ETF国泰、512800 银行ETF华宝、512070 证券保险ETF易方达、512010 医药ETF易方达、512170 医疗ETF华宝、512690 酒ETF鹏华、515170 食品饮料ETF华夏、159996 家电ETF国泰、516110 汽车ETF国泰、159766 旅游ETF富国、159865 养殖ETF国泰、159825 农业ETF富国、515220 煤炭ETF国泰、512400 有色金属ETF南方、515210 钢铁ETF国泰、159870 化工ETF鹏华、512200 房地产ETF南方、516950 基建ETF银华、159930 能源ETF汇添富、159611 电力ETF广发、159301 公用事业ETF华夏、159666 交通运输ETF华夏"
+          ],
+          "classification": "既有失败证据"
+        },
+        {
+          "id": "pool",
+          "name": "股票池镜像",
+          "status": "延迟",
+          "expected": {
+            "data_date": "2026-10-23",
+            "scheduled_at": "2026-10-23T21:37:00+08:00",
+            "deadline": "2026-10-23T21:41:00+08:00",
+            "check_mode": "previous_trading_day"
+          },
+          "actual": {
+            "data_date": "2026-10-22",
+            "updated_at": "2026-10-22T21:39:00+08:00"
+          },
+          "reasons": [
+            "已到截止 2026-10-23T21:41:00+08:00；实际未覆盖预期数据日期/运行时段 2026-10-23T21:37:00+08:00"
+          ],
+          "classification": "产出缺失/过旧"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-25T22:30:00+08:00",
+      "coverage": "按当时可见的Git快照检查；仅已上线且有首份产出的项",
+      "sha": "dbacaf475b09f64a32a24e7193281826fe75f8cb",
+      "checked_items": [
+        "hangqing",
+        "market_state",
+        "news",
+        "community",
+        "sentiment_index",
+        "tophub",
+        "pool"
+      ],
+      "issues": [
+        {
+          "id": "hangqing",
+          "name": "行情库",
+          "status": "部分失败",
+          "expected": {
+            "data_date": "2026-10-23",
+            "scheduled_at": "2026-10-23T16:40:00+08:00",
+            "deadline": "2026-10-24T01:24:00+08:00",
+            "check_mode": "previous_trading_day",
+            "run_after": "2026-10-24T10:17:00+08:00"
+          },
+          "actual": {
+            "data_date": "2026-10-23",
+            "updated_at": "2026-10-24T16:22:00+08:00",
+            "run_at": "2026-10-24T16:22:00+08:00",
+            "stale_symbols": [],
+            "failed": [
+              "002463 沪电股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002463,day,2014-01-01,2016-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+              "002837 英维克：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002837,day,2026-09-13,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+              "002911 佛燃能源：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002911,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601318 中国平安：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601318,day,2026-01-01,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601628 中国人寿：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601628,day,2008-01-01,2010-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601669 中国电建：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601669,day,2026-09-13,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601728 中国电信：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601728,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601766 中国中车、601808 中海油服、601899 紫金矿业、601919 中远海控、601939 建设银行、603019 中科曙光、603191 望变电气、603195 公牛集团、603233 大参林、603259 药明康德、603288 海天味业、603606 东方电缆、603700 宁水集团、603881 数据港、603939 益丰药房、603993 洛阳钼业、605090 九丰能源、688041 海光信息、688235 百济神州、688256 寒武纪、688271 联影医疗、688498 源杰科技、688981 中芯国际、512480 半导体ETF国联安、515880 通信ETF国泰、512720 计算机ETF国泰、159819 人工智能ETF易方达、512980 传媒ETF广发、159869 游戏ETF华夏、562500 机器人ETF华夏、515030 新能源车ETF华夏、159755 电池ETF广发、515790 光伏ETF华泰柏瑞、512660 军工ETF国泰、159992 创新药ETF银华、512880 证券ETF国泰、512800 银行ETF华宝、512070 证券保险ETF易方达、512010 医药ETF易方达、512170 医疗ETF华宝、512690 酒ETF鹏华、515170 食品饮料ETF华夏、159996 家电ETF国泰、516110 汽车ETF国泰、159766 旅游ETF富国、159865 养殖ETF国泰、159825 农业ETF富国、515220 煤炭ETF国泰、512400 有色金属ETF南方、515210 钢铁ETF国泰、159870 化工ETF鹏华、512200 房地产ETF南方、516950 基建ETF银华、159930 能源ETF汇添富、159611 电力ETF广发、159301 公用事业ETF华夏、159666 交通运输ETF华夏"
+            ]
+          },
+          "reasons": [
+            "002463 沪电股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002463,day,2014-01-01,2016-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002837 英维克：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002837,day,2026-09-13,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002911 佛燃能源：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002911,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601318 中国平安：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601318,day,2026-01-01,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601628 中国人寿：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601628,day,2008-01-01,2010-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601669 中国电建：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601669,day,2026-09-13,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601728 中国电信：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601728,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601766 中国中车、601808 中海油服、601899 紫金矿业、601919 中远海控、601939 建设银行、603019 中科曙光、603191 望变电气、603195 公牛集团、603233 大参林、603259 药明康德、603288 海天味业、603606 东方电缆、603700 宁水集团、603881 数据港、603939 益丰药房、603993 洛阳钼业、605090 九丰能源、688041 海光信息、688235 百济神州、688256 寒武纪、688271 联影医疗、688498 源杰科技、688981 中芯国际、512480 半导体ETF国联安、515880 通信ETF国泰、512720 计算机ETF国泰、159819 人工智能ETF易方达、512980 传媒ETF广发、159869 游戏ETF华夏、562500 机器人ETF华夏、515030 新能源车ETF华夏、159755 电池ETF广发、515790 光伏ETF华泰柏瑞、512660 军工ETF国泰、159992 创新药ETF银华、512880 证券ETF国泰、512800 银行ETF华宝、512070 证券保险ETF易方达、512010 医药ETF易方达、512170 医疗ETF华宝、512690 酒ETF鹏华、515170 食品饮料ETF华夏、159996 家电ETF国泰、516110 汽车ETF国泰、159766 旅游ETF富国、159865 养殖ETF国泰、159825 农业ETF富国、515220 煤炭ETF国泰、512400 有色金属ETF南方、515210 钢铁ETF国泰、159870 化工ETF鹏华、512200 房地产ETF南方、516950 基建ETF银华、159930 能源ETF汇添富、159611 电力ETF广发、159301 公用事业ETF华夏、159666 交通运输ETF华夏"
+          ],
+          "classification": "既有失败证据"
+        },
+        {
+          "id": "pool",
+          "name": "股票池镜像",
+          "status": "延迟",
+          "expected": {
+            "data_date": "2026-10-23",
+            "scheduled_at": "2026-10-23T21:37:00+08:00",
+            "deadline": "2026-10-23T21:41:00+08:00",
+            "check_mode": "previous_trading_day"
+          },
+          "actual": {
+            "data_date": "2026-10-22",
+            "updated_at": "2026-10-22T21:39:00+08:00"
+          },
+          "reasons": [
+            "已到截止 2026-10-23T21:41:00+08:00；实际未覆盖预期数据日期/运行时段 2026-10-23T21:37:00+08:00"
+          ],
+          "classification": "产出缺失/过旧"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-26T08:20:00+08:00",
+      "coverage": "按当时可见的Git快照检查；仅已上线且有首份产出的项",
+      "sha": "1d86b39f430c9e58230412efbced314b0860eed5",
+      "checked_items": [
+        "hangqing",
+        "market_state",
+        "news",
+        "community",
+        "sentiment_index",
+        "tophub",
+        "pool"
+      ],
+      "issues": [
+        {
+          "id": "hangqing",
+          "name": "行情库",
+          "status": "部分失败",
+          "expected": {
+            "data_date": "2026-10-23",
+            "scheduled_at": "2026-10-23T16:40:00+08:00",
+            "deadline": "2026-10-24T01:24:00+08:00",
+            "check_mode": "previous_trading_day",
+            "run_after": "2026-10-24T10:17:00+08:00"
+          },
+          "actual": {
+            "data_date": "2026-10-23",
+            "updated_at": "2026-10-24T16:22:00+08:00",
+            "run_at": "2026-10-24T16:22:00+08:00",
+            "stale_symbols": [],
+            "failed": [
+              "002463 沪电股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002463,day,2014-01-01,2016-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+              "002837 英维克：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002837,day,2026-09-13,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+              "002911 佛燃能源：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002911,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601318 中国平安：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601318,day,2026-01-01,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601628 中国人寿：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601628,day,2008-01-01,2010-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601669 中国电建：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601669,day,2026-09-13,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601728 中国电信：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601728,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601766 中国中车、601808 中海油服、601899 紫金矿业、601919 中远海控、601939 建设银行、603019 中科曙光、603191 望变电气、603195 公牛集团、603233 大参林、603259 药明康德、603288 海天味业、603606 东方电缆、603700 宁水集团、603881 数据港、603939 益丰药房、603993 洛阳钼业、605090 九丰能源、688041 海光信息、688235 百济神州、688256 寒武纪、688271 联影医疗、688498 源杰科技、688981 中芯国际、512480 半导体ETF国联安、515880 通信ETF国泰、512720 计算机ETF国泰、159819 人工智能ETF易方达、512980 传媒ETF广发、159869 游戏ETF华夏、562500 机器人ETF华夏、515030 新能源车ETF华夏、159755 电池ETF广发、515790 光伏ETF华泰柏瑞、512660 军工ETF国泰、159992 创新药ETF银华、512880 证券ETF国泰、512800 银行ETF华宝、512070 证券保险ETF易方达、512010 医药ETF易方达、512170 医疗ETF华宝、512690 酒ETF鹏华、515170 食品饮料ETF华夏、159996 家电ETF国泰、516110 汽车ETF国泰、159766 旅游ETF富国、159865 养殖ETF国泰、159825 农业ETF富国、515220 煤炭ETF国泰、512400 有色金属ETF南方、515210 钢铁ETF国泰、159870 化工ETF鹏华、512200 房地产ETF南方、516950 基建ETF银华、159930 能源ETF汇添富、159611 电力ETF广发、159301 公用事业ETF华夏、159666 交通运输ETF华夏"
+            ]
+          },
+          "reasons": [
+            "002463 沪电股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002463,day,2014-01-01,2016-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002837 英维克：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002837,day,2026-09-13,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002911 佛燃能源：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002911,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601318 中国平安：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601318,day,2026-01-01,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601628 中国人寿：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601628,day,2008-01-01,2010-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601669 中国电建：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601669,day,2026-09-13,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601728 中国电信：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601728,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601766 中国中车、601808 中海油服、601899 紫金矿业、601919 中远海控、601939 建设银行、603019 中科曙光、603191 望变电气、603195 公牛集团、603233 大参林、603259 药明康德、603288 海天味业、603606 东方电缆、603700 宁水集团、603881 数据港、603939 益丰药房、603993 洛阳钼业、605090 九丰能源、688041 海光信息、688235 百济神州、688256 寒武纪、688271 联影医疗、688498 源杰科技、688981 中芯国际、512480 半导体ETF国联安、515880 通信ETF国泰、512720 计算机ETF国泰、159819 人工智能ETF易方达、512980 传媒ETF广发、159869 游戏ETF华夏、562500 机器人ETF华夏、515030 新能源车ETF华夏、159755 电池ETF广发、515790 光伏ETF华泰柏瑞、512660 军工ETF国泰、159992 创新药ETF银华、512880 证券ETF国泰、512800 银行ETF华宝、512070 证券保险ETF易方达、512010 医药ETF易方达、512170 医疗ETF华宝、512690 酒ETF鹏华、515170 食品饮料ETF华夏、159996 家电ETF国泰、516110 汽车ETF国泰、159766 旅游ETF富国、159865 养殖ETF国泰、159825 农业ETF富国、515220 煤炭ETF国泰、512400 有色金属ETF南方、515210 钢铁ETF国泰、159870 化工ETF鹏华、512200 房地产ETF南方、516950 基建ETF银华、159930 能源ETF汇添富、159611 电力ETF广发、159301 公用事业ETF华夏、159666 交通运输ETF华夏"
+          ],
+          "classification": "既有失败证据"
+        },
+        {
+          "id": "pool",
+          "name": "股票池镜像",
+          "status": "延迟",
+          "expected": {
+            "data_date": "2026-10-23",
+            "scheduled_at": "2026-10-23T21:37:00+08:00",
+            "deadline": "2026-10-23T21:41:00+08:00",
+            "check_mode": "previous_trading_day"
+          },
+          "actual": {
+            "data_date": "2026-10-22",
+            "updated_at": "2026-10-22T21:39:00+08:00"
+          },
+          "reasons": [
+            "已到截止 2026-10-23T21:41:00+08:00；实际未覆盖预期数据日期/运行时段 2026-10-23T21:37:00+08:00"
+          ],
+          "classification": "产出缺失/过旧"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-26T22:30:00+08:00",
+      "coverage": "按当时可见的Git快照检查；仅已上线且有首份产出的项",
+      "sha": "392b3123b55a1406c3f7e71f98dc495a6e992da8",
+      "checked_items": [
+        "hangqing",
+        "market_state",
+        "news",
+        "community",
+        "sentiment_index",
+        "tophub",
+        "pool"
+      ],
+      "issues": [
+        {
+          "id": "hangqing",
+          "name": "行情库",
+          "status": "部分失败",
+          "expected": {
+            "data_date": "2026-10-23",
+            "scheduled_at": "2026-10-23T16:40:00+08:00",
+            "deadline": "2026-10-24T01:24:00+08:00",
+            "check_mode": "previous_trading_day",
+            "run_after": "2026-10-24T10:17:00+08:00"
+          },
+          "actual": {
+            "data_date": "2026-10-23",
+            "updated_at": "2026-10-24T16:22:00+08:00",
+            "run_at": "2026-10-24T16:22:00+08:00",
+            "stale_symbols": [],
+            "failed": [
+              "002463 沪电股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002463,day,2014-01-01,2016-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+              "002837 英维克：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002837,day,2026-09-13,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+              "002911 佛燃能源：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002911,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601318 中国平安：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601318,day,2026-01-01,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601628 中国人寿：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601628,day,2008-01-01,2010-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601669 中国电建：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601669,day,2026-09-13,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601728 中国电信：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601728,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601766 中国中车、601808 中海油服、601899 紫金矿业、601919 中远海控、601939 建设银行、603019 中科曙光、603191 望变电气、603195 公牛集团、603233 大参林、603259 药明康德、603288 海天味业、603606 东方电缆、603700 宁水集团、603881 数据港、603939 益丰药房、603993 洛阳钼业、605090 九丰能源、688041 海光信息、688235 百济神州、688256 寒武纪、688271 联影医疗、688498 源杰科技、688981 中芯国际、512480 半导体ETF国联安、515880 通信ETF国泰、512720 计算机ETF国泰、159819 人工智能ETF易方达、512980 传媒ETF广发、159869 游戏ETF华夏、562500 机器人ETF华夏、515030 新能源车ETF华夏、159755 电池ETF广发、515790 光伏ETF华泰柏瑞、512660 军工ETF国泰、159992 创新药ETF银华、512880 证券ETF国泰、512800 银行ETF华宝、512070 证券保险ETF易方达、512010 医药ETF易方达、512170 医疗ETF华宝、512690 酒ETF鹏华、515170 食品饮料ETF华夏、159996 家电ETF国泰、516110 汽车ETF国泰、159766 旅游ETF富国、159865 养殖ETF国泰、159825 农业ETF富国、515220 煤炭ETF国泰、512400 有色金属ETF南方、515210 钢铁ETF国泰、159870 化工ETF鹏华、512200 房地产ETF南方、516950 基建ETF银华、159930 能源ETF汇添富、159611 电力ETF广发、159301 公用事业ETF华夏、159666 交通运输ETF华夏"
+            ]
+          },
+          "reasons": [
+            "002463 沪电股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002463,day,2014-01-01,2016-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002837 英维克：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002837,day,2026-09-13,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+            "002911 佛燃能源：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002911,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601318 中国平安：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601318,day,2026-01-01,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601628 中国人寿：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601628,day,2008-01-01,2010-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601669 中国电建：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601669,day,2026-09-13,2026-10-25,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601728 中国电信：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601728,day,2005-01-01,2007-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601766 中国中车、601808 中海油服、601899 紫金矿业、601919 中远海控、601939 建设银行、603019 中科曙光、603191 望变电气、603195 公牛集团、603233 大参林、603259 药明康德、603288 海天味业、603606 东方电缆、603700 宁水集团、603881 数据港、603939 益丰药房、603993 洛阳钼业、605090 九丰能源、688041 海光信息、688235 百济神州、688256 寒武纪、688271 联影医疗、688498 源杰科技、688981 中芯国际、512480 半导体ETF国联安、515880 通信ETF国泰、512720 计算机ETF国泰、159819 人工智能ETF易方达、512980 传媒ETF广发、159869 游戏ETF华夏、562500 机器人ETF华夏、515030 新能源车ETF华夏、159755 电池ETF广发、515790 光伏ETF华泰柏瑞、512660 军工ETF国泰、159992 创新药ETF银华、512880 证券ETF国泰、512800 银行ETF华宝、512070 证券保险ETF易方达、512010 医药ETF易方达、512170 医疗ETF华宝、512690 酒ETF鹏华、515170 食品饮料ETF华夏、159996 家电ETF国泰、516110 汽车ETF国泰、159766 旅游ETF富国、159865 养殖ETF国泰、159825 农业ETF富国、515220 煤炭ETF国泰、512400 有色金属ETF南方、515210 钢铁ETF国泰、159870 化工ETF鹏华、512200 房地产ETF南方、516950 基建ETF银华、159930 能源ETF汇添富、159611 电力ETF广发、159301 公用事业ETF华夏、159666 交通运输ETF华夏"
+          ],
+          "classification": "既有失败证据"
+        },
+        {
+          "id": "pool",
+          "name": "股票池镜像",
+          "status": "延迟",
+          "expected": {
+            "data_date": "2026-10-26",
+            "scheduled_at": "2026-10-26T21:37:00+08:00",
+            "deadline": "2026-10-26T21:41:00+08:00",
+            "check_mode": "previous_trading_day"
+          },
+          "actual": {
+            "data_date": "2026-10-22",
+            "updated_at": "2026-10-22T21:39:00+08:00"
+          },
+          "reasons": [
+            "已到截止 2026-10-26T21:41:00+08:00；实际未覆盖预期数据日期/运行时段 2026-10-26T21:37:00+08:00"
+          ],
+          "classification": "产出缺失/过旧"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-27T08:20:00+08:00",
+      "coverage": "按当时可见的Git快照检查；仅已上线且有首份产出的项",
+      "sha": "89f51d19c6cfa5f5f3ca23a0b88a897e6ae2bd92",
+      "checked_items": [
+        "hangqing",
+        "market_state",
+        "news",
+        "community",
+        "sentiment_index",
+        "tophub",
+        "pool"
+      ],
+      "issues": [
+        {
+          "id": "hangqing",
+          "name": "行情库",
+          "status": "部分失败",
+          "expected": {
+            "data_date": "2026-10-26",
+            "scheduled_at": "2026-10-26T16:40:00+08:00",
+            "deadline": "2026-10-27T01:24:00+08:00",
+            "check_mode": "previous_trading_day"
+          },
+          "actual": {
+            "data_date": "2026-10-26",
+            "updated_at": "2026-10-27T00:03:00+08:00",
+            "run_at": "2026-10-27T00:03:00+08:00",
+            "stale_symbols": [
+              {
+                "code": "600941",
+                "name": "中国移动",
+                "date": "2026-10-23"
+              },
+              {
+                "code": "600995",
+                "name": "南网储能",
+                "date": "2026-10-23"
+              },
+              {
+                "code": "601006",
+                "name": "大秦铁路",
+                "date": "2026-10-23"
+              }
+            ],
+            "failed": [
+              "600941 中国移动：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600941,day,2026-09-13,2026-10-27,900, -> <HTTPError 501: 'Not Implemented'>",
+              "600995 南网储能：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600995,day,2026-09-13,2026-10-27,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601006 大秦铁路：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601006,day,2026-09-13,2026-10-27,900, -> <HTTPError 501: 'Not Implemented'>"
+            ]
+          },
+          "reasons": [
+            "600941 中国移动：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600941,day,2026-09-13,2026-10-27,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600995 南网储能：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600995,day,2026-09-13,2026-10-27,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601006 大秦铁路：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601006,day,2026-09-13,2026-10-27,900, -> <HTTPError 501: 'Not Implemented'>"
+          ],
+          "classification": "既有失败证据"
+        },
+        {
+          "id": "pool",
+          "name": "股票池镜像",
+          "status": "延迟",
+          "expected": {
+            "data_date": "2026-10-26",
+            "scheduled_at": "2026-10-26T21:37:00+08:00",
+            "deadline": "2026-10-26T21:41:00+08:00",
+            "check_mode": "previous_trading_day"
+          },
+          "actual": {
+            "data_date": "2026-10-22",
+            "updated_at": "2026-10-22T21:39:00+08:00"
+          },
+          "reasons": [
+            "已到截止 2026-10-26T21:41:00+08:00；实际未覆盖预期数据日期/运行时段 2026-10-26T21:37:00+08:00"
+          ],
+          "classification": "产出缺失/过旧"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-27T22:30:00+08:00",
+      "coverage": "按当时可见的Git快照检查；仅已上线且有首份产出的项",
+      "sha": "62caa31c2b76815a2fcfc4312b07221f8d4c8781",
+      "checked_items": [
+        "hangqing",
+        "market_state",
+        "news",
+        "community",
+        "sentiment_index",
+        "tophub",
+        "pool"
+      ],
+      "issues": [
+        {
+          "id": "hangqing",
+          "name": "行情库",
+          "status": "部分失败",
+          "expected": {
+            "data_date": "2026-10-26",
+            "scheduled_at": "2026-10-26T16:40:00+08:00",
+            "deadline": "2026-10-27T01:24:00+08:00",
+            "check_mode": "previous_trading_day"
+          },
+          "actual": {
+            "data_date": "2026-10-26",
+            "updated_at": "2026-10-27T00:03:00+08:00",
+            "run_at": "2026-10-27T00:03:00+08:00",
+            "stale_symbols": [
+              {
+                "code": "600941",
+                "name": "中国移动",
+                "date": "2026-10-23"
+              },
+              {
+                "code": "600995",
+                "name": "南网储能",
+                "date": "2026-10-23"
+              },
+              {
+                "code": "601006",
+                "name": "大秦铁路",
+                "date": "2026-10-23"
+              }
+            ],
+            "failed": [
+              "600941 中国移动：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600941,day,2026-09-13,2026-10-27,900, -> <HTTPError 501: 'Not Implemented'>",
+              "600995 南网储能：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600995,day,2026-09-13,2026-10-27,900, -> <HTTPError 501: 'Not Implemented'>",
+              "601006 大秦铁路：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601006,day,2026-09-13,2026-10-27,900, -> <HTTPError 501: 'Not Implemented'>"
+            ]
+          },
+          "reasons": [
+            "600941 中国移动：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600941,day,2026-09-13,2026-10-27,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600995 南网储能：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600995,day,2026-09-13,2026-10-27,900, -> <HTTPError 501: 'Not Implemented'>",
+            "601006 大秦铁路：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh601006,day,2026-09-13,2026-10-27,900, -> <HTTPError 501: 'Not Implemented'>"
+          ],
+          "classification": "既有失败证据"
+        },
+        {
+          "id": "pool",
+          "name": "股票池镜像",
+          "status": "延迟",
+          "expected": {
+            "data_date": "2026-10-27",
+            "scheduled_at": "2026-10-27T21:37:00+08:00",
+            "deadline": "2026-10-27T21:41:00+08:00",
+            "check_mode": "previous_trading_day"
+          },
+          "actual": {
+            "data_date": "2026-10-22",
+            "updated_at": "2026-10-22T21:39:00+08:00"
+          },
+          "reasons": [
+            "已到截止 2026-10-27T21:41:00+08:00；实际未覆盖预期数据日期/运行时段 2026-10-27T21:37:00+08:00"
+          ],
+          "classification": "产出缺失/过旧"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-28T08:20:00+08:00",
+      "coverage": "按当时可见的Git快照检查；仅已上线且有首份产出的项",
+      "sha": "3bb3b68599001b1c151dfc78bf0017ae700a295a",
+      "checked_items": [
+        "hangqing",
+        "market_state",
+        "news",
+        "community",
+        "sentiment_index",
+        "tophub",
+        "pool"
+      ],
+      "issues": [
+        {
+          "id": "hangqing",
+          "name": "行情库",
+          "status": "部分失败",
+          "expected": {
+            "data_date": "2026-10-27",
+            "scheduled_at": "2026-10-27T16:40:00+08:00",
+            "deadline": "2026-10-28T01:24:00+08:00",
+            "check_mode": "previous_trading_day"
+          },
+          "actual": {
+            "data_date": "2026-10-27",
+            "updated_at": "2026-10-27T23:30:00+08:00",
+            "run_at": "2026-10-27T23:30:00+08:00",
+            "stale_symbols": [
+              {
+                "code": "600872",
+                "name": "中炬高新",
+                "date": "2026-10-26"
+              },
+              {
+                "code": "600874",
+                "name": "创业环保",
+                "date": "2026-10-26"
+              },
+              {
+                "code": "600875",
+                "name": "东方电气",
+                "date": "2026-10-26"
+              },
+              {
+                "code": "600887",
+                "name": "伊利股份",
+                "date": "2026-10-26"
+              }
+            ],
+            "failed": [
+              "600872 中炬高新：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600872,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>",
+              "600874 创业环保：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600874,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>",
+              "600875 东方电气：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600875,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>",
+              "600887 伊利股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600887,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>"
+            ]
+          },
+          "reasons": [
+            "600872 中炬高新：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600872,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600874 创业环保：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600874,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600875 东方电气：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600875,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600887 伊利股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600887,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>"
+          ],
+          "classification": "既有失败证据"
+        },
+        {
+          "id": "pool",
+          "name": "股票池镜像",
+          "status": "延迟",
+          "expected": {
+            "data_date": "2026-10-27",
+            "scheduled_at": "2026-10-27T21:37:00+08:00",
+            "deadline": "2026-10-27T21:41:00+08:00",
+            "check_mode": "previous_trading_day"
+          },
+          "actual": {
+            "data_date": "2026-10-22",
+            "updated_at": "2026-10-22T21:39:00+08:00"
+          },
+          "reasons": [
+            "已到截止 2026-10-27T21:41:00+08:00；实际未覆盖预期数据日期/运行时段 2026-10-27T21:37:00+08:00"
+          ],
+          "classification": "产出缺失/过旧"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-28T21:42:00+08:00",
+      "coverage": "按当时可见的Git快照检查；仅已上线且有首份产出的项",
+      "sha": "06be8a691e61716c3d5aa7b3e47ff2b58fd3f870",
+      "checked_items": [
+        "hangqing",
+        "market_state",
+        "news",
+        "community",
+        "sentiment_index",
+        "tophub",
+        "pool"
+      ],
+      "issues": [
+        {
+          "id": "hangqing",
+          "name": "行情库",
+          "status": "部分失败",
+          "expected": {
+            "data_date": "2026-10-27",
+            "scheduled_at": "2026-10-27T16:40:00+08:00",
+            "deadline": "2026-10-28T01:24:00+08:00",
+            "check_mode": "previous_trading_day"
+          },
+          "actual": {
+            "data_date": "2026-10-27",
+            "updated_at": "2026-10-27T23:30:00+08:00",
+            "run_at": "2026-10-27T23:30:00+08:00",
+            "stale_symbols": [
+              {
+                "code": "600872",
+                "name": "中炬高新",
+                "date": "2026-10-26"
+              },
+              {
+                "code": "600874",
+                "name": "创业环保",
+                "date": "2026-10-26"
+              },
+              {
+                "code": "600875",
+                "name": "东方电气",
+                "date": "2026-10-26"
+              },
+              {
+                "code": "600887",
+                "name": "伊利股份",
+                "date": "2026-10-26"
+              }
+            ],
+            "failed": [
+              "600872 中炬高新：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600872,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>",
+              "600874 创业环保：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600874,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>",
+              "600875 东方电气：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600875,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>",
+              "600887 伊利股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600887,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>"
+            ]
+          },
+          "reasons": [
+            "600872 中炬高新：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600872,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600874 创业环保：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600874,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600875 东方电气：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600875,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600887 伊利股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600887,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>"
+          ],
+          "classification": "既有失败证据"
+        },
+        {
+          "id": "pool",
+          "name": "股票池镜像",
+          "status": "延迟",
+          "expected": {
+            "data_date": "2026-10-28",
+            "scheduled_at": "2026-10-28T21:37:00+08:00",
+            "deadline": "2026-10-28T21:41:00+08:00",
+            "check_mode": "previous_trading_day"
+          },
+          "actual": {
+            "data_date": "2026-10-22",
+            "updated_at": "2026-10-22T21:39:00+08:00"
+          },
+          "reasons": [
+            "已到截止 2026-10-28T21:41:00+08:00；实际未覆盖预期数据日期/运行时段 2026-10-28T21:37:00+08:00"
+          ],
+          "classification": "产出缺失/过旧"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-28T22:30:00+08:00",
+      "coverage": "按当时可见的Git快照检查；仅已上线且有首份产出的项",
+      "sha": "521d2d3d5cc004495e645ce21f01666d89deb21a",
+      "checked_items": [
+        "hangqing",
+        "market_state",
+        "news",
+        "community",
+        "sentiment_index",
+        "tophub",
+        "pool"
+      ],
+      "issues": [
+        {
+          "id": "hangqing",
+          "name": "行情库",
+          "status": "部分失败",
+          "expected": {
+            "data_date": "2026-10-27",
+            "scheduled_at": "2026-10-27T16:40:00+08:00",
+            "deadline": "2026-10-28T01:24:00+08:00",
+            "check_mode": "previous_trading_day"
+          },
+          "actual": {
+            "data_date": "2026-10-27",
+            "updated_at": "2026-10-27T23:30:00+08:00",
+            "run_at": "2026-10-27T23:30:00+08:00",
+            "stale_symbols": [
+              {
+                "code": "600872",
+                "name": "中炬高新",
+                "date": "2026-10-26"
+              },
+              {
+                "code": "600874",
+                "name": "创业环保",
+                "date": "2026-10-26"
+              },
+              {
+                "code": "600875",
+                "name": "东方电气",
+                "date": "2026-10-26"
+              },
+              {
+                "code": "600887",
+                "name": "伊利股份",
+                "date": "2026-10-26"
+              }
+            ],
+            "failed": [
+              "600872 中炬高新：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600872,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>",
+              "600874 创业环保：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600874,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>",
+              "600875 东方电气：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600875,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>",
+              "600887 伊利股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600887,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>"
+            ]
+          },
+          "reasons": [
+            "600872 中炬高新：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600872,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600874 创业环保：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600874,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600875 东方电气：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600875,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>",
+            "600887 伊利股份：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600887,day,2026-09-16,2026-10-28,900, -> <HTTPError 501: 'Not Implemented'>"
+          ],
+          "classification": "既有失败证据"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-29T08:20:00+08:00",
+      "coverage": "尚未来到，不回放未来"
+    },
+    {
+      "at": "2026-10-29T22:30:00+08:00",
+      "coverage": "尚未来到，不回放未来"
+    }
+  ],
+  "scope": "固定本次28天校准参数的样本内回放；未覆盖日期、未上线任务及未来检查单列，不称完成14天独立验证"
+}

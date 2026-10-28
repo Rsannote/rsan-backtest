@@ -31,9 +31,9 @@
       "说明": "周六另核验轮换全量运行时间；原始数据日期仍应为最近交易日。",
       "check_mode": "previous_trading_day",
       "delay_basis": {
-        "statistics_at": "2026-10-28T21:42:00+08:00",
-        "source_ref": "06be8a691e61716c3d5aa7b3e47ff2b58fd3f870",
-        "sample_n": 5,
+        "statistics_at": "2026-10-29T06:55:56.257876+08:00",
+        "source_ref": "05c449f3a1defed58fd89fdc0469f6767d9d83b2",
+        "sample_n": 6,
         "p95_minutes": 443.3833333333333,
         "formula": "ceil(P95 + max(P95-P50, 最大值-P95, 1分钟))；最近秩分位数",
         "report": "logs/运行延迟统计.md",
@@ -55,20 +55,20 @@
       "times": [
         "16:40"
       ],
-      "grace_minutes": 521,
+      "grace_minutes": 477,
       "outputs": [
         "data/市场状态/最新.json",
         "data/市场状态/最新.md"
       ],
       "check_mode": "previous_trading_day",
       "delay_basis": {
-        "statistics_at": "2026-10-28T21:42:00+08:00",
-        "source_ref": "06be8a691e61716c3d5aa7b3e47ff2b58fd3f870",
-        "sample_n": 4,
+        "statistics_at": "2026-10-29T06:55:56.257876+08:00",
+        "source_ref": "05c449f3a1defed58fd89fdc0469f6767d9d83b2",
+        "sample_n": 5,
         "p95_minutes": 443.93333333333334,
         "formula": "ceil(P95 + max(P95-P50, 最大值-P95, 1分钟))；最近秩分位数",
         "report": "logs/运行延迟统计.md",
-        "margin_minutes": 76.16666666666669
+        "margin_minutes": 32.73333333333335
       }
     },
     {
@@ -83,27 +83,27 @@
         "16:23",
         "21:11"
       ],
-      "grace_minutes": 492,
+      "grace_minutes": 536,
       "outputs": [
         "data/新闻/状态.json",
         "data/新闻/最新.md"
       ],
       "说明": "状态只保留最近一次运行，核验最近已到截止的slot；没有历史运行记录时不声称四次均已成功。零新增本身不判失败。",
       "check_mode": "freshness",
-      "max_age_minutes": 633,
+      "max_age_minutes": 739,
       "delay_basis": {
-        "statistics_at": "2026-10-28T21:42:00+08:00",
-        "source_ref": "06be8a691e61716c3d5aa7b3e47ff2b58fd3f870",
-        "sample_n": 24,
-        "p95_minutes": 389.5,
+        "statistics_at": "2026-10-29T06:55:56.257876+08:00",
+        "source_ref": "05c449f3a1defed58fd89fdc0469f6767d9d83b2",
+        "sample_n": 26,
+        "p95_minutes": 414.26666666666665,
         "formula": "ceil(P95 + max(P95-P50, 最大值-P95, 1分钟))；最近秩分位数",
         "report": "logs/运行延迟统计.md",
-        "margin_minutes": 101.51666666666665,
+        "margin_minutes": 120.80000000000001,
         "freshness": {
           "p95_minutes": 523.2,
-          "margin_minutes": 109.51666666666671,
-          "minutes": 633,
-          "sample_n": 23,
+          "margin_minutes": 214.95000000000005,
+          "minutes": 739,
+          "sample_n": 25,
           "definition": "下一成功产出提交可见时刻 - 上一成功产出字段时刻（含执行/提交耗时）"
         }
       }
@@ -125,9 +125,9 @@
       ],
       "check_mode": "previous_trading_day",
       "delay_basis": {
-        "statistics_at": "2026-10-28T21:42:00+08:00",
-        "source_ref": "06be8a691e61716c3d5aa7b3e47ff2b58fd3f870",
-        "sample_n": 3,
+        "statistics_at": "2026-10-29T06:55:56.257876+08:00",
+        "source_ref": "05c449f3a1defed58fd89fdc0469f6767d9d83b2",
+        "sample_n": 4,
         "p95_minutes": 417.6666666666667,
         "formula": "ceil(P95 + max(P95-P50, 最大值-P95, 1分钟))；最近秩分位数",
         "report": "logs/运行延迟统计.md",
@@ -153,13 +153,13 @@
       ],
       "check_mode": "previous_trading_day",
       "delay_basis": {
-        "statistics_at": "2026-10-28T21:42:00+08:00",
-        "source_ref": "06be8a691e61716c3d5aa7b3e47ff2b58fd3f870",
-        "sample_n": 3,
-        "p95_minutes": 444.48333333333335,
+        "statistics_at": "2026-10-29T06:55:56.257876+08:00",
+        "source_ref": "05c449f3a1defed58fd89fdc0469f6767d9d83b2",
+        "sample_n": 4,
+        "p95_minutes": 444.51666666666665,
         "formula": "ceil(P95 + max(P95-P50, 最大值-P95, 1分钟))；最近秩分位数",
         "report": "logs/运行延迟统计.md",
-        "margin_minutes": 32.633333333333326
+        "margin_minutes": 32.66666666666663
       }
     },
     {
@@ -174,27 +174,27 @@
         "16:07",
         "21:07"
       ],
-      "grace_minutes": 472,
+      "grace_minutes": 534,
       "outputs": [
         "data/信息源/tophub/运行记录.txt",
         "data/信息源/tophub/状态.json",
         "data/信息源/简报/最新.md"
       ],
       "check_mode": "freshness",
-      "max_age_minutes": 1118,
+      "max_age_minutes": 1120,
       "delay_basis": {
-        "statistics_at": "2026-10-28T21:42:00+08:00",
-        "source_ref": "06be8a691e61716c3d5aa7b3e47ff2b58fd3f870",
-        "sample_n": 22,
-        "p95_minutes": 386.6166666666667,
+        "statistics_at": "2026-10-29T06:55:56.257876+08:00",
+        "source_ref": "05c449f3a1defed58fd89fdc0469f6767d9d83b2",
+        "sample_n": 24,
+        "p95_minutes": 419.46666666666664,
         "formula": "ceil(P95 + max(P95-P50, 最大值-P95, 1分钟))；最近秩分位数",
         "report": "logs/运行延迟统计.md",
-        "margin_minutes": 84.76666666666665,
+        "margin_minutes": 114.5,
         "freshness": {
           "p95_minutes": 698.9166666666666,
-          "margin_minutes": 418.2833333333333,
-          "minutes": 1118,
-          "sample_n": 21,
+          "margin_minutes": 421.0666666666666,
+          "minutes": 1120,
+          "sample_n": 23,
           "definition": "下一成功产出提交可见时刻 - 上一成功产出字段时刻（含执行/提交耗时）"
         }
       }
@@ -216,8 +216,8 @@
       ],
       "check_mode": "previous_trading_day",
       "delay_basis": {
-        "statistics_at": "2026-10-28T21:42:00+08:00",
-        "source_ref": "06be8a691e61716c3d5aa7b3e47ff2b58fd3f870",
+        "statistics_at": "2026-10-29T06:55:56.257876+08:00",
+        "source_ref": "05c449f3a1defed58fd89fdc0469f6767d9d83b2",
         "sample_n": 1,
         "p95_minutes": 3.0,
         "formula": "ceil(P95 + max(P95-P50, 最大值-P95, 1分钟))；最近秩分位数",
@@ -244,7 +244,7 @@
       "times": [
         "10:07"
       ],
-      "grace_minutes": 524,
+      "grace_minutes": 536,
       "outputs": [
         "data/v3/latest.json",
         "data/v3/{date}.json",
@@ -253,8 +253,8 @@
       ],
       "说明": "仅换股月核验当月1日的正式名单；1日截止后缺失即延迟，2、3日重试；不自行补跑。",
       "delay_basis": {
-        "statistics_at": "2026-10-28T21:42:00+08:00",
-        "source_ref": "06be8a691e61716c3d5aa7b3e47ff2b58fd3f870",
+        "statistics_at": "2026-10-29T06:55:56.257876+08:00",
+        "source_ref": "05c449f3a1defed58fd89fdc0469f6767d9d83b2",
         "sample_n": 0,
         "p95_minutes": null,
         "formula": "ceil(P95 + max(P95-P50, 最大值-P95, 1分钟))；最近秩分位数",
