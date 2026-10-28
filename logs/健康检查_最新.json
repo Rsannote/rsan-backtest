@@ -1,0 +1,215 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-10-29T06:59:59.414718+08:00",
+  "timezone": "Asia/Shanghai",
+  "items": [
+    {
+      "id": "hangqing",
+      "name": "行情库",
+      "status": "部分失败",
+      "expected": {
+        "data_date": "2026-10-28",
+        "scheduled_at": "2026-10-28T16:40:00+08:00",
+        "deadline": "2026-10-29T01:24:00+08:00",
+        "check_mode": "previous_trading_day"
+      },
+      "actual": {
+        "data_date": "2026-10-28",
+        "updated_at": "2026-10-29T00:03:00+08:00",
+        "run_at": "2026-10-29T00:03:00+08:00",
+        "stale_symbols": [
+          {
+            "code": "512800",
+            "name": "银行ETF华宝",
+            "date": "2026-10-27"
+          },
+          {
+            "code": "512070",
+            "name": "证券保险ETF易方达",
+            "date": "2026-10-27"
+          },
+          {
+            "code": "512010",
+            "name": "医药ETF易方达",
+            "date": "2026-10-27"
+          },
+          {
+            "code": "512170",
+            "name": "医疗ETF华宝",
+            "date": "2026-10-27"
+          }
+        ],
+        "failed": [
+          "512800 银行ETF华宝：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh512800,day,2026-09-17,2026-10-29,900, -> <HTTPError 501: 'Not Implemented'>",
+          "512070 证券保险ETF易方达：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh512070,day,2026-09-17,2026-10-29,900, -> <HTTPError 501: 'Not Implemented'>",
+          "512010 医药ETF易方达：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh512010,day,2026-09-17,2026-10-29,900, -> <HTTPError 501: 'Not Implemented'>",
+          "512170 医疗ETF华宝：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh512170,day,2026-09-17,2026-10-29,900, -> <HTTPError 501: 'Not Implemented'>"
+        ]
+      },
+      "reasons": [
+        "512800 银行ETF华宝：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh512800,day,2026-09-17,2026-10-29,900, -> <HTTPError 501: 'Not Implemented'>",
+        "512070 证券保险ETF易方达：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh512070,day,2026-09-17,2026-10-29,900, -> <HTTPError 501: 'Not Implemented'>",
+        "512010 医药ETF易方达：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh512010,day,2026-09-17,2026-10-29,900, -> <HTTPError 501: 'Not Implemented'>",
+        "512170 医疗ETF华宝：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh512170,day,2026-09-17,2026-10-29,900, -> <HTTPError 501: 'Not Implemented'>"
+      ]
+    },
+    {
+      "id": "market_state",
+      "name": "市场状态",
+      "status": "部分失败",
+      "expected": {
+        "data_date": "2026-10-28",
+        "scheduled_at": "2026-10-28T16:40:00+08:00",
+        "deadline": "2026-10-29T00:37:00+08:00",
+        "check_mode": "previous_trading_day"
+      },
+      "actual": {
+        "data_date": "2026-10-28",
+        "updated_at": "2026-10-29T00:03:00+08:00"
+      },
+      "reasons": [
+        "这些行业ETF 当天无数据：银行ETF华宝、证券保险ETF易方达、医药ETF易方达、医疗ETF华宝"
+      ]
+    },
+    {
+      "id": "news",
+      "name": "新闻库（每日四次）",
+      "status": "正常",
+      "expected": {
+        "check_mode": "freshness",
+        "max_age_minutes": 739,
+        "cutoff": "2026-10-28T18:40:59.414718+08:00"
+      },
+      "actual": {
+        "data_date": "2026-10-29",
+        "updated_at": "2026-10-29T02:55:00+08:00",
+        "slot_evidence": "状态文件只保留最近一次运行；不据此声称历史四次均成功",
+        "last_success_at": "2026-10-29T02:55:00+08:00",
+        "age_minutes": 244.990245
+      },
+      "reasons": [
+        "最近成功产出距今 244.99 分钟，未超过阈值 739 分钟"
+      ]
+    },
+    {
+      "id": "community",
+      "name": "社区情绪",
+      "status": "正常",
+      "expected": {
+        "data_date": "2026-10-28",
+        "scheduled_at": "2026-10-28T15:37:00+08:00",
+        "deadline": "2026-10-28T23:35:00+08:00",
+        "check_mode": "previous_trading_day"
+      },
+      "actual": {
+        "data_date": "2026-10-28",
+        "updated_at": "2026-10-28T22:26:00+08:00"
+      },
+      "reasons": [
+        "产出已覆盖要求的交易日"
+      ]
+    },
+    {
+      "id": "sentiment_index",
+      "name": "散户情绪指标",
+      "status": "正常",
+      "expected": {
+        "data_date": "2026-10-28",
+        "scheduled_at": "2026-10-28T16:40:00+08:00",
+        "deadline": "2026-10-29T00:38:00+08:00",
+        "check_mode": "previous_trading_day"
+      },
+      "actual": {
+        "data_date": "2026-10-28",
+        "temperature_date": "2026-10-28",
+        "temperature_csv_date": "2026-10-28",
+        "text_csv_date": "2026-10-28"
+      },
+      "reasons": [
+        "产出已覆盖要求的交易日"
+      ]
+    },
+    {
+      "id": "tophub",
+      "name": "信息源监控（每日四次）",
+      "status": "正常",
+      "expected": {
+        "check_mode": "freshness",
+        "max_age_minutes": 1120,
+        "cutoff": "2026-10-28T12:19:59.414718+08:00"
+      },
+      "actual": {
+        "data_date": "2026-10-29",
+        "updated_at": "2026-10-29T02:47:00+08:00",
+        "boards": 57,
+        "successful_boards": 57,
+        "last_success_at": "2026-10-29T02:47:00+08:00",
+        "age_minutes": 252.990245
+      },
+      "reasons": [
+        "最近成功产出距今 252.99 分钟，未超过阈值 1120 分钟"
+      ]
+    },
+    {
+      "id": "pool",
+      "name": "股票池镜像",
+      "status": "正常",
+      "expected": {
+        "data_date": "2026-10-28",
+        "scheduled_at": "2026-10-28T21:37:00+08:00",
+        "deadline": "2026-10-28T21:41:00+08:00",
+        "check_mode": "previous_trading_day"
+      },
+      "actual": {
+        "data_date": "2026-10-28",
+        "updated_at": "2026-10-28T21:54:00+08:00"
+      },
+      "reasons": [
+        "产出已覆盖要求的交易日"
+      ]
+    },
+    {
+      "id": "v3",
+      "name": "业绩加速选股",
+      "status": "正常",
+      "expected": {
+        "skipped": "非换股月，无本月更新要求"
+      },
+      "actual": {},
+      "reasons": [
+        "非换股月，无本月更新要求"
+      ]
+    },
+    {
+      "id": "calendar_refresh",
+      "name": "交易所日历刷新",
+      "status": "正常",
+      "expected": {
+        "data_date": "2026-10-29"
+      },
+      "actual": {
+        "coverage_start": "2026-01-01",
+        "coverage_end": "2026-12-31",
+        "unknown_dates": []
+      },
+      "reasons": [
+        "已读取交易所日历覆盖；历史行情首末日期内仍按成员判定"
+      ]
+    },
+    {
+      "id": "health_check",
+      "name": "运行健康检查",
+      "status": "正常",
+      "expected": {
+        "data_date": "2026-10-29"
+      },
+      "actual": {
+        "updated_at": "2026-10-29T06:59:59.414718+08:00",
+        "data_date": "2026-10-29"
+      },
+      "reasons": [
+        "本次检查成功生成报告；工作流整体失败由Actions失败告警处理"
+      ]
+    }
+  ]
+}

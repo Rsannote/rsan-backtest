@@ -1,0 +1,7 @@
+function get_systemDate_global(){
+var systemDate_global  = "2026-10-28";
+return systemDate_global;}function get_whetherTradeDate_global(){
+var whetherTradeDate_global  = true;
+return whetherTradeDate_global;}function get_lastTradeDate_global(){
+var lastTradeDate_global  = "2026-10-27";
+return lastTradeDate_global;}

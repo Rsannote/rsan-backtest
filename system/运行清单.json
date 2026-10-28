@@ -1,0 +1,307 @@
+{
+  "schema_version": 1,
+  "timezone": "Asia/Shanghai",
+  "calendar": {
+    "history": "data/行情库/指数/sh000300.csv",
+    "closures": "system/交易所休市.json"
+  },
+  "说明": "时间均为北京时间。收盘相关任务08:20只核对严格上一交易日；22:30只要求计划+实测P95及余量已到的产出。新闻/信息源按最近成功产出的统计间隔检查，不核对单个slot。失败证据不被宽限掩盖。详见每项delay_basis与运行延迟统计。",
+  "items": [
+    {
+      "id": "hangqing",
+      "name": "行情库",
+      "workflow": ".github/workflows/update-hangqing.yml",
+      "kind": "hangqing",
+      "trading_days_only": true,
+      "times": [
+        "16:40"
+      ],
+      "grace_minutes": 524,
+      "extra_schedule": {
+        "weekdays": [
+          5
+        ],
+        "time": "10:17",
+        "grace_minutes": 367
+      },
+      "outputs": [
+        "data/行情库/状态.csv",
+        "logs/行情库_最新.md"
+      ],
+      "说明": "周六另核验轮换全量运行时间；原始数据日期仍应为最近交易日。",
+      "check_mode": "previous_trading_day",
+      "delay_basis": {
+        "statistics_at": "2026-10-29T06:59:53.180678+08:00",
+        "source_ref": "05c449f3a1defed58fd89fdc0469f6767d9d83b2",
+        "sample_n": 6,
+        "p95_minutes": 443.3833333333333,
+        "formula": "ceil(P95 + max(P95-P50, 最大值-P95, 1分钟))；最近秩分位数",
+        "report": "logs/运行延迟统计.md",
+        "margin_minutes": 80.61666666666667,
+        "rotation": {
+          "p95_minutes": 365.1333333333333,
+          "margin_minutes": 1,
+          "minutes": 367
+        }
+      }
+    },
+    {
+      "id": "market_state",
+      "name": "市场状态",
+      "workflow": ".github/workflows/market-state.yml",
+      "kind": "market_state",
+      "trigger": "workflow_run:行情库自动更新",
+      "trading_days_only": true,
+      "times": [
+        "16:40"
+      ],
+      "grace_minutes": 477,
+      "outputs": [
+        "data/市场状态/最新.json",
+        "data/市场状态/最新.md"
+      ],
+      "check_mode": "previous_trading_day",
+      "delay_basis": {
+        "statistics_at": "2026-10-29T06:59:53.180678+08:00",
+        "source_ref": "05c449f3a1defed58fd89fdc0469f6767d9d83b2",
+        "sample_n": 5,
+        "p95_minutes": 443.93333333333334,
+        "formula": "ceil(P95 + max(P95-P50, 最大值-P95, 1分钟))；最近秩分位数",
+        "report": "logs/运行延迟统计.md",
+        "margin_minutes": 32.73333333333335
+      }
+    },
+    {
+      "id": "news",
+      "name": "新闻库（每日四次）",
+      "workflow": ".github/workflows/fetch-news.yml",
+      "kind": "news",
+      "trading_days_only": false,
+      "times": [
+        "07:47",
+        "12:13",
+        "16:23",
+        "21:11"
+      ],
+      "grace_minutes": 536,
+      "outputs": [
+        "data/新闻/状态.json",
+        "data/新闻/最新.md"
+      ],
+      "说明": "状态只保留最近一次运行，核验最近已到截止的slot；没有历史运行记录时不声称四次均已成功。零新增本身不判失败。",
+      "check_mode": "freshness",
+      "max_age_minutes": 739,
+      "delay_basis": {
+        "statistics_at": "2026-10-29T06:59:53.180678+08:00",
+        "source_ref": "05c449f3a1defed58fd89fdc0469f6767d9d83b2",
+        "sample_n": 26,
+        "p95_minutes": 414.26666666666665,
+        "formula": "ceil(P95 + max(P95-P50, 最大值-P95, 1分钟))；最近秩分位数",
+        "report": "logs/运行延迟统计.md",
+        "margin_minutes": 120.80000000000001,
+        "freshness": {
+          "p95_minutes": 523.2,
+          "margin_minutes": 214.95000000000005,
+          "minutes": 739,
+          "sample_n": 25,
+          "definition": "下一成功产出提交可见时刻 - 上一成功产出字段时刻（含执行/提交耗时）"
+        }
+      }
+    },
+    {
+      "id": "community",
+      "name": "社区情绪",
+      "workflow": ".github/workflows/community-sentiment.yml",
+      "kind": "community",
+      "trading_days_only": true,
+      "times": [
+        "15:37"
+      ],
+      "grace_minutes": 478,
+      "outputs": [
+        "data/社区情绪/{date}/运行记录.txt",
+        "data/社区情绪/{date}/讨论原始.jsonl",
+        "data/社区情绪/{date}/讨论摘录.md"
+      ],
+      "check_mode": "previous_trading_day",
+      "delay_basis": {
+        "statistics_at": "2026-10-29T06:59:53.180678+08:00",
+        "source_ref": "05c449f3a1defed58fd89fdc0469f6767d9d83b2",
+        "sample_n": 4,
+        "p95_minutes": 417.6666666666667,
+        "formula": "ceil(P95 + max(P95-P50, 最大值-P95, 1分钟))；最近秩分位数",
+        "report": "logs/运行延迟统计.md",
+        "margin_minutes": 60.06666666666666
+      }
+    },
+    {
+      "id": "sentiment_index",
+      "name": "散户情绪指标",
+      "workflow": ".github/workflows/sentiment-index.yml",
+      "kind": "sentiment_index",
+      "trigger": "workflow_run:市场状态",
+      "trading_days_only": true,
+      "times": [
+        "16:40"
+      ],
+      "grace_minutes": 478,
+      "outputs": [
+        "data/社区情绪/触发.json",
+        "data/社区情绪/温度计.csv",
+        "data/社区情绪/文本指标.csv",
+        "data/社区情绪/最新.md"
+      ],
+      "check_mode": "previous_trading_day",
+      "delay_basis": {
+        "statistics_at": "2026-10-29T06:59:53.180678+08:00",
+        "source_ref": "05c449f3a1defed58fd89fdc0469f6767d9d83b2",
+        "sample_n": 4,
+        "p95_minutes": 444.51666666666665,
+        "formula": "ceil(P95 + max(P95-P50, 最大值-P95, 1分钟))；最近秩分位数",
+        "report": "logs/运行延迟统计.md",
+        "margin_minutes": 32.66666666666663
+      }
+    },
+    {
+      "id": "tophub",
+      "name": "信息源监控（每日四次）",
+      "workflow": ".github/workflows/info-monitor.yml",
+      "kind": "tophub",
+      "trading_days_only": false,
+      "times": [
+        "08:07",
+        "12:07",
+        "16:07",
+        "21:07"
+      ],
+      "grace_minutes": 534,
+      "outputs": [
+        "data/信息源/tophub/运行记录.txt",
+        "data/信息源/tophub/状态.json",
+        "data/信息源/简报/最新.md"
+      ],
+      "check_mode": "freshness",
+      "max_age_minutes": 1120,
+      "delay_basis": {
+        "statistics_at": "2026-10-29T06:59:53.180678+08:00",
+        "source_ref": "05c449f3a1defed58fd89fdc0469f6767d9d83b2",
+        "sample_n": 24,
+        "p95_minutes": 419.46666666666664,
+        "formula": "ceil(P95 + max(P95-P50, 最大值-P95, 1分钟))；最近秩分位数",
+        "report": "logs/运行延迟统计.md",
+        "margin_minutes": 114.5,
+        "freshness": {
+          "p95_minutes": 698.9166666666666,
+          "margin_minutes": 421.0666666666666,
+          "minutes": 1120,
+          "sample_n": 23,
+          "definition": "下一成功产出提交可见时刻 - 上一成功产出字段时刻（含执行/提交耗时）"
+        }
+      }
+    },
+    {
+      "id": "pool",
+      "name": "股票池镜像",
+      "workflow": null,
+      "kind": "pool",
+      "trigger": "Claude 同步：每季度「股票池季度复核」任务（2/5/9/11月3日）结束时自动同步，平时按需手动同步（2026-10-28 起不再每日镜像）",
+      "trading_days_only": false,
+      "times": [
+        "21:37"
+      ],
+      "grace_minutes": 4,
+      "outputs": [
+        "data/股票池/状态.json",
+        "data/股票池/股票.csv"
+      ],
+      "check_mode": "freshness",
+      "delay_basis": {
+        "statistics_at": "2026-10-29T06:59:53.180678+08:00",
+        "source_ref": "05c449f3a1defed58fd89fdc0469f6767d9d83b2",
+        "sample_n": 1,
+        "p95_minutes": 3.0,
+        "formula": "ceil(P95 + max(P95-P50, 最大值-P95, 1分钟))；最近秩分位数",
+        "report": "logs/运行延迟统计.md",
+        "margin_minutes": 1
+      },
+      "max_age_minutes": 144000,
+      "freshness_success_paths": [
+        {
+          "path": "data/股票池/状态.json",
+          "field": "最近检查"
+        }
+      ],
+      "说明": "季度同步：两次季度复核最长间隔约92天，阈值取100天（审核定，2026-10-29）。超过即说明季度复核未同步或同步失败。"
+    },
+    {
+      "id": "v3",
+      "name": "业绩加速选股",
+      "workflow": ".github/workflows/v3-select.yml",
+      "kind": "v3",
+      "trading_days_only": false,
+      "months": [
+        5,
+        9,
+        11
+      ],
+      "days": [
+        1,
+        2,
+        3
+      ],
+      "times": [
+        "10:07"
+      ],
+      "grace_minutes": 536,
+      "outputs": [
+        "data/v3/latest.json",
+        "data/v3/{date}.json",
+        "data/v3/最新名单.md",
+        "logs/v3_最新.md"
+      ],
+      "说明": "仅换股月核验当月1日的正式名单；1日截止后缺失即延迟，2、3日重试；不自行补跑。",
+      "delay_basis": {
+        "statistics_at": "2026-10-29T06:59:53.180678+08:00",
+        "source_ref": "05c449f3a1defed58fd89fdc0469f6767d9d83b2",
+        "sample_n": 0,
+        "p95_minutes": null,
+        "formula": "ceil(P95 + max(P95-P50, 最大值-P95, 1分钟))；最近秩分位数",
+        "report": "logs/运行延迟统计.md",
+        "fallback": "无本项定时样本；临时借用全部已测任务中最大的 P95+余量，不声称完成本项校准"
+      }
+    },
+    {
+      "id": "calendar_refresh",
+      "name": "交易所日历刷新",
+      "workflow": ".github/workflows/health-check.yml",
+      "kind": "calendar",
+      "trading_days_only": false,
+      "times": [
+        "08:20",
+        "22:30"
+      ],
+      "grace_minutes": 0,
+      "outputs": [
+        "system/交易所休市.json"
+      ],
+      "说明": "覆盖不足且历史行情不能判定待检查工作日时列失败；周末与已有历史覆盖不因可选日历缺失误报。"
+    },
+    {
+      "id": "health_check",
+      "name": "运行健康检查",
+      "workflow": ".github/workflows/health-check.yml",
+      "kind": "self",
+      "trading_days_only": false,
+      "times": [
+        "08:20",
+        "22:30"
+      ],
+      "grace_minutes": 0,
+      "outputs": [
+        "logs/健康检查_最新.md",
+        "logs/健康检查_最新.json"
+      ],
+      "说明": "本次成功生成报告即为本次运行证据；整个工作流失败由GitHub Actions失败告警发现。"
+    }
+  ]
+}
