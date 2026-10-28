@@ -1,0 +1,45 @@
+name: T2 健康检查分支验收
+
+on:
+  push:
+    branches: [gpt/T2-health]
+    paths:
+      - scripts/probe_health_calendar.py
+      - .github/workflows/test-t2-health.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: repo-writer
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    if: github.ref == 'refs/heads/gpt/T2-health'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: 探测官方交易日历
+        run: python3 scripts/probe_health_calendar.py
+      - name: 导出 main Git 镜像供本机同步
+        run: git bundle create /tmp/rsan-main.bundle refs/remotes/origin/main
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rsan-main-git-bootstrap
+          path: /tmp/rsan-main.bundle
+          retention-days: 1
+      - name: 保存探测证据
+        if: always()
+        run: |
+          git config user.name github-actions
+          git config user.email actions@users.noreply.github.com
+          git add logs/test/T2
+          git diff --cached --quiet && exit 0
+          git commit -m "T2：保存官方日历探测证据"
+          git pull --rebase origin "$GITHUB_REF_NAME"
+          git push origin "HEAD:$GITHUB_REF_NAME"
