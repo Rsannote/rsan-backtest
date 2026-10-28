@@ -87,13 +87,13 @@ def collect_actions(root, now, out):
     runs = []
     page = 1
     while True:
-        query = urllib.parse.urlencode({"branch": "main", "created": ">=" + since, "per_page": 100, "page": page})
+        query = urllib.parse.urlencode({"branch": "main", "per_page": 100, "page": page})
         batch = api.request("GET", "actions/runs?" + query)["workflow_runs"]
         runs.extend({k: r.get(k) for k in ("id", "path", "event", "status", "conclusion", "created_at", "updated_at", "run_started_at", "html_url")} for r in batch)
         if len(batch) < 100:
             break
         page += 1
-    data = {"captured_at": now.isoformat(), "repository": api.repository, "runs": runs}
+    data = {"captured_at": now.isoformat(), "requested_statistics_since": since, "说明": "保留全量Actions元数据用于多时段顺序归属；分位数仅统计近28天样本", "repository": api.repository, "runs": runs}
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return data
@@ -171,7 +171,7 @@ def analyze(root, ref, manifest, runs_data, now):
         inception = introduced(root, ref, item["workflow"]) if item.get("workflow") else introduced(root, ref, SPECS[key][1])
         rows = []
         for commit in commits:
-            if not begin <= commit["at"] <= now or commit["author"] != "github-actions" or not commit["title"].startswith(SPECS[key][0]):
+            if commit["at"] > now or (key not in ("news", "tophub") and commit["at"] < begin) or commit["author"] != "github-actions" or not commit["title"].startswith(SPECS[key][0]):
                 continue
             run = run_for(commit, item, run_rows)
             if not run:
@@ -203,16 +203,16 @@ def analyze(root, ref, manifest, runs_data, now):
             row.update(scheduled_at=nominal.isoformat(), delay_minutes=delay, weekly_rotation=weekly)
             if delay < 0 or delay >= 24 * 60:
                 row["mapping_warning"] = "归属不确定或超过一个日周期，排除延迟分位数；原始样本保留"
-            else:
+            elif at >= begin:
                 (rotations if weekly else delays).append(delay)
         successful = [r for r in rows if r["success"]]
         gaps = [(hc.timestamp(b["available_at"]) - hc.timestamp(a["output_at"])).total_seconds() / 60
-                for a, b in zip(successful, successful[1:])]
+                for a, b in zip(successful, successful[1:]) if hc.timestamp(b["available_at"]) >= begin]
         delay_stats, gap_stats = quantiles(delays), quantiles(gaps)
         result["items"][key] = {"name": item["name"], "introduced_at": inception.isoformat() if inception else None,
             "delay": delay_stats, "grace": allowance(delay_stats), "rotation_delay": quantiles(rotations),
             "rotation_grace": allowance(quantiles(rotations)), "success_gap": gap_stats, "freshness": allowance(gap_stats),
-            "samples": rows, "gap_definition": "下一成功产出提交可见时刻 - 上一成功产出字段时刻（含执行/提交耗时）"}
+            "samples": [r for r in rows if hc.timestamp(r["available_at"]) >= begin], "gap_definition": "下一成功产出提交可见时刻 - 上一成功产出字段时刻（含执行/提交耗时）"}
     return result
 
 

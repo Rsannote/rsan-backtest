@@ -6,12 +6,30 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 import run_delay_stats as stats
 
 
 class DelayStatsTests(unittest.TestCase):
+    def test_rolling_window_does_not_reset_multislot_sequence_to_inception(self):
+        before = stats.hc.timestamp("2026-09-29T09:00:00+08:00")
+        inside = stats.hc.timestamp("2026-09-30T09:00:00+08:00")
+        commits = [{"sha": str(i) * 40, "at": at, "author": "github-actions", "title": "新闻库 模拟"}
+                   for i, at in enumerate((before, inside), 1)]
+        item = {"id": "news", "name": "新闻", "workflow": "w", "times": ["08:00"]}
+        with patch.object(stats, "git", return_value="a" * 40), patch.object(stats, "history", return_value=commits), \
+             patch.object(stats, "introduced", return_value=before.replace(hour=0)), \
+             patch.object(stats, "run_for", return_value={"id": 1}), \
+             patch.object(stats, "produced", side_effect=lambda root, c, item: (c["at"].date().isoformat(), c["at"], True)):
+            out = stats.analyze(Path("/tmp"), "ref", {"items": [item]}, {"runs": []},
+                                stats.hc.timestamp("2026-10-28T08:30:00+08:00"))["items"]["news"]
+        self.assertEqual(out["delay"]["n"], 1)
+        self.assertEqual(out["delay"]["p95"], 60)
+        self.assertEqual(len(out["samples"]), 1)
+        self.assertEqual(out["samples"][0]["scheduled_at"], "2026-09-30T08:00:00+08:00")
+
     def test_nearest_rank_does_not_underestimate_small_tail(self):
         self.assertEqual(stats.quantiles([1, 2, 3, 400]), {"n": 4, "p50": 2, "p90": 400, "p95": 400, "max": 400})
         self.assertIsNone(stats.allowance(stats.quantiles([])))
