@@ -204,8 +204,8 @@
       "name": "股票池镜像",
       "workflow": null,
       "kind": "pool",
-      "trigger": "外部定时任务：股票池数据库每日镜像",
-      "trading_days_only": true,
+      "trigger": "Claude 同步：每季度「股票池季度复核」任务（2/5/9/11月3日）结束时自动同步，平时按需手动同步（2026-10-28 起不再每日镜像）",
+      "trading_days_only": false,
       "times": [
         "21:37"
       ],
@@ -214,7 +214,7 @@
         "data/股票池/状态.json",
         "data/股票池/股票.csv"
       ],
-      "check_mode": "previous_trading_day",
+      "check_mode": "freshness",
       "delay_basis": {
         "statistics_at": "2026-10-29T06:59:53.180678+08:00",
         "source_ref": "05c449f3a1defed58fd89fdc0469f6767d9d83b2",
@@ -223,7 +223,15 @@
         "formula": "ceil(P95 + max(P95-P50, 最大值-P95, 1分钟))；最近秩分位数",
         "report": "logs/运行延迟统计.md",
         "margin_minutes": 1
-      }
+      },
+      "max_age_minutes": 144000,
+      "freshness_success_paths": [
+        {
+          "path": "data/股票池/状态.json",
+          "field": "最近检查"
+        }
+      ],
+      "说明": "季度同步：两次季度复核最长间隔约92天，阈值取100天（审核定，2026-10-29）。超过即说明季度复核未同步或同步失败。"
     },
     {
       "id": "v3",
