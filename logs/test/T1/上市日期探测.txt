@@ -1,0 +1,128 @@
+T1 新浪 ETF 上市日期接口探测（仅在 GitHub Actions 执行）
+
+代码 512200；来源 https://finance.sina.com.cn/fund/quotes/512200/bc.shtml
+返回字节数 259800；响应编码 gb18030
+脚本来源：//news.sina.com.cn/js/pctianyi/sima.js
+http://news.sina.com.cn/js/87/20140221/addfavorite.js
+http://news.sina.com.cn/268/2015/0112/jquery.newest.js
+http://i.sso.sina.com.cn/js/user_panel.js
+http://i.sso.sina.com.cn/js/ssologin.js
+//finance.sina.com.cn/basejs/suggestServer.js
+//n.sinaimg.cn/finance/fund_detail_20151218/common.js
+//n.sinaimg.cn/finance/fund_detail_20151218/widgets.js
+//finance.sina.com.cn/js/286/20140127/FN.js
+//n.sinaimg.cn/finance/fund/quotes/quotes_index_new.js
+//n.sinaimg.cn/finance/fund/quotes/index_tab2_new.js?v=2026102215
+//n.sinaimg.cn/finance/fund_detail_20151218/index_subtab_jbxx.js
+//n.sinaimg.cn/finance/fund_detail_20151218/index_subtab_fh.js
+//n.sinaimg.cn/finance/fund_detail_20151218/index_anchor.js
+//i1.sinaimg.cn/cj/hsuan/flashcanvas/flashcanvas.js
+//finance.sina.com.cn/jiawei/js/require-min.js
+//finance.sina.com.cn/sinafinancesdk/js/sf_sdk.js
+//n.sinaimg.cn/finance/fund/details/FundChart.js
+//n.sinaimg.cn/finance/fund_detail_20151218/index_charts.js
+//n.sinaimg.cn/finance/fund/quotes/index_charts.js
+//n.sinaimg.cn/finance/2020tzxy/src/layui/layui.js
+//n.sinaimg.cn/finance/stock/hq/src/popuptoapp.js
+接口线索：                   <tr>
+                                                <td class='zqx_jjgg_title_td'><a target='_blank' href='http://vip.stock.finance.sina.com.cn/fund/go.php/vAkFundInfo_JJGKXX/q/5539041.phtml' title='关于国信证券股份有限公司为南方中证全指房地产交易型开放式指数证券投资基金提供一般做市服务的公告'>关于国信证券股份有限公司为南方中证全指房地产交易型开放式指数证券投资...</a></td>
+                                                <td
+接口线索：              </tr><tr>
+                                                <td class='zqx_jjgg_title_td'><a target='_blank' href='http://vip.stock.finance.sina.com.cn/fund/go.php/vAkFundInfo_JJGKXX/q/5525025.phtml' title='南方中证全指房地产交易型开放式指数证券投资基金2026年中期报告'>南方中证全指房地产交易型开放式指数证券投资基金2026年中期报告</a></td>
+                                                <td>基金中期报告</td>
+      
+接口线索：              </tr><tr>
+                                                <td class='zqx_jjgg_title_td'><a target='_blank' href='http://vip.stock.finance.sina.com.cn/fund/go.php/vAkFundInfo_JJGKXX/q/5505097.phtml' title='南方基金管理股份有限公司旗下基金2026年中期报告提示性公告'>南方基金管理股份有限公司旗下基金2026年中期报告提示性公告</a></td>
+                                                <td>基金中期报告提示</td>
+        
+接口线索：              </tr><tr>
+                                                <td class='zqx_jjgg_title_td'><a target='_blank' href='http://vip.stock.finance.sina.com.cn/fund/go.php/vAkFundInfo_JJGKXX/q/5450949.phtml' title='南方基金管理股份有限公司关于旗下基金投资关联方承销证券的关联交易公告'>南方基金管理股份有限公司关于旗下基金投资关联方承销证券的关联交易公告</a></td>
+                                                <td>关联交易公告</td>
+  
+接口线索：              </tr><tr>
+                                                <td class='zqx_jjgg_title_td'><a target='_blank' href='http://vip.stock.finance.sina.com.cn/fund/go.php/vAkFundInfo_JJGKXX/q/5444970.phtml' title='南方基金管理股份有限公司关于旗下基金投资关联方承销证券的关联交易公告'>南方基金管理股份有限公司关于旗下基金投资关联方承销证券的关联交易公告</a></td>
+                                                <td>关联交易公告</td>
+  
+接口线索：              </tr><tr>
+                                                <td class='zqx_jjgg_title_td'><a target='_blank' href='http://vip.stock.finance.sina.com.cn/fund/go.php/vAkFundInfo_JJGKXX/q/5435091.phtml' title='南方基金管理股份有限公司关于旗下基金投资关联方承销证券的关联交易公告'>南方基金管理股份有限公司关于旗下基金投资关联方承销证券的关联交易公告</a></td>
+                                                <td>关联交易公告</td>
+  
+接口线索：              </tr><tr>
+                                                <td class='zqx_jjgg_title_td'><a target='_blank' href='http://vip.stock.finance.sina.com.cn/fund/go.php/vAkFundInfo_JJGKXX/q/5429744.phtml' title='南方基金管理股份有限公司关于旗下基金投资关联方承销证券的关联交易公告'>南方基金管理股份有限公司关于旗下基金投资关联方承销证券的关联交易公告</a></td>
+                                                <td>关联交易公告</td>
+  
+接口线索：              </tr><tr>
+                                                <td class='zqx_jjgg_title_td'><a target='_blank' href='http://vip.stock.finance.sina.com.cn/fund/go.php/vAkFundInfo_JJGKXX/q/5414353.phtml' title='南方中证全指房地产交易型开放式指数证券投资基金2026年第2季度报告'>南方中证全指房地产交易型开放式指数证券投资基金2026年第2季度报告</a></td>
+                                                <td>投资组合</td>
+    
+接口线索：              </tr><tr>
+                                                <td class='zqx_jjgg_title_td'><a target='_blank' href='http://vip.stock.finance.sina.com.cn/fund/go.php/vAkFundInfo_JJGKXX/q/5395102.phtml' title='南方基金管理股份有限公司旗下基金2026年第二季度报告提示性公告'>南方基金管理股份有限公司旗下基金2026年第二季度报告提示性公告</a></td>
+                                                <td>基金季度报告提示</td>
+    
+接口线索：              </tr><tr>
+                                                <td class='zqx_jjgg_title_td'><a target='_blank' href='http://vip.stock.finance.sina.com.cn/fund/go.php/vAkFundInfo_JJGKXX/q/5329645.phtml' title='南方基金管理股份有限公司旗下部分ETF增加华源证券为一级交易商的公告'>南方基金管理股份有限公司旗下部分ETF增加华源证券为一级交易商的公告</a></td>
+                                                <td>增加代销机构</td>
+  
+接口线索：                                       <td>{{=it.clrq.substr(0,10)}}</td>
+                                        <td>上市日期</td>
+                                        <td>{{=it.ssrq}}</td>
+                                    </tr>
+                                    <tr class="tr_bg">
+                                        <td>存续期限</td>
+                 
+接口线索：     {{? value.title.length>30}}
+                                        <td><a target="_blank" title="{{=value.title}}" href="http://vip.stock.finance.sina.com.cn/fund/go.php/vAkFundInfo_JJGKXX/q/{{=value.id}}.phtml">{{=value.title.substr(0,30)}}...</a></td>
+                                    {{??}}
+                                        <td><a target="_blank"
+接口线索：}...</a></td>
+                                    {{??}}
+                                        <td><a target="_blank" href="http://vip.stock.finance.sina.com.cn/fund/go.php/vAkFundInfo_JJGKXX/q/{{=value.id}}.phtml">{{=value.title}}</a></td>
+                                    {{?}}
+
+                                    {{? value.gglx.length>8}}
+              
+解码 gb18030；日期标签数 0；开头  鍗楁柟涓瘉_鍗楁柟涓瘉鍏ㄦ寚鎴垮湴浜TF(512200)_鍩洪噾琛屾儏_鏂版氮璐㈢粡_鏂版氮缃� var $FConfig = {}; $FConfig['symbol'] = '512200'; $FConfig['type'] = 'x2002'; $FConfig['type3id'] = 'x3008'; $FConfig['fname'] 
+解码 utf-8；日期标签数 7；开头  南方中证_南方中证全指房地产ETF(512200)_基金行情_新浪财经_新浪网 var $FConfig = {}; $FConfig['symbol'] = '512200'; $FConfig['type'] = 'x2002'; $FConfig['type3id'] = 'x3008'; $FConfig['fname'] = '南方中证全指房地产
+幅排名 3418/ 3666 近3年涨幅排名 2027/ 2060 数据日期：2026-10-21 成立日期： 2017年08月25日 累计单位净值： 0.4250元 最新规模： 31.55亿 累计分红： 0元 管理人： 南方基金 公司微博 基金经理： 罗文杰 南方基金 旗下基金 539只 位居 4 /189位 总规模 1.29亿 位居 2 /189位 擅长基金类型：QDII、股票型 股票型基金历史业绩： 返回 罗文杰 （现任） 从业时间 13年6个月 位居 
+名 日期区间（截止2026-10-21） 近半年 近一年 今年以来 2025年 2024年 近3年 成立以来 净值增长率 -14.92% -27.71% -20.72% 2.44% -0.35% -25.58% -57.50% 同类排行（复制指数型） 2628/4379 3418/3666 3687/4337 3043/3327 2079/2576 2027/2060 -- 同类平均（复制指数型） -13.03% -7.56% -7.83% 27.16% 10
+配置打开新空间 今年以来FOF新发规模近1500亿元 26-10-13 01:30 213只！9月新成立基金数量创2022年以来月度新高 26-10-10 06:29 首批“固收+”纳入个人养老金产品池 中低波养老产品供给升级 26-09-30 07:00 积极信号释放 绩优基金集中“松绑” 26-09-30 03:00 逐鹿科技赛道 多只基金“松绑”限购 26-09-28 06:53 超千只基金业绩翻倍 公募正从“卖产品”转向“配资产” 26-09-28 0
+{=it.jjqc}} 基金简称 {{=it.jjjc}} 基金代码 {{=it.symbol}} 成立日期 {{=it.clrq.substr(0,10)}} 上市日期 {{=it.ssrq}} 存续期限 {{=it.xcr}} 上市地点 {{=it.ssdd}} 基金总份额(亿份) {{=it.jjfe}}({{=it.jjferq.substr(0,10)}}) 上市流通份额(亿份) {{=it.jjltfe}}{{? it.jjltferq }} ({
+金代码 {{=it.symbol}} 成立日期 {{=it.clrq.substr(0,10)}} 上市日期 {{=it.ssrq}} 存续期限 {{=it.xcr}} 上市地点 {{=it.ssdd}} 基金总份额(亿份) {{=it.jjfe}}({{=it.jjferq.substr(0,10)}}) 上市流通份额(亿份) {{=it.jjltfe}}{{? it.jjltferq }} ({{=it.jjltferq.substr(0,10)}}){{
+substr(0,10)}} 上市日期 {{=it.ssrq}} 存续期限 {{=it.xcr}} 上市地点 {{=it.ssdd}} 基金总份额(亿份) {{=it.jjfe}}({{=it.jjferq.substr(0,10)}}) 上市流通份额(亿份) {{=it.jjltfe}}{{? it.jjltferq }} ({{=it.jjltferq.substr(0,10)}}){{?}} 基金规模(亿元) {{=it.jjgm}}{{? it.jjg
+总份额(亿份) {{=it.jjfe}}({{=it.jjferq.substr(0,10)}}) 上市流通份额(亿份) {{=it.jjltfe}}{{? it.jjltferq }} ({{=it.jjltferq.substr(0,10)}}){{?}} 基金规模(亿元) {{=it.jjgm}}{{? it.jjgmrq }}({{=it.jjgmrq.substr(0,10)}}){{?}} 选股风格 {{=it.ScaleStyle}}一{{=it
+
+代码 516950；来源 https://finance.sina.com.cn/fund/quotes/516950/bc.shtml
+返回字节数 259396；响应编码 gb18030
+解码 gb18030；日期标签数 0；开头  鍩哄缓ETF_鍩哄缓ETF(516950)_鍩洪噾琛屾儏_鏂版氮璐㈢粡_鏂版氮缃� var $FConfig = {}; $FConfig['symbol'] = '516950'; $FConfig['type'] = 'x2002'; $FConfig['type3id'] = 'x3008'; $FConfig['fname'] = '鍩哄缓ETF'
+解码 utf-8；日期标签数 7；开头  基建ETF_基建ETF(516950)_基金行情_新浪财经_新浪网 var $FConfig = {}; $FConfig['symbol'] = '516950'; $FConfig['type'] = 'x2002'; $FConfig['type3id'] = 'x3008'; $FConfig['fname'] = '基建ETF'; $FConfi
+幅排名 3062/ 3666 近3年涨幅排名 1698/ 2060 数据日期：2026-10-21 成立日期： 2021年04月29日 累计单位净值： 0.9684元 最新规模： 1.16亿 累计分红： 0元 管理人： 银华基金 公司微博 基金经理： 王帅 银华基金 旗下基金 332只 位居 13 /189位 总规模 6955.69亿 位居 24 /189位 擅长基金类型：QDII、股票型 股票型基金历史业绩： 返回 王帅 （现任） 从业时间 7年4个月 位居
+名 日期区间（截止2026-10-21） 近半年 近一年 今年以来 2025年 2024年 近3年 成立以来 净值增长率 -16.33% -19.02% -16.80% 8.61% 17.47% 1.49% -3.16% 同类排行（复制指数型） 2876/4379 3062/3666 3439/4337 2738/3327 767/2576 1698/2060 -- 同类平均（复制指数型） -13.03% -7.56% -7.83% 27.16% 10.50%
+配置打开新空间 今年以来FOF新发规模近1500亿元 26-10-13 01:30 213只！9月新成立基金数量创2022年以来月度新高 26-10-10 06:29 首批“固收+”纳入个人养老金产品池 中低波养老产品供给升级 26-09-30 07:00 积极信号释放 绩优基金集中“松绑” 26-09-30 03:00 逐鹿科技赛道 多只基金“松绑”限购 26-09-28 06:53 超千只基金业绩翻倍 公募正从“卖产品”转向“配资产” 26-09-28 0
+{=it.jjqc}} 基金简称 {{=it.jjjc}} 基金代码 {{=it.symbol}} 成立日期 {{=it.clrq.substr(0,10)}} 上市日期 {{=it.ssrq}} 存续期限 {{=it.xcr}} 上市地点 {{=it.ssdd}} 基金总份额(亿份) {{=it.jjfe}}({{=it.jjferq.substr(0,10)}}) 上市流通份额(亿份) {{=it.jjltfe}}{{? it.jjltferq }} ({
+金代码 {{=it.symbol}} 成立日期 {{=it.clrq.substr(0,10)}} 上市日期 {{=it.ssrq}} 存续期限 {{=it.xcr}} 上市地点 {{=it.ssdd}} 基金总份额(亿份) {{=it.jjfe}}({{=it.jjferq.substr(0,10)}}) 上市流通份额(亿份) {{=it.jjltfe}}{{? it.jjltferq }} ({{=it.jjltferq.substr(0,10)}}){{
+substr(0,10)}} 上市日期 {{=it.ssrq}} 存续期限 {{=it.xcr}} 上市地点 {{=it.ssdd}} 基金总份额(亿份) {{=it.jjfe}}({{=it.jjferq.substr(0,10)}}) 上市流通份额(亿份) {{=it.jjltfe}}{{? it.jjltferq }} ({{=it.jjltferq.substr(0,10)}}){{?}} 基金规模(亿元) {{=it.jjgm}}{{? it.jjg
+总份额(亿份) {{=it.jjfe}}({{=it.jjferq.substr(0,10)}}) 上市流通份额(亿份) {{=it.jjltfe}}{{? it.jjltferq }} ({{=it.jjltferq.substr(0,10)}}){{?}} 基金规模(亿元) {{=it.jjgm}}{{? it.jjgmrq }}({{=it.jjgmrq.substr(0,10)}}){{?}} 选股风格 {{=it.ScaleStyle}}一{{=it
+
+代码 159930；来源 https://finance.sina.com.cn/fund/quotes/159930/bc.shtml
+返回字节数 259850；响应编码 gb18030
+解码 gb18030；日期标签数 0；开头  姹囨坊瀵屼腑_姹囨坊瀵屼腑璇佽兘婧怑TF(159930)_鍩洪噾琛屾儏_鏂版氮璐㈢粡_鏂版氮缃� var $FConfig = {}; $FConfig['symbol'] = '159930'; $FConfig['type'] = 'x2002'; $FConfig['type3id'] = 'x3008'; $FConfig['fname'] = '
+解码 utf-8；日期标签数 7；开头  汇添富中_汇添富中证能源ETF(159930)_基金行情_新浪财经_新浪网 var $FConfig = {}; $FConfig['symbol'] = '159930'; $FConfig['type'] = 'x2002'; $FConfig['type3id'] = 'x3008'; $FConfig['fname'] = '汇添富中证能源ETF'
+1年涨幅排名 63/ 3666 近3年涨幅排名 507/ 2060 数据日期：2026-10-21 成立日期： 2013年08月23日 累计单位净值： 1.7409元 最新规模： 9.96亿 累计分红： 0元 管理人： 汇添富基金 公司微博 基金经理： 狄则徐 汇添富基金 旗下基金 467只 位居 8 /189位 总规模 12564.79亿 位居 3 /189位 擅长基金类型：QDII、股票型 股票型基金历史业绩： 返回 狄则徐 （现任） 从业时间 3个月 位
+名 日期区间（截止2026-10-21） 近半年 近一年 今年以来 2025年 2024年 近3年 成立以来 净值增长率 2.50% 22.02% 19.11% 2.97% 13.42% 42.16% 75.71% 同类排行（复制指数型） 156/4379 63/3666 84/4337 3007/3327 1183/2576 507/2060 -- 同类平均（复制指数型） -13.03% -7.56% -7.83% 27.16% 10.50% 28.10% 
+配置打开新空间 今年以来FOF新发规模近1500亿元 26-10-13 01:30 213只！9月新成立基金数量创2022年以来月度新高 26-10-10 06:29 首批“固收+”纳入个人养老金产品池 中低波养老产品供给升级 26-09-30 07:00 积极信号释放 绩优基金集中“松绑” 26-09-30 03:00 逐鹿科技赛道 多只基金“松绑”限购 26-09-28 06:53 超千只基金业绩翻倍 公募正从“卖产品”转向“配资产” 26-09-28 0
+{=it.jjqc}} 基金简称 {{=it.jjjc}} 基金代码 {{=it.symbol}} 成立日期 {{=it.clrq.substr(0,10)}} 上市日期 {{=it.ssrq}} 存续期限 {{=it.xcr}} 上市地点 {{=it.ssdd}} 基金总份额(亿份) {{=it.jjfe}}({{=it.jjferq.substr(0,10)}}) 上市流通份额(亿份) {{=it.jjltfe}}{{? it.jjltferq }} ({
+金代码 {{=it.symbol}} 成立日期 {{=it.clrq.substr(0,10)}} 上市日期 {{=it.ssrq}} 存续期限 {{=it.xcr}} 上市地点 {{=it.ssdd}} 基金总份额(亿份) {{=it.jjfe}}({{=it.jjferq.substr(0,10)}}) 上市流通份额(亿份) {{=it.jjltfe}}{{? it.jjltferq }} ({{=it.jjltferq.substr(0,10)}}){{
+substr(0,10)}} 上市日期 {{=it.ssrq}} 存续期限 {{=it.xcr}} 上市地点 {{=it.ssdd}} 基金总份额(亿份) {{=it.jjfe}}({{=it.jjferq.substr(0,10)}}) 上市流通份额(亿份) {{=it.jjltfe}}{{? it.jjltferq }} ({{=it.jjltferq.substr(0,10)}}){{?}} 基金规模(亿元) {{=it.jjgm}}{{? it.jjg
+总份额(亿份) {{=it.jjfe}}({{=it.jjferq.substr(0,10)}}) 上市流通份额(亿份) {{=it.jjltfe}}{{? it.jjltferq }} ({{=it.jjltferq.substr(0,10)}}){{?}} 基金规模(亿元) {{=it.jjgm}}{{? it.jjgmrq }}({{=it.jjgmrq.substr(0,10)}}){{?}} 选股风格 {{=it.ScaleStyle}}一{{=it
+
+代码 159611；来源 https://finance.sina.com.cn/fund/quotes/159611/bc.shtml
+返回字节数 259767；响应编码 gb18030
+解码 gb18030；日期标签数 0；开头  骞垮彂涓瘉_骞垮彂涓瘉鍏ㄦ寚鐢靛姏ETF(159611)_鍩洪噾琛屾儏_鏂版氮璐㈢粡_鏂版氮缃� var $FConfig = {}; $FConfig['symbol'] = '159611'; $FConfig['type'] = 'x2002'; $FConfig['type3id'] = 'x3008'; $FConfig['fname'] =
+解码 utf-8；日期标签数 7；开头  广发中证_广发中证全指电力ETF(159611)_基金行情_新浪财经_新浪网 var $FConfig = {}; $FConfig['symbol'] = '159611'; $FConfig['type'] = 'x2002'; $FConfig['type3id'] = 'x3008'; $FConfig['fname'] = '广发中证全指电力ET
+涨幅排名 947/ 3666 近3年涨幅排名 1204/ 2060 数据日期：2026-10-21 成立日期： 2021年12月29日 累计单位净值： 1.0375元 最新规模： 87.72亿 累计分红： 0元 管理人： 广发基金 公司微博 基金经理： 陆志明 广发基金 旗下基金 565只 位居 3 /189位 总规模 18075.32亿 位居 5 /189位 擅长基金类型：QDII、封闭-权益 股票型基金历史业绩： 返回 陆志明 （现任） 从业时间 15年6
+名 日期区间（截止2026-10-21） 近半年 近一年 今年以来 2025年 2024年 近3年 成立以来 净值增长率 -7.52% -0.90% 3.74% 0.92% 13.91% 21.56% 3.75% 同类排行（复制指数型） 1237/4379 947/3666 614/4337 3108/3327 1147/2576 1204/2060 -- 同类平均（复制指数型） -13.03% -7.56% -7.83% 27.16% 10.50% 28.1
+配置打开新空间 今年以来FOF新发规模近1500亿元 26-10-13 01:30 213只！9月新成立基金数量创2022年以来月度新高 26-10-10 06:29 首批“固收+”纳入个人养老金产品池 中低波养老产品供给升级 26-09-30 07:00 积极信号释放 绩优基金集中“松绑” 26-09-30 03:00 逐鹿科技赛道 多只基金“松绑”限购 26-09-28 06:53 超千只基金业绩翻倍 公募正从“卖产品”转向“配资产” 26-09-28 0
+{=it.jjqc}} 基金简称 {{=it.jjjc}} 基金代码 {{=it.symbol}} 成立日期 {{=it.clrq.substr(0,10)}} 上市日期 {{=it.ssrq}} 存续期限 {{=it.xcr}} 上市地点 {{=it.ssdd}} 基金总份额(亿份) {{=it.jjfe}}({{=it.jjferq.substr(0,10)}}) 上市流通份额(亿份) {{=it.jjltfe}}{{? it.jjltferq }} ({
+金代码 {{=it.symbol}} 成立日期 {{=it.clrq.substr(0,10)}} 上市日期 {{=it.ssrq}} 存续期限 {{=it.xcr}} 上市地点 {{=it.ssdd}} 基金总份额(亿份) {{=it.jjfe}}({{=it.jjferq.substr(0,10)}}) 上市流通份额(亿份) {{=it.jjltfe}}{{? it.jjltferq }} ({{=it.jjltferq.substr(0,10)}}){{
+substr(0,10)}} 上市日期 {{=it.ssrq}} 存续期限 {{=it.xcr}} 上市地点 {{=it.ssdd}} 基金总份额(亿份) {{=it.jjfe}}({{=it.jjferq.substr(0,10)}}) 上市流通份额(亿份) {{=it.jjltfe}}{{? it.jjltferq }} ({{=it.jjltferq.substr(0,10)}}){{?}} 基金规模(亿元) {{=it.jjgm}}{{? it.jjg
+总份额(亿份) {{=it.jjfe}}({{=it.jjferq.substr(0,10)}}) 上市流通份额(亿份) {{=it.jjltfe}}{{? it.jjltferq }} ({{=it.jjltferq.substr(0,10)}}){{?}} 基金规模(亿元) {{=it.jjgm}}{{? it.jjgmrq }}({{=it.jjgmrq.substr(0,10)}}){{?}} 选股风格 {{=it.ScaleStyle}}一{{=it

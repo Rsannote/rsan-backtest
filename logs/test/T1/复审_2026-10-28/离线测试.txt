@@ -1,0 +1,22 @@
+test_501_after_valid_history_is_failure (test_update_hangqing.HistoryTests.test_501_after_valid_history_is_failure) ... ok
+test_all_empty_fails_without_writing (test_update_hangqing.HistoryTests.test_all_empty_fails_without_writing) ... ok
+test_existing_file_survives_network_failure (test_update_hangqing.HistoryTests.test_existing_file_survives_network_failure) ... ok
+test_full_starts_at_stored_tencent_first_year (test_update_hangqing.HistoryTests.test_full_starts_at_stored_tencent_first_year) ... ok
+test_incremental_501_is_failure (test_update_hangqing.HistoryTests.test_incremental_501_is_failure) ... ok
+test_non_501_errors_and_bad_json_are_not_swallowed (test_update_hangqing.HistoryTests.test_non_501_errors_and_bad_json_are_not_swallowed) ... ok
+test_unknown_year_skips_501_and_empty_prefix (test_update_hangqing.HistoryTests.test_unknown_year_skips_501_and_empty_prefix) ... ok
+test_unknown_year_uses_prefix_fallback (test_update_hangqing.HistoryTests.test_unknown_year_uses_prefix_fallback) ... ok
+test_reprobe_empty_or_exhausted_501_is_uncertain_and_fails (test_update_hangqing.PrefixGuardTests.test_reprobe_empty_or_exhausted_501_is_uncertain_and_fails) ... ok
+test_reprobe_keeps_going_back_if_recovered_data_also_touches_boundary (test_update_hangqing.PrefixGuardTests.test_reprobe_keeps_going_back_if_recovered_data_also_touches_boundary) ... ok
+test_reprobe_recovers_previous_segment (test_update_hangqing.PrefixGuardTests.test_reprobe_recovers_previous_segment) ... ok
+test_ten_day_boundary_is_inclusive (test_update_hangqing.PrefixGuardTests.test_ten_day_boundary_is_inclusive) ... ok
+test_uncertain_prefix_does_not_write_price_or_events (test_update_hangqing.PrefixGuardTests.test_uncertain_prefix_does_not_write_price_or_events) ... ok
+test_mixed_network_errors_never_become_empty_prefix (test_update_hangqing.RetryTests.test_mixed_network_errors_never_become_empty_prefix) ... ok
+test_normal_501_still_retries_five_times_then_fails (test_update_hangqing.RetryTests.test_normal_501_still_retries_five_times_then_fails) ... ok
+test_prefix_501_only_escapes_after_three_backoff_attempts (test_update_hangqing.RetryTests.test_prefix_501_only_escapes_after_three_backoff_attempts) ... ok
+test_transient_prefix_501_retries_same_segment_and_keeps_history (test_update_hangqing.RetryTests.test_transient_prefix_501_retries_same_segment_and_keeps_history) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.029s
+
+OK

@@ -48,6 +48,8 @@ UA_SINA = {"User-Agent": "Mozilla/5.0", "Referer": "https://finance.sina.com.cn"
 COLS = ["open", "high", "low", "close", "volume"]
 FULL_START = date(2005, 1, 1)
 OVERLAP_DAYS = 40
+PREFIX_TRIES = 3  # 首次建库的未知区间也先走限流退避，连续 501 才暂记无数据
+PREFIX_RECHECK_DAYS = 10  # 按 T1 审核要求：首条距分段起点 10 个自然日内，向前核验
 BJ = timezone(timedelta(hours=8))
 
 
@@ -57,8 +59,9 @@ _next = [0.0]
 PACE = 0.8  # 两次请求之间至少间隔的秒数（腾讯请求太密会返回 501）
 
 
-def get(url, headers, tries=5):
+def get(url, headers, tries=5, *, empty_501=False):
     last = None
+    only_501 = True
     for i in range(tries):
         with _lock:  # 全局节流
             wait = _next[0] - time.time()
@@ -71,6 +74,7 @@ def get(url, headers, tries=5):
                 return r.read().decode("utf-8", "replace")
         except urllib.error.HTTPError as e:
             last = e
+            only_501 = only_501 and e.code == 501
             if e.code in (403, 429, 501, 503):  # 被限流：所有线程一起暂停
                 with _lock:
                     _next[0] = time.time() + 30 * (i + 1)
@@ -78,7 +82,10 @@ def get(url, headers, tries=5):
                 time.sleep(2 * (i + 1))
         except Exception as e:  # 超时、断连
             last = e
+            only_501 = False
             time.sleep(2 * (i + 1))
+    if empty_501 and only_501 and isinstance(last, urllib.error.HTTPError) and last.code == 501:
+        raise last  # 仅连续 501 且退避尝试耗尽，才交给未知区间探测处理
     raise RuntimeError(f"请求失败：{url} -> {last!r}")
 
 
@@ -88,25 +95,72 @@ def symbol(code, typ):
     return ("sh" if code[0] in "569" else "sz") + code
 
 
-def fetch_raw(sym, start):
-    """腾讯不复权日线，start 到今天，按 3 年一段请求。"""
+def fetch_segment(sym, start, end, *, prefix=False):
+    """请求一个分段；未知前缀的连续 501 经退避尝试耗尽后暂记为空。"""
+    u = (f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={sym},day,"
+         f"{start.isoformat()},{end.isoformat()},900,")
+    try:
+        text = get(u, UA_QQ, tries=PREFIX_TRIES, empty_501=True) if prefix else get(u, UA_QQ)
+    except urllib.error.HTTPError as exc:
+        if not (prefix and exc.code == 501):
+            raise
+        return {}, f"连续 {PREFIX_TRIES} 次尝试退避后仍返回 501"
+    j = json.loads(text)
+    if j.get("code", 0) != 0:
+        raise RuntimeError(f"{sym} {start}—{end}：腾讯返回错误 {j.get('code')} {j.get('msg', '')}")
+    node = (j.get("data") or {}).get(sym) or {}
     rows = {}
+    for r in node.get("day") or []:
+        if len(r) >= 6:
+            rows[r[0]] = [float(r[1]), float(r[3]), float(r[4]), float(r[2]), float(r[5])]
+    return rows, "腾讯空返回" if not rows else ""
+
+
+def fetch_raw(sym, start, *, empty_prefix=False, notes=None):
+    """腾讯不复权日线，按 3 年一段请求；可疑的前缀空段必须向前核验。"""
+    rows = {}
+    skipped = []
     end_all = date.today() + timedelta(days=1)
     s = start
     while s < end_all:
         e = min(date(s.year + 3, s.month, 1) - timedelta(days=1), end_all)
-        u = (f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={sym},day,"
-             f"{s.isoformat()},{e.isoformat()},900,")
-        j = json.loads(get(u, UA_QQ))
-        node = (j.get("data") or {}).get(sym) or {}
-        for r in node.get("day") or []:
-            if len(r) >= 6:
-                rows[r[0]] = [float(r[1]), float(r[3]), float(r[4]), float(r[2]), float(r[5])]
+        prefix = empty_prefix and not rows
+        part, reason = fetch_segment(sym, s, e, prefix=prefix)
+        if prefix and not part:
+            skipped.append((s, e))
+            if notes is not None:
+                notes.append(f"{sym} {s}—{e}：{reason}，暂记无数据并继续探测")
+        rows.update(part)
+        if prefix and rows:
+            boundary = s
+            # 补回的前一段若也紧贴边界，继续向前，不能只补一段又漏更早历史。
+            while skipped and (date.fromisoformat(min(rows)) - boundary).days <= PREFIX_RECHECK_DAYS:
+                previous_start, previous_end = skipped.pop()
+                if notes is not None:
+                    notes.append(f"{sym} 首条数据紧贴分段起点，重新核验 {previous_start}—{previous_end}")
+                recovered, why = fetch_segment(sym, previous_start, previous_end, prefix=True)
+                if not recovered:
+                    raise RuntimeError(f"{sym} {previous_start}—{previous_end} 前缀重探仍无法确认历史是否完整（{why}），不写入")
+                rows.update(recovered)
+                boundary = previous_start
         s = e + timedelta(days=1)
     # 腾讯日线顺序是 日期,开,收,高,低,量 → 这里存成 开,高,低,收,量
     df = pd.DataFrame([[d] + v for d, v in sorted(rows.items())], columns=["date"] + COLS)
     df["date"] = pd.to_datetime(df["date"])
     return df.set_index("date")
+
+
+def fetch_full(sym, path, notes):
+    """已有腾讯日线从首个数据年份开始；首次建库允许跳过上市前的空区间。"""
+    previous = read_store(path)
+    if previous is not None and len(previous):
+        first = previous.index.min().date()
+        start = max(FULL_START, date(first.year, 1, 1))
+        notes.append(f"{sym} 全量起点 {start}：取已存腾讯日线首年（首日 {first}），未手填上市日期")
+        # 已知首年应当有数据，501 必须按请求失败处理，防止丢失历史。
+        return fetch_raw(sym, start)
+    notes.append(f"{sym} 未取得首个数据年份，从 {FULL_START} 分段探测；前缀 501 先退避重试，首条贴近边界则向前核验")
+    return fetch_raw(sym, FULL_START, empty_prefix=True, notes=notes)
 
 
 def fetch_events(sym):
@@ -216,11 +270,11 @@ def update_one(item, full):
                 raise RuntimeError("腾讯没有返回最近的数据")
             if mism or len(ov) == 0:
                 rep["notes"].append(f"最近数据与已存不一致（{len(mism)} 天，如 {mism[:3]}），改为全量重抓")
-                raw = fetch_raw(sym, FULL_START)
+                raw = fetch_full(sym, path, rep["notes"])
             else:
                 raw = pd.concat([old.loc[old.index < tail.index[0], COLS], tail[COLS]])
         else:
-            raw = fetch_raw(sym, FULL_START)
+            raw = fetch_full(sym, path, rep["notes"])
         if len(raw) == 0:
             raise RuntimeError("腾讯没有返回任何数据")
         raw = raw[~raw.index.duplicated(keep="last")].sort_index()
