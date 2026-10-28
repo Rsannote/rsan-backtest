@@ -1,0 +1,73 @@
+{
+  "title": "程序判断落档",
+  "generated_at": "2026-10-29T07:45:31.467751+08:00",
+  "data_date": "2026-10-28",
+  "status": "正常",
+  "module": "散户情绪",
+  "draft_replay": false,
+  "summary": [
+    "本次事件0条；新增0条；同事件重跑跳过0条。"
+  ],
+  "skipped": [
+    "market_attack：未启用：enabled/approved未同时为true",
+    "market_defend：未启用：enabled/approved未同时为true",
+    "flow_proxy_top5：未启用：enabled/approved未同时为true",
+    "sentiment_ice：未启用：enabled/approved未同时为true",
+    "sentiment_hot：未启用：enabled/approved未同时为true",
+    "mainline_confirm：未启用，等待T15；草案回放也不启用",
+    "mainline_retreat：未启用，等待T15；草案回放也不启用"
+  ],
+  "errors": [],
+  "rules": [
+    {
+      "id": "market_attack",
+      "name": "市场攻势方向",
+      "enabled": false,
+      "reason": "未启用：enabled/approved未同时为true",
+      "counts": {}
+    },
+    {
+      "id": "market_defend",
+      "name": "市场守势方向",
+      "enabled": false,
+      "reason": "未启用：enabled/approved未同时为true",
+      "counts": {}
+    },
+    {
+      "id": "flow_proxy_top5",
+      "name": "行业成交占比上升前5相对强弱",
+      "enabled": false,
+      "reason": "未启用：enabled/approved未同时为true",
+      "counts": {}
+    },
+    {
+      "id": "sentiment_ice",
+      "name": "情绪进入冰点后的方向",
+      "enabled": false,
+      "reason": "未启用：enabled/approved未同时为true",
+      "counts": {}
+    },
+    {
+      "id": "sentiment_hot",
+      "name": "情绪进入过热后的方向",
+      "enabled": false,
+      "reason": "未启用：enabled/approved未同时为true",
+      "counts": {}
+    },
+    {
+      "id": "mainline_confirm",
+      "name": "主线进入确认后的相对强弱",
+      "enabled": false,
+      "reason": "未启用，等待T15；草案回放也不启用",
+      "counts": {}
+    },
+    {
+      "id": "mainline_retreat",
+      "name": "主线进入退潮后的相对强弱",
+      "enabled": false,
+      "reason": "未启用，等待T15；草案回放也不启用",
+      "counts": {}
+    }
+  ],
+  "pending": []
+}
