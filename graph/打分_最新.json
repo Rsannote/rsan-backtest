@@ -6,7 +6,7 @@
   "graphs": [
     {
       "path": "graph/驱动图谱_v0.json",
-      "as_of": "2026-10-22",
+      "as_of": "2026-10-27",
       "version": "v0-样板（算力×电力）",
       "rules": {
         "vote": "公司与某个驱动家族的连线强度≥2时，该家族记1票；同一家族内的多个驱动只算1票",
@@ -111,7 +111,7 @@
     },
     {
       "path": "graph/驱动图谱_v0.json",
-      "sha256_text": "cfe072b865ac8533cf577645df3ade4e699a48016374b7a09b57332b81eb12b0"
+      "sha256_text": "e417c21964edba1c6e1bc88a94aa5121f6daa26d81fc44bb040eb072e8aec865"
     }
   ],
   "rules": {
@@ -124,15 +124,15 @@
     },
     "state_weights_source": "图谱rules或缺失",
     "score_aggregation": "合格边强度×状态权重，家族内取最大值，家族间求和",
-    "drawdown_threshold": null,
-    "pricing_status": "待审核",
+    "drawdown_threshold": 0.2,
+    "pricing_status": "显式回撤规则",
     "weight_drafts_enabled": false,
     "pricing_drafts_enabled": false
   },
   "warnings": [
     "正式状态权重：显式配置",
-    "未被定价阈值：未配置，待审核",
-    "图谱日期：2026-10-22；股票池快照日期：2026-10-22",
+    "未被定价阈值：0.2",
+    "图谱日期：2026-10-27；股票池快照日期：2026-10-22",
     "传导强度继承、家族最大值聚合与状态权重由审核确认；JSON 保留逐边证据。",
     "300442 润泽科技：相对指数日历缺失6日（可能停牌，未补零）"
   ],
@@ -303,8 +303,8 @@
         "plan_price_date": "2026-10-12",
         "l1_status": "通过"
       },
-      "unpriced": null,
-      "cross_candidate": null,
+      "unpriced": true,
+      "cross_candidate": true,
       "pricing_drafts": {
         "回撤10%草案": {
           "threshold": 0.1,
@@ -443,8 +443,8 @@
         "plan_price_date": "2026-10-12",
         "l1_status": "通过"
       },
-      "unpriced": null,
-      "cross_candidate": null,
+      "unpriced": false,
+      "cross_candidate": false,
       "pricing_drafts": {
         "回撤10%草案": {
           "threshold": 0.1,
@@ -583,8 +583,8 @@
         "plan_price_date": "2026-10-15",
         "l1_status": "通过"
       },
-      "unpriced": null,
-      "cross_candidate": null,
+      "unpriced": true,
+      "cross_candidate": true,
       "pricing_drafts": {
         "回撤10%草案": {
           "threshold": 0.1,
@@ -754,8 +754,8 @@
         "plan_price_date": "2026-10-15",
         "l1_status": "通过"
       },
-      "unpriced": null,
-      "cross_candidate": null,
+      "unpriced": true,
+      "cross_candidate": true,
       "pricing_drafts": {
         "回撤10%草案": {
           "threshold": 0.1,
@@ -894,8 +894,8 @@
         "plan_price_date": "2026-10-12",
         "l1_status": "通过"
       },
-      "unpriced": null,
-      "cross_candidate": null,
+      "unpriced": true,
+      "cross_candidate": true,
       "pricing_drafts": {
         "回撤10%草案": {
           "threshold": 0.1,
@@ -1001,8 +1001,8 @@
         "plan_price_date": "2026-10-12",
         "l1_status": "通过"
       },
-      "unpriced": null,
-      "cross_candidate": null,
+      "unpriced": true,
+      "cross_candidate": false,
       "pricing_drafts": {
         "回撤10%草案": {
           "threshold": 0.1,
@@ -1222,8 +1222,8 @@
         "plan_price_date": "2026-10-12",
         "l1_status": "通过"
       },
-      "unpriced": null,
-      "cross_candidate": null,
+      "unpriced": false,
+      "cross_candidate": false,
       "pricing_drafts": {
         "回撤10%草案": {
           "threshold": 0.1,
@@ -1360,8 +1360,8 @@
         "plan_price_date": "2026-10-12",
         "l1_status": "通过"
       },
-      "unpriced": null,
-      "cross_candidate": null,
+      "unpriced": false,
+      "cross_candidate": false,
       "pricing_drafts": {
         "回撤10%草案": {
           "threshold": 0.1,
@@ -1485,8 +1485,8 @@
         "plan_price_date": "2026-10-12",
         "l1_status": "通过"
       },
-      "unpriced": null,
-      "cross_candidate": null,
+      "unpriced": false,
+      "cross_candidate": false,
       "pricing_drafts": {
         "回撤10%草案": {
           "threshold": 0.1,
@@ -1610,8 +1610,8 @@
         "plan_price_date": "2026-10-15",
         "l1_status": "通过"
       },
-      "unpriced": null,
-      "cross_candidate": null,
+      "unpriced": true,
+      "cross_candidate": false,
       "pricing_drafts": {
         "回撤10%草案": {
           "threshold": 0.1,
@@ -1728,8 +1728,8 @@
         "plan_price_date": "2026-10-12",
         "l1_status": "通过"
       },
-      "unpriced": null,
-      "cross_candidate": null,
+      "unpriced": true,
+      "cross_candidate": false,
       "pricing_drafts": {
         "回撤10%草案": {
           "threshold": 0.1,
@@ -1853,8 +1853,8 @@
         "plan_price_date": "2026-10-15",
         "l1_status": "通过"
       },
-      "unpriced": null,
-      "cross_candidate": null,
+      "unpriced": false,
+      "cross_candidate": false,
       "pricing_drafts": {
         "回撤10%草案": {
           "threshold": 0.1,
@@ -1971,8 +1971,8 @@
         "plan_price_date": "2026-10-12",
         "l1_status": "通过"
       },
-      "unpriced": null,
-      "cross_candidate": null,
+      "unpriced": true,
+      "cross_candidate": false,
       "pricing_drafts": {
         "回撤10%草案": {
           "threshold": 0.1,
@@ -2078,8 +2078,8 @@
         "plan_price_date": "2026-10-12",
         "l1_status": "通过"
       },
-      "unpriced": null,
-      "cross_candidate": null,
+      "unpriced": true,
+      "cross_candidate": false,
       "pricing_drafts": {
         "回撤10%草案": {
           "threshold": 0.1,
@@ -2185,8 +2185,8 @@
         "plan_price_date": "2026-10-12",
         "l1_status": "通过"
       },
-      "unpriced": null,
-      "cross_candidate": null,
+      "unpriced": true,
+      "cross_candidate": false,
       "pricing_drafts": {
         "回撤10%草案": {
           "threshold": 0.1,
@@ -2292,8 +2292,8 @@
         "plan_price_date": "2026-10-12",
         "l1_status": "通过"
       },
-      "unpriced": null,
-      "cross_candidate": null,
+      "unpriced": true,
+      "cross_candidate": false,
       "pricing_drafts": {
         "回撤10%草案": {
           "threshold": 0.1,
@@ -2410,8 +2410,8 @@
         "plan_price_date": "2026-10-12",
         "l1_status": "通过"
       },
-      "unpriced": null,
-      "cross_candidate": null,
+      "unpriced": true,
+      "cross_candidate": false,
       "pricing_drafts": {
         "回撤10%草案": {
           "threshold": 0.1,
