@@ -78,10 +78,10 @@
   "sources": [
     {
       "url": "https://www.sse.com.cn/disclosure/dealinstruc/closed/",
-      "captured_at": "2026-10-28T20:53:31.927110+08:00",
-      "sha256": "78b26463736679bd10a9bb2330443185788e056ce6294eab374b9b614e1b9c4d",
-      "snapshot": "logs/test/T2/日历探测/上交所_休市.txt"
+      "captured_at": "2026-10-28T21:33:13.383306+08:00",
+      "sha256": "8c2f8ba80f5a95e1630fe253147eb2763b6e96ba8ce7da531345dbd40c6f4b00",
+      "snapshot": "运行时官网响应"
     }
   ],
-  "generated_at": "2026-10-28T21:00:51.449994+08:00"
+  "generated_at": "2026-10-28T21:33:13.388903+08:00"
 }
