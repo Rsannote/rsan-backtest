@@ -64,7 +64,7 @@ python3 engine/backtest.py \
 
 异常以“告警”标签开 Issue，同一天同一项目复用并追加评论；同日恢复再失败会重开原 Issue。产出恢复后自动关闭；工作流故障还须核对故障之后的成功运行，按完成运行的更新时间判断，避免旧运行重跑造成误关闭。全部现有工作流均接入 `if: failure()`，checkout 失败时可通过同一提交的 GitHub API 下载独立告警脚本执行。工作流使用默认 `GITHUB_TOKEN`，健康任务需要 contents/ issues 写权限及 actions 读权限，无新 Secret。
 
-可离线生成报告：`python3 scripts/health_check.py --json-out logs/健康检查_最新.json`。命令只读各数据产出，写健康报告；告警联网与日历网络刷新仅在 Actions 执行。验收与模拟故障记录放在 `logs/test/T2/`。
+可离线生成报告：`python3 scripts/health_check.py --json-out logs/健康检查_最新.json`。命令只读各数据产出，写健康报告；告警联网与日历网络刷新仅在 Actions 执行。验收与模拟故障记录放在 `logs/test/T2/`，入口见 `logs/test/T2/验收.md`。Issue 去重读取禁缓存的完整列表并保留成功写入响应，避免标签列表延迟造成重复告警。
 
 ### 股票池镜像（每天自动）
 
