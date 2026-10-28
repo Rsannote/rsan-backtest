@@ -1,0 +1,35 @@
+{
+  "时间": "2026-10-28T20:53:31.927110+08:00",
+  "探测": [
+    {
+      "来源": "https://www.szse.cn/api/report/exchange/onepersistenthour/monthList?month=2026-10",
+      "名称": "深交所_本月",
+      "成功": false,
+      "错误": "URLError: <urlopen error [Errno 104] Connection reset by peer>"
+    },
+    {
+      "来源": "https://www.szse.cn/api/report/exchange/onepersistenthour/monthList?month=2026-11",
+      "名称": "深交所_次月",
+      "状态码": 200,
+      "字节数": 1293,
+      "成功": true,
+      "开头": "{\"data\":[{\"zrxh\":1,\"jybz\":\"0\",\"jyrq\":\"2026-11-01\"},{\"zrxh\":2,\"jybz\":\"1\",\"jyrq\":\"2026-11-02\"},{\"zrxh\":3,\"jybz\":\"1\",\"jyrq\":\"2026-11-03\"},{\"zrxh\":4,\"jybz\":\"1\",\"jyrq\":\"2026-11-04\"},{\"zrxh\":5,\"jybz\":\"1\",\"jyrq\":\"2026-11-05\"},{\"zrxh\":6,\"jybz\":\"1\",\"jyrq\":\"2026-11-06\"},{\"zrxh\":7,\"jybz\":\"0\",\"jyrq\":\"2026-11-07\"},{\"zrxh\":1,\"jybz\":\"0\",\"jyrq\":\"2026-11-08\"},{\"zrxh\":2,\"jybz\":\"1\",\"jyrq\":\"2026-11-09\"},{\"zrxh\":3,\"jybz\":\"1\",\"jyrq\":\"2026-11-10\"},{\"zrxh\":4,\"jybz\":\"1\",\"jyrq\":\"2026-11-11\"},{\"zrxh\":5,\"jybz\":\"1\",\"jyrq\":\"2026-11-12\"},{\"zrxh\":6,\"jybz\":\"1\",\"jyrq\":\"2026-11-13\"},{\"zrxh\":7,\"jybz\":\"0\",\"jyrq\":\"2026-11-14\"},{\"zrxh\":1,\"jybz\":\"0\",\"jyrq\":\"2026-11-15\"},{\"zrxh\":2,\"jybz\":\"1\",\"jyrq\":\"2026-11-16\"},{\"zrxh\":3,\"jybz\":\"1\",\"jyrq\":\"2026-11-17\"},{\"zrxh\":4,\"jybz\":\"1\",\"jyrq\":\"2026-11-18\"},{\"zrxh\":5,\"jybz\":\"1\",\"jyrq\":\"2026-1"
+    },
+    {
+      "来源": "https://www.sse.com.cn/js/common/systemDate_global.js",
+      "名称": "上交所_交易日",
+      "状态码": 200,
+      "字节数": 316,
+      "成功": true,
+      "开头": "function get_systemDate_global(){\nvar systemDate_global  = \"2026-10-28\";\nreturn systemDate_global;}function get_whetherTradeDate_global(){\nvar whetherTradeDate_global  = true;\nreturn whetherTradeDate_global;}function get_lastTradeDate_global(){\nvar lastTradeDate_global  = \"2026-10-27\";\nreturn lastTradeDate_global;}"
+    },
+    {
+      "来源": "https://www.sse.com.cn/disclosure/dealinstruc/closed/",
+      "名称": "上交所_休市",
+      "状态码": 200,
+      "字节数": 29605,
+      "成功": true,
+      "开头": "<!doctype html>\n<html> \n <head> <!--获取栏目id页--> <!-- 站点属性 --><meta charset=\"utf-8\">\r\n<meta name=\"description\" content=\"\">\r\n<meta name=\"author\" content=\"上海证券交易所\">\r\n<meta name=\"renderer\" content=\"webkit\">\r\n<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\r\n<meta name=\"apple-mobile-web-app-capable\" content=\"yes\">\r\n<meta name=\"mobile-web-app-capable\" content=\"yes\">\r\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\r\n<meta name=\"apple-mobile-web-app-title\" content=\"上海证券交易所\">\r\n<link rel=\"shortcut icon\" href=\"/xhtml/images/favicon.ico\">\n\n \n  <meta name=\"SiteName\" content=\"中文版上交所官网\"> \n  <meta name=\"SiteDomain\" content=\"http://www.sse.com.cn/\"> \n  <meta name=\"SiteIDCode\" content=\"28\"> \n  <meta name=\"others\" content=\"页面生成时间 2023-06-05 "
+    }
+  ]
+}
