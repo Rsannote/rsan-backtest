@@ -9,6 +9,7 @@ on:
       - scripts/verify_t11_retry.py
       - tests/test_update_hangqing_retry.py
       - tests/test_run_delay_stats.py
+      - tests/test_t11_workflow.py
       - logs/test/T11/每日验收请求.json
       - .github/workflows/test-t11-retry.yml
   workflow_dispatch:
@@ -42,13 +43,12 @@ jobs:
           INPUT_MODE: ${{ inputs.mode }}
         run: |
           python3 - <<'PY'
-          import datetime,json,os
+          import datetime,json,os,subprocess
           from pathlib import Path
           mode=os.environ.get('INPUT_MODE') or 'smoke'
           event=json.loads(Path(os.environ['GITHUB_EVENT_PATH']).read_text())
-          changed=set()
-          for commit in event.get('commits',[]):
-            changed.update(commit.get('added',[])+commit.get('modified',[]))
+          # Actions中的push载荷不保证含commit变更文件，直接查已检出提交。
+          changed=set(subprocess.check_output(['git','-c','core.quotePath=false','diff-tree','--no-commit-id','--name-only','-r','-z',os.environ['GITHUB_SHA']]).decode().split('\0'))
           request='logs/test/T11/每日验收请求.json'
           if os.environ['GITHUB_EVENT_NAME']=='push' and request in changed:
             data=json.loads(Path(request).read_text())
