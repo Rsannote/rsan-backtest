@@ -37,7 +37,7 @@ def check_condition(c):
         return ["check必须是对象"]
     errors = []
     kind = c.get("type")
-    if not isinstance(kind, str) or kind not in {"指数涨跌", "指数相对", "行业ETF相对沪深300"}:
+    if not isinstance(kind, str) or kind not in {"指数涨跌", "指数相对", "行业ETF相对沪深300", "指数最大回撤"}:
         errors.append("check.type不受支持")
     code = c.get("code")
     if not isinstance(code, str) or not re.fullmatch(r"(?:sh|sz)\d{6}" if kind != "行业ETF相对沪深300" else r"\d{6}", code):
@@ -58,6 +58,8 @@ def check_condition(c):
     v = c.get("value")
     if isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v):
         errors.append("check.value须为有限数字")
+    elif kind == "指数最大回撤" and not 0 <= v <= 1:
+        errors.append("指数最大回撤阈值须在0–1之间")
     return errors
 
 
