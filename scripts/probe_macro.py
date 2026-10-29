@@ -19,6 +19,7 @@ import unittest
 import urllib.error
 import urllib.parse
 import urllib.request
+import xml.etree.ElementTree as ET
 from datetime import date, datetime, timedelta, timezone
 from html.parser import HTMLParser
 from pathlib import Path
@@ -139,6 +140,34 @@ def yahoo_series(text):
                       if v is not None)
 
 
+def treasury_xml(text):
+    rows = []
+    for node in ET.fromstring(text).iter():
+        if node.tag.rsplit('}', 1)[-1] != 'properties':
+            continue
+        fields = {x.tag.rsplit('}', 1)[-1]: x.text for x in node}
+        if fields.get('BC_10YEAR') is not None:
+            rows.append((fields['NEW_DATE'], fields['BC_10YEAR']))
+    return normalized(rows)
+
+
+def sina_copper(text):
+    records = json.loads(text)
+    rows = []
+    for r in records:
+        if isinstance(r, dict):
+            rows.append((r['date'], r['close']))
+        elif isinstance(r, list) and len(r) >= 6:
+            # 实测数组为 日期/开/高/低/收/量；同时检查OHLC结构。
+            opening, high, low, close = map(number, r[1:5])
+            if not low <= min(opening, close) <= max(opening, close) <= high:
+                raise ValueError('沪铜OHLC字段校验失败')
+            rows.append((r[0], close))
+        else:
+            raise ValueError('沪铜记录结构未知')
+    return normalized(rows)
+
+
 def request(url, trace, deadline, data=None):
     if os.environ.get('GITHUB_ACTIONS') != 'true':
         raise RuntimeError('联网探测只能在 GitHub Actions 运行')
@@ -182,7 +211,7 @@ def url(base, **params):
     return base + '?' + urllib.parse.urlencode(params)
 
 
-def series_summary(values):
+def series_summary(values, frequency='日'):
     keys = list(values)
     years = sorted(set(k[:4] for k in keys))
     return {'有效条数': len(values), '最早观测': keys[0], '最新观测': keys[-1],
@@ -192,7 +221,7 @@ def series_summary(values):
             '各年条数': {y: sum(k.startswith(y) for k in keys) for y in years},
             '样例': [{'date': k, 'value': values[k]} for k in
                      dict.fromkeys((keys[0], keys[len(keys) // 2], keys[-1]))],
-            '至少21个日频观测': len(keys) >= 21 and all(len(k) == 10 for k in keys)}
+            '至少21个日频观测': frequency == '日' and len(keys) >= 21 and all(len(k) == 10 for k in keys)}
 
 
 def self_test():
@@ -208,6 +237,16 @@ def self_test():
         def test_treasury_exact_ten_year(self):
             self.assertEqual(csv_series('Date,1 Mo,10 Yr\n01/05/2015,0.02,2.04\n',
                                         '10 Yr', 'Date'), {'2015-01-05': 2.04})
+
+        def test_treasury_xml_ten_year(self):
+            text = '<feed xmlns:m="urn:m" xmlns:d="urn:d"><m:properties><d:NEW_DATE>2015-01-05T00:00:00</d:NEW_DATE><d:BC_5YEAR>1.5</d:BC_5YEAR><d:BC_10YEAR>2.04</d:BC_10YEAR></m:properties></feed>'
+            self.assertEqual(treasury_xml(text), {'2015-01-05': 2.04})
+
+        def test_sina_close_column_and_ohlc(self):
+            text = '[["2015-01-05","10","12","8","11","100"]]'
+            self.assertEqual(sina_copper(text), {'2015-01-05': 11})
+            with self.assertRaises(ValueError):
+                sina_copper('[["2015-01-05","10","9","8","11","100"]]')
 
         def test_china_curve_identity(self):
             html = '<table><tr><th>曲线名称</th><th>日期</th><th>10年</th></tr>'
@@ -225,6 +264,9 @@ def self_test():
 
         def test_month_is_not_publication_date(self):
             self.assertEqual(day('201501'), '2015-01')
+            values = {f'2015-{m:02d}-01': 1 for m in range(1, 13)}
+            values.update({f'2016-{m:02d}-01': 1 for m in range(1, 13)})
+            self.assertFalse(series_summary(values, '月')['至少21个日频观测'])
 
         def test_network_guard(self):
             from unittest.mock import patch
@@ -280,7 +322,7 @@ def main():
                     entry.update(extra)
                     entry['复测'].append({'轮次': n + 1, '状态': '仅页面或结构可达，未取得指标序列'})
                 else:
-                    summary = series_summary(values)
+                    summary = series_summary(values, frequency)
                     entry['复测'].append({'轮次': n + 1, '状态': '取得有效观测', **summary})
                     entry.update(extra)
                     got = values
@@ -294,7 +336,7 @@ def main():
         entry['状态'] = ('取得有效观测（来源待审核）' if success == repeat else
                        '部分成功' if success else '未取得指标序列')
         if got:
-            entry.update(series_summary(got))
+            entry.update(series_summary(got, frequency))
         save()
         print(f"{indicator} / {name}：{entry['状态']}，{success}/{repeat}", flush=True)
         return got
@@ -331,7 +373,16 @@ def main():
         for year in range(2015, today.year + 1):
             u = url(f'https://home.treasury.gov/resource-center-data-chart-center/interest-rates/daily-treasury-rates.csv/{year}/all',
                     type='daily_treasury_yield_curve', field_tdr_date_value=str(year), _format='csv')
-            values.update(csv_series(get(u, trace), '10 Yr', 'Date'))
+            try:
+                chunk = csv_series(get(u, trace), '10 Yr', 'Date')
+            except urllib.error.HTTPError as exc:
+                if exc.code != 404:
+                    raise
+                # CSV路径实测404时保留失败证据，再试官方XML；不改用二级冒充官方。
+                xml_url = url('https://home.treasury.gov/resource-center-data-chart-center/interest-rates/pages/xml',
+                              data='daily_treasury_yield_curve', field_tdr_date_value=str(year))
+                chunk = treasury_xml(get(xml_url, trace))
+            values.update(chunk)
         return normalized(values.items()), {'数据口径': '美国财政部10年恒定期限国债收益率，非期货价格',
                                            '真实发布日期': '日表无逐行公布时刻，需另查美东发布安排；不能当日A股盘中已知'}
 
@@ -449,8 +500,7 @@ def main():
 
     def shfe(trace):
         text = get(url('https://stock2.finance.sina.com.cn/futures/api/json.php/IndexService.getInnerFuturesDailyKLine', symbol='CU0'), trace)
-        records = json.loads(text)
-        return normalized((r['date'], r['close']) for r in records), {
+        return sina_copper(text), {
             '数据口径': '沪铜CU0连续序列，收盘价；换月拼接规则待核实'}
     probe('新浪沪铜', '沪铜', '二级', '人民币/吨', '日', shfe,
           '沪铜与LME铜分别记录；不能用COMEX铜替代LME铜')
