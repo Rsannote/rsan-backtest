@@ -1,0 +1,17 @@
+{
+  "正式档案基线HEAD": "4e061f3635af8e3cc21cd359b33fb054a698c693",
+  "正式档案文件SHA256": {
+    "judgments/2026-10.jsonl": "95862c0bd2aea064af5ee662b313488663ba1a5a6239349ec9f1be45ef115074"
+  },
+  "正式档案条数": 7,
+  "与HEAD字节相同": true,
+  "隔离正式入口零新增且原七条不变": true,
+  "草案回放重复JSONL字节不变": true,
+  "回放JSONL_SHA256": {
+    "2026-10.jsonl": "62471a230467528068a6eab8af3d961a8ddeab712b4569fd3ced0ac779b73ac4"
+  },
+  "数据日期": "2026-10-28",
+  "引擎MD5": "c06e2dd885eb8ac18f9cd4e1021a9b8c",
+  "既有清单项目逐字段保持": true,
+  "股票池max_age_minutes": 144000
+}

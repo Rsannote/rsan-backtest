@@ -23,6 +23,7 @@ class HealthTests(unittest.TestCase):
         legacy_grace = {"hangqing": 90, "market_state": 110, "news": 30, "community": 20,
                         "sentiment_index": 125, "tophub": 30, "pool": 30, "v3": 180,
                         "calendar_refresh": 0, "health_check": 0}
+        self.manifest["items"] = [item for item in self.manifest["items"] if item["id"] in legacy_grace]
         for item in self.manifest["items"]:
             for key in ("check_mode", "max_age_minutes", "freshness_success_paths"):
                 item.pop(key, None)
@@ -430,6 +431,19 @@ class HealthTests(unittest.TestCase):
     def test_future_artifact_timestamp_fails(self):
         self.news("2026-10-29 08:00")
         self.assertEqual(self.run_item("news")["status"], "失败")
+
+    def test_judgment_report_disabled_is_normal_and_due_missing_is_partial(self):
+        item = {"id":"auto_test", "name":"判断测试", "kind":"judgment_report", "workflow":None,
+                "times":["16:40"], "grace_minutes":30, "trading_days_only":True,
+                "outputs":["logs/程序判断_最新.json"], "check_mode":"previous_trading_day"}
+        self.json(item["outputs"][0], {"data_date":"2026-10-28", "generated_at":"2026-10-28T17:00:00+08:00",
+                  "status":"正常", "errors":[], "skipped":["草案未批准"], "pending":[]})
+        cal=health.Calendar(self.root,self.manifest["calendar"])
+        now=health.timestamp("2026-10-28T22:30:00+08:00")
+        self.assertEqual(health.check_item(self.root,item,now,cal)["status"],"正常")
+        obj=json.loads((self.root/item["outputs"][0]).read_text()); obj["pending"]=["到期固定窗口缺行情"]
+        self.json(item["outputs"][0],obj)
+        self.assertEqual(health.check_item(self.root,item,now,cal)["status"],"部分失败")
 
 
 if __name__ == "__main__":

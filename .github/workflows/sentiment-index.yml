@@ -40,13 +40,31 @@ jobs:
           else
             python3 scripts/sentiment_index.py
           fi
+      - name: 程序判断落档（未批准草案只记日志）
+        env:
+          DAY: ${{ inputs.date }}
+        run: |
+          if [ -n "$DAY" ]; then
+            python3 scripts/auto_judgments.py --module 散户情绪 --date "$DAY"
+          else
+            python3 scripts/auto_judgments.py --module 散户情绪
+          fi
+      - name: 到期判断自动复核
+        run: python3 scripts/auto_review.py
+      - name: 校验判断档案
+        run: python3 scripts/check_judgments.py --stats
       - name: 提交
         if: always()
         run: |
           git config user.name "github-actions"
           git config user.email "actions@users.noreply.github.com"
           git add data/社区情绪/温度计.csv data/社区情绪/文本指标.csv data/社区情绪/最新.md data/社区情绪/触发.json
-          git commit -m "散户情绪指标 $(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M')" || exit 0
+          git add judgments
+          for file in logs/程序判断_散户情绪_最新.json logs/程序判断_散户情绪_最新.md logs/自动复核_最新.json logs/自动复核_最新.md; do
+            if [ -f "$file" ]; then git add "$file"; fi
+          done
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "散户情绪指标与程序判断 $(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M')"
           for i in 1 2 3; do git pull --rebase origin main && git push && exit 0; sleep 5; done
           exit 1
       - name: 工作流失败告警
