@@ -1,0 +1,1253 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-10-29T21:24:01.303925+08:00",
+  "requested_since": "2026-10-01T21:24:01.303925+08:00",
+  "source_ref": "54066d2376e4b768c273d645846917945a4639e1",
+  "first_repository_commit": "2026-10-20T23:45:53+08:00",
+  "formula": "ceil(P95 + max(P95-P50, 最大值-P95, 1分钟))；最近秩分位数",
+  "items": {
+    "hangqing": {
+      "name": "行情库",
+      "introduced_at": "2026-10-21T07:28:15+08:00",
+      "first_success_at": "2026-10-21T22:42:37+08:00",
+      "delay": {
+        "n": 6,
+        "p50": 362.76666666666665,
+        "p90": 443.3833333333333,
+        "p95": 443.3833333333333,
+        "max": 443.3833333333333
+      },
+      "grace": {
+        "p95_minutes": 443.3833333333333,
+        "margin_minutes": 80.61666666666667,
+        "minutes": 524
+      },
+      "rotation_delay": {
+        "n": 1,
+        "p50": 365.1333333333333,
+        "p90": 365.1333333333333,
+        "p95": 365.1333333333333,
+        "max": 365.1333333333333
+      },
+      "rotation_grace": {
+        "p95_minutes": 365.1333333333333,
+        "margin_minutes": 1,
+        "minutes": 367
+      },
+      "success_gap": {
+        "n": 6,
+        "p50": 1422.5833333333333,
+        "p90": 3341.383333333333,
+        "p95": 3341.383333333333,
+        "max": 3341.383333333333
+      },
+      "freshness": {
+        "p95_minutes": 3341.383333333333,
+        "margin_minutes": 1918.8,
+        "minutes": 5261
+      },
+      "samples": [
+        {
+          "sha": "3b33eabaf6b7ff4d67dc3597c37ce54f80ab5baf",
+          "available_at": "2026-10-21T22:42:37+08:00",
+          "output_at": "2026-10-21T22:42:00+08:00",
+          "data_date": "2026-10-21",
+          "run_id": 39614027310,
+          "success": true,
+          "mapping": "产出数据日期+清单计划",
+          "scheduled_at": "2026-10-21T16:40:00+08:00",
+          "delay_minutes": 362.6166666666667,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "d0e5268c916af410d6ae052e94d1c4bdbf3b1445",
+          "available_at": "2026-10-22T22:42:46+08:00",
+          "output_at": "2026-10-22T22:42:00+08:00",
+          "data_date": "2026-10-22",
+          "run_id": 39792784640,
+          "success": true,
+          "mapping": "产出数据日期+清单计划",
+          "scheduled_at": "2026-10-22T16:40:00+08:00",
+          "delay_minutes": 362.76666666666665,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "dc9b20bde7773f3d9ad36971941a48705179cd10",
+          "available_at": "2026-10-23T22:24:35+08:00",
+          "output_at": "2026-10-23T22:24:00+08:00",
+          "data_date": "2026-10-23",
+          "run_id": 39964303063,
+          "success": true,
+          "mapping": "产出数据日期+清单计划",
+          "scheduled_at": "2026-10-23T16:40:00+08:00",
+          "delay_minutes": 344.5833333333333,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "b29890b40d2a4c6378693951c4e99c02eb60093a",
+          "available_at": "2026-10-24T16:22:08+08:00",
+          "output_at": "2026-10-24T16:22:00+08:00",
+          "data_date": "2026-10-23",
+          "run_id": 40073678191,
+          "success": true,
+          "mapping": "产出数据日期+清单计划；周六行情链使用轮换计划",
+          "scheduled_at": "2026-10-24T10:17:00+08:00",
+          "delay_minutes": 365.1333333333333,
+          "weekly_rotation": true
+        },
+        {
+          "sha": "53b5a1815ff604298aa54dfe9bdebadc2cca3fbe",
+          "available_at": "2026-10-27T00:03:23+08:00",
+          "output_at": "2026-10-27T00:03:00+08:00",
+          "data_date": "2026-10-26",
+          "run_id": 40349581370,
+          "success": true,
+          "mapping": "产出数据日期+清单计划",
+          "scheduled_at": "2026-10-26T16:40:00+08:00",
+          "delay_minutes": 443.3833333333333,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "2059d324d76d458660b46e8c04f1e2bcaabf47f3",
+          "available_at": "2026-10-27T23:30:33+08:00",
+          "output_at": "2026-10-27T23:30:00+08:00",
+          "data_date": "2026-10-27",
+          "run_id": 40525708973,
+          "success": true,
+          "mapping": "产出数据日期+清单计划",
+          "scheduled_at": "2026-10-27T16:40:00+08:00",
+          "delay_minutes": 410.55,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "9725d442df410530cd67460420014d610b8e1bfa",
+          "available_at": "2026-10-29T00:03:18+08:00",
+          "output_at": "2026-10-29T00:03:00+08:00",
+          "data_date": "2026-10-28",
+          "run_id": 40716041575,
+          "success": true,
+          "mapping": "产出数据日期+清单计划",
+          "scheduled_at": "2026-10-28T16:40:00+08:00",
+          "delay_minutes": 443.3,
+          "weekly_rotation": false
+        }
+      ],
+      "gap_definition": "下一成功产出提交可见时刻 - 上一成功产出字段时刻（含执行/提交耗时）"
+    },
+    "market_state": {
+      "name": "市场状态",
+      "introduced_at": "2026-10-22T15:28:30+08:00",
+      "first_success_at": "2026-10-22T22:47:46+08:00",
+      "delay": {
+        "n": 5,
+        "p50": 411.2,
+        "p90": 443.93333333333334,
+        "p95": 443.93333333333334,
+        "max": 443.93333333333334
+      },
+      "grace": {
+        "p95_minutes": 443.93333333333334,
+        "margin_minutes": 32.73333333333335,
+        "minutes": 477
+      },
+      "rotation_delay": {
+        "n": 0,
+        "p50": null,
+        "p90": null,
+        "p95": null,
+        "max": null
+      },
+      "rotation_grace": null,
+      "success_gap": {
+        "n": 4,
+        "p50": 1418.1666666666667,
+        "p90": 4418.933333333333,
+        "p95": 4418.933333333333,
+        "max": 4418.933333333333
+      },
+      "freshness": {
+        "p95_minutes": 4418.933333333333,
+        "margin_minutes": 3000.7666666666664,
+        "minutes": 7420
+      },
+      "samples": [
+        {
+          "sha": "5123af2d69b8ba57ce7647d9b5a96148497469a1",
+          "available_at": "2026-10-22T22:47:46+08:00",
+          "output_at": "2026-10-22T22:47:00+08:00",
+          "data_date": "2026-10-22",
+          "run_id": 39798763247,
+          "success": true,
+          "mapping": "产出数据日期+清单计划",
+          "scheduled_at": "2026-10-22T16:40:00+08:00",
+          "delay_minutes": 367.76666666666665,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "c6e4dc6f70e58b7d09a7bf71162b2d579a41b1a6",
+          "available_at": "2026-10-23T22:25:10+08:00",
+          "output_at": "2026-10-23T22:25:00+08:00",
+          "data_date": "2026-10-23",
+          "run_id": 39969396055,
+          "success": true,
+          "mapping": "产出数据日期+清单计划",
+          "scheduled_at": "2026-10-23T16:40:00+08:00",
+          "delay_minutes": 345.1666666666667,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "106d9d176eb6fd277166c451486c43fbf3821c22",
+          "available_at": "2026-10-27T00:03:56+08:00",
+          "output_at": "2026-10-27T00:03:00+08:00",
+          "data_date": "2026-10-26",
+          "run_id": 40355405340,
+          "success": true,
+          "mapping": "产出数据日期+清单计划",
+          "scheduled_at": "2026-10-26T16:40:00+08:00",
+          "delay_minutes": 443.93333333333334,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "bc247ff96696f14405f8d4b130d8f9e020e74e43",
+          "available_at": "2026-10-27T23:31:12+08:00",
+          "output_at": "2026-10-27T23:31:00+08:00",
+          "data_date": "2026-10-27",
+          "run_id": 40531711337,
+          "success": true,
+          "mapping": "产出数据日期+清单计划",
+          "scheduled_at": "2026-10-27T16:40:00+08:00",
+          "delay_minutes": 411.2,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "d625e29db28d7519f0aa6964f80836fc5561bc4b",
+          "available_at": "2026-10-29T00:03:54+08:00",
+          "output_at": "2026-10-29T00:03:00+08:00",
+          "data_date": "2026-10-28",
+          "run_id": 40722173197,
+          "success": true,
+          "mapping": "产出数据日期+清单计划",
+          "scheduled_at": "2026-10-28T16:40:00+08:00",
+          "delay_minutes": 443.9,
+          "weekly_rotation": false
+        }
+      ],
+      "gap_definition": "下一成功产出提交可见时刻 - 上一成功产出字段时刻（含执行/提交耗时）"
+    },
+    "news": {
+      "name": "新闻库（每日四次）",
+      "introduced_at": "2026-10-22T14:30:35+08:00",
+      "first_success_at": "2026-10-22T21:59:32+08:00",
+      "delay": {
+        "n": 28,
+        "p50": 293.46666666666664,
+        "p90": 404.3833333333333,
+        "p95": 414.26666666666665,
+        "max": 418.25
+      },
+      "grace": {
+        "p95_minutes": 414.26666666666665,
+        "margin_minutes": 120.80000000000001,
+        "minutes": 536
+      },
+      "rotation_delay": {
+        "n": 0,
+        "p50": null,
+        "p90": null,
+        "p95": null,
+        "max": null
+      },
+      "rotation_grace": null,
+      "success_gap": {
+        "n": 27,
+        "p50": 413.68333333333334,
+        "p90": 505.96666666666664,
+        "p95": 523.2,
+        "max": 545.9666666666667
+      },
+      "freshness": {
+        "p95_minutes": 523.2,
+        "margin_minutes": 109.51666666666671,
+        "minutes": 633
+      },
+      "samples": [
+        {
+          "sha": "4091dc32d635a412b2370ed3cb50cf934f54f61c",
+          "available_at": "2026-10-22T21:59:32+08:00",
+          "output_at": "2026-10-22T21:59:00+08:00",
+          "data_date": "2026-10-22",
+          "run_id": 39791281332,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-22T16:23:00+08:00",
+          "delay_minutes": 336.53333333333336,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "a70064c9f1b875424d2d14834e8a48967fda672b",
+          "available_at": "2026-10-23T01:58:59+08:00",
+          "output_at": "2026-10-23T01:58:00+08:00",
+          "data_date": "2026-10-23",
+          "run_id": 39827042853,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-22T21:11:00+08:00",
+          "delay_minutes": 287.98333333333335,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "2082d123e1ea836e5cee6cf2eb6e90a129a7c5b9",
+          "available_at": "2026-10-23T10:03:11+08:00",
+          "output_at": "2026-10-23T10:03:00+08:00",
+          "data_date": "2026-10-23",
+          "run_id": 39887155399,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-23T07:47:00+08:00",
+          "delay_minutes": 136.18333333333334,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "d9ac41efab620e47eb001da81daed43d83103acb",
+          "available_at": "2026-10-23T17:24:06+08:00",
+          "output_at": "2026-10-23T17:24:00+08:00",
+          "data_date": "2026-10-23",
+          "run_id": 39931311317,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-23T12:13:00+08:00",
+          "delay_minutes": 311.1,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "07a83489a1f04f7f24ff765c0801514a060124fa",
+          "available_at": "2026-10-23T21:41:22+08:00",
+          "output_at": "2026-10-23T21:41:00+08:00",
+          "data_date": "2026-10-23",
+          "run_id": 39962730463,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-23T16:23:00+08:00",
+          "delay_minutes": 318.3666666666667,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "c629b6771061c3365cde2761124e8e66cbabe734",
+          "available_at": "2026-10-24T01:56:06+08:00",
+          "output_at": "2026-10-24T01:56:00+08:00",
+          "data_date": "2026-10-24",
+          "run_id": 39998481154,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-23T21:11:00+08:00",
+          "delay_minutes": 285.1,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "ae93bc71a1f409f30ec6976034f56ae2fc02d759",
+          "available_at": "2026-10-24T10:02:51+08:00",
+          "output_at": "2026-10-24T10:02:00+08:00",
+          "data_date": "2026-10-24",
+          "run_id": 40052332403,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-24T07:47:00+08:00",
+          "delay_minutes": 135.85,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "944c8a5147152fec28e51883b0b17a9dea48f4a4",
+          "available_at": "2026-10-24T16:55:41+08:00",
+          "output_at": "2026-10-24T16:55:00+08:00",
+          "data_date": "2026-10-24",
+          "run_id": 40079781861,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-24T12:13:00+08:00",
+          "delay_minutes": 282.68333333333334,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "018b0cdd064674748761b431f67ecb2efa6c7106",
+          "available_at": "2026-10-24T20:50:05+08:00",
+          "output_at": "2026-10-24T20:49:00+08:00",
+          "data_date": "2026-10-24",
+          "run_id": 40095386109,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-24T16:23:00+08:00",
+          "delay_minutes": 267.0833333333333,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "6f8054199cefaf0b163cd9ea91895c400f4741f9",
+          "available_at": "2026-10-25T00:37:25+08:00",
+          "output_at": "2026-10-25T00:37:00+08:00",
+          "data_date": "2026-10-25",
+          "run_id": 40112081531,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-24T21:11:00+08:00",
+          "delay_minutes": 206.41666666666666,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "a3d3328ad54a7519446551811a62d8506d1fd068",
+          "available_at": "2026-10-25T09:42:58+08:00",
+          "output_at": "2026-10-25T09:42:00+08:00",
+          "data_date": "2026-10-25",
+          "run_id": 40151626798,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-25T07:47:00+08:00",
+          "delay_minutes": 115.96666666666667,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "ebfe4f592cb180bd4b4c902cd7e3d39989bd3cce",
+          "available_at": "2026-10-25T17:11:42+08:00",
+          "output_at": "2026-10-25T17:11:00+08:00",
+          "data_date": "2026-10-25",
+          "run_id": 40179503381,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-25T12:13:00+08:00",
+          "delay_minutes": 298.7,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "dbacaf475b09f64a32a24e7193281826fe75f8cb",
+          "available_at": "2026-10-25T21:16:28+08:00",
+          "output_at": "2026-10-25T21:16:00+08:00",
+          "data_date": "2026-10-25",
+          "run_id": 40196734061,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-25T16:23:00+08:00",
+          "delay_minutes": 293.46666666666664,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "1d86b39f430c9e58230412efbced314b0860eed5",
+          "available_at": "2026-10-26T01:05:38+08:00",
+          "output_at": "2026-10-26T01:05:00+08:00",
+          "data_date": "2026-10-26",
+          "run_id": 40214508504,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-25T21:11:00+08:00",
+          "delay_minutes": 234.63333333333333,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "1c229360d968ec405891a4aca20df7629c5cc54a",
+          "available_at": "2026-10-26T09:48:12+08:00",
+          "output_at": "2026-10-26T09:48:00+08:00",
+          "data_date": "2026-10-26",
+          "run_id": 40255870086,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-26T07:47:00+08:00",
+          "delay_minutes": 121.2,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "392b3123b55a1406c3f7e71f98dc495a6e992da8",
+          "available_at": "2026-10-26T18:13:58+08:00",
+          "output_at": "2026-10-26T18:13:00+08:00",
+          "data_date": "2026-10-26",
+          "run_id": 40305070638,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-26T12:13:00+08:00",
+          "delay_minutes": 360.96666666666664,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "4c619778cc4d2179ef5c10dee55e1226167c1933",
+          "available_at": "2026-10-26T23:21:15+08:00",
+          "output_at": "2026-10-26T23:21:00+08:00",
+          "data_date": "2026-10-26",
+          "run_id": 40348002038,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-26T16:23:00+08:00",
+          "delay_minutes": 418.25,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "89f51d19c6cfa5f5f3ca23a0b88a897e6ae2bd92",
+          "available_at": "2026-10-27T03:16:08+08:00",
+          "output_at": "2026-10-27T03:16:00+08:00",
+          "data_date": "2026-10-27",
+          "run_id": 40384720995,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-26T21:11:00+08:00",
+          "delay_minutes": 365.1333333333333,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "e29819202d3790958815f9d028780cf0c6fdfac9",
+          "available_at": "2026-10-27T10:32:28+08:00",
+          "output_at": "2026-10-27T10:32:00+08:00",
+          "data_date": "2026-10-27",
+          "run_id": 40438446639,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-27T07:47:00+08:00",
+          "delay_minutes": 165.46666666666667,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "47480ddb07301ca31aa629593ae2ade7d6ca3d98",
+          "available_at": "2026-10-27T17:55:37+08:00",
+          "output_at": "2026-10-27T17:55:00+08:00",
+          "data_date": "2026-10-27",
+          "run_id": 40483721103,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-27T12:13:00+08:00",
+          "delay_minutes": 342.6166666666667,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "8759782eb7b4d684c1d99214190a101926678724",
+          "available_at": "2026-10-27T22:44:02+08:00",
+          "output_at": "2026-10-27T22:44:00+08:00",
+          "data_date": "2026-10-27",
+          "run_id": 40523487086,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-27T16:23:00+08:00",
+          "delay_minutes": 381.03333333333336,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "3bb3b68599001b1c151dfc78bf0017ae700a295a",
+          "available_at": "2026-10-28T02:44:35+08:00",
+          "output_at": "2026-10-28T02:44:00+08:00",
+          "data_date": "2026-10-28",
+          "run_id": 40562009944,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-27T21:11:00+08:00",
+          "delay_minutes": 333.5833333333333,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "32144e7b8ef85a76081db5dc4abca1f5f0c5d5df",
+          "available_at": "2026-10-28T10:38:45+08:00",
+          "output_at": "2026-10-28T10:38:00+08:00",
+          "data_date": "2026-10-28",
+          "run_id": 40621902618,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-28T07:47:00+08:00",
+          "delay_minutes": 171.75,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "ed30cbf608a0c462c322b52e1263a365a50729c5",
+          "available_at": "2026-10-28T18:42:30+08:00",
+          "output_at": "2026-10-28T18:42:00+08:00",
+          "data_date": "2026-10-28",
+          "run_id": 40673359122,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-28T12:13:00+08:00",
+          "delay_minutes": 389.5,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "4ac821e9c12ea50c869451a3417e5545666d30d9",
+          "available_at": "2026-10-28T23:17:16+08:00",
+          "output_at": "2026-10-28T23:17:00+08:00",
+          "data_date": "2026-10-28",
+          "run_id": 40713895366,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-28T16:23:00+08:00",
+          "delay_minutes": 414.26666666666665,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "05c449f3a1defed58fd89fdc0469f6767d9d83b2",
+          "available_at": "2026-10-29T02:55:51+08:00",
+          "output_at": "2026-10-29T02:55:00+08:00",
+          "data_date": "2026-10-29",
+          "run_id": 40748552264,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-28T21:11:00+08:00",
+          "delay_minutes": 344.85,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "92b1467ab6cf73cecc8814691d8ae9c5e5d6987a",
+          "available_at": "2026-10-29T10:57:43+08:00",
+          "output_at": "2026-10-29T10:57:00+08:00",
+          "data_date": "2026-10-29",
+          "run_id": 40809137434,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-29T07:47:00+08:00",
+          "delay_minutes": 190.71666666666667,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "54066d2376e4b768c273d645846917945a4639e1",
+          "available_at": "2026-10-29T18:57:23+08:00",
+          "output_at": "2026-10-29T18:57:00+08:00",
+          "data_date": "2026-10-29",
+          "run_id": 40861195057,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-29T12:13:00+08:00",
+          "delay_minutes": 404.3833333333333,
+          "weekly_rotation": false
+        }
+      ],
+      "gap_definition": "下一成功产出提交可见时刻 - 上一成功产出字段时刻（含执行/提交耗时）"
+    },
+    "community": {
+      "name": "社区情绪",
+      "introduced_at": "2026-10-22T17:48:58+08:00",
+      "first_success_at": "2026-10-23T20:53:35+08:00",
+      "delay": {
+        "n": 4,
+        "p50": 357.6,
+        "p90": 417.6666666666667,
+        "p95": 417.6666666666667,
+        "max": 417.6666666666667
+      },
+      "grace": {
+        "p95_minutes": 417.6666666666667,
+        "margin_minutes": 60.06666666666666,
+        "minutes": 478
+      },
+      "rotation_delay": {
+        "n": 0,
+        "p50": null,
+        "p90": null,
+        "p95": null,
+        "max": null
+      },
+      "rotation_grace": null,
+      "success_gap": {
+        "n": 3,
+        "p50": 1499.9666666666667,
+        "p90": 4424.666666666667,
+        "p95": 4424.666666666667,
+        "max": 4424.666666666667
+      },
+      "freshness": {
+        "p95_minutes": 4424.666666666667,
+        "margin_minutes": 2924.7000000000003,
+        "minutes": 7350
+      },
+      "samples": [
+        {
+          "sha": "7fcfab1f0bfd2343f78e7fe76275cac5a284fd4b",
+          "available_at": "2026-10-23T20:53:35+08:00",
+          "output_at": "2026-10-23T20:50:00+08:00",
+          "data_date": "2026-10-23",
+          "run_id": 39956320836,
+          "success": true,
+          "mapping": "产出数据日期+清单计划",
+          "scheduled_at": "2026-10-23T15:37:00+08:00",
+          "delay_minutes": 316.5833333333333,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "ad3e76f3384df0bb3175224aa28598968cd371a6",
+          "available_at": "2026-10-26T22:34:40+08:00",
+          "output_at": "2026-10-26T22:31:00+08:00",
+          "data_date": "2026-10-26",
+          "run_id": 40340361870,
+          "success": true,
+          "mapping": "产出数据日期+清单计划",
+          "scheduled_at": "2026-10-26T15:37:00+08:00",
+          "delay_minutes": 417.6666666666667,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "fcc7639b84f5ea06438bd0851caa4eea943ba759",
+          "available_at": "2026-10-27T21:34:36+08:00",
+          "output_at": "2026-10-27T21:31:00+08:00",
+          "data_date": "2026-10-27",
+          "run_id": 40512749729,
+          "success": true,
+          "mapping": "产出数据日期+清单计划",
+          "scheduled_at": "2026-10-27T15:37:00+08:00",
+          "delay_minutes": 357.6,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "ab9c20ad50b4dd439923653520ee9db3bc5964c8",
+          "available_at": "2026-10-28T22:30:58+08:00",
+          "output_at": "2026-10-28T22:26:00+08:00",
+          "data_date": "2026-10-28",
+          "run_id": 40705817228,
+          "success": true,
+          "mapping": "产出数据日期+清单计划",
+          "scheduled_at": "2026-10-28T15:37:00+08:00",
+          "delay_minutes": 413.96666666666664,
+          "weekly_rotation": false
+        }
+      ],
+      "gap_definition": "下一成功产出提交可见时刻 - 上一成功产出字段时刻（含执行/提交耗时）"
+    },
+    "sentiment_index": {
+      "name": "散户情绪指标",
+      "introduced_at": "2026-10-22T19:11:04+08:00",
+      "first_success_at": "2026-10-23T22:25:43+08:00",
+      "delay": {
+        "n": 4,
+        "p50": 411.85,
+        "p90": 444.51666666666665,
+        "p95": 444.51666666666665,
+        "max": 444.51666666666665
+      },
+      "grace": {
+        "p95_minutes": 444.51666666666665,
+        "margin_minutes": 32.66666666666663,
+        "minutes": 478
+      },
+      "rotation_delay": {
+        "n": 0,
+        "p50": null,
+        "p90": null,
+        "p95": null,
+        "max": null
+      },
+      "rotation_grace": null,
+      "success_gap": {
+        "n": 3,
+        "p50": 1472.6666666666667,
+        "p90": 4418.766666666666,
+        "p95": 4418.766666666666,
+        "max": 4418.766666666666
+      },
+      "freshness": {
+        "p95_minutes": 4418.766666666666,
+        "margin_minutes": 2946.0999999999995,
+        "minutes": 7365
+      },
+      "samples": [
+        {
+          "sha": "c62882cdf590300dc27ef615fe0530d96cf42ac2",
+          "available_at": "2026-10-23T22:25:43+08:00",
+          "output_at": "2026-10-23T22:25:43+08:00",
+          "data_date": "2026-10-23",
+          "run_id": 39969476899,
+          "success": true,
+          "mapping": "产出数据日期+清单计划",
+          "scheduled_at": "2026-10-23T16:40:00+08:00",
+          "delay_minutes": 345.71666666666664,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "90d092a1f317bdd1c1bdb255e0c4bd562a1255fe",
+          "available_at": "2026-10-27T00:04:29+08:00",
+          "output_at": "2026-10-27T00:04:29+08:00",
+          "data_date": "2026-10-26",
+          "run_id": 40355491519,
+          "success": true,
+          "mapping": "产出数据日期+清单计划",
+          "scheduled_at": "2026-10-26T16:40:00+08:00",
+          "delay_minutes": 444.48333333333335,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "6ff42ae45613116df7a8f05d40aad824e3c52cbc",
+          "available_at": "2026-10-27T23:31:51+08:00",
+          "output_at": "2026-10-27T23:31:51+08:00",
+          "data_date": "2026-10-27",
+          "run_id": 40531801325,
+          "success": true,
+          "mapping": "产出数据日期+清单计划",
+          "scheduled_at": "2026-10-27T16:40:00+08:00",
+          "delay_minutes": 411.85,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "e2c59c364d427db783a402cd05e2167c29f76b8e",
+          "available_at": "2026-10-29T00:04:31+08:00",
+          "output_at": "2026-10-29T00:04:31+08:00",
+          "data_date": "2026-10-28",
+          "run_id": 40722265633,
+          "success": true,
+          "mapping": "产出数据日期+清单计划",
+          "scheduled_at": "2026-10-28T16:40:00+08:00",
+          "delay_minutes": 444.51666666666665,
+          "weekly_rotation": false
+        }
+      ],
+      "gap_definition": "下一成功产出提交可见时刻 - 上一成功产出字段时刻（含执行/提交耗时）"
+    },
+    "tophub": {
+      "name": "信息源监控（每日四次）",
+      "introduced_at": "2026-10-22T23:13:23+08:00",
+      "first_success_at": "2026-10-23T12:42:14+08:00",
+      "delay": {
+        "n": 26,
+        "p50": 313.8333333333333,
+        "p90": 406.85,
+        "p95": 419.46666666666664,
+        "max": 424.05
+      },
+      "grace": {
+        "p95_minutes": 419.46666666666664,
+        "margin_minutes": 105.63333333333333,
+        "minutes": 526
+      },
+      "rotation_delay": {
+        "n": 0,
+        "p50": null,
+        "p90": null,
+        "p95": null,
+        "max": null
+      },
+      "rotation_grace": null,
+      "success_gap": {
+        "n": 25,
+        "p50": 280.6333333333333,
+        "p90": 654.3166666666667,
+        "p95": 698.9166666666666,
+        "max": 722.4166666666666
+      },
+      "freshness": {
+        "p95_minutes": 698.9166666666666,
+        "margin_minutes": 418.2833333333333,
+        "minutes": 1118
+      },
+      "samples": [
+        {
+          "sha": "7150eb9521338385d64f7d30bfead31b7b12c703",
+          "available_at": "2026-10-23T12:42:14+08:00",
+          "output_at": "2026-10-23T12:39:00+08:00",
+          "data_date": "2026-10-23",
+          "run_id": 39901439330,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-23T08:07:00+08:00",
+          "delay_minutes": 275.23333333333335,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "692d986d8cee57e2afede58d4cfa3c1ac12890ff",
+          "available_at": "2026-10-23T17:20:50+08:00",
+          "output_at": "2026-10-23T17:17:00+08:00",
+          "data_date": "2026-10-23",
+          "run_id": 39930831798,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-23T12:07:00+08:00",
+          "delay_minutes": 313.8333333333333,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "3eb55d0e5ef94496bc913179a5e987345af1787b",
+          "available_at": "2026-10-23T21:23:30+08:00",
+          "output_at": "2026-10-23T21:20:00+08:00",
+          "data_date": "2026-10-23",
+          "run_id": 39960407605,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-23T16:07:00+08:00",
+          "delay_minutes": 316.5,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "da96da556f8134a025d538f81ff7f2f78ec35e0b",
+          "available_at": "2026-10-24T01:53:25+08:00",
+          "output_at": "2026-10-24T01:50:00+08:00",
+          "data_date": "2026-10-24",
+          "run_id": 39998405229,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-23T21:07:00+08:00",
+          "delay_minutes": 286.4166666666667,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "c1691310302889d96a98e625f17ad384825b1e9d",
+          "available_at": "2026-10-24T12:31:10+08:00",
+          "output_at": "2026-10-24T12:28:00+08:00",
+          "data_date": "2026-10-24",
+          "run_id": 40062434070,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-24T08:07:00+08:00",
+          "delay_minutes": 264.1666666666667,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "e8282301852d45e6b1ea5d001dbcda2c437cd75f",
+          "available_at": "2026-10-24T16:52:43+08:00",
+          "output_at": "2026-10-24T16:50:00+08:00",
+          "data_date": "2026-10-24",
+          "run_id": 40079562410,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-24T12:07:00+08:00",
+          "delay_minutes": 285.71666666666664,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "8768fd3fb7ed575c11384138341c99d95271b463",
+          "available_at": "2026-10-24T20:40:51+08:00",
+          "output_at": "2026-10-24T20:38:00+08:00",
+          "data_date": "2026-10-24",
+          "run_id": 40094732756,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-24T16:07:00+08:00",
+          "delay_minutes": 273.85,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "7122ab30c5be66ce492820c8b2c1b77c58126803",
+          "available_at": "2026-10-25T00:35:08+08:00",
+          "output_at": "2026-10-25T00:32:00+08:00",
+          "data_date": "2026-10-25",
+          "run_id": 40112034194,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-24T21:07:00+08:00",
+          "delay_minutes": 208.13333333333333,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "31ff26f9ca5bc4da442e10fb6a89e1e45e705d7a",
+          "available_at": "2026-10-25T12:34:25+08:00",
+          "output_at": "2026-10-25T12:31:00+08:00",
+          "data_date": "2026-10-25",
+          "run_id": 40162205962,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-25T08:07:00+08:00",
+          "delay_minutes": 267.4166666666667,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "76e3735896c7b9cba347214930797b3cf285083d",
+          "available_at": "2026-10-25T17:08:51+08:00",
+          "output_at": "2026-10-25T17:06:00+08:00",
+          "data_date": "2026-10-25",
+          "run_id": 40179268373,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-25T12:07:00+08:00",
+          "delay_minutes": 301.85,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "a7d212d0aa11de9af829d5daac048ca745cb2f3e",
+          "available_at": "2026-10-25T21:11:58+08:00",
+          "output_at": "2026-10-25T21:09:00+08:00",
+          "data_date": "2026-10-25",
+          "run_id": 40196314514,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-25T16:07:00+08:00",
+          "delay_minutes": 304.96666666666664,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "ed9cadc8e7995f2fa5574f6e4112e85f20e7391c",
+          "available_at": "2026-10-26T01:04:07+08:00",
+          "output_at": "2026-10-26T01:01:00+08:00",
+          "data_date": "2026-10-26",
+          "run_id": 40214467120,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-25T21:07:00+08:00",
+          "delay_minutes": 237.11666666666667,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "d5e5a721859067930ed26191e65dcbf31ddf6a42",
+          "available_at": "2026-10-26T12:39:55+08:00",
+          "output_at": "2026-10-26T12:37:00+08:00",
+          "data_date": "2026-10-26",
+          "run_id": 40269976784,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-26T08:07:00+08:00",
+          "delay_minutes": 272.9166666666667,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "03140151711455f2d9a23c21f9bf8c183d535bb3",
+          "available_at": "2026-10-26T18:04:40+08:00",
+          "output_at": "2026-10-26T18:02:00+08:00",
+          "data_date": "2026-10-26",
+          "run_id": 40304177991,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-26T12:07:00+08:00",
+          "delay_minutes": 357.6666666666667,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "c392e62d84d47c7ef4c98b93303436a9c8a0f6e3",
+          "available_at": "2026-10-26T23:11:03+08:00",
+          "output_at": "2026-10-26T23:08:00+08:00",
+          "data_date": "2026-10-26",
+          "run_id": 40346296931,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-26T16:07:00+08:00",
+          "delay_minutes": 424.05,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "4af789f058ec50812248b10f1efde470eef74b29",
+          "available_at": "2026-10-27T03:13:57+08:00",
+          "output_at": "2026-10-27T03:11:00+08:00",
+          "data_date": "2026-10-27",
+          "run_id": 40384505255,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-26T21:07:00+08:00",
+          "delay_minutes": 366.95,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "4178ece68442497f2b991ed67845925b8abcdf91",
+          "available_at": "2026-10-27T12:57:40+08:00",
+          "output_at": "2026-10-27T12:54:00+08:00",
+          "data_date": "2026-10-27",
+          "run_id": 40452331900,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-27T08:07:00+08:00",
+          "delay_minutes": 290.6666666666667,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "234091cf5922ae89d8ff6b3155a3706da6abc265",
+          "available_at": "2026-10-27T17:48:26+08:00",
+          "output_at": "2026-10-27T17:45:00+08:00",
+          "data_date": "2026-10-27",
+          "run_id": 40483228596,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-27T12:07:00+08:00",
+          "delay_minutes": 341.43333333333334,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "62caa31c2b76815a2fcfc4312b07221f8d4c8781",
+          "available_at": "2026-10-27T22:25:38+08:00",
+          "output_at": "2026-10-27T22:23:00+08:00",
+          "data_date": "2026-10-27",
+          "run_id": 40520571465,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-27T16:07:00+08:00",
+          "delay_minutes": 378.6333333333333,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "8c62c94b838a8abdafb31060aaf5af7031706d14",
+          "available_at": "2026-10-28T02:41:43+08:00",
+          "output_at": "2026-10-28T02:39:00+08:00",
+          "data_date": "2026-10-28",
+          "run_id": 40561968000,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-27T21:07:00+08:00",
+          "delay_minutes": 334.71666666666664,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "e19eecc3e7b4a18306cc722e3d3e997f367f3fe0",
+          "available_at": "2026-10-28T13:32:40+08:00",
+          "output_at": "2026-10-28T13:29:00+08:00",
+          "data_date": "2026-10-28",
+          "run_id": 40638288807,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-28T08:07:00+08:00",
+          "delay_minutes": 325.6666666666667,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "9848b22f836a6fce0f50517d611d60dc034b6912",
+          "available_at": "2026-10-28T18:33:37+08:00",
+          "output_at": "2026-10-28T18:30:00+08:00",
+          "data_date": "2026-10-28",
+          "run_id": 40672670408,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-28T12:07:00+08:00",
+          "delay_minutes": 386.6166666666667,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "6501cefdb5c1e3cd3422c0433ec7de418c26c2ed",
+          "available_at": "2026-10-28T23:06:28+08:00",
+          "output_at": "2026-10-28T23:03:00+08:00",
+          "data_date": "2026-10-28",
+          "run_id": 40712094960,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-28T16:07:00+08:00",
+          "delay_minutes": 419.46666666666664,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "c3151dc96b9c6036c6ff782c2441de37e4739bec",
+          "available_at": "2026-10-29T02:49:40+08:00",
+          "output_at": "2026-10-29T02:47:00+08:00",
+          "data_date": "2026-10-29",
+          "run_id": 40748362578,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-28T21:07:00+08:00",
+          "delay_minutes": 342.6666666666667,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "5ef394ac4bc1d8b848ced2aa17f5f28efb0d7e1a",
+          "available_at": "2026-10-29T13:41:19+08:00",
+          "output_at": "2026-10-29T13:38:00+08:00",
+          "data_date": "2026-10-29",
+          "run_id": 40824552806,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-29T08:07:00+08:00",
+          "delay_minutes": 334.31666666666666,
+          "weekly_rotation": false
+        },
+        {
+          "sha": "51f3ade1cd1fe216270003d0c959ee57675ad855",
+          "available_at": "2026-10-29T18:53:51+08:00",
+          "output_at": "2026-10-29T18:50:00+08:00",
+          "data_date": "2026-10-29",
+          "run_id": 40860750023,
+          "success": true,
+          "mapping": "从工作流上线后第一个时段起，成功定时运行按顺序配对的估计；API未提供原始cron，不用于新鲜度门槛",
+          "scheduled_at": "2026-10-29T12:07:00+08:00",
+          "delay_minutes": 406.85,
+          "weekly_rotation": false
+        }
+      ],
+      "gap_definition": "下一成功产出提交可见时刻 - 上一成功产出字段时刻（含执行/提交耗时）"
+    },
+    "pool": {
+      "name": "股票池镜像",
+      "introduced_at": "2026-10-22T14:27:20+08:00",
+      "first_success_at": "2026-10-22T21:40:00+08:00",
+      "delay": {
+        "n": 1,
+        "p50": 3.0,
+        "p90": 3.0,
+        "p95": 3.0,
+        "max": 3.0
+      },
+      "grace": {
+        "p95_minutes": 3.0,
+        "margin_minutes": 1,
+        "minutes": 4
+      },
+      "rotation_delay": {
+        "n": 0,
+        "p50": null,
+        "p90": null,
+        "p95": null,
+        "max": null
+      },
+      "rotation_grace": null,
+      "success_gap": {
+        "n": 0,
+        "p50": null,
+        "p90": null,
+        "p95": null,
+        "max": null
+      },
+      "freshness": null,
+      "samples": [
+        {
+          "sha": "353366b9fcb661822b5af05c7a043aae2b77a3f2",
+          "available_at": "2026-10-22T21:40:00+08:00",
+          "output_at": "2026-10-22T21:39:00+08:00",
+          "data_date": "2026-10-22",
+          "run_id": null,
+          "success": true,
+          "mapping": "产出数据日期+清单计划",
+          "scheduled_at": "2026-10-22T21:37:00+08:00",
+          "delay_minutes": 3.0,
+          "weekly_rotation": false
+        }
+      ],
+      "gap_definition": "下一成功产出提交可见时刻 - 上一成功产出字段时刻（含执行/提交耗时）"
+    },
+    "v3": {
+      "name": "业绩加速选股",
+      "introduced_at": "2026-10-21T17:31:47+08:00",
+      "first_success_at": null,
+      "delay": {
+        "n": 0,
+        "p50": null,
+        "p90": null,
+        "p95": null,
+        "max": null
+      },
+      "grace": null,
+      "rotation_delay": {
+        "n": 0,
+        "p50": null,
+        "p90": null,
+        "p95": null,
+        "max": null
+      },
+      "rotation_grace": null,
+      "success_gap": {
+        "n": 0,
+        "p50": null,
+        "p90": null,
+        "p95": null,
+        "max": null
+      },
+      "freshness": null,
+      "samples": [],
+      "gap_definition": "下一成功产出提交可见时刻 - 上一成功产出字段时刻（含执行/提交耗时）"
+    }
+  },
+  "excluded": [
+    {
+      "item": "community",
+      "sha": "7ae8831e1925e0578de7e3b24c254d8e75d9dad6",
+      "reason": "无成功 schedule/workflow_run 匹配；手动运行不校准调度延迟"
+    },
+    {
+      "item": "community",
+      "sha": "6e081ea9b530c57717f51487602b2e0208ff67ac",
+      "reason": "无成功 schedule/workflow_run 匹配；手动运行不校准调度延迟"
+    },
+    {
+      "item": "community",
+      "sha": "de6303fc77aab5e3710eef64d17a1d40209f4276",
+      "reason": "无成功 schedule/workflow_run 匹配；手动运行不校准调度延迟"
+    },
+    {
+      "item": "community",
+      "sha": "b92db5dcc2148f8b0ea0097375158a46ff9126f9",
+      "reason": "无成功 schedule/workflow_run 匹配；手动运行不校准调度延迟"
+    },
+    {
+      "item": "tophub",
+      "sha": "b031bdbcb33ff35269505cf8e22efdd438dfb1be",
+      "reason": "无成功 schedule/workflow_run 匹配；手动运行不校准调度延迟"
+    },
+    {
+      "item": "tophub",
+      "sha": "c7891df7ce76fb8d6f3285ae1d41b49eb537431c",
+      "reason": "无成功 schedule/workflow_run 匹配；手动运行不校准调度延迟"
+    }
+  ]
+}

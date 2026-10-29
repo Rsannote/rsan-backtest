@@ -1,0 +1,94 @@
+name: T11 补抓分支验收
+
+on:
+  push:
+    branches: [gpt/T11-retry]
+    paths:
+      - scripts/update_hangqing.py
+      - scripts/run_delay_stats.py
+      - scripts/verify_t11_retry.py
+      - tests/test_update_hangqing_retry.py
+      - tests/test_run_delay_stats.py
+      - tests/test_t11_workflow.py
+      - logs/test/T11/每日验收请求.json
+      - .github/workflows/test-t11-retry.yml
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 验收范围（全库只在真实交易日收盘后计数）
+        type: choice
+        options: [smoke, full, stats]
+        default: smoke
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: repo-writer
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    if: github.ref == 'refs/heads/gpt/T11-retry'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: 选择验收范围
+        id: scope
+        env:
+          INPUT_MODE: ${{ inputs.mode }}
+        run: |
+          python3 - <<'PY'
+          import datetime,json,os,subprocess
+          from pathlib import Path
+          mode=os.environ.get('INPUT_MODE') or 'smoke'
+          event=json.loads(Path(os.environ['GITHUB_EVENT_PATH']).read_text())
+          # Actions中的push载荷不保证含commit变更文件，直接查已检出提交。
+          changed=set(subprocess.check_output(['git','-c','core.quotePath=false','diff-tree','--no-commit-id','--name-only','-r','-z',os.environ['GITHUB_SHA']]).decode().split('\0'))
+          request='logs/test/T11/每日验收请求.json'
+          if os.environ['GITHUB_EVENT_NAME']=='push' and request in changed:
+            data=json.loads(Path(request).read_text())
+            today=datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).date().isoformat()
+            assert data['date']==today,'验收请求日期已过，不把补跑冒充当日实跑'
+            mode=data['mode']
+          assert mode in ('smoke','full','stats')
+          with open(os.environ['GITHUB_OUTPUT'],'a') as output: output.write('mode='+mode+'\n')
+          print('本次验收范围：'+mode)
+          PY
+      - name: 安装既有依赖
+        run: python3 -m pip install pandas numpy requests
+      - name: 完整离线测试与引擎校验
+        run: |
+          set -o pipefail
+          mkdir -p logs/test/T11/CI
+          python3 -m unittest discover -s tests -v 2>&1 | tee logs/test/T11/CI/离线测试.txt
+          md5sum -c engine/ENGINE_MD5.txt | tee logs/test/T11/CI/引擎校验.txt
+      - name: 隔离真实行情与延迟统计验收
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          MODE: ${{ steps.scope.outputs.mode }}
+        run: |
+          git fetch origin main
+          case "$MODE" in
+            full) python3 scripts/verify_t11_retry.py --source-ref origin/main --all ;;
+            stats) python3 scripts/verify_t11_retry.py --source-ref origin/main --stats-only ;;
+            smoke) python3 scripts/verify_t11_retry.py --source-ref origin/main --codes sh000300,600872 --inject-501 600872 ;;
+            *) exit 1 ;;
+          esac
+      - name: 正式数据与回测口径保护
+        if: always()
+        run: git diff --exit-code -- data engine archive judgments graph system/运行清单.json logs/运行延迟统计.md logs/运行延迟统计.json
+      - name: 保存分支验收证据
+        if: always()
+        run: |
+          git config user.name github-actions
+          git config user.email actions@users.noreply.github.com
+          git add logs/test/T11
+          git diff --cached --quiet && exit 0
+          git commit -m "T11：保存补抓与隔离统计复跑验收证据"
+          git pull --rebase origin "$GITHUB_REF_NAME"
+          git push origin "HEAD:$GITHUB_REF_NAME"

@@ -1,6 +1,7 @@
 """校准统计与历史取证边界，不联网。"""
 import copy
 import importlib.util
+import json
 from pathlib import Path
 import subprocess
 import sys
@@ -52,24 +53,93 @@ class DelayStatsTests(unittest.TestCase):
                "freshness": stats.allowance(stats.quantiles([300, 600])), "gap_definition": "实测成功间隔"}
         report = {"checked_at": "2026-10-29T07:00:00+08:00", "source_ref": "a" * 40, "formula": "公式",
                   "items": {"news": copy.deepcopy(row), "pool": copy.deepcopy(row)}}
-        manifest = {"items": [{"id": "news"}, {"id": "pool", "trading_days_only": False}]}
+        policy = {"id": "pool", "trading_days_only": False, "check_mode": "freshness", "max_age_minutes": 144000,
+                  "freshness_success_paths": [{"path": "data/股票池/状态.json", "field": "最近检查"}], "说明": "审核批准100天"}
+        manifest = {"items": [{"id": "news"}, policy]}
         calibrated = stats.calibrated(manifest, report)
         news, pool = calibrated["items"]
         self.assertEqual(news["check_mode"], "freshness")
         self.assertEqual(news["max_age_minutes"], 900)
         self.assertEqual(news["delay_basis"]["freshness"]["p95_minutes"], 600)
-        self.assertEqual(pool["check_mode"], "previous_trading_day")
-        self.assertTrue(pool["trading_days_only"])
+        self.assertEqual(pool, policy)
         self.assertNotIn("check_mode", manifest["items"][0])
 
     def test_no_samples_are_not_presented_as_measured_p95(self):
         known = {"delay": stats.quantiles([400]), "grace": stats.allowance(stats.quantiles([400])), "rotation_grace": None}
         missing = {"delay": stats.quantiles([]), "grace": None, "rotation_grace": None}
-        report = {"checked_at": "2026-10-29T07:00:00+08:00", "source_ref": "b" * 40, "formula": "公式", "items": {"pool": known, "v3": missing}}
-        out = stats.calibrated({"items": [{"id": "pool"}, {"id": "v3"}]}, report)["items"][1]
+        report = {"checked_at": "2026-10-29T07:00:00+08:00", "source_ref": "b" * 40, "formula": "公式", "items": {"hangqing": known, "v3": missing}}
+        out = stats.calibrated({"items": [{"id": "hangqing"}, {"id": "v3"}]}, report)["items"][1]
         self.assertEqual(out["grace_minutes"], 401)
         self.assertIsNone(out["delay_basis"]["p95_minutes"])
         self.assertIn("无本项定时样本", out["delay_basis"]["fallback"])
+
+    def ready(self):
+        return {"checked_at": "2026-11-29T08:20:00+08:00", "first_repository_commit": "2026-10-20T00:00:00+08:00",
+                "items": {"hangqing": {"introduced_at": "2026-10-21T00:00:00+08:00", "first_success_at": "2026-10-22T23:30:00+08:00",
+                                       "samples": [{"success": True, "available_at": date + "T23:30:00+08:00"}
+                                                   for date in ("2026-11-03", "2026-11-10", "2026-11-17", "2026-11-24")]}}}
+
+    def test_actual_four_weeks_allows_apply_without_impossible_window_span(self):
+        report = self.ready()
+        # 四段样本只跨21天，完整历史已经证明首成功在窗口前；仍应通过。
+        stats.require_four_weeks({"items": [{"id": "hangqing"}]}, report)
+
+    def test_old_repository_alone_does_not_prove_task_or_success_coverage(self):
+        for field in ("introduced_at", "first_success_at"):
+            report = self.ready()
+            report["items"]["hangqing"][field] = "2026-11-02T00:00:00+08:00"
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                stats.require_four_weeks({"items": [{"id": "hangqing"}]}, report)
+        report = self.ready()
+        report["items"]["hangqing"]["samples"].pop()
+        with self.assertRaises(ValueError):
+            stats.require_four_weeks({"items": [{"id": "hangqing"}]}, report)
+
+    def test_sparse_selection_and_manual_policy_are_not_applied(self):
+        original = {"items": [{"id": "v3", "grace_minutes": 400}, {"id": "pool", "check_mode": "freshness", "max_age_minutes": 144000},
+                              {"id": "hangqing", "grace_minutes": 400}]}
+        proposal = copy.deepcopy(original)
+        for item in proposal["items"]:
+            item["grace_minutes"] = 999
+        applied = stats.applicable(original, proposal)
+        self.assertEqual(applied["items"][:2], original["items"][:2])
+        self.assertEqual(applied["items"][2]["grace_minutes"], 999)
+
+    def test_apply_rejects_short_history_without_changing_manifest_bytes(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            path = root / "system/运行清单.json"; path.parent.mkdir()
+            original = b'{"items": [{"id": "pool", "max_age_minutes": 144000}]}\n'
+            path.write_bytes(original)
+            actions = root / "actions.json"; actions.write_text('{"runs": []}')
+            short = {"checked_at": "2026-10-29T08:20:00+08:00", "first_repository_commit": "2026-10-20T00:00:00+08:00", "items": {}}
+            with patch.object(stats, "analyze", return_value=short), patch.object(stats, "calibrated", return_value={"items": []}), \
+                 patch("sys.argv", ["stats", "--root", folder, "--actions", str(actions), "--apply-manifest"]):
+                with self.assertRaisesRegex(ValueError, "不足28天"):
+                    stats.main()
+            self.assertEqual(path.read_bytes(), original)
+            self.assertFalse((root / "logs/运行延迟统计.json").exists())
+
+    def test_cli_after_four_weeks_applies_daily_grace_and_retains_pool(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            path = root / "system/运行清单.json"; path.parent.mkdir()
+            policy = {"id": "pool", "check_mode": "freshness", "max_age_minutes": 144000, "说明": "审核批准100天"}
+            manifest = {"items": [{"id": "hangqing", "grace_minutes": 999}, policy, {"id": "v3", "grace_minutes": 999}]}
+            path.write_text(json.dumps(manifest), encoding="utf-8")
+            actions = root / "actions.json"; actions.write_text('{"runs": []}')
+            report = self.ready()
+            report.update(source_ref="a" * 40, formula="公式")
+            row = report["items"]["hangqing"]
+            row.update(delay=stats.quantiles([100, 200]), grace=stats.allowance(stats.quantiles([100, 200])),
+                       rotation_grace=None, freshness=None)
+            with patch.object(stats, "analyze", return_value=report), patch.object(stats, "render", return_value="隔离统计"), \
+                 patch("sys.argv", ["stats", "--root", folder, "--actions", str(actions), "--apply-manifest"]):
+                stats.main()
+            actual = json.loads(path.read_text())["items"]
+            self.assertEqual(actual[0]["grace_minutes"], 300)
+            self.assertEqual(actual[1], policy)
+            self.assertEqual(actual[2], manifest["items"][2])
 
     def test_git_snapshot_handles_chinese_paths_and_preserves_exact_bytes(self):
         with tempfile.TemporaryDirectory() as source, tempfile.TemporaryDirectory() as target:
