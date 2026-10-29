@@ -7,7 +7,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: repo-writer
+  group: t4b-readonly-snapshot
   cancel-in-progress: false
 jobs:
   snapshot:
