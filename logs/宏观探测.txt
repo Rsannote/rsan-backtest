@@ -1,9 +1,9 @@
 T6 宏观数据源探测（北京时间）
 {
   "任务": "T6 宏观数据来源探测，待审核后另案接入",
-  "北京时间": "2026-10-29T22:20:46.116008+08:00",
-  "Actions": "https://github.com/Rsannote/rsan-backtest/actions/runs/40890508224",
-  "源提交": "ebbbd649a5df8ba6b64f976a4c042066018b54cc",
+  "北京时间": "2026-10-29T22:29:48.072243+08:00",
+  "Actions": "https://github.com/Rsannote/rsan-backtest/actions/runs/40892004856",
+  "源提交": "1c5f6baf6090afd6da54a064ced4a7f6eef1166a",
   "程序完成": true,
   "已批准接入": false,
   "范围": "只写本日志；未接入 data/宏观、生产工作流或主线雷达",
@@ -27,7 +27,7 @@ T6 宏观数据源探测（北京时间）
         {
           "网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2015-01-01&endDate=2015-12-31&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:20:47.116355+08:00",
+          "北京时间": "2026-10-29T22:29:49.072750+08:00",
           "状态码": 200,
           "最终网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2015-01-01&endDate=2015-12-31&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "内容类型": "text/html;charset=UTF-8",
@@ -35,12 +35,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 251130,
           "SHA256": "f23fa2acdd7565ab6bdb94317697505c330e58ae1fe82440639d4d833f6000f7",
           "响应开头": " <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"> <html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"> <script type=\"text/javascript\" > var ctx=\"/cbweb-pbc-web\"; var ctxStatics=\"/cbweb-pbc-web/statics\"; </script> <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" /> <meta http-equiv=\"Cache-Control\" content=\"no-store\" /><meta http-equiv=\"Pragma\" content=\"no-cache\" /> <meta http-equiv=\"Expires\" content=\"0\" /> <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" /> <script src=\"/",
-          "耗时秒": 15.494
+          "耗时秒": 17.314
         },
         {
           "网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2016-01-01&endDate=2016-12-31&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:21:03.664464+08:00",
+          "北京时间": "2026-10-29T22:30:07.462204+08:00",
           "状态码": 200,
           "最终网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2016-01-01&endDate=2016-12-31&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "内容类型": "text/html;charset=UTF-8",
@@ -48,12 +48,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 253094,
           "SHA256": "b8cb3ef1a6e88cc5f93283edccad791a56c2a8751eb10b1a42f6877045b59c1e",
           "响应开头": " <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"> <html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"> <script type=\"text/javascript\" > var ctx=\"/cbweb-pbc-web\"; var ctxStatics=\"/cbweb-pbc-web/statics\"; </script> <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" /> <meta http-equiv=\"Cache-Control\" content=\"no-store\" /><meta http-equiv=\"Pragma\" content=\"no-cache\" /> <meta http-equiv=\"Expires\" content=\"0\" /> <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" /> <script src=\"/",
-          "耗时秒": 13.885
+          "耗时秒": 14.6
         },
         {
           "网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2017-01-01&endDate=2017-12-31&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:21:18.600626+08:00",
+          "北京时间": "2026-10-29T22:30:23.133974+08:00",
           "状态码": 200,
           "最终网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2017-01-01&endDate=2017-12-31&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "内容类型": "text/html;charset=UTF-8",
@@ -61,12 +61,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 253094,
           "SHA256": "38e05b15bca67923e732d82165733d50fc873a77d120516e98cd5c8673138111",
           "响应开头": " <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"> <html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"> <script type=\"text/javascript\" > var ctx=\"/cbweb-pbc-web\"; var ctxStatics=\"/cbweb-pbc-web/statics\"; </script> <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" /> <meta http-equiv=\"Cache-Control\" content=\"no-store\" /><meta http-equiv=\"Pragma\" content=\"no-cache\" /> <meta http-equiv=\"Expires\" content=\"0\" /> <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" /> <script src=\"/",
-          "耗时秒": 16.292
+          "耗时秒": 13.692
         },
         {
           "网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2018-01-01&endDate=2018-12-31&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:21:35.943837+08:00",
+          "北京时间": "2026-10-29T22:30:37.898446+08:00",
           "状态码": 200,
           "最终网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2018-01-01&endDate=2018-12-31&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "内容类型": "text/html;charset=UTF-8",
@@ -74,12 +74,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 254076,
           "SHA256": "2d1902ec3ff3ddb684c85ed2ff9042bd81dfac36c02d5551403db8afd4a7ffe5",
           "响应开头": " <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"> <html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"> <script type=\"text/javascript\" > var ctx=\"/cbweb-pbc-web\"; var ctxStatics=\"/cbweb-pbc-web/statics\"; </script> <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" /> <meta http-equiv=\"Cache-Control\" content=\"no-store\" /><meta http-equiv=\"Pragma\" content=\"no-cache\" /> <meta http-equiv=\"Expires\" content=\"0\" /> <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" /> <script src=\"/",
-          "耗时秒": 13.237
+          "耗时秒": 15.894
         },
         {
           "网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2019-01-01&endDate=2019-12-31&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:21:50.233601+08:00",
+          "北京时间": "2026-10-29T22:30:54.865300+08:00",
           "状态码": 200,
           "最终网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2019-01-01&endDate=2019-12-31&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "内容类型": "text/html;charset=UTF-8",
@@ -87,12 +87,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 252112,
           "SHA256": "53fd6d8d3bc04d48d9e44530aad20d4bc9670072a109c663c2c1d0809103e22d",
           "响应开头": " <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"> <html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"> <script type=\"text/javascript\" > var ctx=\"/cbweb-pbc-web\"; var ctxStatics=\"/cbweb-pbc-web/statics\"; </script> <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" /> <meta http-equiv=\"Cache-Control\" content=\"no-store\" /><meta http-equiv=\"Pragma\" content=\"no-cache\" /> <meta http-equiv=\"Expires\" content=\"0\" /> <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" /> <script src=\"/",
-          "耗时秒": 15.995
+          "耗时秒": 15.812
         },
         {
           "网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2020-01-01&endDate=2020-12-31&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:22:07.281165+08:00",
+          "北京时间": "2026-10-29T22:31:11.749824+08:00",
           "状态码": 200,
           "最终网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2020-01-01&endDate=2020-12-31&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "内容类型": "text/html;charset=UTF-8",
@@ -100,12 +100,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 251130,
           "SHA256": "eecba87fefd198878f234df6e0081c135622ccb1aca12f5b1174938088b34930",
           "响应开头": " <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"> <html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"> <script type=\"text/javascript\" > var ctx=\"/cbweb-pbc-web\"; var ctxStatics=\"/cbweb-pbc-web/statics\"; </script> <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" /> <meta http-equiv=\"Cache-Control\" content=\"no-store\" /><meta http-equiv=\"Pragma\" content=\"no-cache\" /> <meta http-equiv=\"Expires\" content=\"0\" /> <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" /> <script src=\"/",
-          "耗时秒": 14.416
+          "耗时秒": 13.689
         },
         {
           "网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2021-01-01&endDate=2021-12-31&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:22:22.747264+08:00",
+          "北京时间": "2026-10-29T22:31:26.511063+08:00",
           "状态码": 200,
           "最终网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2021-01-01&endDate=2021-12-31&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "内容类型": "text/html;charset=UTF-8",
@@ -113,12 +113,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 252112,
           "SHA256": "96b273dbd84cbecfef4993ff15d5481cf87a6b4001c386e865d9511e1861dc80",
           "响应开头": " <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"> <html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"> <script type=\"text/javascript\" > var ctx=\"/cbweb-pbc-web\"; var ctxStatics=\"/cbweb-pbc-web/statics\"; </script> <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" /> <meta http-equiv=\"Cache-Control\" content=\"no-store\" /><meta http-equiv=\"Pragma\" content=\"no-cache\" /> <meta http-equiv=\"Expires\" content=\"0\" /> <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" /> <script src=\"/",
-          "耗时秒": 15.768
+          "耗时秒": 16.851
         },
         {
           "网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2022-01-01&endDate=2022-12-31&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:22:39.566025+08:00",
+          "北京时间": "2026-10-29T22:31:44.432150+08:00",
           "状态码": 200,
           "最终网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2022-01-01&endDate=2022-12-31&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "内容类型": "text/html;charset=UTF-8",
@@ -126,12 +126,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 252112,
           "SHA256": "902c7aea968ab028d547091cf503a16a871f5cb1ddad9f5589068d4bf410a1a4",
           "响应开头": " <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"> <html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"> <script type=\"text/javascript\" > var ctx=\"/cbweb-pbc-web\"; var ctxStatics=\"/cbweb-pbc-web/statics\"; </script> <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" /> <meta http-equiv=\"Cache-Control\" content=\"no-store\" /><meta http-equiv=\"Pragma\" content=\"no-cache\" /> <meta http-equiv=\"Expires\" content=\"0\" /> <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" /> <script src=\"/",
-          "耗时秒": 15.153
+          "耗时秒": 15.057
         },
         {
           "网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2023-01-01&endDate=2023-12-31&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:22:55.771729+08:00",
+          "北京时间": "2026-10-29T22:32:00.562171+08:00",
           "状态码": 200,
           "最终网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2023-01-01&endDate=2023-12-31&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "内容类型": "text/html;charset=UTF-8",
@@ -139,12 +139,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 252112,
           "SHA256": "13ebf9dd69e200c95d39af66a8db14ca2daa684e312998debc077bd42def24ca",
           "响应开头": " <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"> <html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"> <script type=\"text/javascript\" > var ctx=\"/cbweb-pbc-web\"; var ctxStatics=\"/cbweb-pbc-web/statics\"; </script> <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" /> <meta http-equiv=\"Cache-Control\" content=\"no-store\" /><meta http-equiv=\"Pragma\" content=\"no-cache\" /> <meta http-equiv=\"Expires\" content=\"0\" /> <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" /> <script src=\"/",
-          "耗时秒": 15.105
+          "耗时秒": 14.104
         },
         {
           "网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2024-01-01&endDate=2024-12-31&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:23:11.928289+08:00",
+          "北京时间": "2026-10-29T22:32:15.738906+08:00",
           "状态码": 200,
           "最终网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2024-01-01&endDate=2024-12-31&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "内容类型": "text/html;charset=UTF-8",
@@ -152,12 +152,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 253094,
           "SHA256": "6464ae61ec52be3623fe28dd0a9716b25f676e6ac83fac81536d11f10b72f232",
           "响应开头": " <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"> <html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"> <script type=\"text/javascript\" > var ctx=\"/cbweb-pbc-web\"; var ctxStatics=\"/cbweb-pbc-web/statics\"; </script> <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" /> <meta http-equiv=\"Cache-Control\" content=\"no-store\" /><meta http-equiv=\"Pragma\" content=\"no-cache\" /> <meta http-equiv=\"Expires\" content=\"0\" /> <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" /> <script src=\"/",
-          "耗时秒": 14.546
+          "耗时秒": 14.257
         },
         {
           "网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2025-01-01&endDate=2025-12-31&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:23:27.526640+08:00",
+          "北京时间": "2026-10-29T22:32:31.068665+08:00",
           "状态码": 200,
           "最终网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2025-01-01&endDate=2025-12-31&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "内容类型": "text/html;charset=UTF-8",
@@ -165,12 +165,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 250148,
           "SHA256": "ae65bb9e11420d773ff9ff04420697f6fb0434023a2ecf845066d5367fb037cf",
           "响应开头": " <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"> <html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"> <script type=\"text/javascript\" > var ctx=\"/cbweb-pbc-web\"; var ctxStatics=\"/cbweb-pbc-web/statics\"; </script> <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" /> <meta http-equiv=\"Cache-Control\" content=\"no-store\" /><meta http-equiv=\"Pragma\" content=\"no-cache\" /> <meta http-equiv=\"Expires\" content=\"0\" /> <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" /> <script src=\"/",
-          "耗时秒": 14.312
+          "耗时秒": 15.031
         },
         {
           "网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2026-01-01&endDate=2026-10-29&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:23:42.890260+08:00",
+          "北京时间": "2026-10-29T22:32:47.171473+08:00",
           "状态码": 200,
           "最终网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2026-01-01&endDate=2026-10-29&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "内容类型": "text/html;charset=UTF-8",
@@ -178,7 +178,7 @@ T6 宏观数据源探测（北京时间）
           "字节数": 205958,
           "SHA256": "7639a288e19d63b9681f901cc19dd32d58efef8dbcf7a675497671d18b12f6fb",
           "响应开头": " <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"> <html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"> <script type=\"text/javascript\" > var ctx=\"/cbweb-pbc-web\"; var ctxStatics=\"/cbweb-pbc-web/statics\"; </script> <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" /> <meta http-equiv=\"Cache-Control\" content=\"no-store\" /><meta http-equiv=\"Pragma\" content=\"no-cache\" /> <meta http-equiv=\"Expires\" content=\"0\" /> <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" /> <script src=\"/",
-          "耗时秒": 12.138
+          "耗时秒": 12.456
         }
       ],
       "复测": [
@@ -349,7 +349,7 @@ T6 宏观数据源探测（北京时间）
         {
           "网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2026-07-31&endDate=2026-10-29&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:23:56.097694+08:00",
+          "北京时间": "2026-10-29T22:33:00.724182+08:00",
           "状态码": 200,
           "最终网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2026-07-31&endDate=2026-10-29&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "内容类型": "text/html;charset=UTF-8",
@@ -357,12 +357,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 66514,
           "SHA256": "755d62000d11f368bdf01eabb8c10e93878afb0457f2de2c2c2cc5bcadd37f4a",
           "响应开头": " <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"> <html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"> <script type=\"text/javascript\" > var ctx=\"/cbweb-pbc-web\"; var ctxStatics=\"/cbweb-pbc-web/statics\"; </script> <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" /> <meta http-equiv=\"Cache-Control\" content=\"no-store\" /><meta http-equiv=\"Pragma\" content=\"no-cache\" /> <meta http-equiv=\"Expires\" content=\"0\" /> <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" /> <script src=\"/",
-          "耗时秒": 4.374
+          "耗时秒": 5.11
         },
         {
           "网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2026-07-31&endDate=2026-10-29&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:24:01.485763+08:00",
+          "北京时间": "2026-10-29T22:33:06.855349+08:00",
           "状态码": 200,
           "最终网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2026-07-31&endDate=2026-10-29&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "内容类型": "text/html;charset=UTF-8",
@@ -370,12 +370,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 66514,
           "SHA256": "755d62000d11f368bdf01eabb8c10e93878afb0457f2de2c2c2cc5bcadd37f4a",
           "响应开头": " <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"> <html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"> <script type=\"text/javascript\" > var ctx=\"/cbweb-pbc-web\"; var ctxStatics=\"/cbweb-pbc-web/statics\"; </script> <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" /> <meta http-equiv=\"Cache-Control\" content=\"no-store\" /><meta http-equiv=\"Pragma\" content=\"no-cache\" /> <meta http-equiv=\"Expires\" content=\"0\" /> <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" /> <script src=\"/",
-          "耗时秒": 5.204
+          "耗时秒": 5.225
         },
         {
           "网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2026-07-31&endDate=2026-10-29&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:24:07.704152+08:00",
+          "北京时间": "2026-10-29T22:33:13.099826+08:00",
           "状态码": 200,
           "最终网址": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2026-07-31&endDate=2026-10-29&gjqx=0&qxId=ycqx&locale=cn_ZH",
           "内容类型": "text/html;charset=UTF-8",
@@ -383,7 +383,7 @@ T6 宏观数据源探测（北京时间）
           "字节数": 66514,
           "SHA256": "755d62000d11f368bdf01eabb8c10e93878afb0457f2de2c2c2cc5bcadd37f4a",
           "响应开头": " <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"> <html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"> <script type=\"text/javascript\" > var ctx=\"/cbweb-pbc-web\"; var ctxStatics=\"/cbweb-pbc-web/statics\"; </script> <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" /> <meta http-equiv=\"Cache-Control\" content=\"no-store\" /><meta http-equiv=\"Pragma\" content=\"no-cache\" /> <meta http-equiv=\"Expires\" content=\"0\" /> <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" /> <script src=\"/",
-          "耗时秒": 4.423
+          "耗时秒": 4.923
         }
       ],
       "复测": [
@@ -520,10 +520,18 @@ T6 宏观数据源探测（北京时间）
         {
           "网址": "https://home.treasury.gov/resource-center-data-chart-center/interest-rates/daily-treasury-rates.csv/2015/all?type=daily_treasury_yield_curve&field_tdr_date_value=2015&_format=csv",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:24:13.142786+08:00",
+          "北京时间": "2026-10-29T22:33:19.043841+08:00",
           "错误": "HTTPError: HTTP Error 404: Not Found",
           "状态码": 404,
-          "耗时秒": 1.103
+          "耗时秒": 0.674
+        },
+        {
+          "网址": "https://home.treasury.gov/resource-center-data-chart-center/interest-rates/pages/xml?data=daily_treasury_yield_curve&field_tdr_date_value=2015",
+          "方法": "GET",
+          "北京时间": "2026-10-29T22:33:20.718331+08:00",
+          "错误": "HTTPError: HTTP Error 404: Not Found",
+          "状态码": 404,
+          "耗时秒": 2.743
         }
       ],
       "复测": [
@@ -548,7 +556,7 @@ T6 宏观数据源探测（北京时间）
         {
           "网址": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2015-01-01",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:24:15.248770+08:00",
+          "北京时间": "2026-10-29T22:33:24.464446+08:00",
           "状态码": 200,
           "最终网址": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2015-01-01",
           "内容类型": "application/csv",
@@ -556,12 +564,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 48843,
           "SHA256": "bb3bee805ac0568528a961891050ccf4fdd4906c73660fe47bf4c8ff3f048b18",
           "响应开头": "observation_date,DGS10 2015-01-02,2.12 2015-01-05,2.04 2015-01-06,1.97 2015-01-07,1.96 2015-01-08,2.03 2015-01-09,1.98 2015-01-12,1.92 2015-01-13,1.91 2015-01-14,1.86 2015-01-15,1.77 2015-01-16,1.83 2015-01-19, 2015-01-20,1.82 2015-01-21,1.87 2015-01-22,1.90 2015-01-23,1.81 2015-01-26,1.83 2015-01-27,1.83 2015-01-28,1.73 2015-01-29,1.77 2015-01-30,1.68 2015-02-02,1.68 2015-02-03,1.79 2015-02-04,1.81 2015-02-05,1.83 2015-02-06,1.95 2015-02-09,1.96 2015-02-10,2.01 2015-02-11,2.00 2015-02-12,1.99 2015-02-13,2.02 2015-02-16, 2015-02-17,2.14 2015-02-18,2.07 2015-02-19,2.11 2015-02-20,2.13 2015-02-23,2.06 2015-02-24,1.99 2015-02-25,1.96 2015-02-26,",
-          "耗时秒": 0.478
+          "耗时秒": 0.155
         },
         {
           "网址": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2015-01-01",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:24:16.753010+08:00",
+          "北京时间": "2026-10-29T22:33:25.657690+08:00",
           "状态码": 200,
           "最终网址": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2015-01-01",
           "内容类型": "application/csv",
@@ -569,12 +577,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 48843,
           "SHA256": "bb3bee805ac0568528a961891050ccf4fdd4906c73660fe47bf4c8ff3f048b18",
           "响应开头": "observation_date,DGS10 2015-01-02,2.12 2015-01-05,2.04 2015-01-06,1.97 2015-01-07,1.96 2015-01-08,2.03 2015-01-09,1.98 2015-01-12,1.92 2015-01-13,1.91 2015-01-14,1.86 2015-01-15,1.77 2015-01-16,1.83 2015-01-19, 2015-01-20,1.82 2015-01-21,1.87 2015-01-22,1.90 2015-01-23,1.81 2015-01-26,1.83 2015-01-27,1.83 2015-01-28,1.73 2015-01-29,1.77 2015-01-30,1.68 2015-02-02,1.68 2015-02-03,1.79 2015-02-04,1.81 2015-02-05,1.83 2015-02-06,1.95 2015-02-09,1.96 2015-02-10,2.01 2015-02-11,2.00 2015-02-12,1.99 2015-02-13,2.02 2015-02-16, 2015-02-17,2.14 2015-02-18,2.07 2015-02-19,2.11 2015-02-20,2.13 2015-02-23,2.06 2015-02-24,1.99 2015-02-25,1.96 2015-02-26,",
-          "耗时秒": 0.033
+          "耗时秒": 0.062
         },
         {
           "网址": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2015-01-01",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:24:17.812234+08:00",
+          "北京时间": "2026-10-29T22:33:26.757718+08:00",
           "状态码": 200,
           "最终网址": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2015-01-01",
           "内容类型": "application/csv",
@@ -582,7 +590,7 @@ T6 宏观数据源探测（北京时间）
           "字节数": 48843,
           "SHA256": "bb3bee805ac0568528a961891050ccf4fdd4906c73660fe47bf4c8ff3f048b18",
           "响应开头": "observation_date,DGS10 2015-01-02,2.12 2015-01-05,2.04 2015-01-06,1.97 2015-01-07,1.96 2015-01-08,2.03 2015-01-09,1.98 2015-01-12,1.92 2015-01-13,1.91 2015-01-14,1.86 2015-01-15,1.77 2015-01-16,1.83 2015-01-19, 2015-01-20,1.82 2015-01-21,1.87 2015-01-22,1.90 2015-01-23,1.81 2015-01-26,1.83 2015-01-27,1.83 2015-01-28,1.73 2015-01-29,1.77 2015-01-30,1.68 2015-02-02,1.68 2015-02-03,1.79 2015-02-04,1.81 2015-02-05,1.83 2015-02-06,1.95 2015-02-09,1.96 2015-02-10,2.01 2015-02-11,2.00 2015-02-12,1.99 2015-02-13,2.02 2015-02-16, 2015-02-17,2.14 2015-02-18,2.07 2015-02-19,2.11 2015-02-20,2.13 2015-02-23,2.06 2015-02-24,1.99 2015-02-25,1.96 2015-02-26,",
-          "耗时秒": 0.023
+          "耗时秒": 0.042
         }
       ],
       "复测": [
@@ -807,7 +815,7 @@ T6 宏观数据源探测（北京时间）
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=1&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:24:18.866119+08:00",
+          "北京时间": "2026-10-29T22:33:27.843937+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=1&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -815,12 +823,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136623,
           "SHA256": "20ae278fe734aba84cd3da52314f75ede52b120a2e154aed3365e440e2a21f13",
           "响应开头": "{\"version\":\"8ea4b340f4622cd8c1566540d79d6063\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2026-10-29 00:00:00\",\"EMM00588704\":1.2218,\"EMM00166462\":1.3297,\"EMM00166466\":1.6233,\"EMM00166469\":2.0467,\"EMM01276014\":0.4015,\"EMM00000024\":null,\"EMG00001306\":null,\"EMG00001308\":null,\"EMG00001310\":null,\"EMG00001312\":null,\"EMG01339436\":null,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2026-10-28 00:00:00\",\"EMM00588704\":1.233,\"EMM00166462\":1.3407,\"EMM00166466\":1.6345,\"EMM00166469\":2.0489,\"EMM01276014\":0.4015,\"EMM00000024\":null,\"EMG00001306\":4.67,\"EMG00001308\":4.85,\"EMG00001310\":5.05,\"EMG00001312\":5.37,\"EMG01339436\":0.38,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2026-10-27 ",
-          "耗时秒": 1.642
+          "耗时秒": 1.763
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=2&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:24:21.513671+08:00",
+          "北京时间": "2026-10-29T22:33:30.614511+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=2&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -828,12 +836,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 137096,
           "SHA256": "829ff11a8ea2931ef21872402436886d0296f7bb35b826104739681d0bd6b303",
           "响应开头": "{\"version\":\"fec020b2986c6782f971414b23b0ed39\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2024-12-09 00:00:00\",\"EMM00588704\":1.3165,\"EMM00166462\":1.585,\"EMM00166466\":1.9168,\"EMM00166469\":2.1151,\"EMM01276014\":0.6003,\"EMM00000024\":null,\"EMG00001306\":4.13,\"EMG00001308\":4.07,\"EMG00001310\":4.2,\"EMG00001312\":4.39,\"EMG01339436\":0.07,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2024-12-06 00:00:00\",\"EMM00588704\":1.3184,\"EMM00166462\":1.6111,\"EMM00166466\":1.9539,\"EMM00166469\":2.1585,\"EMM01276014\":0.6355,\"EMM00000024\":null,\"EMG00001306\":4.1,\"EMG00001308\":4.03,\"EMG00001310\":4.15,\"EMG00001312\":4.34,\"EMG01339436\":0.05,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2024-12-05 00",
-          "耗时秒": 4.366
+          "耗时秒": 1.418
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=3&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:24:26.883543+08:00",
+          "北京时间": "2026-10-29T22:33:33.039103+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=3&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -841,12 +849,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136850,
           "SHA256": "a036a91f7be86d411fe1f7b8edcd96c525c9faf5244cc390221361b23c693fbe",
           "响应开头": "{\"version\":\"835e9c90a7594e2f41792143c6da00a1\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2023-01-28 00:00:00\",\"EMM00588704\":2.4312,\"EMM00166462\":2.7283,\"EMM00166466\":2.9341,\"EMM00166469\":3.283,\"EMM01276014\":0.5029,\"EMM00000024\":null,\"EMG00001306\":null,\"EMG00001308\":null,\"EMG00001310\":null,\"EMG00001312\":null,\"EMG01339436\":null,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2023-01-27 00:00:00\",\"EMM00588704\":null,\"EMM00166462\":null,\"EMM00166466\":null,\"EMM00166469\":null,\"EMM01276014\":null,\"EMM00000024\":null,\"EMG00001306\":4.19,\"EMG00001308\":3.62,\"EMG00001310\":3.52,\"EMG00001312\":3.64,\"EMG01339436\":-0.67,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2023-01-26 00:00:00\"",
-          "耗时秒": 1.769
+          "耗时秒": 1.151
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=4&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:24:29.656483+08:00",
+          "北京时间": "2026-10-29T22:33:35.196320+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=4&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -854,12 +862,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136786,
           "SHA256": "64af1561ea50c9ea0bf4f5b4d8a2a0cf771a70e6b5fc23266e80c4b8af91efec",
           "响应开头": "{\"version\":\"4cbf750d70e29da179ad90ea66a80547\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2021-03-17 00:00:00\",\"EMM00588704\":2.8468,\"EMM00166462\":3.0635,\"EMM00166466\":3.2564,\"EMM00166469\":3.7504,\"EMM01276014\":0.4096,\"EMM00000024\":null,\"EMG00001306\":0.13,\"EMG00001308\":0.8,\"EMG00001310\":1.63,\"EMG00001312\":2.42,\"EMG01339436\":1.5,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2021-03-16 00:00:00\",\"EMM00588704\":2.8692,\"EMM00166462\":3.0699,\"EMM00166466\":3.2614,\"EMM00166469\":3.7605,\"EMM01276014\":0.3922,\"EMM00000024\":null,\"EMG00001306\":0.15,\"EMG00001308\":0.83,\"EMG00001310\":1.62,\"EMG00001312\":2.38,\"EMG01339436\":1.47,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2021-03-15 0",
-          "耗时秒": 0.962
+          "耗时秒": 1.728
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=5&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:24:31.622316+08:00",
+          "北京时间": "2026-10-29T22:33:37.930683+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=5&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -867,12 +875,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136806,
           "SHA256": "49132729331af155f02e6464ee488d2ab5f7ffb7f72a7bd77d93a985f9f2b8c7",
           "响应开头": "{\"version\":\"f7c5d0c7577b43dd62cc1196f5fec43e\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2019-04-29 00:00:00\",\"EMM00588704\":2.9223,\"EMM00166462\":3.2199,\"EMM00166466\":3.4268,\"EMM00166469\":3.9743,\"EMM01276014\":0.5045,\"EMM00000024\":null,\"EMG00001306\":2.3,\"EMG00001308\":2.32,\"EMG00001310\":2.54,\"EMG00001312\":2.96,\"EMG01339436\":0.24,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2019-04-28 00:00:00\",\"EMM00588704\":2.8922,\"EMM00166462\":3.214,\"EMM00166466\":3.4043,\"EMM00166469\":3.9715,\"EMM01276014\":0.5121,\"EMM00000024\":null,\"EMG00001306\":null,\"EMG00001308\":null,\"EMG00001310\":null,\"EMG00001312\":null,\"EMG01339436\":null,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2019-04-26 0",
-          "耗时秒": 1.136
+          "耗时秒": 1.96
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=6&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:24:33.762959+08:00",
+          "北京时间": "2026-10-29T22:33:40.896713+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=6&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -880,12 +888,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136705,
           "SHA256": "554a64322d675ce8729c78e1d3014fd88271bc894d2bec824ec7a58567240b28",
           "响应开头": "{\"version\":\"926e7b03f4a3c414833ff61d28709df1\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2017-06-13 00:00:00\",\"EMM00588704\":3.5762,\"EMM00166462\":3.559,\"EMM00166466\":3.5754,\"EMM00166469\":3.9323,\"EMM01276014\":-0.0008,\"EMM00000024\":null,\"EMG00001306\":1.38,\"EMG00001308\":1.79,\"EMG00001310\":2.21,\"EMG00001312\":2.87,\"EMG01339436\":0.83,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2017-06-12 00:00:00\",\"EMM00588704\":3.5735,\"EMM00166462\":3.5621,\"EMM00166466\":3.5841,\"EMM00166469\":3.9425,\"EMM01276014\":0.0106,\"EMM00000024\":null,\"EMG00001306\":1.35,\"EMG00001308\":1.78,\"EMG00001310\":2.21,\"EMG00001312\":2.86,\"EMG01339436\":0.86,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2017-06-09",
-          "耗时秒": 1.248
+          "耗时秒": 3.801
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=7&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:24:36.015328+08:00",
+          "北京时间": "2026-10-29T22:33:45.703853+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=7&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -893,12 +901,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136796,
           "SHA256": "b93e9a88ce5043619999d2db2f8a9387b0d63fb906e815cb291de2cbc6fb150b",
           "响应开头": "{\"version\":\"1d3159ffb202cd742042b55262c64596\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2015-07-28 00:00:00\",\"EMM00588704\":2.5659,\"EMM00166462\":3.1501,\"EMM00166466\":3.4401,\"EMM00166469\":3.9031,\"EMM01276014\":0.8742,\"EMM00000024\":null,\"EMG00001306\":0.69,\"EMG00001308\":1.61,\"EMG00001310\":2.26,\"EMG00001312\":2.96,\"EMG01339436\":1.57,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2015-07-27 00:00:00\",\"EMM00588704\":2.5716,\"EMM00166462\":3.1596,\"EMM00166466\":3.4602,\"EMM00166469\":3.9231,\"EMM01276014\":0.8886,\"EMM00000024\":null,\"EMG00001306\":0.68,\"EMG00001308\":1.58,\"EMG00001310\":2.23,\"EMG00001312\":2.93,\"EMG01339436\":1.55,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2015-07-24",
-          "耗时秒": 1.035
+          "耗时秒": 1.239
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=1&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:24:38.080815+08:00",
+          "北京时间": "2026-10-29T22:33:47.985391+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=1&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -906,12 +914,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136623,
           "SHA256": "20ae278fe734aba84cd3da52314f75ede52b120a2e154aed3365e440e2a21f13",
           "响应开头": "{\"version\":\"8ea4b340f4622cd8c1566540d79d6063\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2026-10-29 00:00:00\",\"EMM00588704\":1.2218,\"EMM00166462\":1.3297,\"EMM00166466\":1.6233,\"EMM00166469\":2.0467,\"EMM01276014\":0.4015,\"EMM00000024\":null,\"EMG00001306\":null,\"EMG00001308\":null,\"EMG00001310\":null,\"EMG00001312\":null,\"EMG01339436\":null,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2026-10-28 00:00:00\",\"EMM00588704\":1.233,\"EMM00166462\":1.3407,\"EMM00166466\":1.6345,\"EMM00166469\":2.0489,\"EMM01276014\":0.4015,\"EMM00000024\":null,\"EMG00001306\":4.67,\"EMG00001308\":4.85,\"EMG00001310\":5.05,\"EMG00001312\":5.37,\"EMG01339436\":0.38,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2026-10-27 ",
-          "耗时秒": 0.953
+          "耗时秒": 1.303
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=2&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:24:40.038689+08:00",
+          "北京时间": "2026-10-29T22:33:50.295524+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=2&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -919,12 +927,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 137096,
           "SHA256": "829ff11a8ea2931ef21872402436886d0296f7bb35b826104739681d0bd6b303",
           "响应开头": "{\"version\":\"fec020b2986c6782f971414b23b0ed39\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2024-12-09 00:00:00\",\"EMM00588704\":1.3165,\"EMM00166462\":1.585,\"EMM00166466\":1.9168,\"EMM00166469\":2.1151,\"EMM01276014\":0.6003,\"EMM00000024\":null,\"EMG00001306\":4.13,\"EMG00001308\":4.07,\"EMG00001310\":4.2,\"EMG00001312\":4.39,\"EMG01339436\":0.07,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2024-12-06 00:00:00\",\"EMM00588704\":1.3184,\"EMM00166462\":1.6111,\"EMM00166466\":1.9539,\"EMM00166469\":2.1585,\"EMM01276014\":0.6355,\"EMM00000024\":null,\"EMG00001306\":4.1,\"EMG00001308\":4.03,\"EMG00001310\":4.15,\"EMG00001312\":4.34,\"EMG01339436\":0.05,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2024-12-05 00",
-          "耗时秒": 2.607
+          "耗时秒": 1.686
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=3&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:24:43.649887+08:00",
+          "北京时间": "2026-10-29T22:33:52.987983+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=3&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -932,12 +940,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136850,
           "SHA256": "a036a91f7be86d411fe1f7b8edcd96c525c9faf5244cc390221361b23c693fbe",
           "响应开头": "{\"version\":\"835e9c90a7594e2f41792143c6da00a1\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2023-01-28 00:00:00\",\"EMM00588704\":2.4312,\"EMM00166462\":2.7283,\"EMM00166466\":2.9341,\"EMM00166469\":3.283,\"EMM01276014\":0.5029,\"EMM00000024\":null,\"EMG00001306\":null,\"EMG00001308\":null,\"EMG00001310\":null,\"EMG00001312\":null,\"EMG01339436\":null,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2023-01-27 00:00:00\",\"EMM00588704\":null,\"EMM00166462\":null,\"EMM00166466\":null,\"EMM00166469\":null,\"EMM01276014\":null,\"EMM00000024\":null,\"EMG00001306\":4.19,\"EMG00001308\":3.62,\"EMG00001310\":3.52,\"EMG00001312\":3.64,\"EMG01339436\":-0.67,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2023-01-26 00:00:00\"",
-          "耗时秒": 1.051
+          "耗时秒": 1.238
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=4&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:24:45.704864+08:00",
+          "北京时间": "2026-10-29T22:33:55.231885+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=4&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -945,12 +953,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136786,
           "SHA256": "64af1561ea50c9ea0bf4f5b4d8a2a0cf771a70e6b5fc23266e80c4b8af91efec",
           "响应开头": "{\"version\":\"4cbf750d70e29da179ad90ea66a80547\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2021-03-17 00:00:00\",\"EMM00588704\":2.8468,\"EMM00166462\":3.0635,\"EMM00166466\":3.2564,\"EMM00166469\":3.7504,\"EMM01276014\":0.4096,\"EMM00000024\":null,\"EMG00001306\":0.13,\"EMG00001308\":0.8,\"EMG00001310\":1.63,\"EMG00001312\":2.42,\"EMG01339436\":1.5,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2021-03-16 00:00:00\",\"EMM00588704\":2.8692,\"EMM00166462\":3.0699,\"EMM00166466\":3.2614,\"EMM00166469\":3.7605,\"EMM01276014\":0.3922,\"EMM00000024\":null,\"EMG00001306\":0.15,\"EMG00001308\":0.83,\"EMG00001310\":1.62,\"EMG00001312\":2.38,\"EMG01339436\":1.47,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2021-03-15 0",
-          "耗时秒": 3.17
+          "耗时秒": 1.724
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=5&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:24:49.878898+08:00",
+          "北京时间": "2026-10-29T22:33:57.962072+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=5&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -958,12 +966,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136806,
           "SHA256": "49132729331af155f02e6464ee488d2ab5f7ffb7f72a7bd77d93a985f9f2b8c7",
           "响应开头": "{\"version\":\"f7c5d0c7577b43dd62cc1196f5fec43e\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2019-04-29 00:00:00\",\"EMM00588704\":2.9223,\"EMM00166462\":3.2199,\"EMM00166466\":3.4268,\"EMM00166469\":3.9743,\"EMM01276014\":0.5045,\"EMM00000024\":null,\"EMG00001306\":2.3,\"EMG00001308\":2.32,\"EMG00001310\":2.54,\"EMG00001312\":2.96,\"EMG01339436\":0.24,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2019-04-28 00:00:00\",\"EMM00588704\":2.8922,\"EMM00166462\":3.214,\"EMM00166466\":3.4043,\"EMM00166469\":3.9715,\"EMM01276014\":0.5121,\"EMM00000024\":null,\"EMG00001306\":null,\"EMG00001308\":null,\"EMG00001310\":null,\"EMG00001312\":null,\"EMG01339436\":null,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2019-04-26 0",
-          "耗时秒": 6.397
+          "耗时秒": 1.461
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=6&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:24:57.280405+08:00",
+          "北京时间": "2026-10-29T22:34:00.429667+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=6&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -971,12 +979,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136705,
           "SHA256": "554a64322d675ce8729c78e1d3014fd88271bc894d2bec824ec7a58567240b28",
           "响应开头": "{\"version\":\"926e7b03f4a3c414833ff61d28709df1\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2017-06-13 00:00:00\",\"EMM00588704\":3.5762,\"EMM00166462\":3.559,\"EMM00166466\":3.5754,\"EMM00166469\":3.9323,\"EMM01276014\":-0.0008,\"EMM00000024\":null,\"EMG00001306\":1.38,\"EMG00001308\":1.79,\"EMG00001310\":2.21,\"EMG00001312\":2.87,\"EMG01339436\":0.83,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2017-06-12 00:00:00\",\"EMM00588704\":3.5735,\"EMM00166462\":3.5621,\"EMM00166466\":3.5841,\"EMM00166469\":3.9425,\"EMM01276014\":0.0106,\"EMM00000024\":null,\"EMG00001306\":1.35,\"EMG00001308\":1.78,\"EMG00001310\":2.21,\"EMG00001312\":2.86,\"EMG01339436\":0.86,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2017-06-09",
-          "耗时秒": 2.641
+          "耗时秒": 4.801
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=7&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:25:00.925392+08:00",
+          "北京时间": "2026-10-29T22:34:06.237045+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=7&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -984,7 +992,7 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136796,
           "SHA256": "b93e9a88ce5043619999d2db2f8a9387b0d63fb906e815cb291de2cbc6fb150b",
           "响应开头": "{\"version\":\"1d3159ffb202cd742042b55262c64596\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2015-07-28 00:00:00\",\"EMM00588704\":2.5659,\"EMM00166462\":3.1501,\"EMM00166466\":3.4401,\"EMM00166469\":3.9031,\"EMM01276014\":0.8742,\"EMM00000024\":null,\"EMG00001306\":0.69,\"EMG00001308\":1.61,\"EMG00001310\":2.26,\"EMG00001312\":2.96,\"EMG01339436\":1.57,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2015-07-27 00:00:00\",\"EMM00588704\":2.5716,\"EMM00166462\":3.1596,\"EMM00166466\":3.4602,\"EMM00166469\":3.9231,\"EMM01276014\":0.8886,\"EMM00000024\":null,\"EMG00001306\":0.68,\"EMG00001308\":1.58,\"EMG00001310\":2.23,\"EMG00001312\":2.93,\"EMG01339436\":1.55,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2015-07-24",
-          "耗时秒": 4.066
+          "耗时秒": 1.383
         }
       ],
       "复测": [
@@ -1185,7 +1193,7 @@ T6 宏观数据源探测（北京时间）
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=1&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:25:06.100556+08:00",
+          "北京时间": "2026-10-29T22:34:08.670391+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=1&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -1193,12 +1201,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136623,
           "SHA256": "20ae278fe734aba84cd3da52314f75ede52b120a2e154aed3365e440e2a21f13",
           "响应开头": "{\"version\":\"8ea4b340f4622cd8c1566540d79d6063\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2026-10-29 00:00:00\",\"EMM00588704\":1.2218,\"EMM00166462\":1.3297,\"EMM00166466\":1.6233,\"EMM00166469\":2.0467,\"EMM01276014\":0.4015,\"EMM00000024\":null,\"EMG00001306\":null,\"EMG00001308\":null,\"EMG00001310\":null,\"EMG00001312\":null,\"EMG01339436\":null,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2026-10-28 00:00:00\",\"EMM00588704\":1.233,\"EMM00166462\":1.3407,\"EMM00166466\":1.6345,\"EMM00166469\":2.0489,\"EMM01276014\":0.4015,\"EMM00000024\":null,\"EMG00001306\":4.67,\"EMG00001308\":4.85,\"EMG00001310\":5.05,\"EMG00001312\":5.37,\"EMG01339436\":0.38,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2026-10-27 ",
-          "耗时秒": 2.259
+          "耗时秒": 1.592
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=2&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:25:09.364917+08:00",
+          "北京时间": "2026-10-29T22:34:11.269680+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=2&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -1206,12 +1214,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 137096,
           "SHA256": "829ff11a8ea2931ef21872402436886d0296f7bb35b826104739681d0bd6b303",
           "响应开头": "{\"version\":\"fec020b2986c6782f971414b23b0ed39\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2024-12-09 00:00:00\",\"EMM00588704\":1.3165,\"EMM00166462\":1.585,\"EMM00166466\":1.9168,\"EMM00166469\":2.1151,\"EMM01276014\":0.6003,\"EMM00000024\":null,\"EMG00001306\":4.13,\"EMG00001308\":4.07,\"EMG00001310\":4.2,\"EMG00001312\":4.39,\"EMG01339436\":0.07,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2024-12-06 00:00:00\",\"EMM00588704\":1.3184,\"EMM00166462\":1.6111,\"EMM00166466\":1.9539,\"EMM00166469\":2.1585,\"EMM01276014\":0.6355,\"EMM00000024\":null,\"EMG00001306\":4.1,\"EMG00001308\":4.03,\"EMG00001310\":4.15,\"EMG00001312\":4.34,\"EMG01339436\":0.05,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2024-12-05 00",
-          "耗时秒": 2.784
+          "耗时秒": 2.032
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=3&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:25:13.153365+08:00",
+          "北京时间": "2026-10-29T22:34:14.307370+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=3&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -1219,12 +1227,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136850,
           "SHA256": "a036a91f7be86d411fe1f7b8edcd96c525c9faf5244cc390221361b23c693fbe",
           "响应开头": "{\"version\":\"835e9c90a7594e2f41792143c6da00a1\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2023-01-28 00:00:00\",\"EMM00588704\":2.4312,\"EMM00166462\":2.7283,\"EMM00166466\":2.9341,\"EMM00166469\":3.283,\"EMM01276014\":0.5029,\"EMM00000024\":null,\"EMG00001306\":null,\"EMG00001308\":null,\"EMG00001310\":null,\"EMG00001312\":null,\"EMG01339436\":null,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2023-01-27 00:00:00\",\"EMM00588704\":null,\"EMM00166462\":null,\"EMM00166466\":null,\"EMM00166469\":null,\"EMM01276014\":null,\"EMM00000024\":null,\"EMG00001306\":4.19,\"EMG00001308\":3.62,\"EMG00001310\":3.52,\"EMG00001312\":3.64,\"EMG01339436\":-0.67,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2023-01-26 00:00:00\"",
-          "耗时秒": 1.965
+          "耗时秒": 1.223
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=4&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:25:16.122636+08:00",
+          "北京时间": "2026-10-29T22:34:16.536690+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=4&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -1232,12 +1240,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136786,
           "SHA256": "64af1561ea50c9ea0bf4f5b4d8a2a0cf771a70e6b5fc23266e80c4b8af91efec",
           "响应开头": "{\"version\":\"4cbf750d70e29da179ad90ea66a80547\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2021-03-17 00:00:00\",\"EMM00588704\":2.8468,\"EMM00166462\":3.0635,\"EMM00166466\":3.2564,\"EMM00166469\":3.7504,\"EMM01276014\":0.4096,\"EMM00000024\":null,\"EMG00001306\":0.13,\"EMG00001308\":0.8,\"EMG00001310\":1.63,\"EMG00001312\":2.42,\"EMG01339436\":1.5,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2021-03-16 00:00:00\",\"EMM00588704\":2.8692,\"EMM00166462\":3.0699,\"EMM00166466\":3.2614,\"EMM00166469\":3.7605,\"EMM01276014\":0.3922,\"EMM00000024\":null,\"EMG00001306\":0.15,\"EMG00001308\":0.83,\"EMG00001310\":1.62,\"EMG00001312\":2.38,\"EMG01339436\":1.47,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2021-03-15 0",
-          "耗时秒": 1.777
+          "耗时秒": 1.89
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=5&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:25:18.904050+08:00",
+          "北京时间": "2026-10-29T22:34:19.433137+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=5&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -1245,12 +1253,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136806,
           "SHA256": "49132729331af155f02e6464ee488d2ab5f7ffb7f72a7bd77d93a985f9f2b8c7",
           "响应开头": "{\"version\":\"f7c5d0c7577b43dd62cc1196f5fec43e\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2019-04-29 00:00:00\",\"EMM00588704\":2.9223,\"EMM00166462\":3.2199,\"EMM00166466\":3.4268,\"EMM00166469\":3.9743,\"EMM01276014\":0.5045,\"EMM00000024\":null,\"EMG00001306\":2.3,\"EMG00001308\":2.32,\"EMG00001310\":2.54,\"EMG00001312\":2.96,\"EMG01339436\":0.24,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2019-04-28 00:00:00\",\"EMM00588704\":2.8922,\"EMM00166462\":3.214,\"EMM00166466\":3.4043,\"EMM00166469\":3.9715,\"EMM01276014\":0.5121,\"EMM00000024\":null,\"EMG00001306\":null,\"EMG00001308\":null,\"EMG00001310\":null,\"EMG00001312\":null,\"EMG01339436\":null,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2019-04-26 0",
-          "耗时秒": 9.667
+          "耗时秒": 1.055
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=6&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:25:29.575723+08:00",
+          "北京时间": "2026-10-29T22:34:21.495376+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=6&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -1258,12 +1266,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136705,
           "SHA256": "554a64322d675ce8729c78e1d3014fd88271bc894d2bec824ec7a58567240b28",
           "响应开头": "{\"version\":\"926e7b03f4a3c414833ff61d28709df1\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2017-06-13 00:00:00\",\"EMM00588704\":3.5762,\"EMM00166462\":3.559,\"EMM00166466\":3.5754,\"EMM00166469\":3.9323,\"EMM01276014\":-0.0008,\"EMM00000024\":null,\"EMG00001306\":1.38,\"EMG00001308\":1.79,\"EMG00001310\":2.21,\"EMG00001312\":2.87,\"EMG01339436\":0.83,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2017-06-12 00:00:00\",\"EMM00588704\":3.5735,\"EMM00166462\":3.5621,\"EMM00166466\":3.5841,\"EMM00166469\":3.9425,\"EMM01276014\":0.0106,\"EMM00000024\":null,\"EMG00001306\":1.35,\"EMG00001308\":1.78,\"EMG00001310\":2.21,\"EMG00001312\":2.86,\"EMG01339436\":0.86,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2017-06-09",
-          "耗时秒": 1.254
+          "耗时秒": 1.004
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=7&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:25:31.834425+08:00",
+          "北京时间": "2026-10-29T22:34:23.505402+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=7&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -1271,12 +1279,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136796,
           "SHA256": "b93e9a88ce5043619999d2db2f8a9387b0d63fb906e815cb291de2cbc6fb150b",
           "响应开头": "{\"version\":\"1d3159ffb202cd742042b55262c64596\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2015-07-28 00:00:00\",\"EMM00588704\":2.5659,\"EMM00166462\":3.1501,\"EMM00166466\":3.4401,\"EMM00166469\":3.9031,\"EMM01276014\":0.8742,\"EMM00000024\":null,\"EMG00001306\":0.69,\"EMG00001308\":1.61,\"EMG00001310\":2.26,\"EMG00001312\":2.96,\"EMG01339436\":1.57,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2015-07-27 00:00:00\",\"EMM00588704\":2.5716,\"EMM00166462\":3.1596,\"EMM00166466\":3.4602,\"EMM00166469\":3.9231,\"EMM01276014\":0.8886,\"EMM00000024\":null,\"EMG00001306\":0.68,\"EMG00001308\":1.58,\"EMG00001310\":2.23,\"EMG00001312\":2.93,\"EMG01339436\":1.55,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2015-07-24",
-          "耗时秒": 1.286
+          "耗时秒": 4.057
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=1&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:25:34.151224+08:00",
+          "北京时间": "2026-10-29T22:34:28.605195+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=1&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -1284,12 +1292,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136623,
           "SHA256": "20ae278fe734aba84cd3da52314f75ede52b120a2e154aed3365e440e2a21f13",
           "响应开头": "{\"version\":\"8ea4b340f4622cd8c1566540d79d6063\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2026-10-29 00:00:00\",\"EMM00588704\":1.2218,\"EMM00166462\":1.3297,\"EMM00166466\":1.6233,\"EMM00166469\":2.0467,\"EMM01276014\":0.4015,\"EMM00000024\":null,\"EMG00001306\":null,\"EMG00001308\":null,\"EMG00001310\":null,\"EMG00001312\":null,\"EMG01339436\":null,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2026-10-28 00:00:00\",\"EMM00588704\":1.233,\"EMM00166462\":1.3407,\"EMM00166466\":1.6345,\"EMM00166469\":2.0489,\"EMM01276014\":0.4015,\"EMM00000024\":null,\"EMG00001306\":4.67,\"EMG00001308\":4.85,\"EMG00001310\":5.05,\"EMG00001312\":5.37,\"EMG01339436\":0.38,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2026-10-27 ",
-          "耗时秒": 1.925
+          "耗时秒": 1.535
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=2&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:25:37.083671+08:00",
+          "北京时间": "2026-10-29T22:34:31.147419+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=2&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -1297,12 +1305,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 137096,
           "SHA256": "829ff11a8ea2931ef21872402436886d0296f7bb35b826104739681d0bd6b303",
           "响应开头": "{\"version\":\"fec020b2986c6782f971414b23b0ed39\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2024-12-09 00:00:00\",\"EMM00588704\":1.3165,\"EMM00166462\":1.585,\"EMM00166466\":1.9168,\"EMM00166469\":2.1151,\"EMM01276014\":0.6003,\"EMM00000024\":null,\"EMG00001306\":4.13,\"EMG00001308\":4.07,\"EMG00001310\":4.2,\"EMG00001312\":4.39,\"EMG01339436\":0.07,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2024-12-06 00:00:00\",\"EMM00588704\":1.3184,\"EMM00166462\":1.6111,\"EMM00166466\":1.9539,\"EMM00166469\":2.1585,\"EMM01276014\":0.6355,\"EMM00000024\":null,\"EMG00001306\":4.1,\"EMG00001308\":4.03,\"EMG00001310\":4.15,\"EMG00001312\":4.34,\"EMG01339436\":0.05,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2024-12-05 00",
-          "耗时秒": 1.241
+          "耗时秒": 3.027
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=3&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:25:39.329158+08:00",
+          "北京时间": "2026-10-29T22:34:35.180729+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=3&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -1310,12 +1318,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136850,
           "SHA256": "a036a91f7be86d411fe1f7b8edcd96c525c9faf5244cc390221361b23c693fbe",
           "响应开头": "{\"version\":\"835e9c90a7594e2f41792143c6da00a1\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2023-01-28 00:00:00\",\"EMM00588704\":2.4312,\"EMM00166462\":2.7283,\"EMM00166466\":2.9341,\"EMM00166469\":3.283,\"EMM01276014\":0.5029,\"EMM00000024\":null,\"EMG00001306\":null,\"EMG00001308\":null,\"EMG00001310\":null,\"EMG00001312\":null,\"EMG01339436\":null,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2023-01-27 00:00:00\",\"EMM00588704\":null,\"EMM00166462\":null,\"EMM00166466\":null,\"EMM00166469\":null,\"EMM01276014\":null,\"EMM00000024\":null,\"EMG00001306\":4.19,\"EMG00001308\":3.62,\"EMG00001310\":3.52,\"EMG00001312\":3.64,\"EMG01339436\":-0.67,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2023-01-26 00:00:00\"",
-          "耗时秒": 1.226
+          "耗时秒": 1.385
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=4&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:25:41.559211+08:00",
+          "北京时间": "2026-10-29T22:34:37.571882+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=4&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -1323,12 +1331,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136786,
           "SHA256": "64af1561ea50c9ea0bf4f5b4d8a2a0cf771a70e6b5fc23266e80c4b8af91efec",
           "响应开头": "{\"version\":\"4cbf750d70e29da179ad90ea66a80547\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2021-03-17 00:00:00\",\"EMM00588704\":2.8468,\"EMM00166462\":3.0635,\"EMM00166466\":3.2564,\"EMM00166469\":3.7504,\"EMM01276014\":0.4096,\"EMM00000024\":null,\"EMG00001306\":0.13,\"EMG00001308\":0.8,\"EMG00001310\":1.63,\"EMG00001312\":2.42,\"EMG01339436\":1.5,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2021-03-16 00:00:00\",\"EMM00588704\":2.8692,\"EMM00166462\":3.0699,\"EMM00166466\":3.2614,\"EMM00166469\":3.7605,\"EMM01276014\":0.3922,\"EMM00000024\":null,\"EMG00001306\":0.15,\"EMG00001308\":0.83,\"EMG00001310\":1.62,\"EMG00001312\":2.38,\"EMG01339436\":1.47,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2021-03-15 0",
-          "耗时秒": 3.04
+          "耗时秒": 0.756
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=5&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:25:45.603908+08:00",
+          "北京时间": "2026-10-29T22:34:39.333855+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=5&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -1336,12 +1344,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136806,
           "SHA256": "49132729331af155f02e6464ee488d2ab5f7ffb7f72a7bd77d93a985f9f2b8c7",
           "响应开头": "{\"version\":\"f7c5d0c7577b43dd62cc1196f5fec43e\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2019-04-29 00:00:00\",\"EMM00588704\":2.9223,\"EMM00166462\":3.2199,\"EMM00166466\":3.4268,\"EMM00166469\":3.9743,\"EMM01276014\":0.5045,\"EMM00000024\":null,\"EMG00001306\":2.3,\"EMG00001308\":2.32,\"EMG00001310\":2.54,\"EMG00001312\":2.96,\"EMG01339436\":0.24,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2019-04-28 00:00:00\",\"EMM00588704\":2.8922,\"EMM00166462\":3.214,\"EMM00166466\":3.4043,\"EMM00166469\":3.9715,\"EMM01276014\":0.5121,\"EMM00000024\":null,\"EMG00001306\":null,\"EMG00001308\":null,\"EMG00001310\":null,\"EMG00001312\":null,\"EMG01339436\":null,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2019-04-26 0",
-          "耗时秒": 1.285
+          "耗时秒": 1.19
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=6&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:25:47.892850+08:00",
+          "北京时间": "2026-10-29T22:34:41.530316+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=6&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -1349,12 +1357,12 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136705,
           "SHA256": "554a64322d675ce8729c78e1d3014fd88271bc894d2bec824ec7a58567240b28",
           "响应开头": "{\"version\":\"926e7b03f4a3c414833ff61d28709df1\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2017-06-13 00:00:00\",\"EMM00588704\":3.5762,\"EMM00166462\":3.559,\"EMM00166466\":3.5754,\"EMM00166469\":3.9323,\"EMM01276014\":-0.0008,\"EMM00000024\":null,\"EMG00001306\":1.38,\"EMG00001308\":1.79,\"EMG00001310\":2.21,\"EMG00001312\":2.87,\"EMG01339436\":0.83,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2017-06-12 00:00:00\",\"EMM00588704\":3.5735,\"EMM00166462\":3.5621,\"EMM00166466\":3.5841,\"EMM00166469\":3.9425,\"EMM01276014\":0.0106,\"EMM00000024\":null,\"EMG00001306\":1.35,\"EMG00001308\":1.78,\"EMG00001310\":2.21,\"EMG00001312\":2.86,\"EMG01339436\":0.86,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2017-06-09",
-          "耗时秒": 2.581
+          "耗时秒": 0.973
         },
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=7&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:25:51.478758+08:00",
+          "北京时间": "2026-10-29T22:34:43.509355+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=7&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -1362,7 +1370,7 @@ T6 宏观数据源探测（北京时间）
           "字节数": 136796,
           "SHA256": "b93e9a88ce5043619999d2db2f8a9387b0d63fb906e815cb291de2cbc6fb150b",
           "响应开头": "{\"version\":\"1d3159ffb202cd742042b55262c64596\",\"result\":{\"pages\":19,\"data\":[{\"SOLAR_DATE\":\"2015-07-28 00:00:00\",\"EMM00588704\":2.5659,\"EMM00166462\":3.1501,\"EMM00166466\":3.4401,\"EMM00166469\":3.9031,\"EMM01276014\":0.8742,\"EMM00000024\":null,\"EMG00001306\":0.69,\"EMG00001308\":1.61,\"EMG00001310\":2.26,\"EMG00001312\":2.96,\"EMG01339436\":1.57,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2015-07-27 00:00:00\",\"EMM00588704\":2.5716,\"EMM00166462\":3.1596,\"EMM00166466\":3.4602,\"EMM00166469\":3.9231,\"EMM01276014\":0.8886,\"EMM00000024\":null,\"EMG00001306\":0.68,\"EMG00001308\":1.58,\"EMG00001310\":2.23,\"EMG00001312\":2.93,\"EMG01339436\":1.55,\"EMG00159635\":null},{\"SOLAR_DATE\":\"2015-07-24",
-          "耗时秒": 3.187
+          "耗时秒": 1.433
         }
       ],
       "复测": [
@@ -1563,10 +1571,10 @@ T6 宏观数据源探测（北京时间）
         {
           "网址": "https://www.chinamoney.com.cn/ags/ms/cm-u-bk-currency/ClsYldCurvHis?lang=CN&reference=1%2C2%2C3&bondType=CYCC000&startDate=2026-10-22&endDate=2026-10-29&termId=1&pageNum=1&pageSize=500",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:25:55.703934+08:00",
+          "北京时间": "2026-10-29T22:34:45.995632+08:00",
           "错误": "HTTPError: HTTP Error 403: Forbidden",
           "状态码": 403,
-          "耗时秒": 0.871
+          "耗时秒": 0.478
         }
       ],
       "复测": [
@@ -1591,10 +1599,10 @@ T6 宏观数据源探测（北京时间）
         {
           "网址": "https://www.chinamoney.com.cn/r/cms/www/chinamoney/data/currency/bkrr-cny.json",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:25:57.591492+08:00",
+          "北京时间": "2026-10-29T22:34:47.480374+08:00",
           "错误": "HTTPError: HTTP Error 404: Not Found",
           "状态码": 404,
-          "耗时秒": 0.252
+          "耗时秒": 0.528
         }
       ],
       "复测": [
@@ -1619,9 +1627,9 @@ T6 宏观数据源探测（北京时间）
         {
           "网址": "https://www.shibor.org/r/cms/www/shibor/data/shibor.json",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:25:58.848710+08:00",
+          "北京时间": "2026-10-29T22:34:49.014516+08:00",
           "错误": "URLError: <urlopen error [Errno -3] Temporary failure in name resolution>",
-          "耗时秒": 10.015
+          "耗时秒": 20.507
         }
       ],
       "复测": [
@@ -1646,7 +1654,7 @@ T6 宏观数据源探测（北京时间）
         {
           "网址": "https://www.chinamoney.com.cn/r/cms/www/chinamoney/data/fx/ccpr.json",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:26:09.869589+08:00",
+          "北京时间": "2026-10-29T22:35:10.528760+08:00",
           "状态码": 200,
           "最终网址": "https://www.chinamoney.com.cn/r/cms/www/chinamoney/data/fx/ccpr.json",
           "内容类型": "application/json",
@@ -1654,7 +1662,7 @@ T6 宏观数据源探测（北京时间）
           "字节数": 10995,
           "SHA256": "14c7642011a8c1abd47512f765f1782dd4eea077892629e61517ffde47519e6c",
           "响应开头": "{\"head\":{\"version\":\"2.0\",\"provider\":\"CWAP\",\"req_code\":\"\",\"rep_code\":\"200\",\"rep_message\":\"\",\"ts\":1793237140600,\"producer\":\"\"},\"data\":{\"lastDateEn\":\"29/10/2026 9:15\",\"pairChange\":\"美元/人民币欧元/人民币100日元/人民币港元/人民币英镑/人民币澳元/人民币新西兰元/人民币新加坡元/人民币瑞士法郎/人民币加元/人民币人民币/澳门元人民币/马来西亚林吉特人民币/俄罗斯卢布人民币/南非兰特人民币/韩元人民币/阿联酋迪拉姆人民币/沙特里亚尔人民币/匈牙利福林人民币/波兰兹罗提人民币/丹麦克朗人民币/瑞典克朗人民币/挪威克朗人民币/土耳其里拉人民币/墨西哥比索人民币/泰铢\",\"lastDate\":\"2026-10-29 9:15\"},\"records\":[{\"vrtCode\":\"1\",\"price\":\"6.7147\",\"bp\":\"18.00\",\"vrtName\":\"美元/人民币\",\"vrtEName\":\"USD/CNY\",\"foreignCName\":\"USD\",\"bpDouble\":-18.0,\"approvedTime\":\"\",\"approvedTimeEn\":\"\",\"showDate\":\"\",\"showDateForCn\":\"\",\"lastMonthAvgPrice\":\"---\",\"monthPrice\":\"",
-          "耗时秒": 0.049
+          "耗时秒": 0.139
         }
       ],
       "复测": [
@@ -1685,7 +1693,7 @@ T6 宏观数据源探测（北京时间）
         {
           "网址": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXCHUS&cosd=2015-01-01",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:26:10.923753+08:00",
+          "北京时间": "2026-10-29T22:35:11.674849+08:00",
           "状态码": 200,
           "最终网址": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXCHUS&cosd=2015-01-01",
           "内容类型": "application/csv",
@@ -1693,7 +1701,7 @@ T6 宏观数据源探测（北京时间）
           "字节数": 54709,
           "SHA256": "ef9eaf2ea5c1eb1461fa154ef79f57a387ccddec2e7f20c81302b4809d133dda",
           "响应开头": "observation_date,DEXCHUS 2015-01-02,6.2046 2015-01-05,6.2201 2015-01-06,6.2125 2015-01-07,6.2127 2015-01-08,6.2143 2015-01-09,6.2085 2015-01-12,6.2027 2015-01-13,6.1970 2015-01-14,6.1957 2015-01-15,6.1870 2015-01-16,6.2065 2015-01-19, 2015-01-20,6.2137 2015-01-21,6.2112 2015-01-22,6.2085 2015-01-23,6.2279 2015-01-26,6.2535 2015-01-27,6.2430 2015-01-28,6.2475 2015-01-29,6.2463 2015-01-30,6.2495 2015-02-02,6.2594 2015-02-03,6.2573 2015-02-04,6.2472 2015-02-05,6.2516 2015-02-06,6.2417 2015-02-09,6.2467 2015-02-10,6.2405 2015-02-11,6.2422 2015-02-12,6.2440 2015-02-13,6.2399 2015-02-16, 2015-02-17,6.2546 2015-02-18,6.2546 2015-02-19,6.2546 2015-02",
-          "耗时秒": 0.344
+          "耗时秒": 0.409
         }
       ],
       "复测": [
@@ -1814,7 +1822,7 @@ T6 宏观数据源探测（北京时间）
         {
           "网址": "https://www.pbc.gov.cn/diaochatongjisi/116219/116225/index.html",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:26:12.301289+08:00",
+          "北京时间": "2026-10-29T22:35:13.132443+08:00",
           "状态码": 200,
           "最终网址": "https://www.pbc.gov.cn/diaochatongjisi/116219/116225/index.html",
           "内容类型": "text/html",
@@ -1822,7 +1830,7 @@ T6 宏观数据源探测（北京时间）
           "字节数": 39154,
           "SHA256": "9568f564d4170811f08c5920f241b1ead353392ac4cb08413e3a52294fbf2c56",
           "响应开头": "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"><html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /><title>数据解读 </title> <meta name=\"createDate\" content=\"2026-10-14 17:07:43\" /> <meta name=renderer content=webkit> <link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"/uiFramework/images/huilan.ico\" /> <script type=\"text/javascript\">var _speedMark = new Date();</script> <meta name=\"ColumnName\" content=\"数据解读\" > <meta name=\"ColumnType\" content=\"工作动态\" > <meta name=\"SiteName\" content=\"调查统计司\"><!--网站名称--> <meta name=\"SiteDomain\" content",
-          "耗时秒": 1.621
+          "耗时秒": 2.373
         }
       ],
       "复测": [
@@ -1897,7 +1905,7 @@ T6 宏观数据源探测（北京时间）
         {
           "网址": "https://www.stats.gov.cn/sj/zxfb/",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:26:14.935723+08:00",
+          "北京时间": "2026-10-29T22:35:16.512950+08:00",
           "状态码": 200,
           "最终网址": "https://www.stats.gov.cn/sj/zxfb/",
           "内容类型": "text/html",
@@ -1905,7 +1913,7 @@ T6 宏观数据源探测（北京时间）
           "字节数": 72810,
           "SHA256": "1c17523ff6631c642b299eb57a69aa0feb88141de59514bd6d686f2662b0dcea",
           "响应开头": "<!DOCTYPE html> <html lang=\"en\"> <head> <meta charset=\"UTF-8\" /> <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" /> <title> 数据发布 - 国家统计局 </title> <meta name=\"ColumnName\" content=\"数据发布\"> <meta name=\"ColumnType\" content=\"数据发布\"> <meta name=\"ColumnDescription\" content=\"数据发布\"> <meta name=\"ColumnKeywords\" content=\"数据发布\"> <link href=\"../../images/gtj2023_base.css\" rel=\"stylesheet\" /> <link href=\"../../images/gtj2023_pc_common.css\" rel=\"stylesheet\" /> <link href=\"../../images/gtj2023_index.css\" rel=\"stylesheet\" /> <link href=\"../../images/gtj2",
-          "耗时秒": 3.473
+          "耗时秒": 5.367
         }
       ],
       "复测": [
@@ -1944,7 +1952,7 @@ T6 宏观数据源探测（北京时间）
         {
           "网址": "https://data.stats.gov.cn/dg/website/publicrelease/web/external/new/queryIndexTreeAsync?pid=&code=1",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:26:19.415105+08:00",
+          "北京时间": "2026-10-29T22:35:22.887676+08:00",
           "状态码": 200,
           "最终网址": "https://data.stats.gov.cn/dg/website/publicrelease/web/external/new/queryIndexTreeAsync?pid=&code=1",
           "内容类型": "text/html;charset=UTF-8",
@@ -1952,7 +1960,7 @@ T6 宏观数据源探测（北京时间）
           "字节数": 463,
           "SHA256": "f084953f679008b0c564710a9106823748290884c5a0a14160932849ab7c86b0",
           "响应开头": "{\"data\":[{\"explain\":null,\"sdate\":null,\"_name\":\"月度数据\",\"treeinfo_pid\":\"69c574ab128a44e595cc0b24502b771b\",\"treeinfo_level\":2,\"type\":\"catalog\",\"edate\":null,\"isLeaf\":false,\"treeinfo_globalid\":\"69c574ab128a44e595cc0b24502b771b.fc982599aa684be7969d7b90b1bd0e84\",\"name\":\"月度数据\",\"_id\":\"fc982599aa684be7969d7b90b1bd0e84\",\"publicrelease_web_catalog_id\":\"fc982599aa684be7969d7b90b1bd0e84\",\"treeinfo_icon\":null}],\"success\":true,\"state\":20000,\"message\":\"成功\"}",
-          "耗时秒": 4.051
+          "耗时秒": 1.402
         }
       ],
       "复测": [
@@ -1984,7 +1992,7 @@ T6 宏观数据源探测（北京时间）
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_CURRENCY_SUPPLY&columns=ALL&pageSize=500&pageNumber=1&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:26:24.472749+08:00",
+          "北京时间": "2026-10-29T22:35:25.296590+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_CURRENCY_SUPPLY&columns=ALL&pageSize=500&pageNumber=1&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -1992,7 +2000,7 @@ T6 宏观数据源探测（北京时间）
           "字节数": 70175,
           "SHA256": "fb7c6ce5bdc84debd1f6738fd34e7785c632b672a65ff35e50645b0e649a5b90",
           "响应开头": "{\"version\":\"bb30c48a1f96b0e54c3a63e79a47ce4c\",\"result\":{\"pages\":1,\"data\":[{\"REPORT_DATE\":\"2026-09-01 00:00:00\",\"TIME\":\"2026年09月份\",\"BASIC_CURRENCY\":3596289.7,\"BASIC_CURRENCY_SAME\":7.2,\"BASIC_CURRENCY_SEQUENTIAL\":0.79051119,\"CURRENCY\":1167563.84,\"CURRENCY_SAME\":3.2,\"CURRENCY_SEQUENTIAL\":0.84841138,\"FREE_CASH\":150169.14,\"FREE_CASH_SAME\":10.6,\"FREE_CASH_SEQUENTIAL\":1.25219824},{\"REPORT_DATE\":\"2026-08-01 00:00:00\",\"TIME\":\"2026年08月份\",\"BASIC_CURRENCY\":3568083.6,\"BASIC_CURRENCY_SAME\":7.5,\"BASIC_CURRENCY_SEQUENTIAL\":0.36585309,\"CURRENCY\":1157741.43,\"CURRENCY_SAME\":4.1,\"CURRENCY_SEQUENTIAL\":0.2700821,\"FREE_CASH\":148311.98,\"FREE_CASH_SAME\":11.2,\"FREE_CA",
-          "耗时秒": 1.742
+          "耗时秒": 0.97
         }
       ],
       "复测": [
@@ -2060,7 +2068,7 @@ T6 宏观数据源探测（北京时间）
               "value": 1167563.84
             }
           ],
-          "至少21个日频观测": true
+          "至少21个日频观测": false
         }
       ],
       "真实发布日期": "REPORT_DATE/SOLAR_DATE为统计期/观测日，未核验真实公布日；不能用于时点回放",
@@ -2142,7 +2150,7 @@ T6 宏观数据源探测（北京时间）
           "value": 1167563.84
         }
       ],
-      "至少21个日频观测": true
+      "至少21个日频观测": false
     },
     {
       "来源": "东财_M2",
@@ -2155,7 +2163,7 @@ T6 宏观数据源探测（北京时间）
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_CURRENCY_SUPPLY&columns=ALL&pageSize=500&pageNumber=1&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:26:27.225338+08:00",
+          "北京时间": "2026-10-29T22:35:27.281575+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_CURRENCY_SUPPLY&columns=ALL&pageSize=500&pageNumber=1&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -2163,7 +2171,7 @@ T6 宏观数据源探测（北京时间）
           "字节数": 70175,
           "SHA256": "fb7c6ce5bdc84debd1f6738fd34e7785c632b672a65ff35e50645b0e649a5b90",
           "响应开头": "{\"version\":\"bb30c48a1f96b0e54c3a63e79a47ce4c\",\"result\":{\"pages\":1,\"data\":[{\"REPORT_DATE\":\"2026-09-01 00:00:00\",\"TIME\":\"2026年09月份\",\"BASIC_CURRENCY\":3596289.7,\"BASIC_CURRENCY_SAME\":7.2,\"BASIC_CURRENCY_SEQUENTIAL\":0.79051119,\"CURRENCY\":1167563.84,\"CURRENCY_SAME\":3.2,\"CURRENCY_SEQUENTIAL\":0.84841138,\"FREE_CASH\":150169.14,\"FREE_CASH_SAME\":10.6,\"FREE_CASH_SEQUENTIAL\":1.25219824},{\"REPORT_DATE\":\"2026-08-01 00:00:00\",\"TIME\":\"2026年08月份\",\"BASIC_CURRENCY\":3568083.6,\"BASIC_CURRENCY_SAME\":7.5,\"BASIC_CURRENCY_SEQUENTIAL\":0.36585309,\"CURRENCY\":1157741.43,\"CURRENCY_SAME\":4.1,\"CURRENCY_SEQUENTIAL\":0.2700821,\"FREE_CASH\":148311.98,\"FREE_CASH_SAME\":11.2,\"FREE_CA",
-          "耗时秒": 1.097
+          "耗时秒": 1.241
         }
       ],
       "复测": [
@@ -2231,7 +2239,7 @@ T6 宏观数据源探测（北京时间）
               "value": 3596289.7
             }
           ],
-          "至少21个日频观测": true
+          "至少21个日频观测": false
         }
       ],
       "真实发布日期": "REPORT_DATE/SOLAR_DATE为统计期/观测日，未核验真实公布日；不能用于时点回放",
@@ -2313,7 +2321,7 @@ T6 宏观数据源探测（北京时间）
           "value": 3596289.7
         }
       ],
-      "至少21个日频观测": true
+      "至少21个日频观测": false
     },
     {
       "来源": "东财_CPI同比",
@@ -2326,7 +2334,7 @@ T6 宏观数据源探测（北京时间）
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_CPI&columns=ALL&pageSize=500&pageNumber=1&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:26:29.333390+08:00",
+          "北京时间": "2026-10-29T22:35:29.537805+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_CPI&columns=ALL&pageSize=500&pageNumber=1&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -2334,7 +2342,7 @@ T6 宏观数据源探测（北京时间）
           "字节数": 76364,
           "SHA256": "eee1bd0effff84e377396a35215f27a2f1bc24d27657ba8f7380b33bc41163b3",
           "响应开头": "{\"version\":\"04d9d58bb293256b0139d15ac4cca2ad\",\"result\":{\"pages\":1,\"data\":[{\"REPORT_DATE\":\"2026-09-01 00:00:00\",\"TIME\":\"2026年09月份\",\"NATIONAL_SAME\":0.9,\"NATIONAL_BASE\":100.9,\"NATIONAL_SEQUENTIAL\":0.2,\"NATIONAL_ACCUMULATE\":100.9,\"CITY_SAME\":0.9,\"CITY_BASE\":100.9,\"CITY_SEQUENTIAL\":0.2,\"CITY_ACCUMULATE\":100.9,\"RURAL_SAME\":0.8,\"RURAL_BASE\":100.8,\"RURAL_SEQUENTIAL\":0.4,\"RURAL_ACCUMULATE\":100.7},{\"REPORT_DATE\":\"2026-08-01 00:00:00\",\"TIME\":\"2026年08月份\",\"NATIONAL_SAME\":0.8,\"NATIONAL_BASE\":100.8,\"NATIONAL_SEQUENTIAL\":0.4,\"NATIONAL_ACCUMULATE\":100.9,\"CITY_SAME\":0.8,\"CITY_BASE\":100.8,\"CITY_SEQUENTIAL\":0.4,\"CITY_ACCUMULATE\":100.9,\"RURAL_SAME\":0.7,\"RURAL_BAS",
-          "耗时秒": 1.449
+          "耗时秒": 1.715
         }
       ],
       "复测": [
@@ -2402,7 +2410,7 @@ T6 宏观数据源探测（北京时间）
               "value": 0.9
             }
           ],
-          "至少21个日频观测": true
+          "至少21个日频观测": false
         }
       ],
       "真实发布日期": "REPORT_DATE/SOLAR_DATE为统计期/观测日，未核验真实公布日；不能用于时点回放",
@@ -2487,7 +2495,7 @@ T6 宏观数据源探测（北京时间）
           "value": 0.9
         }
       ],
-      "至少21个日频观测": true
+      "至少21个日频观测": false
     },
     {
       "来源": "东财_PPI同比",
@@ -2500,7 +2508,7 @@ T6 宏观数据源探测（北京时间）
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_PPI&columns=ALL&pageSize=500&pageNumber=1&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:26:31.794269+08:00",
+          "北京时间": "2026-10-29T22:35:32.269770+08:00",
           "状态码": 200,
           "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_PPI&columns=ALL&pageSize=500&pageNumber=1&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
           "内容类型": "text/plain;charset=UTF-8",
@@ -2508,7 +2516,7 @@ T6 宏观数据源探测（北京时间）
           "字节数": 29237,
           "SHA256": "fc9804a7b36967bdd2678bc2852f13b85e1d2e56383a8bc9043aeced5efd9523",
           "响应开头": "{\"version\":\"0bb82a84f6c3f01a1bb964346c4aff8e\",\"result\":{\"pages\":1,\"data\":[{\"REPORT_DATE\":\"2026-09-01 00:00:00\",\"TIME\":\"2026年09月份\",\"BASE\":105,\"BASE_SAME\":5,\"BASE_ACCUMULATE\":102.3},{\"REPORT_DATE\":\"2026-08-01 00:00:00\",\"TIME\":\"2026年08月份\",\"BASE\":103.8,\"BASE_SAME\":3.8,\"BASE_ACCUMULATE\":102},{\"REPORT_DATE\":\"2026-07-01 00:00:00\",\"TIME\":\"2026年07月份\",\"BASE\":103.5,\"BASE_SAME\":3.5,\"BASE_ACCUMULATE\":101.8},{\"REPORT_DATE\":\"2026-06-01 00:00:00\",\"TIME\":\"2026年06月份\",\"BASE\":104.1,\"BASE_SAME\":4.1,\"BASE_ACCUMULATE\":101.5},{\"REPORT_DATE\":\"2026-05-01 00:00:00\",\"TIME\":\"2026年05月份\",\"BASE\":103.9,\"BASE_SAME\":3.9,\"BASE_ACCUMULATE\":101},{\"REPORT_DATE\":\"2026-04-01 00:00:0",
-          "耗时秒": 2.371
+          "耗时秒": 1.096
         }
       ],
       "复测": [
@@ -2580,7 +2588,7 @@ T6 宏观数据源探测（北京时间）
               "value": 5.0
             }
           ],
-          "至少21个日频观测": true
+          "至少21个日频观测": false
         }
       ],
       "真实发布日期": "REPORT_DATE/SOLAR_DATE为统计期/观测日，未核验真实公布日；不能用于时点回放",
@@ -2660,7 +2668,7 @@ T6 宏观数据源探测（北京时间）
           "value": 5.0
         }
       ],
-      "至少21个日频观测": true
+      "至少21个日频观测": false
     },
     {
       "来源": "东财_制造业PMI",
@@ -2673,21 +2681,160 @@ T6 宏观数据源探测（北京时间）
         {
           "网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_PMI&columns=ALL&pageSize=500&pageNumber=1&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:26:35.177898+08:00",
-          "错误": "TimeoutError: The read operation timed out",
-          "耗时秒": 18.126
+          "北京时间": "2026-10-29T22:35:34.380801+08:00",
+          "状态码": 200,
+          "最终网址": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_PMI&columns=ALL&pageSize=500&pageNumber=1&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
+          "内容类型": "text/plain;charset=UTF-8",
+          "Last_Modified": null,
+          "字节数": 33095,
+          "SHA256": "6b1c8f1b20e9334d6bb1ba6ecc7f982d3cf0ff18bdb4b0ff3c08db308b6b245b",
+          "响应开头": "{\"version\":\"0780892aaf2c5c89099883a3d13a19d8\",\"result\":{\"pages\":1,\"data\":[{\"REPORT_DATE\":\"2026-09-01 00:00:00\",\"TIME\":\"2026年09月份\",\"MAKE_INDEX\":50.1,\"MAKE_SAME\":0.60240964,\"NMAKE_INDEX\":50.2,\"NMAKE_SAME\":0.4},{\"REPORT_DATE\":\"2026-08-01 00:00:00\",\"TIME\":\"2026年08月份\",\"MAKE_INDEX\":49.8,\"MAKE_SAME\":0.8097166,\"NMAKE_INDEX\":49,\"NMAKE_SAME\":-2.58449304},{\"REPORT_DATE\":\"2026-07-01 00:00:00\",\"TIME\":\"2026年07月份\",\"MAKE_INDEX\":49.2,\"MAKE_SAME\":-0.20283976,\"NMAKE_INDEX\":49,\"NMAKE_SAME\":-2.19560878},{\"REPORT_DATE\":\"2026-06-01 00:00:00\",\"TIME\":\"2026年06月份\",\"MAKE_INDEX\":50.3,\"MAKE_SAME\":1.20724346,\"NMAKE_INDEX\":50.2,\"NMAKE_SAME\":-0.59405941},{\"REPORT_DATE\":\"2026",
+          "耗时秒": 0.84
         }
       ],
       "复测": [
         {
           "轮次": 1,
-          "状态": "失败",
-          "错误": "TimeoutError: The read operation timed out"
+          "状态": "取得有效观测",
+          "有效条数": 225,
+          "最早观测": "2008-01-01",
+          "最新观测": "2026-09-01",
+          "距抓取日天数": 58,
+          "实取年份": [
+            "2008",
+            "2009",
+            "2010",
+            "2011",
+            "2012",
+            "2013",
+            "2014",
+            "2015",
+            "2016",
+            "2017",
+            "2018",
+            "2019",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "2025",
+            "2026"
+          ],
+          "2015年有数据": true,
+          "各年条数": {
+            "2008": 12,
+            "2009": 12,
+            "2010": 12,
+            "2011": 12,
+            "2012": 12,
+            "2013": 12,
+            "2014": 12,
+            "2015": 12,
+            "2016": 12,
+            "2017": 12,
+            "2018": 12,
+            "2019": 12,
+            "2020": 12,
+            "2021": 12,
+            "2022": 12,
+            "2023": 12,
+            "2024": 12,
+            "2025": 12,
+            "2026": 9
+          },
+          "样例": [
+            {
+              "date": "2008-01-01",
+              "value": 53.0
+            },
+            {
+              "date": "2017-05-01",
+              "value": 51.2
+            },
+            {
+              "date": "2026-09-01",
+              "value": 50.1
+            }
+          ],
+          "至少21个日频观测": false
         }
       ],
-      "真实发布日期": "未取得；不可用观测日期或抓取时间冒充",
-      "状态": "未取得指标序列",
-      "有效序列成功次数": "0/1"
+      "真实发布日期": "REPORT_DATE/SOLAR_DATE为统计期/观测日，未核验真实公布日；不能用于时点回放",
+      "状态": "取得有效观测（来源待审核）",
+      "数据字段": "MAKE_INDEX",
+      "总页数": 1,
+      "首条字段": [
+        "REPORT_DATE",
+        "TIME",
+        "MAKE_INDEX",
+        "MAKE_SAME",
+        "NMAKE_INDEX",
+        "NMAKE_SAME"
+      ],
+      "有效序列成功次数": "1/1",
+      "有效条数": 225,
+      "最早观测": "2008-01-01",
+      "最新观测": "2026-09-01",
+      "距抓取日天数": 58,
+      "实取年份": [
+        "2008",
+        "2009",
+        "2010",
+        "2011",
+        "2012",
+        "2013",
+        "2014",
+        "2015",
+        "2016",
+        "2017",
+        "2018",
+        "2019",
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+      ],
+      "2015年有数据": true,
+      "各年条数": {
+        "2008": 12,
+        "2009": 12,
+        "2010": 12,
+        "2011": 12,
+        "2012": 12,
+        "2013": 12,
+        "2014": 12,
+        "2015": 12,
+        "2016": 12,
+        "2017": 12,
+        "2018": 12,
+        "2019": 12,
+        "2020": 12,
+        "2021": 12,
+        "2022": 12,
+        "2023": 12,
+        "2024": 12,
+        "2025": 12,
+        "2026": 9
+      },
+      "样例": [
+        {
+          "date": "2008-01-01",
+          "value": 53.0
+        },
+        {
+          "date": "2017-05-01",
+          "value": 51.2
+        },
+        {
+          "date": "2026-09-01",
+          "value": 50.1
+        }
+      ],
+      "至少21个日频观测": false
     },
     {
       "来源": "商务部统计接口",
@@ -2700,7 +2847,7 @@ T6 宏观数据源探测（北京时间）
         {
           "网址": "https://data.mofcom.gov.cn/datamofcom/front/gnmy/shrzgmQuery",
           "方法": "POST",
-          "北京时间": "2026-10-29T22:26:54.310708+08:00",
+          "北京时间": "2026-10-29T22:35:36.235771+08:00",
           "状态码": 200,
           "最终网址": "https://data.mofcom.gov.cn/datamofcom/front/gnmy/shrzgmQuery",
           "内容类型": "application/json;charset=UTF-8",
@@ -2708,7 +2855,7 @@ T6 宏观数据源探测（北京时间）
           "字节数": 18844,
           "SHA256": "411c2c89889dcc6643498d215317a93334a97a839b09c11c1b223720c7f8348b",
           "响应开头": "[{\"date\":\"202604\",\"ndbab\":-5284,\"entrustloan\":-283,\"forcloan\":184,\"rmblaon\":-4006,\"bibae\":4520,\"tiosfs\":6245,\"sfinfe\":835,\"trustloan\":-129},{\"date\":\"202603\",\"ndbab\":1258,\"entrustloan\":-284,\"forcloan\":420,\"rmblaon\":31522,\"bibae\":3910,\"tiosfs\":52240,\"sfinfe\":428,\"trustloan\":-173},{\"date\":\"202602\",\"ndbab\":-1755,\"entrustloan\":-181,\"forcloan\":-36,\"rmblaon\":8458,\"bibae\":1522,\"tiosfs\":23837,\"sfinfe\":454,\"trustloan\":310},{\"date\":\"202601\",\"ndbab\":6293,\"entrustloan\":-192,\"forcloan\":468,\"rmblaon\":49016,\"bibae\":5033,\"tiosfs\":72185,\"sfinfe\":291,\"trustloan\":-4},{\"date\":\"202512\",\"ndbab\":-1492,\"entrustloan\":308,\"forcloan\":-675,\"rmblaon\":9804,\"bibae\":1541,\"ti",
-          "耗时秒": 1.728
+          "耗时秒": 1.82
         }
       ],
       "复测": [
@@ -2733,17 +2880,17 @@ T6 宏观数据源探测（北京时间）
       "限制": "期货连续序列换月口径待审核，不能当成现货或固定到期合约",
       "请求": [
         {
-          "网址": "https://query1.finance.yahoo.com/v8/finance/chart/DX-Y.NYB?period1=1420070400&period2=1793284016&interval=1d",
+          "网址": "https://query1.finance.yahoo.com/v8/finance/chart/DX-Y.NYB?period1=1420070400&period2=1793284538&interval=1d",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:26:57.046470+08:00",
+          "北京时间": "2026-10-29T22:35:39.067710+08:00",
           "状态码": 200,
-          "最终网址": "https://query1.finance.yahoo.com/v8/finance/chart/DX-Y.NYB?period1=1420070400&period2=1793284016&interval=1d",
+          "最终网址": "https://query1.finance.yahoo.com/v8/finance/chart/DX-Y.NYB?period1=1420070400&period2=1793284538&interval=1d",
           "内容类型": "application/json;charset=utf-8",
           "Last_Modified": null,
-          "字节数": 328202,
-          "SHA256": "acc5b41bdee3781f73e5c1cb73dc99ee6fe75e2cb6c2f671e7d2b38ba1630531",
-          "响应开头": "{\"chart\":{\"result\":[{\"meta\":{\"currency\":\"USD\",\"symbol\":\"DX-Y.NYB\",\"exchangeName\":\"NYB\",\"fullExchangeName\":\"ICE Futures\",\"instrumentType\":\"INDEX\",\"firstTradeDate\":31813200,\"regularMarketTime\":1793283416,\"hasPrePostMarketData\":false,\"gmtoffset\":-14400,\"timezone\":\"EDT\",\"exchangeTimezoneName\":\"America/New_York\",\"regularMarketPrice\":102.229,\"regularMarketChangePercent\":0.034,\"fulldayPrice\":102.229,\"fulldayChange\":0.035,\"fulldayChangePercent\":0.034,\"fiftyTwoWeekHigh\":102.95,\"fiftyTwoWeekLow\":95.55,\"regularMarketDayHigh\":102.448,\"regularMarketDayLow\":102.06,\"longName\":\"US Dollar Index\",\"shortName\":\"ICE US Dollar Index - Index - C\",\"chartPreviousClos",
-          "耗时秒": 0.239
+          "字节数": 328205,
+          "SHA256": "ef7cb9c3c0f532857eec105bec2ae6eb4ae02f46ebcba1e44ae669ea9f809078",
+          "响应开头": "{\"chart\":{\"result\":[{\"meta\":{\"currency\":\"USD\",\"symbol\":\"DX-Y.NYB\",\"exchangeName\":\"NYB\",\"fullExchangeName\":\"ICE Futures\",\"instrumentType\":\"INDEX\",\"firstTradeDate\":31813200,\"regularMarketTime\":1793283938,\"hasPrePostMarketData\":false,\"gmtoffset\":-14400,\"timezone\":\"EDT\",\"exchangeTimezoneName\":\"America/New_York\",\"regularMarketPrice\":102.103,\"regularMarketChangePercent\":-0.089,\"fulldayPrice\":102.103,\"fulldayChange\":-0.091,\"fulldayChangePercent\":-0.089,\"fiftyTwoWeekHigh\":102.95,\"fiftyTwoWeekLow\":95.55,\"regularMarketDayHigh\":102.448,\"regularMarketDayLow\":102.06,\"longName\":\"US Dollar Index\",\"shortName\":\"ICE US Dollar Index - Index - C\",\"chartPreviousC",
+          "耗时秒": 0.162
         }
       ],
       "复测": [
@@ -2794,7 +2941,7 @@ T6 宏观数据源探测（北京时间）
             },
             {
               "date": "2026-10-29",
-              "value": 102.22899627685547
+              "value": 102.10299682617188
             }
           ],
           "至少21个日频观测": true
@@ -2855,7 +3002,7 @@ T6 宏观数据源探测（北京时间）
         },
         {
           "date": "2026-10-29",
-          "value": 102.22899627685547
+          "value": 102.10299682617188
         }
       ],
       "至少21个日频观测": true
@@ -2869,17 +3016,17 @@ T6 宏观数据源探测（北京时间）
       "限制": "期货连续序列换月口径待审核，不能当成现货或固定到期合约",
       "请求": [
         {
-          "网址": "https://query1.finance.yahoo.com/v8/finance/chart/BZ%3DF?period1=1420070400&period2=1793284017&interval=1d",
+          "网址": "https://query1.finance.yahoo.com/v8/finance/chart/BZ%3DF?period1=1420070400&period2=1793284539&interval=1d",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:26:58.375274+08:00",
+          "北京时间": "2026-10-29T22:35:40.302797+08:00",
           "状态码": 200,
-          "最终网址": "https://query1.finance.yahoo.com/v8/finance/chart/BZ%3DF?period1=1420070400&period2=1793284017&interval=1d",
+          "最终网址": "https://query1.finance.yahoo.com/v8/finance/chart/BZ%3DF?period1=1420070400&period2=1793284539&interval=1d",
           "内容类型": "application/json;charset=utf-8",
           "Last_Modified": null,
           "字节数": 312413,
-          "SHA256": "408aeca5359f3d240665d6805cb1824339b8bd10bd5fb6273a6541aa8c4f30c6",
-          "响应开头": "{\"chart\":{\"result\":[{\"meta\":{\"currency\":\"USD\",\"symbol\":\"BZ=F\",\"exchangeName\":\"NYM\",\"fullExchangeName\":\"NY Mercantile\",\"instrumentType\":\"FUTURE\",\"firstTradeDate\":1185768000,\"regularMarketTime\":1793283415,\"hasPrePostMarketData\":false,\"gmtoffset\":-14400,\"timezone\":\"EDT\",\"exchangeTimezoneName\":\"America/New_York\",\"regularMarketPrice\":110.42,\"regularMarketChangePercent\":-1.093,\"fulldayPrice\":110.42,\"fulldayChange\":-1.22,\"fulldayChangePercent\":-1.093,\"fiftyTwoWeekHigh\":126.1,\"fiftyTwoWeekLow\":58.72,\"regularMarketDayHigh\":110.99,\"regularMarketDayLow\":109.03,\"regularMarketVolume\":18644,\"longName\":\"Brent Crude Oil Last Day Financial Futures\",\"shortName",
-          "耗时秒": 0.331
+          "SHA256": "6750a5aab6c4c7331b7c8d1953a3034e8f17ea6450ea3d245d6b3058c48e9de1",
+          "响应开头": "{\"chart\":{\"result\":[{\"meta\":{\"currency\":\"USD\",\"symbol\":\"BZ=F\",\"exchangeName\":\"NYM\",\"fullExchangeName\":\"NY Mercantile\",\"instrumentType\":\"FUTURE\",\"firstTradeDate\":1185768000,\"regularMarketTime\":1793283939,\"hasPrePostMarketData\":false,\"gmtoffset\":-14400,\"timezone\":\"EDT\",\"exchangeTimezoneName\":\"America/New_York\",\"regularMarketPrice\":110.16,\"regularMarketChangePercent\":-1.326,\"fulldayPrice\":110.16,\"fulldayChange\":-1.48,\"fulldayChangePercent\":-1.326,\"fiftyTwoWeekHigh\":126.1,\"fiftyTwoWeekLow\":58.72,\"regularMarketDayHigh\":110.99,\"regularMarketDayLow\":109.03,\"regularMarketVolume\":19050,\"longName\":\"Brent Crude Oil Last Day Financial Futures\",\"shortName",
+          "耗时秒": 0.094
         }
       ],
       "复测": [
@@ -2930,7 +3077,7 @@ T6 宏观数据源探测（北京时间）
             },
             {
               "date": "2026-10-29",
-              "value": 110.41999816894531
+              "value": 110.16000366210938
             }
           ],
           "至少21个日频观测": true
@@ -2991,7 +3138,7 @@ T6 宏观数据源探测（北京时间）
         },
         {
           "date": "2026-10-29",
-          "value": 110.41999816894531
+          "value": 110.16000366210938
         }
       ],
       "至少21个日频观测": true
@@ -3005,17 +3152,17 @@ T6 宏观数据源探测（北京时间）
       "限制": "期货连续序列换月口径待审核，不能当成现货或固定到期合约",
       "请求": [
         {
-          "网址": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1420070400&period2=1793284018&interval=1d",
+          "网址": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1420070400&period2=1793284540&interval=1d",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:26:59.750255+08:00",
+          "北京时间": "2026-10-29T22:35:41.458779+08:00",
           "状态码": 200,
-          "最终网址": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1420070400&period2=1793284018&interval=1d",
+          "最终网址": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1420070400&period2=1793284540&interval=1d",
           "内容类型": "application/json;charset=utf-8",
           "Last_Modified": null,
-          "字节数": 283085,
-          "SHA256": "76e5b5d178f4c1609402de507e692c5ce0ae973cb246aa001ae396fb5a85d8cf",
-          "响应开头": "{\"chart\":{\"result\":[{\"meta\":{\"currency\":\"USD\",\"symbol\":\"GC=F\",\"exchangeName\":\"CMX\",\"fullExchangeName\":\"COMEX\",\"instrumentType\":\"FUTURE\",\"firstTradeDate\":967608000,\"regularMarketTime\":1793283416,\"hasPrePostMarketData\":false,\"gmtoffset\":-14400,\"timezone\":\"EDT\",\"exchangeTimezoneName\":\"America/New_York\",\"regularMarketPrice\":4032.8,\"regularMarketChangePercent\":-0.464,\"fulldayPrice\":4032.8,\"fulldayChange\":-18.8,\"fulldayChangePercent\":-0.464,\"fiftyTwoWeekHigh\":5586.2,\"fiftyTwoWeekLow\":3925.1,\"regularMarketDayHigh\":4081.7,\"regularMarketDayLow\":4027.0,\"regularMarketVolume\":90353,\"shortName\":\"Gold Dec 26\",\"chartPreviousClose\":1183.9,\"priceHint\":2,\"curr",
-          "耗时秒": 0.209
+          "字节数": 283083,
+          "SHA256": "e8e189bfd9ebc085ea24f135ae471743963aba8af7b43ee90b8ee1e660d1edfb",
+          "响应开头": "{\"chart\":{\"result\":[{\"meta\":{\"currency\":\"USD\",\"symbol\":\"GC=F\",\"exchangeName\":\"CMX\",\"fullExchangeName\":\"COMEX\",\"instrumentType\":\"FUTURE\",\"firstTradeDate\":967608000,\"regularMarketTime\":1793283938,\"hasPrePostMarketData\":false,\"gmtoffset\":-14400,\"timezone\":\"EDT\",\"exchangeTimezoneName\":\"America/New_York\",\"regularMarketPrice\":4035.9,\"regularMarketChangePercent\":-0.388,\"fulldayPrice\":4035.9,\"fulldayChange\":-15.7,\"fulldayChangePercent\":-0.388,\"fiftyTwoWeekHigh\":5586.2,\"fiftyTwoWeekLow\":3925.1,\"regularMarketDayHigh\":4081.7,\"regularMarketDayLow\":4027.0,\"regularMarketVolume\":92283,\"shortName\":\"Gold Dec 26\",\"chartPreviousClose\":1183.9,\"priceHint\":2,\"curr",
+          "耗时秒": 0.113
         }
       ],
       "复测": [
@@ -3066,7 +3213,7 @@ T6 宏观数据源探测（北京时间）
             },
             {
               "date": "2026-10-29",
-              "value": 4032.800048828125
+              "value": 4035.89990234375
             }
           ],
           "至少21个日频观测": true
@@ -3127,7 +3274,7 @@ T6 宏观数据源探测（北京时间）
         },
         {
           "date": "2026-10-29",
-          "value": 4032.800048828125
+          "value": 4035.89990234375
         }
       ],
       "至少21个日频观测": true
@@ -3143,10 +3290,10 @@ T6 宏观数据源探测（北京时间）
         {
           "网址": "https://www.lme.com/en/Metals/Non-ferrous/LME-Copper",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:27:01.001406+08:00",
+          "北京时间": "2026-10-29T22:35:42.634846+08:00",
           "错误": "HTTPError: HTTP Error 403: Forbidden",
           "状态码": 403,
-          "耗时秒": 0.127
+          "耗时秒": 0.06
         }
       ],
       "复测": [
@@ -3171,7 +3318,7 @@ T6 宏观数据源探测（北京时间）
         {
           "网址": "https://stock2.finance.sina.com.cn/futures/api/json.php/IndexService.getInnerFuturesDailyKLine?symbol=CU0",
           "方法": "GET",
-          "北京时间": "2026-10-29T22:27:02.136101+08:00",
+          "北京时间": "2026-10-29T22:35:43.706907+08:00",
           "状态码": 200,
           "最终网址": "https://stock2.finance.sina.com.cn/futures/api/json.php/IndexService.getInnerFuturesDailyKLine?symbol=CU0",
           "内容类型": "application/json; charset=gbk",
@@ -3179,14 +3326,14 @@ T6 宏观数据源探测（北京时间）
           "字节数": 341140,
           "SHA256": "05022ac33e0c8cc8f1d60b6ac594550eb52e8b4024d51c863a61fa5cdb5e5011",
           "响应开头": "[[\"2005-01-04\",\"29110.000\",\"29190.000\",\"28270.000\",\"28560.000\",\"134210\"],[\"2005-01-05\",\"27990.000\",\"27990.000\",\"27990.000\",\"27990.000\",\"4054\"],[\"2005-01-06\",\"28070.000\",\"28520.000\",\"28020.000\",\"28470.000\",\"118436\"],[\"2005-01-07\",\"28380.000\",\"28570.000\",\"28310.000\",\"28420.000\",\"76214\"],[\"2005-01-10\",\"28390.000\",\"28590.000\",\"27930.000\",\"28150.000\",\"115932\"],[\"2005-01-11\",\"28360.000\",\"28550.000\",\"28330.000\",\"28510.000\",\"88654\"],[\"2005-01-12\",\"28800.000\",\"28920.000\",\"28730.000\",\"28900.000\",\"72470\"],[\"2005-01-13\",\"28820.000\",\"28870.000\",\"28650.000\",\"28810.000\",\"76128\"],[\"2005-01-14\",\"28550.000\",\"28810.000\",\"28520.000\",\"28800.000\",\"79154\"],[\"2005-0",
-          "耗时秒": 1.51
+          "耗时秒": 2.559
         }
       ],
       "复测": [
         {
           "轮次": 1,
           "状态": "失败",
-          "错误": "TypeError: list indices must be integers or slices, not str"
+          "错误": "ValueError: 沪铜OHLC字段校验失败"
         }
       ],
       "真实发布日期": "未取得；不可用观测日期或抓取时间冒充",
@@ -3229,8 +3376,8 @@ T6 宏观数据源探测（北京时间）
       "缺口": "两个来源共同有效日期不足3个，未完成三时点官方核对"
     }
   ],
-  "结束北京时间": "2026-10-29T22:27:03.654561+08:00",
-  "有效来源数": 13,
+  "结束北京时间": "2026-10-29T22:35:46.278685+08:00",
+  "有效来源数": 14,
   "审核事项": [
     "中美10年收益率来源、完整历史、短时复测与逐时可见性是否足以接入环境维度。",
     "其余来源的单位、合约定义、修订历史和真实发布日期仍须逐项核实。",
