@@ -1,0 +1,43 @@
+name: T4b 规则与全历史回放验收
+on:
+  push:
+    branches: [gpt/T4b-rules]
+    paths: ['scripts/**', 'tests/**', 'system/自动判断规则.json', 'system/判断记录格式.md', '.github/workflows/test-t4b-rules.yml']
+  pull_request:
+    paths: ['scripts/auto_judgment*', 'scripts/check_judgments.py', 'tests/test_auto_judgments.py', 'system/自动判断规则.json']
+  workflow_dispatch:
+permissions:
+  contents: read
+# 仅上传隔离验收artifact，不提交仓库，无需占用repo-writer。
+concurrency:
+  group: t4b-readonly-tests-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pandas numpy requests
+      - name: 单元测试与引擎校验
+        run: |
+          set -euo pipefail
+          mkdir -p logs/test/T4b
+          python -m unittest discover -s tests -v 2>&1 | tee logs/test/T4b/单元测试.txt
+          md5sum -c engine/ENGINE_MD5.txt | tee logs/test/T4b/引擎校验.txt
+      - name: 全历史与正式入口隔离验证
+        run: |
+          set -euo pipefail
+          python scripts/auto_judgments.py --full-history
+          python tests/verify_t4b_delivery.py
+          python scripts/check_judgments.py --stats
+          git diff --exit-code -- data engine archive graph judgments/*.jsonl
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T4b-规则验收
+          path: |
+            logs/test/T4b/
+            logs/test/T4/全历史回放.*

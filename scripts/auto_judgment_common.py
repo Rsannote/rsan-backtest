@@ -125,9 +125,9 @@ def evaluate(root, record, as_of, calendar=None):
     as_of = dt.date.fromisoformat(as_of) if isinstance(as_of, str) else as_of
     if window[-1] > as_of:
         return {"pending": f"未到期，固定终点{target}", "target": target}
-    returns, evidence = [], []
+    returns, evidence, drawdown = [], [], None
     codes = [(condition["type"], condition["code"])]
-    if condition["type"] != "指数涨跌":
+    if condition["type"] in {"指数相对", "行业ETF相对沪深300"}:
         codes.append(("指数涨跌", condition["benchmark"]))
     for kind, code in codes:
         try:
@@ -143,16 +143,21 @@ def evaluate(root, record, as_of, calendar=None):
                     raise ValueError(f"{code} {day} close/factor无效")
                 adjusted.append(close * factor)
             returns.append(adjusted[-1] / adjusted[0] - 1)
-            evidence.append({"text": f"{code} {condition['from']}→{target} close×factor收益{returns[-1]:+.8%}", "source": path, "level": "一级"})
+            if condition["type"] == "指数最大回撤":
+                drawdown = 1 - min(adjusted) / adjusted[0]
+                description = f"起点收盘{adjusted[0]:g}、窗口最低收盘{min(adjusted):g}、起点最大回撤{drawdown:.8%}"
+            else:
+                description = f"收益{returns[-1]:+.8%}"
+            evidence.append({"text": f"{code} {condition['from']}→{target} close×factor{description}", "source": path, "level": "一级"})
         except (OSError, KeyError, ValueError) as exc:
             return {"pending": str(exc), "target": target}
-    actual = returns[0] - (returns[1] if len(returns) == 2 else 0)
+    actual = drawdown if drawdown is not None else returns[0] - (returns[1] if len(returns) == 2 else 0)
     op, value = condition["op"], condition["value"]
     hit = {">": actual > value, ">=": actual >= value, "<": actual < value, "<=": actual <= value}[op]
     status = "证实" if hit else "证伪"
     return {"status": status, "actual": actual, "target": target, "returns": returns,
             "result": {"date": as_of.isoformat(), "status": status,
-                       "note": f"固定窗口{condition['from']}→{target}（{condition['to_trading_days']}交易日）；实际{actual:+.8%}；条件 {op} {value:+.8%}。close×factor，端点收益差；缺日不顺延。",
+                       "note": f"固定窗口{condition['from']}→{target}（{condition['to_trading_days']}交易日）；实际{actual:+.8%}；条件 {op} {value:+.8%}。close×factor，{'起点收盘至窗口最低收盘回撤，不是滚动高点回撤' if drawdown is not None else '端点收益差'}；缺日不顺延。",
                        "evidence": evidence}}
 
 

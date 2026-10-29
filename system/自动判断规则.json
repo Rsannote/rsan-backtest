@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "说明": "全部为未批准草案，enabled和approved双门；主线预留规则当前实现无条件跳过，不能被include-drafts启用。结果是端点方向/超额指标，非投资结论。",
+  "说明": "依据PR #6审核，只启用进入守势回撤风险与成交占比代理前五；情绪暂不批准，主线未启用。approved存审核说明，兼容旧布尔值加approval。",
   "rules": [
     {
       "id": "market_attack",
@@ -9,13 +9,14 @@
       "module": "市场状态",
       "enabled": false,
       "approved": false,
-      "status": "草案待审核",
+      "status": "不批准",
       "approval": null,
       "trigger": "market_state",
       "to_trading_days": 5,
       "op": ">",
       "value": 0,
-      "state": "攻"
+      "state": "攻",
+      "说明": "PR #6审核：市场状态用于风险环境，不作涨跌方向预测"
     },
     {
       "id": "market_defend",
@@ -24,23 +25,40 @@
       "module": "市场状态",
       "enabled": false,
       "approved": false,
-      "status": "草案待审核",
+      "status": "不批准",
       "approval": null,
       "trigger": "market_state",
       "to_trading_days": 5,
       "op": "<=",
       "value": 0,
-      "state": "守"
+      "state": "守",
+      "说明": "PR #6审核：市场状态用于风险环境，不作涨跌方向预测"
+    },
+    {
+      "id": "market_defend_risk",
+      "name": "进入守势后的回撤风险",
+      "version": "v1",
+      "module": "市场状态",
+      "enabled": true,
+      "approved": "Claude 审核 2026-10-29，依据 PR #6 评论",
+      "approval": "Claude 审核 2026-10-29，依据 PR #6 评论",
+      "status": "已批准",
+      "trigger": "market_state_enter",
+      "state": "守",
+      "to_trading_days": 20,
+      "op": ">=",
+      "value": 0.05,
+      "说明": "仅从非守进入守的当天生成；起点收盘至窗口最低收盘，非滚动高点回撤"
     },
     {
       "id": "flow_proxy_top5",
       "name": "行业成交占比上升前5相对强弱",
-      "version": "草案v1",
+      "version": "v1",
       "module": "资金轮动",
-      "enabled": false,
-      "approved": false,
-      "status": "草案待审核",
-      "approval": null,
+      "enabled": true,
+      "approved": "Claude 审核 2026-10-29，依据 PR #6 评论",
+      "status": "已批准",
+      "approval": "Claude 审核 2026-10-29，依据 PR #6 评论",
       "trigger": "flow_proxy",
       "to_trading_days": 10,
       "op": ">",
@@ -57,14 +75,15 @@
       "module": "散户情绪",
       "enabled": false,
       "approved": false,
-      "status": "草案待审核",
+      "status": "暂不批准",
       "approval": null,
       "trigger": "sentiment_enter",
       "to_trading_days": 20,
       "op": ">",
       "value": 0,
       "zone": "冰点",
-      "threshold": 20
+      "threshold": 20,
+      "说明": "等文本指标满20天、情绪规则升级后再议，PR #6"
     },
     {
       "id": "sentiment_hot",
@@ -73,14 +92,15 @@
       "module": "散户情绪",
       "enabled": false,
       "approved": false,
-      "status": "草案待审核",
+      "status": "暂不批准",
       "approval": null,
       "trigger": "sentiment_enter",
       "to_trading_days": 20,
       "op": "<=",
       "value": 0,
       "zone": "过热",
-      "threshold": 80
+      "threshold": 80,
+      "说明": "等文本指标满20天、情绪规则升级后再议，PR #6"
     },
     {
       "id": "mainline_confirm",

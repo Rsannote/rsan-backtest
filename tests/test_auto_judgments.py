@@ -31,8 +31,11 @@ class AutoTests(unittest.TestCase):
         self.csv('data/行情库/指数/sh000001.csv',[(d,100,1) for d in self.days])
         self.csv('data/行情库/ETF/512880.csv',[(d,100+i,1) for i,d in enumerate(self.days)])
         self.config=json.loads((REPO/'system/自动判断规则.json').read_text())
+        # 保留T4原框架的独立草案夹具，不随生产审批开关漂移。
+        self.config['rules']=[r for r in self.config['rules'] if r['id']!='market_defend_risk']
         for rule in self.config['rules']:
-            if not rule.get('reserved'): rule['to_trading_days']=2
+            if not rule.get('reserved'):
+                rule.update(enabled=False,approved=False,approval=None,status='草案待审核',to_trading_days=2)
         self.put('system/自动判断规则.json',self.config)
         self.market('2026-10-22')
         self.temp('2026-10-21,30\n2026-10-22,10\n')
@@ -243,6 +246,81 @@ class AutoTests(unittest.TestCase):
             self.assertTrue(checker.check_record(bad,'坏条件'),field)
         record['evidence'][0]['source']='data/../judgments/2026-10.jsonl'
         self.assertTrue(checker.check_record(record,'路径'))
+
+
+    def test_t4b_start_drawdown_is_neither_endpoint_nor_rolling_peak(self):
+        record=self.record('指数最大回撤',op='>=',value=.05)
+        # 100→120→96：起点回撤4%，滚动高点回撤20%；端点涨跌-4%。
+        self.csv('data/行情库/指数/sh000300.csv',[(d, { '2026-10-22':100,'2026-10-23':120,'2026-10-26':96}.get(d,100),1) for d in self.days])
+        result=common.evaluate(self.root,record,'2026-10-26')
+        self.assertEqual(result['status'],'证伪'); self.assertAlmostEqual(result['actual'],.04)
+        self.assertIn('起点收盘',result['result']['evidence'][0]['text'])
+        self.csv('data/行情库/指数/sh000300.csv',[(d,100 if d=='2026-10-22' else 120,1) for d in self.days])
+        self.assertEqual(common.evaluate(self.root,record,'2026-10-26')['actual'],0)
+
+    def test_t4b_drawdown_factor_fixed_window_and_bad_threshold(self):
+        record=self.record('指数最大回撤',op='>=',value=.05)
+        self.csv('data/行情库/指数/sh000300.csv',[(d,50 if d=='2026-10-23' else 100,2 if d=='2026-10-23' else 1) for d in self.days])
+        self.assertEqual(common.evaluate(self.root,record,'2026-10-26')['actual'],0)
+        self.assertIn('未到期',common.evaluate(self.root,record,'2026-10-23')['pending'])
+        self.csv('data/行情库/指数/sh000300.csv',[(d,100,1) for d in self.days if d!='2026-10-23'])
+        self.assertIn('缺日',common.evaluate(self.root,record,'2026-10-29')['pending'])
+        for value in (-.01,1.01):
+            bad=copy.deepcopy(record); bad['check']['value']=value
+            self.assertTrue(checker.check_record(bad,'错误回撤'))
+
+    def test_t4b_enter_requires_previous_trading_day_non_defend(self):
+        rule=next(r for r in json.loads((REPO/'system/自动判断规则.json').read_text())['rules'] if r['id']=='market_defend_risk')
+        calendar=common.TradingCalendar(self.root)
+        event,reason=generate.trigger_events(self.root,rule,'2026-10-22',calendar,{})
+        self.assertEqual(event,[]); self.assertIn('缺失',reason)
+        self.market('2026-10-21','守')
+        self.assertEqual(generate.trigger_events(self.root,rule,'2026-10-22',calendar,{})[0],[])
+        self.market('2026-10-21','中性')
+        event,reason=generate.trigger_events(self.root,rule,'2026-10-22',calendar,{})
+        self.assertIsNone(reason); self.assertEqual(len(event),1)
+        self.assertEqual(event[0]['type'],'指数最大回撤')
+        self.assertIn('2026-10-21为中性',event[0]['text'])
+        self.put('data/市场状态/2026-10/2026-10-21.json',{'数据日期':'2026-10-20','市场':{'结论':'攻'}})
+        self.assertIn('不可确认',generate.trigger_events(self.root,rule,'2026-10-22',calendar,{})[1])
+
+    def test_t4b_approval_policy_and_legacy_compatibility(self):
+        config=json.loads((REPO/'system/自动判断规则.json').read_text())
+        generate.validate_rules(config)
+        enabled=[r for r in config['rules'] if generate.active(r,False,False)[0]]
+        self.assertEqual({r['id'] for r in enabled},{'market_defend_risk','flow_proxy_top5'})
+        self.assertTrue(all(r['approved']=='Claude 审核 2026-10-29，依据 PR #6 评论' for r in enabled))
+        for r in config['rules']:
+            if r not in enabled: self.assertFalse(generate.active(r,True,True)[0])
+        self.assertFalse(generate.approved({'approved':True}))
+        self.assertTrue(generate.approved({'approved':True,'approval':'旧格式批准'}))
+        bad=copy.deepcopy(config); bad['rules'][2]['approved']=' '
+        with self.assertRaises(ValueError): generate.validate_rules(bad)
+
+    def test_t4b_full_history_pending_denominators_and_isolation(self):
+        import auto_judgments_full_history as history
+        # 延长真实交易日历，使前两个进入事件有20日窗口，尾部事件保持待到期。
+        days=[(dt.date(2026,9,1)+dt.timedelta(days=i)).isoformat() for i in range(59)
+              if (dt.date(2026,9,1)+dt.timedelta(days=i)).weekday()<5 and (dt.date(2026,9,1)+dt.timedelta(days=i)).isoformat() not in {'2026-10-01','2026-10-02','2026-10-05','2026-10-06','2026-10-07'}]
+        self.csv('data/行情库/指数/sh000300.csv',[(d,100-i,1) for i,d in enumerate(days)])
+        path=self.root/'logs/市场状态_规则检验_逐日.csv'; path.parent.mkdir(parents=True,exist_ok=True)
+        path.write_text('date,结论,5日涨跌,20日最大回撤\n'+''.join(f"{d},{state},{ret},{dd}\n" for d,state,ret,dd in [
+            (days[0],'守',1,-6),(days[1],'攻',1,-1),(days[2],'守',-1,-8),(days[3],'守','',''),(days[-2],'攻',1,-2),(days[-1],'守','','')]))
+        self.temp(''.join(f'{d},{v}\n' for d,v in zip(days[:5],[30,10,10,90,90])))
+        guard=self.root/'judgments/2026-10.jsonl'; guard.parent.mkdir(); guard.write_text('原文保护\n')
+        report=history.full_history(self.root)
+        defend=next(s for s in report['cached_daily'] if s['name']=='守之后5日上涨')
+        self.assertEqual((defend['samples'],defend['complete'],defend['pending'],defend['hit']),(4,2,2,1))
+        self.assertEqual(defend['review_share'],.25); self.assertEqual(defend['hit_rate'],.5)
+        self.assertEqual([e['date'] for e in report['entry_events']],[days[2],days[-1]])
+        self.assertEqual(report['entry_previous_unknown'],[days[0]])
+        self.assertEqual(report['entry_risk']['pending'],1)
+        self.assertEqual(len(report['sentiment_events']['冰点']),1)
+        self.assertEqual(len(report['sentiment_events']['过热']),1)
+        self.assertEqual(guard.read_text(),'原文保护\n')
+        with self.assertRaises(ValueError): history.full_history(self.root,self.root/'judgments')
+        path.write_text(path.read_text()+f'{days[0]},攻,1,-1\n')
+        with self.assertRaises(ValueError): history.full_history(self.root)
 
 
 if __name__=='__main__': unittest.main()

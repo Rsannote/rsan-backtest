@@ -15,6 +15,11 @@ ROOT = Path(__file__).resolve().parents[1]
 MODULE_CHOICES = ("市场状态", "散户情绪")
 
 
+def approved(rule):
+    value = rule.get("approved")
+    return bool(value.strip()) if isinstance(value, str) else value is True and bool(rule.get("approval"))
+
+
 def validate_rules(config):
     seen = set()
     if config.get("schema_version") != 1 or not isinstance(config.get("rules"), list):
@@ -23,13 +28,15 @@ def validate_rules(config):
         if rule["id"] in seen:
             raise ValueError("规则ID重复")
         seen.add(rule["id"])
-        if not isinstance(rule.get("enabled"), bool) or not isinstance(rule.get("approved"), bool):
-            raise ValueError("规则enabled/approved须为布尔值")
-        if rule["enabled"] and (not rule["approved"] or not rule.get("approval")):
-            raise ValueError("启用正式规则必须批准并写approval")
+        if not isinstance(rule.get("enabled"), bool) or not isinstance(rule.get("approved"), (bool, str)):
+            raise ValueError("规则enabled须为布尔值；approved须为布尔值或审核说明")
+        if isinstance(rule["approved"], str) and not rule["approved"].strip():
+            raise ValueError("审核说明不能为空")
+        if rule["enabled"] and not approved(rule):
+            raise ValueError("启用正式规则必须有审核说明（或旧格式批准加approval）")
         if rule.get("reserved") and (rule["enabled"] or rule["status"] != "未启用"):
             raise ValueError("主线预留规则必须未启用")
-        if rule["trigger"] not in {"market_state", "flow_proxy", "sentiment_enter", "mainline_enter"}:
+        if rule["trigger"] not in {"market_state", "market_state_enter", "flow_proxy", "sentiment_enter", "mainline_enter"}:
             raise ValueError("未知触发类型")
         n, value = rule["to_trading_days"], rule["value"]
         if isinstance(n,bool) or not isinstance(n,int) or not 1 <= n <= 250:
@@ -41,11 +48,11 @@ def validate_rules(config):
 def active(rule, replay, drafts):
     if rule.get("reserved") or rule.get("requires") == "T15":
         return False, "未启用，等待T15；草案回放也不启用"
-    if rule["enabled"] and rule["approved"]:
+    if rule["enabled"] and approved(rule):
         return True, None
     if replay and drafts and rule["status"] == "草案待审核":
         return True, None
-    return False, "未启用：enabled/approved未同时为true"
+    return False, "未启用：enabled关闭或尚无审核批准"
 
 
 def temperature_map(root):
@@ -66,19 +73,29 @@ def temperature_map(root):
 def trigger_events(root, rule, day, calendar, temperatures):
     """只读取day及之前的信号；返回事件和无法生成的原因。"""
     kind = rule["trigger"]
-    if kind in {"market_state", "flow_proxy"}:
+    if kind in {"market_state", "market_state_enter", "flow_proxy"}:
         path = Path("data/市场状态") / day[:7] / (day + ".json")
         if not (root / path).exists():
             return [], "市场状态历史存档缺失"
         obj = read_json(root / path)
         if obj.get("数据日期") != day:
             return [], "市场存档数据日期不匹配"
-        if kind == "market_state":
+        if kind in {"market_state", "market_state_enter"}:
             if obj.get("市场", {}).get("结论") != rule["state"]:
                 return [], "当日未触发该状态"
+            if kind == "market_state_enter":
+                previous = calendar.previous(day).isoformat()
+                before = root / "data/市场状态" / previous[:7] / (previous + ".json")
+                if not before.is_file():
+                    return [], "前一交易日存档缺失，不能把首次可见当作进入守势"
+                old = read_json(before)
+                if old.get("数据日期") != previous or old.get("市场", {}).get("结论") not in {"攻", "守", "中性"}:
+                    return [], "前一交易日状态不可确认"
+                if old["市场"]["结论"] == rule["state"]:
+                    return [], "仍处于守势，本日不是进入日"
             return [{"code":"sh000300", "name":"沪深300", "source":str(path),
-                     "text":f"{day}市场规则{obj.get('版本')}结论={rule['state']}",
-                     "type":"指数涨跌", "direction":rule["state"]}], None
+                     "text":f"{day}市场规则{obj.get('版本')}结论={rule['state']}" + (f"；前一交易日{previous}为{old['市场']['结论']}，本日进入守势" if kind == "market_state_enter" else ""),
+                     "type":"指数最大回撤" if kind == "market_state_enter" else "指数涨跌", "direction":rule["state"]}], None
         sector = obj.get("板块", {})
         names, details = sector.get("资金流入前5"), sector.get("明细")
         if not isinstance(names,list) or not isinstance(details,dict) or len(set(names)) != len(names):
@@ -121,16 +138,16 @@ def make_record(rule, event, day, write_day, calendar):
     key = hashlib.sha256(identity.encode()).hexdigest()[:16]
     condition = {"type":event["type"], "code":event["code"], "from":day,
                  "to_trading_days":rule["to_trading_days"], "op":rule["op"], "value":rule["value"]}
-    if event["type"] != "指数涨跌":
+    if event["type"] in {"指数相对", "行业ETF相对沪深300"}:
         condition["benchmark"] = "sh000300"
-    relative = "相对沪深300的超额收益" if event["type"] != "指数涨跌" else "收盘收益"
+    relative = "起点收盘至窗口最低收盘最大回撤" if event["type"] == "指数最大回撤" else "收盘收益" if event["type"] == "指数涨跌" else "相对沪深300的超额收益"
     claim = f"规则结论：依据{day}指标，{event['name']}未来{rule['to_trading_days']}个交易日{relative} {rule['op']} {rule['value']:.2%}"
     if rule["trigger"] == "flow_proxy":
         claim += "（成交占比变化代理，非真实资金流入）"
     # 临时序号只为内存格式验证；persist按全部档案的当天最大序号分配正式ID。
     return {"id":f"J-{write_day}-001", "auto_key":key, "date":write_day, "auto":True,
             "rule":rule["name"] + "·" + rule["version"], "module":rule["module"],
-            "scope":{"type":"产业" if event["type"] != "指数涨跌" else "市场", "id":event["code"], "name":event["name"]},
+            "scope":{"type":"产业" if event["type"] == "行业ETF相对沪深300" else "市场", "id":event["code"], "name":event["name"]},
             "horizon":"周" if rule["to_trading_days"]<=10 else "月", "claim":claim,
             "direction":event["direction"], "confidence":"低",
             "evidence":[{"text":event["text"], "source":event["source"], "level":"一级"}],
@@ -179,7 +196,7 @@ def run(root=ROOT, module=None, day=None, replay=False, include_drafts=False, ou
               "summary":[], "skipped":[], "errors":[], "rules":[], "pending":[]}
     records = []
     for rule in config["rules"]:
-        chosen = module is None or (rule["trigger"] in {"market_state","flow_proxy"} if module=="市场状态" else rule["trigger"]=="sentiment_enter")
+        chosen = module is None or (rule["trigger"] in {"market_state","market_state_enter","flow_proxy"} if module=="市场状态" else rule["trigger"]=="sentiment_enter")
         enabled, reason = active(rule, replay, include_drafts)
         tally = Counter()
         if not chosen or not enabled:
@@ -247,9 +264,16 @@ def main():
     parser.add_argument("--date")
     parser.add_argument("--replay",action="store_true")
     parser.add_argument("--include-drafts",action="store_true")
+    parser.add_argument("--full-history",action="store_true",help="全历史研究模式，只写logs/test，不落正式档案")
     parser.add_argument("--out-dir",type=Path)
     args=parser.parse_args()
     try:
+        if args.full_history:
+            if args.date or args.module:
+                raise ValueError("全历史模式不接受单日或单模块过滤")
+            from auto_judgments_full_history import full_history
+            full_history(args.root, args.out_dir)
+            return 0
         result=run(args.root,args.module,args.date,args.replay,args.include_drafts,args.out_dir)
     except (ValueError,KeyError,OSError,TypeError) as exc:
         parser.exit(1,f"程序判断失败：{exc}\n")
