@@ -72,6 +72,10 @@ test_old_repository_alone_does_not_prove_task_or_success_coverage (test_run_dela
 test_only_successful_scheduled_run_calibrates (test_run_delay_stats.DelayStatsTests.test_only_successful_scheduled_run_calibrates) ... ok
 test_rolling_window_does_not_reset_multislot_sequence_to_inception (test_run_delay_stats.DelayStatsTests.test_rolling_window_does_not_reset_multislot_sequence_to_inception) ... ok
 test_sparse_selection_and_manual_policy_are_not_applied (test_run_delay_stats.DelayStatsTests.test_sparse_selection_and_manual_policy_are_not_applied) ... ok
+test_code_only_push_does_not_reuse_old_full_request (test_t11_workflow.T11ScopeTests.test_code_only_push_does_not_reuse_old_full_request) ... ok
+test_manual_statistics_scope_is_respected (test_t11_workflow.T11ScopeTests.test_manual_statistics_scope_is_respected) ... ok
+test_scope_from_actual_unicode_commit_not_webhook_file_attributes (test_t11_workflow.T11ScopeTests.test_scope_from_actual_unicode_commit_not_webhook_file_attributes) ... ok
+test_stale_request_is_rejected (test_t11_workflow.T11ScopeTests.test_stale_request_is_rejected) ... ok
 test_invalid_offline_source_does_not_overwrite_existing_file (test_trade_calendar.CalendarNoticeTests.test_invalid_offline_source_does_not_overwrite_existing_file) ... 日历失败，未写入：ValueError: 未取得 2026 年完整年度休市公告，不推测交易日
 ok
 test_official_notice_has_full_year_and_all_holidays (test_trade_calendar.CalendarNoticeTests.test_official_notice_has_full_year_and_all_holidays) ... ok
@@ -107,17 +111,17 @@ test_wait_is_inside_total_budget_no_attempt_after_exhaustion (test_update_hangqi
 test_actual_blocking_child_is_killed_without_corrupting_original (test_update_hangqing_retry.StagingTests.test_actual_blocking_child_is_killed_without_corrupting_original) ... ok
 test_atomic_promotion_error_rolls_back_already_replaced_price (test_update_hangqing_retry.StagingTests.test_atomic_promotion_error_rolls_back_already_replaced_price) ... ok
 test_bad_sha_or_missing_events_is_never_promoted (test_update_hangqing_retry.StagingTests.test_bad_sha_or_missing_events_is_never_promoted) ... ok
-test_main_retry_success_updates_state_and_logs_separate_recovery (test_update_hangqing_retry.StagingTests.test_main_retry_success_updates_state_and_logs_separate_recovery) ... /home/runner/work/rsan-backtest/rsan-backtest/scripts/update_hangqing.py:531: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpsnhi364s/标的清单.csv' mode='r' encoding='utf-8'>
+test_main_retry_success_updates_state_and_logs_separate_recovery (test_update_hangqing_retry.StagingTests.test_main_retry_success_updates_state_and_logs_separate_recovery) ... /home/runner/work/rsan-backtest/rsan-backtest/scripts/update_hangqing.py:531: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmphjv21bbi/标的清单.csv' mode='r' encoding='utf-8'>
   items = list(csv.DictReader(open(LIST, encoding="utf-8")))
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-/home/runner/work/rsan-backtest/rsan-backtest/scripts/update_hangqing.py:575: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpsnhi364s/标的清单.csv' mode='r' encoding='utf-8'>
+/home/runner/work/rsan-backtest/rsan-backtest/scripts/update_hangqing.py:575: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmphjv21bbi/标的清单.csv' mode='r' encoding='utf-8'>
   order = [x["code"] for x in csv.DictReader(open(LIST, encoding="utf-8"))]
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 ok
-test_main_rotation_keeps_original_full_flag_for_each_retry (test_update_hangqing_retry.StagingTests.test_main_rotation_keeps_original_full_flag_for_each_retry) ... /home/runner/work/rsan-backtest/rsan-backtest/scripts/update_hangqing.py:531: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpw7hd769u/标的清单.csv' mode='r' encoding='utf-8'>
+test_main_rotation_keeps_original_full_flag_for_each_retry (test_update_hangqing_retry.StagingTests.test_main_rotation_keeps_original_full_flag_for_each_retry) ... /home/runner/work/rsan-backtest/rsan-backtest/scripts/update_hangqing.py:531: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp9dj_r8tl/标的清单.csv' mode='r' encoding='utf-8'>
   items = list(csv.DictReader(open(LIST, encoding="utf-8")))
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-/home/runner/work/rsan-backtest/rsan-backtest/scripts/update_hangqing.py:575: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpw7hd769u/标的清单.csv' mode='r' encoding='utf-8'>
+/home/runner/work/rsan-backtest/rsan-backtest/scripts/update_hangqing.py:575: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp9dj_r8tl/标的清单.csv' mode='r' encoding='utf-8'>
   order = [x["code"] for x in csv.DictReader(open(LIST, encoding="utf-8"))]
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 ok
@@ -128,7 +132,7 @@ test_failure_shell_runs_with_and_without_checkout (test_workflow_alerts.Workflow
 test_health_schedule_and_recovery_access (test_workflow_alerts.WorkflowAlertTests.test_health_schedule_and_recovery_access) ... ok
 
 ----------------------------------------------------------------------
-Ran 115 tests in 0.708s
+Ran 119 tests in 1.044s
 
 OK
 健康检查 2026-10-28T22:30:00+08:00：正常3项，延迟1项，失败6项，部分失败0项
