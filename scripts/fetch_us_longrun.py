@@ -9,7 +9,9 @@
   十年国债_FRED.csv  FRED GS10：美国十年期国债收益率，月度
   CPI_FRED.csv       FRED CPIAUCSL：美国CPI，月度
   标普股息率.csv     multpl.com：标普500股息率，月度（补席勒数据 2023 年后缺的分红）
-  标普价格.csv       multpl.com：标普500月度价格
+  十年国债_multpl.csv / CPI_multpl.csv  multpl.com：FRED 超时时的替代来源（十年国债收益率、CPI，月度）
+
+参数：--only 文件名1,文件名2  只抓这几个（不带扩展名也行）
 
 用法：python3 scripts/fetch_us_longrun.py
 只用标准库和 pandas。已存在的文件不覆盖，另存带日期的新文件并在日志里说明。
@@ -63,7 +65,8 @@ JOBS = {
     "十年国债_FRED.csv": lambda: (csv_src(u := "https://fred.stlouisfed.org/graph/fredgraph.csv?id=GS10"), u),
     "CPI_FRED.csv": lambda: (csv_src(u := "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCSL"), u),
     "标普股息率.csv": lambda: multpl("s-p-500-dividend-yield"),
-    "标普价格.csv": lambda: multpl("s-p-500-price"),
+    "十年国债_multpl.csv": lambda: multpl("10-year-treasury-rate"),
+    "CPI_multpl.csv": lambda: multpl("cpi"),
 }
 
 
@@ -73,7 +76,11 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     lines = ["# 美股长期数据抓取", "", f"运行时间 {stamp}", ""]
     fail = 0
-    for name, job in JOBS.items():
+    only = None
+    if "--only" in sys.argv:
+        only = {x.removesuffix(".csv") for x in sys.argv[sys.argv.index("--only") + 1].split(",")}
+    jobs = {k: v for k, v in JOBS.items() if only is None or k.removesuffix(".csv") in only}
+    for name, job in jobs.items():
         try:
             df, url = job()
             if len(df) < 100:
@@ -92,7 +99,7 @@ def main():
     LOG.parent.mkdir(parents=True, exist_ok=True)
     LOG.write_text("\n".join(lines) + "\n", encoding="utf-8")
     print("\n".join(lines))
-    if fail == len(JOBS):
+    if fail == len(jobs):
         sys.exit(1)
 
 
