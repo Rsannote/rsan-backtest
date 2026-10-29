@@ -78,7 +78,12 @@ def main():
     fail = 0
     only = None
     if "--only" in sys.argv:
-        only = {x.removesuffix(".csv") for x in sys.argv[sys.argv.index("--only") + 1].split(",")}
+        # 推送任务只允许英文参数，用英文简称：sp gold fred multpl dy
+        alias = {"sp": ["标普500_席勒"], "gold": ["黄金_月度"], "fred": ["十年国债_FRED", "CPI_FRED"],
+                 "multpl": ["十年国债_multpl", "CPI_multpl"], "dy": ["标普股息率"]}
+        only = set()
+        for x in sys.argv[sys.argv.index("--only") + 1].split(","):
+            only.update(alias.get(x, [x.removesuffix(".csv")]))
     jobs = {k: v for k, v in JOBS.items() if only is None or k.removesuffix(".csv") in only}
     for name, job in jobs.items():
         try:
