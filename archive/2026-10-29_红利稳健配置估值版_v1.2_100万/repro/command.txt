@@ -1,0 +1,1 @@
+engine/backtest.py --data data/日线_2026-10-28 --strategy strategies/hongli_guzhi/guzhi.py --capital 1000000 --out archive/2026-10-29_红利稳健配置估值版_v1.2_100万
