@@ -78,6 +78,7 @@ jobs:
           # backfill内部先精确预检所有分片，再原子写入，避免重复全历史计算。
           python scripts/mainline_signals.py --backfill
           python tests/verify_t13_signals.py
+          python tests/verify_t13b_history.py --require-complete
       - name: 仅保存已成功晋升的产物
         if: always() && steps.promote.outcome == 'success'
         env:
