@@ -47,7 +47,7 @@ def parse_ths(text,year):
         return {'状态':'来源明确暂无预测','eps':{},'机构数':{},'来源更新时间':None}
     match=re.search(r'(?:预测年报每股收益|每股收益预测|预测每股收益)[\s\S]{0,3000}?(<table\b[\s\S]*?</table>)',text,re.I)
     if not match:raise ValueError('未定位EPS预测表，不用净利润/历史每股收益/首个任意表格代替')
-    table=Table();table.feed(match[1]);header=None;eps={};counts={}
+    table=Table();table.feed(match[1]);header=None;eps={};counts={};raw_rows={}
     for row in table.rows:
         if '年度' in row and any(c in row for c in ('均值','平均值')):
             header=row;continue
@@ -61,9 +61,11 @@ def parse_ths(text,year):
         count=numeric(row[count_col]) if count_col is not None else None
         if count is not None and (count<0 or int(count)!=count):raise ValueError('机构数不是非负整数')
         counts[y]=int(count) if count is not None else None
+        raw_rows[y]=row
     if any(y not in eps for y in (year,year+1)):raise ValueError('缺本年/次年EPS均值；历史或单年预测不算完整覆盖')
     return {'状态':'两年一致预期EPS可解析','eps':{str(y):eps[y] for y in (year,year+1)},
             '机构数':{str(y):counts.get(y) for y in (year,year+1)},'字段':header,
+            'EPS原表行':{str(y):raw_rows[y] for y in (year,year+1)},
             '聚合口径':'来源EPS预测表的均值，未自行平均研报','来源更新时间':None}
 
 
@@ -150,9 +152,14 @@ def run(root=ROOT,count=8):
                            '腾讯':f'https://gu.qq.com/{symbol}/gp'}
                 item={'来源':source,'code':code,'name':stock['name'],'轮次':round_no,'两年EPS覆盖':False,'机构数字段齐全':False,'状态':'进行中'}
                 report['探测'].append(item)
+                before=len(client.trace)
                 try:
                     text=client.get(addresses[source],'gbk' if source in ('同花顺','新浪') else 'utf-8')
                     if source=='同花顺':
+                        tables=[]
+                        for block in re.findall(r'<table\b[\s\S]*?</table>',text,re.I)[:3]:
+                            table=Table();table.feed(block);tables.append(table.rows[:5])
+                        item['候选表格样例']=tables
                         result=parse_ths(text,year);item.update(result)
                         item['两年EPS覆盖']=len(result['eps'])==2
                         item['机构数字段齐全']=item['两年EPS覆盖'] and all(v is not None and v>0 for v in result['机构数'].values())
@@ -162,6 +169,7 @@ def run(root=ROOT,count=8):
                                     限制='新浪检索可能是逐篇研报，腾讯页可能只含历史/TTM；未核实聚合与年份映射，不计成功')
                     item['本轮抓取时刻']=dt.datetime.now(BJ).isoformat()
                 except Exception as exc:item.update(状态='失败或缺目标字段',原因=type(exc).__name__+': '+str(exc))
+                item['已发起请求']=len(client.trace)>before
                 save();print(f"{source} {code} 第{round_no}轮：{item['状态']}",flush=True)
     # 东财只试一页一次；不全量遍历，也不作为主源。
     params={'reportName':'RPT_WEB_RESPREDICT','columns':'WEB_RESPREDICT','pageNumber':1,'pageSize':500,'sortTypes':-1,'sortColumns':'RATING_ORG_NUM','p':1,'pageNo':1,'pageNum':1}
@@ -174,8 +182,8 @@ def run(root=ROOT,count=8):
         for second in repeated:
             one=next(i for i in first if i['code']==second['code'])
             if one.get('两年EPS覆盖') and second.get('两年EPS覆盖') and one.get('eps')==second.get('eps') and one.get('机构数')==second.get('机构数'):repeat_equal+=1
-        report['来源汇总'][source]={'实测样本数':len(first),'两年EPS覆盖数':sum(i['两年EPS覆盖'] for i in first),
-            'EPS及机构数均齐全数':sum(i['机构数字段齐全'] for i in first),'重复样本数':len(repeated),'两轮均有效且数值一致数':repeat_equal,
+        report['来源汇总'][source]={'计划样本数':len(first),'实测样本数':sum(i['已发起请求'] for i in first),'两年EPS覆盖数':sum(i['两年EPS覆盖'] for i in first),
+            'EPS及机构数均齐全数':sum(i['机构数字段齐全'] for i in first),'计划重复样本数':len(repeated),'重复样本数':sum(i['已发起请求'] for i in repeated),'两轮均有效且数值一致数':repeat_equal,
             '更新频率':'未核实，页面抓取时刻不是预测更新时间','跨日稳定性':'未验证；仅本轮独立重复，不证明跨日稳定',
             '全市场覆盖':'未知，未穷举；不得按样本覆盖率外推'}
     report['程序完成']=True;report['结束北京时间']=dt.datetime.now(BJ).isoformat()
