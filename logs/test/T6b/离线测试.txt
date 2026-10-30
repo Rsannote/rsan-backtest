@@ -112,23 +112,13 @@ test_normal_501_still_retries_five_times_then_fails (test_update_hangqing.RetryT
 test_prefix_501_only_escapes_after_three_backoff_attempts (test_update_hangqing.RetryTests.test_prefix_501_only_escapes_after_three_backoff_attempts) ... ok
 test_transient_prefix_501_retries_same_segment_and_keeps_history (test_update_hangqing.RetryTests.test_transient_prefix_501_retries_same_segment_and_keeps_history) ... ok
 test_append_revision_asof_and_exact_original_bytes (test_update_macro.MacroTests.test_append_revision_asof_and_exact_original_bytes) ... ok
+test_chinabond_before_eighteen_does_not_request_empty_today_tail (test_update_macro.MacroTests.test_chinabond_before_eighteen_does_not_request_empty_today_tail) ... ok
 test_currency_identity_and_not_mixing_fred (test_update_macro.MacroTests.test_currency_identity_and_not_mixing_fred) ... ok
 test_derived_fixed_twenty_a_sessions_and_no_future_observation (test_update_macro.MacroTests.test_derived_fixed_twenty_a_sessions_and_no_future_observation) ... ok
 test_future_visible_row_is_not_latest_and_precision_idempotent (test_update_macro.MacroTests.test_future_visible_row_is_not_latest_and_precision_idempotent) ... ok
 test_guard_empty_duplicates_nan_and_network (test_update_macro.MacroTests.test_guard_empty_duplicates_nan_and_network) ... ok
-test_official_parser_sign_units_and_nominal_not_tips (test_update_macro.MacroTests.test_official_parser_sign_units_and_nominal_not_tips) ... ok
-test_visibility_same_day_time_and_holiday_next_session (test_update_macro.MacroTests.test_visibility_same_day_time_and_holiday_next_session) ... ok
-test_yahoo_uses_local_session_and_excludes_unfinished_quote (test_update_macro.MacroTests.test_yahoo_uses_local_session_and_excludes_unfinished_quote) ... ok
-test_all_production_workflows_have_failure_alert_and_permissions (test_workflow_alerts.WorkflowAlertTests.test_all_production_workflows_have_failure_alert_and_permissions) ... ok
-test_every_cron_workflow_is_in_manifest (test_workflow_alerts.WorkflowAlertTests.test_every_cron_workflow_is_in_manifest) ... ok
-test_failure_shell_runs_with_and_without_checkout (test_workflow_alerts.WorkflowAlertTests.test_failure_shell_runs_with_and_without_checkout) ... ok
-test_health_schedule_and_recovery_access (test_workflow_alerts.WorkflowAlertTests.test_health_schedule_and_recovery_access) ... ok
-
-----------------------------------------------------------------------
-Ran 124 tests in 0.518s
-
-OK
-程序判断落档：2026-10-22；事件0条；正常；正式草案未启用不会作为失败。
+test_health_manifest_reads_macro_errors_not_observation_dates (test_update_macro.MacroTests.test_health_manifest_reads_macro_errors_not_observation_dates) ... ok
+test_official_failure_leaves_existing_raw_csv_untouched (test_update_macro.MacroTests.test_official_failure_leaves_existing_raw_csv_untouched) ... 程序判断落档：2026-10-22；事件0条；正常；正式草案未启用不会作为失败。
 程序判断落档：2026-10-22；事件0条；正常；正式草案未启用不会作为失败。
 程序判断落档：2026-10-22；事件1条；正常；正式草案未启用不会作为失败。
 程序判断落档：2026-10-22；事件1条；正常；正式草案未启用不会作为失败。
@@ -139,6 +129,45 @@ OK
 程序判断隔离回放：2026-10-22；事件3条；正常；正式草案未启用不会作为失败。
 自动复核：核对13条；复核写入1条；待人工2条；待数据0条。 状态：正常
 程序判断落档：2026-10-22；事件0条；失败；正式草案未启用不会作为失败。
-全历史回放：市场6日、温度5日；进入守势2次；仅写/tmp/tmpq9dqm3u5/logs/test/T4
+全历史回放：市场6日、温度5日；进入守势2次；仅写/tmp/tmpmersuwzm/logs/test/T4
 健康检查 2026-10-28T22:30:00+08:00：正常3项，延迟1项，失败6项，部分失败0项
 健康检查 2026-10-28T22:30:00+08:00：正常0项，延迟0项，失败1项，部分失败0项
+取数开始：中国10年国债
+取数完成：中国10年国债，2条，2015-01-02—2026-10-29
+取数开始：美国10年国债
+取数完成：美国10年国债，2条，2015-01-02—2026-10-29
+取数开始：美元兑人民币
+取数完成：美元兑人民币，2条，2015-01-02—2026-10-29
+取数开始：美元兑人民币_FRED历史补充
+取数完成：美元兑人民币_FRED历史补充，2条，2015-01-02—2026-10-29
+取数开始：美元指数
+取数完成：美元指数，2条，2015-01-02—2026-10-29
+取数开始：布伦特原油
+取数完成：布伦特原油，2条，2015-01-02—2026-10-29
+取数开始：COMEX黄金
+取数完成：COMEX黄金，2条，2015-01-02—2026-10-29
+取数开始：M1
+取数完成：M1，2条，2015-01-02—2026-10-29
+取数开始：M2
+取数完成：M2，2条，2015-01-02—2026-10-29
+取数开始：CPI同比
+取数完成：CPI同比，2条，2015-01-02—2026-10-29
+取数开始：PPI同比
+取数完成：PPI同比，2条，2015-01-02—2026-10-29
+取数开始：制造业PMI
+取数完成：制造业PMI，2条，2015-01-02—2026-10-29
+宏观更新：失败；来源12项，错误1项，警告0项；官方核对0行
+官方抽查失败：官方原文不可达
+ok
+test_official_parser_sign_units_and_nominal_not_tips (test_update_macro.MacroTests.test_official_parser_sign_units_and_nominal_not_tips) ... ok
+test_visibility_same_day_time_and_holiday_next_session (test_update_macro.MacroTests.test_visibility_same_day_time_and_holiday_next_session) ... ok
+test_yahoo_uses_local_session_and_excludes_unfinished_quote (test_update_macro.MacroTests.test_yahoo_uses_local_session_and_excludes_unfinished_quote) ... ok
+test_all_production_workflows_have_failure_alert_and_permissions (test_workflow_alerts.WorkflowAlertTests.test_all_production_workflows_have_failure_alert_and_permissions) ... ok
+test_every_cron_workflow_is_in_manifest (test_workflow_alerts.WorkflowAlertTests.test_every_cron_workflow_is_in_manifest) ... ok
+test_failure_shell_runs_with_and_without_checkout (test_workflow_alerts.WorkflowAlertTests.test_failure_shell_runs_with_and_without_checkout) ... ok
+test_health_schedule_and_recovery_access (test_workflow_alerts.WorkflowAlertTests.test_health_schedule_and_recovery_access) ... ok
+
+----------------------------------------------------------------------
+Ran 127 tests in 0.536s
+
+OK
