@@ -1,9 +1,9 @@
 {
-  "checked_at": "2026-10-30T13:43:40.784456+08:00",
+  "checked_at": "2026-10-30T13:57:11.179604+08:00",
   "events": [
     {
       "item": "flow",
-      "action": "创建",
+      "action": "追加评论",
       "number": 20,
       "url": "https://github.com/Rsannote/rsan-backtest/issues/20",
       "state": "open"
