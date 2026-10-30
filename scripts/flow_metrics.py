@@ -57,7 +57,7 @@ def share_matrix(amount,codes,start):
 
 
 def valid_rolling(values,window,method='mean'):
-    """保留固定交易日窗口，完整跨度内至少90%有效；绝不压缩/填补缺日。"""
+    """保留固定交易日窗口，至少90%有效；起步期同门槛，不压缩或填补缺日。"""
     minimum=(window*9+9)//10
     roll=values.rolling(window,min_periods=minimum)
     result=roll.mean() if method=='mean' else roll.rank(method='max',pct=True)*100
@@ -65,7 +65,7 @@ def valid_rolling(values,window,method='mean'):
 
 
 def window_notes(values,windows,prefix):
-    """缺日保留在交易日轴，暖启动与成熟窗口缺口分别标注。"""
+    """缺日保留在交易日轴，说明每个窗口的实际缺数，含起步不足。"""
     notes=pd.DataFrame('',index=values.index,columns=values.columns)
     positions=np.arange(len(values))
     for window in windows:
