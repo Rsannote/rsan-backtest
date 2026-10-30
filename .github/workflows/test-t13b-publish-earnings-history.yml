@@ -100,4 +100,12 @@ jobs:
         if: always()
         with:
           name: T13b-发布-${{ github.run_id }}
-          path: logs/test/T13b/
+          path: |
+            logs/test/T13b/
+            data/财报/全市场单季/
+            data/主线/历史信号修订/
+            data/主线/信号修订/
+            data/主线/最新.json
+            data/主线/最新.md
+            logs/主线信号_最新.json
+            logs/主线信号_最新.md
