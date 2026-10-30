@@ -129,7 +129,7 @@ test_official_failure_leaves_existing_raw_csv_untouched (test_update_macro.Macro
 程序判断隔离回放：2026-10-22；事件3条；正常；正式草案未启用不会作为失败。
 自动复核：核对13条；复核写入1条；待人工2条；待数据0条。 状态：正常
 程序判断落档：2026-10-22；事件0条；失败；正式草案未启用不会作为失败。
-全历史回放：市场6日、温度5日；进入守势2次；仅写/tmp/tmpmersuwzm/logs/test/T4
+全历史回放：市场6日、温度5日；进入守势2次；仅写/tmp/tmpoqg4svnf/logs/test/T4
 健康检查 2026-10-28T22:30:00+08:00：正常3项，延迟1项，失败6项，部分失败0项
 健康检查 2026-10-28T22:30:00+08:00：正常0项，延迟0项，失败1项，部分失败0项
 取数开始：中国10年国债
@@ -168,6 +168,6 @@ test_failure_shell_runs_with_and_without_checkout (test_workflow_alerts.Workflow
 test_health_schedule_and_recovery_access (test_workflow_alerts.WorkflowAlertTests.test_health_schedule_and_recovery_access) ... ok
 
 ----------------------------------------------------------------------
-Ran 127 tests in 0.536s
+Ran 127 tests in 0.582s
 
 OK
