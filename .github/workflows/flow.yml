@@ -35,7 +35,10 @@ jobs:
           python -u scripts/flow_indicators.py
       - name: 分支真实数据与TLS负例验收
         if: github.ref == 'refs/heads/gpt/T8b-flow'
-        run: python tests/verify_flow_delivery.py --negative-tls
+        run: |
+          python tests/verify_flow_delivery.py --negative-tls
+          python scripts/audit_flow_revision.py
+          python scripts/health_check.py --report logs/test/T8b/复审/健康检查.md --json-out logs/test/T8b/复审/健康检查.json
       - name: 分支告警开出与恢复关闭验收
         if: github.ref == 'refs/heads/gpt/T8b-flow' && hashFiles('logs/test/T8b/告警闭环通过.json') == ''
         env:

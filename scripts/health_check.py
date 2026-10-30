@@ -18,6 +18,7 @@ import argparse
 import csv
 import datetime as dt
 import json
+import math
 from pathlib import Path
 import re
 from typing import Any
@@ -228,6 +229,28 @@ def fail_sections(content: str) -> list[str]:
     return result
 
 
+def key_value_coverage(root: Path, policy: dict, data_date: str) -> tuple[dict, list[str]]:
+    """按最新数据日、每代码最后修订统计有限数值，缺整行也计入分母。"""
+    columns=policy['columns'];minimum=float(policy['minimum']);expected=int(policy['expected_count'])
+    if not columns or not 0<minimum<=1 or expected<=0:raise ValueError('关键列覆盖率配置无效')
+    latest={}
+    with (root/policy['path']).open(encoding='utf-8-sig',newline='') as handle:
+        reader=csv.DictReader(handle)
+        if not {'date','code',*columns}.issubset(reader.fieldnames or []):raise ValueError('日表缺少关键列/日期/代码')
+        for row in reader:
+            if row.get('date')==data_date:latest[row['code']]=row
+    total=max(expected,len(latest));result={};issues=[]
+    for column in columns:
+        valid=0
+        for row in latest.values():
+            try:valid+=math.isfinite(float(row.get(column,'')))
+            except (ValueError,TypeError):pass
+        ratio=valid/total
+        result[column]={'有值':valid,'应有':total,'比例':ratio,'最低比例':minimum}
+        if ratio<minimum:issues.append(f'{data_date}关键列{column}有值比例{valid}/{total}={ratio:.2%}，低于{minimum:.0%}')
+    return result,issues
+
+
 def load_actual(root: Path, item: dict[str, Any], expected: dict[str, Any]) -> tuple[dict[str, Any], list[str], int]:
     """返回实际日期、既有失败原因、成功子项数；未解释的旧数据仅判延迟。"""
     kind = item["kind"]
@@ -266,13 +289,18 @@ def load_actual(root: Path, item: dict[str, Any], expected: dict[str, Any]) -> t
     elif kind == "judgment_report":
         obj = read_json(root / item["outputs"][0])
         actual = {"data_date": day(obj["data_date"]).isoformat(), "updated_at": timestamp(obj["generated_at"]).isoformat()}
-        if obj.get("status") not in ("正常", "失败") or not isinstance(obj.get("errors"), list):
+        if obj.get("status") not in ("正常", "失败", "部分失败") or not isinstance(obj.get("errors"), list):
             raise ValueError("程序判断报告缺少有效status/errors")
         issues.extend(str(error) for error in obj["errors"])
         if obj["status"] == "失败":
             success = 0
             if not issues:
                 issues.append("程序判断报告标记失败")
+        if item.get('key_value_coverage'):
+            coverage, coverage_issues = key_value_coverage(root, item['key_value_coverage'], actual['data_date'])
+            actual['关键列有值比例'] = coverage
+            issues.extend(coverage_issues)
+        if obj['status']=='部分失败' and not issues:issues.append('产出报告标记部分失败')
         # 草案未启用不算失败；到期后固定窗口缺行情需暴露，不能顺延抹掉。
         issues.extend(str(item) for item in obj.get("pending", []))
     elif kind == "news":
@@ -535,6 +563,8 @@ def render(report: dict[str, Any]) -> str:
             actual_text += f"；最近成功 {actual['last_success_at'][5:16].replace('T', ' ') if actual['last_success_at'] else '无法确认'}"
         if actual.get("stale_symbols"):
             actual_text += f"；{len(actual['stale_symbols'])}只数据日期较早（详见JSON）"
+        if "关键列有值比例" in actual:
+            actual_text += "；" + "、".join(f"{k} {v['有值']}/{v['应有']}={v['比例']:.1%}" for k,v in actual["关键列有值比例"].items())
         if "coverage_end" in actual:
             actual_text = f"覆盖 {actual.get('coverage_start') or '无'} 至 {actual.get('coverage_end') or '无'}"
         reasons = re.sub(r"https?://\S+", "〔请求地址略〕", "；".join(row["reasons"]))

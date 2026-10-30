@@ -2,9 +2,9 @@ name: T8b 资金轮动离线验收
 on:
   push:
     branches: [gpt/T8b-flow]
-    paths: ['scripts/flow_*.py', 'scripts/health_check.py', 'tests/test_flow.py', 'tests/test_health_fragments.py', 'tests/verify_flow_delivery.py', 'system/资金轮动格式.md', 'system/证书/**', 'system/运行清单.d/**', '.github/workflows/flow.yml', '.github/workflows/test-t8b-flow.yml']
+    paths: ['scripts/flow_*.py', 'scripts/repair_flow_gaps.py', 'scripts/audit_flow_revision.py', 'scripts/health_check.py', 'tests/test_flow*.py', 'tests/test_health_fragments.py', 'tests/verify_flow_delivery.py', 'system/资金轮动格式.md', 'system/证书/**', 'system/运行清单.d/**', '.github/workflows/flow.yml', '.github/workflows/test-t8b-flow.yml']
   pull_request:
-    paths: ['scripts/flow_*.py', 'scripts/health_check.py', 'tests/test_flow.py', 'tests/test_health_fragments.py', 'system/证书/**', 'system/运行清单.d/**']
+    paths: ['scripts/flow_*.py', 'scripts/repair_flow_gaps.py', 'scripts/audit_flow_revision.py', 'scripts/health_check.py', 'tests/test_flow*.py', 'tests/test_health_fragments.py', 'system/证书/**', 'system/运行清单.d/**']
 permissions:
   contents: read
 concurrency:

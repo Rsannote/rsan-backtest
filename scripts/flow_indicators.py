@@ -57,8 +57,8 @@ def run(root=ROOT,offline=False,capture=None,now=None):
     if not complete:errors.append(f'申万{target}的{scope}口径不完整，资金维度仅看ETF专列')
     if not use_primary and etf_current.empty:errors.append('ETF备用也无当日数据，不沿用旧值')
     base=root/'data/资金轮动';base.mkdir(parents=True,exist_ok=True)
-    sw_added=append_rows(base/'日表.csv',SW_COLUMNS+['生成时间','修订原因'],daily.to_dict('records'),['date','code'],stamp)
-    etf_added=append_rows(base/'ETF日表.csv',ETF_COLUMNS+['生成时间','修订原因'],etf.to_dict('records'),['date','code'],stamp)
+    sw_added=append_rows(base/'日表.csv',SW_COLUMNS+['生成时间','修订原因'],daily.to_dict('records'),['date','code'],stamp,revision_reason='PR21复审：有效交易日窗口90%及缺口说明重算，旧版本保留')
+    etf_added=append_rows(base/'ETF日表.csv',ETF_COLUMNS+['生成时间','修订原因'],etf.to_dict('records'),['date','code'],stamp,revision_reason='PR21复审：有效交易日窗口90%及缺口说明重算，旧版本保留')
     units=unit_check(root,A,target) if names else {'rows':[],'全部通过':False,'口径':'无申万数据不能核对单位'}
     if not units['全部通过']:warnings.append('最近10日单位量级核对未全部通过，原字段不擅自换算')
     stats,pairs=describe(C,benchmark,names,metrics)
@@ -78,11 +78,17 @@ def run(root=ROOT,offline=False,capture=None,now=None):
     lines=['# 31行业成交额单位核对','',units['口径'],'', '|日期|申万31合计原值|市场成交额亿|市场来源|相对偏差|±15%内|','|---|---:|---:|---|---:|---|']
     for r in units['rows']:lines.append(f"|{r['date']}|{r['申万31合计原值']:.8f}|{r['市场成交额亿']:.4f}|{r['市场来源']}|{r['相对偏差']:.6%}|{r['±15%内']}|")
     atomic_text(root/'logs/test/T8b/成交额单位核对.md','\n'.join(lines)+'\n')
+    quality=[];coverage={}
+    for key in ('占比一年分位_31','偏离60日线'):
+        good=int(np.isfinite(pd.to_numeric(current[key],errors='coerce')).sum());den=max(31,len(current))
+        coverage[key]={'有值':good,'应有':den,'比例':good/den}
+        if good/den<.9:quality.append(f'{key}有值比例{good}/{den}低于90%')
+    warnings.extend(quality)
     primary_rows=current.to_dict('records') if use_primary else []
-    report={'title':'资金轮动','generated_at':stamp,'data_date':target,'status':'失败' if errors else '正常','errors':errors,'warnings':warnings,
+    report={'title':'资金轮动','generated_at':stamp,'data_date':target,'status':'失败' if errors else ('部分失败' if quality else '正常'),'errors':errors,'warnings':warnings,
             '资金来源':'申万官网' if use_primary else 'ETF 近似','申万口径':scope if use_primary else None,'本次在线TLS验证通过':verified,
             '执行模式':'离线复现，不冒称本次TLS验证' if offline else 'Actions在线抓取',
-            '申万':primary_rows,'ETF备用':etf_current.to_dict('records'),'申万当日完整':complete,'申万当日有效行业数':int(current[column].notna().sum()) if column in current else 0,
+            '关键列有值比例':coverage,'申万':primary_rows,'ETF备用':etf_current.to_dict('records'),'申万当日完整':complete,'申万当日有效行业数':int(current[column].notna().sum()) if column in current else 0,
             '单位核对通过':units['全部通过'],'新增日表行':sw_added,'新增ETF行':etf_added,'数据起点':START,
             '统计口径':'固定28行业，描述性条件统计；无信号测试、无交易回测','说明':'资金指标与拥挤度；解释【待判读】',
             '输入SHA256':{'沪深300':hashlib.sha256((root/'data/行情库/指数/sh000300.csv').read_bytes()).hexdigest(),'市场日指标':hashlib.sha256((root/'data/市场状态/日指标.csv').read_bytes()).hexdigest()},
@@ -101,7 +107,7 @@ def run(root=ROOT,offline=False,capture=None,now=None):
         atomic_text(base/'最新.md','\n'.join(display));atomic_text(root/'logs/资金轮动_最新.md','\n'.join(display))
     else:atomic_text(root/'logs/test/T8b/离线复现/最新.md','\n'.join(display))
     alert={'checked_at':stamp,'items':[{'id':'flow','name':'资金轮动','status':report['status'],'expected':{'申万':'本次TLS通过且当日完整'},
-                                     'actual':{'资金来源':report['资金来源'],'data_date':target},'reasons':errors or ['申万完整，本次运行正常']}]}
+                                     'actual':{'资金来源':report['资金来源'],'data_date':target},'reasons':errors or quality or ['申万完整，本次运行正常']}]}
     if not offline:dump(root/'logs/资金轮动_告警.json',alert)
     print(json.dumps({'数据日期':target,'资金来源':report['资金来源'],'日表':len(daily),'ETF日表':len(etf),'errors':errors,'warnings':warnings},ensure_ascii=False),flush=True)
     return clean(report)

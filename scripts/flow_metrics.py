@@ -56,6 +56,37 @@ def share_matrix(amount,codes,start):
     return subset.div(total,axis=0).reindex(columns=amount.columns),total
 
 
+def valid_rolling(values,window,method='mean'):
+    """保留固定交易日窗口，完整跨度内至少90%有效；绝不压缩/填补缺日。"""
+    minimum=(window*9+9)//10
+    roll=values.rolling(window,min_periods=minimum)
+    result=roll.mean() if method=='mean' else roll.rank(method='max',pct=True)*100
+    # 暖启动不以225个观测假装已有250日历史；新31口径独立起算。
+    def mature(series):
+        valid=series.notna().to_numpy();positions=np.arange(len(series));first=int(np.argmax(valid)) if valid.any() else len(series)
+        return pd.Series(positions-first+1>=window,index=series.index)
+    mask=values.apply(mature) if isinstance(values,pd.DataFrame) else mature(values)
+    return result.where(mask)
+
+
+def window_notes(values,windows,prefix):
+    """缺日保留在交易日轴，暖启动与成熟窗口缺口分别标注。"""
+    notes=pd.DataFrame('',index=values.index,columns=values.columns)
+    positions=np.arange(len(values))
+    for window in windows:
+        counts=values.rolling(window,min_periods=1).count()
+        for code in values:
+            first=values[code].first_valid_index()
+            if first is None:continue
+            begin=values.index.get_loc(first);mature=positions-begin+1>=window
+            text=pd.Series('',index=values.index)
+            if window in (60,250):text.loc[(positions>=begin)&~mature]=f'{prefix}{window}日窗口不足{window}交易日；'
+            missing=window-counts[code];mask=mature&(missing>0)
+            text.loc[mask]=f'{prefix}{window}日窗口内缺 '+missing.loc[mask].astype(int).astype(str)+' 天；'
+            notes[code]+=text
+    return notes
+
+
 def compute_sw(C,A,benchmark,names):
     if not names:return pd.DataFrame(columns=SW_COLUMNS),{}
     codes28=sorted(set(names)-NEW);codes31=sorted(names);metrics={};shares={}
@@ -64,16 +95,18 @@ def compute_sw(C,A,benchmark,names):
         metrics['占比_'+scope]=S;metrics['总额_'+scope]=total
         for n in (5,20):
             metrics[f'占比{n}日变化_'+scope]=S-S.shift(n)
-            metrics[f'占比{n}日均_'+scope]=S.rolling(n,min_periods=n).mean()
+            metrics[f'占比{n}日均_'+scope]=valid_rolling(S,n)
         metrics['占比5日均较20日均_'+scope]=metrics['占比5日均_'+scope]/metrics['占比20日均_'+scope]-1
         metrics['占比5日变化排名_'+scope]=rank_complete(metrics['占比5日变化_'+scope],codes)
-        for n,label in [(60,'60日分位'),(250,'一年分位')]:metrics['占比'+label+'_'+scope]=S.rolling(n,min_periods=n).rank(method='max',pct=True)*100
+        for n,label in [(60,'60日分位'),(250,'一年分位')]:metrics['占比'+label+'_'+scope]=valid_rolling(S,n,'rank')
     relative={}
     for n in (5,20,60):relative[n]=(C/C.shift(n)-1).sub(benchmark/benchmark.shift(n)-1,axis=0);metrics[f'相对沪深300_{n}']=relative[n]
     for scope,codes in [('28',codes28),('31',codes31)]:
         for n in (20,60):metrics[f'相对强弱排名_{n}_'+scope]=rank_complete(relative[n],codes)
         metrics['动量排名_20_'+scope]=metrics['相对强弱排名_20_'+scope]
-    metrics['偏离60日线']=C/C.rolling(60,min_periods=60).mean()-1
+    metrics['偏离60日线']=C/valid_rolling(C,60)-1
+    notes=window_notes(C,[60],'收盘')
+    for scope in ('28','31'):notes=notes+window_notes(shares[scope],[5,20,60,250],'占比_'+scope+'：')
     parts=[]
     dates=C.index[C.index>=START]
     for code in sorted(names):
@@ -81,7 +114,7 @@ def compute_sw(C,A,benchmark,names):
         part=pd.DataFrame({'date':index,'code':code,'name':names[code],'来源':'申万官网'},index=index)
         part['收盘']=C[code].reindex(index);part['成交额原值']=A[code].reindex(index)
         for label,value in metrics.items():part[label]=value[code].reindex(index) if isinstance(value,pd.DataFrame) else value.reindex(index)
-        part['数据说明']=np.where(part['收盘'].isna()|part['成交额原值'].isna(),'申万当日缺数据；不填ETF或旧值','')
+        part['数据说明']=np.where(part['收盘'].isna()|part['成交额原值'].isna(),'申万当日缺数据；不填ETF或旧值；','')+notes[code].reindex(index).fillna('')
         parts.append(part)
     return pd.concat(parts,ignore_index=True).sort_values(['date','code'])[SW_COLUMNS],metrics
 
@@ -104,9 +137,9 @@ def compute_etf(root,benchmark):
         p['ETF_成交额代理原值']=A[code].reindex(index);p['ETF_占比']=S[code].reindex(index);p['ETF_可用只数']=A.count(axis=1).reindex(index)
         for n in (5,20):p[f'ETF_占比{n}日变化']=(S[code]-S[code].shift(n)).reindex(index)
         for n in (5,20,60):p[f'ETF_相对沪深300_{n}']=((C[code]/C[code].shift(n)-1)-(benchmark/benchmark.shift(n)-1)).reindex(index)
-        p['ETF_占比60日分位']=S[code].rolling(60,min_periods=60).rank(method='max',pct=True).reindex(index)*100
-        p['ETF_占比一年分位']=S[code].rolling(250,min_periods=250).rank(method='max',pct=True).reindex(index)*100
-        p['ETF_偏离60日线']=(C[code]/C[code].rolling(60,min_periods=60).mean()-1).reindex(index);parts.append(p)
+        p['ETF_占比60日分位']=valid_rolling(S[code],60,'rank').reindex(index)
+        p['ETF_占比一年分位']=valid_rolling(S[code],250,'rank').reindex(index)
+        p['ETF_偏离60日线']=(C[code]/valid_rolling(C[code],60)-1).reindex(index);parts.append(p)
     return pd.concat(parts,ignore_index=True).sort_values(['date','code'])[ETF_COLUMNS]
 
 
