@@ -374,6 +374,36 @@
         "report": "logs/运行延迟统计.md",
         "说明": "新步骤无样本，暂继承上游已审核宽限；后续用实际Actions样本单独校准"
       }
+    },
+    {
+      "id": "macro",
+      "name": "宏观数据",
+      "workflow": ".github/workflows/update-macro.yml",
+      "kind": "judgment_report",
+      "trading_days_only": false,
+      "times": [
+        "09:35",
+        "18:35"
+      ],
+      "grace_minutes": 536,
+      "check_mode": "freshness",
+      "max_age_minutes": 1976,
+      "freshness_success_paths": [
+        {
+          "path": "logs/宏观_最新.json",
+          "field": "generated_at"
+        }
+      ],
+      "outputs": [
+        "logs/宏观_最新.json",
+        "data/宏观/最新.md",
+        "data/宏观/派生.csv"
+      ],
+      "说明": "使用通用status/errors报告协议检查；源失败列errors，同日中债差值>0.5bp列warnings。源观测日期不同于执行日期，不要求海外/月度值每天换日期。新任务暂无独立延迟样本，临时借现有已审核任务最大宽限536分钟，新鲜度24小时+536分钟；后续实测校准，不改其他项。",
+      "delay_basis": {
+        "sample_n": 0,
+        "fallback": "沿用现有任务最大已审核宽限，非本任务P95；新鲜度=24小时+536分钟"
+      }
     }
   ]
 }
