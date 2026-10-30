@@ -1,0 +1,76 @@
+name: 主线信号更新
+on:
+  workflow_run:
+    workflows: ['资金轮动更新']
+    types: [completed]
+  workflow_dispatch:
+  push:
+    branches: [gpt/T13-signals]
+    paths: ['logs/test/T13/运行请求.json']
+permissions:
+  contents: write
+  issues: write
+  actions: read
+concurrency:
+  group: repo-writer
+  cancel-in-progress: false
+jobs:
+  update:
+    if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/gpt/T13-signals') && (github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pandas numpy requests
+      - name: 全量回补与增量修订
+        run: python -u scripts/mainline_signals.py --backfill
+      - name: 随机三行业三日期与原字节核对
+        if: github.ref == 'refs/heads/gpt/T13-signals'
+        run: |
+          python -u tests/verify_t13_signals.py
+          python scripts/health_check.py --report logs/test/T13/健康检查.md --json-out logs/test/T13/健康检查.json
+      - name: 保存本任务输出
+        if: always()
+        env:
+          TASK_BRANCH: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email actions@users.noreply.github.com
+          git add -- data/主线 logs/主线信号_最新.json logs/主线信号_最新.md
+          if [ -d logs/test/T13 ]; then git add -- logs/test/T13; fi
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "主线信号更新 $(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M')"
+          for attempt in 1 2 3; do
+            git pull --rebase origin "$TASK_BRANCH" && git push origin "HEAD:$TASK_BRANCH" && exit 0
+            sleep 5
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T13-真实信号与验收
+          path: |
+            data/主线/
+            logs/主线信号_最新.*
+            logs/test/T13/
+      - name: 工作流失败告警
+        if: failure() && github.ref == 'refs/heads/main'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          HEALTH_ITEM_ID: mainline_signals
+          HEALTH_ITEM_NAME: 主线五维信号
+          HEALTH_WORKFLOW_FILE: .github/workflows/mainline-signals.yml
+        run: |
+          alert_script="${GITHUB_WORKSPACE}/scripts/health_alert.py"
+          if [ ! -f "$alert_script" ]; then
+            alert_script="${RUNNER_TEMP}/health_alert.py"
+            curl --fail --silent --show-error --retry 2 -H "Authorization: Bearer ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.raw+json' "https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/scripts/health_alert.py?ref=${GITHUB_SHA}" -o "$alert_script"
+          fi
+          python3 "$alert_script" --workflow-failure
