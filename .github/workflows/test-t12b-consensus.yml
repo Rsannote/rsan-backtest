@@ -2,7 +2,7 @@ name: T12b 一致预期离线验收
 on:
   push:
     branches: [gpt/T12b-consensus]
-    paths: ['scripts/consensus_common.py', 'scripts/compare_consensus.py', 'scripts/update_consensus.py', 'tests/test_compare_consensus.py', 'tests/test_update_consensus.py', '.github/workflows/test-t12b-consensus.yml', '.github/workflows/consensus.yml', 'system/一致预期格式.md', 'system/运行清单.json']
+    paths: ['scripts/consensus_common.py', 'scripts/compare_consensus.py', 'scripts/update_consensus.py', 'scripts/check_consensus_acceptance.py', 'tests/test_compare_consensus.py', 'tests/test_update_consensus.py', 'tests/test_consensus_acceptance.py', '.github/workflows/test-t12b-consensus.yml', '.github/workflows/consensus.yml', 'system/一致预期格式.md', 'system/运行清单.json']
   workflow_dispatch:
 permissions:
   contents: read

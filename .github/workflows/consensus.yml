@@ -114,16 +114,19 @@ jobs:
       - name: 完整性与追加保护汇总
         id: assemble
         run: python scripts/update_consensus.py assemble --prepared "${RUNNER_TEMP}/prepared/准备.json" --batches "${RUNNER_TEMP}/parts"
+      - name: 累计同实现五交易日资格
+        id: acceptance
+        run: python scripts/check_consensus_acceptance.py
       - name: 保存已校验的真实快照或失败报告
         if: always()
         env:
           TASK_BRANCH: ${{ github.ref_name }}
-          ASSEMBLED: ${{ steps.assemble.outcome }}
+          ASSEMBLED: ${{ steps.assemble.outcome == 'success' && steps.acceptance.outcome == 'success' }}
         run: |
           set -euo pipefail
           git config user.name github-actions
           git config user.email actions@users.noreply.github.com
-          if [ "$ASSEMBLED" = success ]; then git add -- data/一致预期; fi
+          if [ "$ASSEMBLED" = true ]; then git add -- data/一致预期 logs/test/T12b/五日验收.json logs/test/T12b/五日验收.md; fi
           for file in logs/一致预期_最新.json logs/一致预期_最新.md; do
             if [ -f "$file" ]; then git add -- "$file"; fi
           done
@@ -141,6 +144,7 @@ jobs:
           path: |
             data/一致预期/
             logs/一致预期_最新.*
+            logs/test/T12b/五日验收.*
   alert:
     needs: [prepare, fetch, persist]
     if: failure() && github.ref == 'refs/heads/main'
