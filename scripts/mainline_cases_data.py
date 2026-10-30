@@ -191,9 +191,11 @@ class SignalWindow:
             stamp = raw.get('环境_' + label + '可见时刻')
             keys = ['环境_' + label + '10年20日变化bp', '环境_' + label + '久期适配bp']
             if any(out.get(k) is not None for k in keys) and not visible(stamp, cutoff):
-                for key in keys:
-                    out[key] = None
-                notes.append(label + '宏观可见时刻缺失或晚于观测日，屏蔽数值')
+                neutral=raw.get('久期')=='中' and out.get(keys[1]) in ('0','0.0')
+                out[keys[0]]=None
+                if not neutral:
+                    out[keys[1]]=None
+                notes.append(label + '宏观可见时刻缺失或晚于观测日，屏蔽依赖观测的数值'+('；中久期0按中性定义保留' if neutral else ''))
         if out.get('环境_大盘攻守') is not None and not visible(raw.get('市场可见时刻'), cutoff):
             out['环境_大盘攻守'] = None
             notes.append('市场状态实际可见时刻缺失或晚于观测日，屏蔽攻守')

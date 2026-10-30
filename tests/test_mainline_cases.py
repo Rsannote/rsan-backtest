@@ -244,6 +244,20 @@ class CaseTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             storage.read_signal_table(self.root, 99)
 
+    def test_neutral_zero_survives_missing_macro_but_observed_scores_do_not(self):
+        code=self.candidates[0];day=self.dates(1)[0]
+        row={'date':day,'code':code,'口径':'28','久期':'中','环境_中国10年20日变化bp':'4',
+             '环境_中国久期适配bp':'0','环境_中国可见时刻':'2027-01-01T00:00:00+08:00'}
+        self.write('data/主线/历史信号表_28.csv',list(row),[row])
+        values,notes=storage.SignalWindow(self.root,[day]).row(day,code)
+        self.assertIsNone(values['环境_中国10年20日变化bp'])
+        self.assertEqual(values['环境_中国久期适配bp'],'0')
+        self.assertTrue(any('中性定义' in n for n in notes))
+        row['久期']='长'
+        self.write('data/主线/历史信号表_28.csv',list(row),[row])
+        values,_=storage.SignalWindow(self.root,[day]).row(day,code)
+        self.assertIsNone(values['环境_中国久期适配bp'])
+
     def test_price_source_last_empty_does_not_fall_back_to_older_close(self):
         days = self.dates(2)
         code = self.candidates[0]
