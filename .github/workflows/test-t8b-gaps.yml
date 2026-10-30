@@ -1,0 +1,42 @@
+name: T8b 缺口重抓
+on:
+  push:
+    branches: [gpt/T8b-flow]
+    paths: ['logs/test/T8b/缺口重抓请求.json']
+permissions:
+  contents: write
+concurrency:
+  group: repo-writer
+  cancel-in-progress: false
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gpt/T8b-flow
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pandas numpy requests
+      - run: python -u scripts/repair_flow_gaps.py
+      - name: 保存缺口复查与真实修订
+        if: always()
+        run: |
+          git config user.name github-actions
+          git config user.email actions@users.noreply.github.com
+          git add -- data/资金轮动/原始
+          find logs/test/T8b/复审/缺口重抓 -type f -name '*.json' -exec git add -- {} +
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'T8b：19个缺口日期真实重抓结果'
+          git pull --rebase origin gpt/T8b-flow
+          git push origin HEAD:gpt/T8b-flow
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T8b-缺口重抓
+          path: |
+            logs/test/T8b/复审/缺口重抓/*.json
+            data/资金轮动/原始/
