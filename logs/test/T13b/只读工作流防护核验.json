@@ -1,0 +1,14 @@
+{
+  "身份及注入防护用例": [
+    "valid",
+    "branch",
+    "sha",
+    "path",
+    "status",
+    "conclusion",
+    "run_injection",
+    "sha_injection"
+  ],
+  "真实八股artifact沙盒预检": "另见只读采集探测预检.json",
+  "全部成功": true
+}

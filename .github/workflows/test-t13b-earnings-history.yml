@@ -1,0 +1,107 @@
+# 本分支专用手工验收工作流；只读Git，正式追加由独立发布验收处理。
+name: T13b 业绩历史采集
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        type: choice
+        options: [probe, batch]
+        default: probe
+      max_stocks:
+        default: '400'
+      budget:
+        default: '2700'
+      refresh:
+        type: boolean
+        default: false
+  push:
+    branches: [gpt/T13b-earnings]
+    paths: ['logs/test/T13b/采集请求.json']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: t13b-collector-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  collect:
+    if: github.ref == 'refs/heads/gpt/T13b-earnings'
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pandas numpy requests
+      - name: 核验可选的已发布探测artifact身份
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json,os,re,subprocess
+          from pathlib import Path
+          request=json.loads(Path('logs/test/T13b/采集请求.json').read_text()) if os.environ['GITHUB_EVENT_NAME']=='push' else {}
+          probe=request.get('probe_run_id')
+          if probe is not None:
+              probe=str(probe);sha=request.get('probe_sha','')
+              if not re.fullmatch(r'\d+',probe) or not re.fullmatch(r'[0-9a-f]{40}',sha):raise ValueError('来源探测运行/SHA格式无效')
+              info=json.loads(subprocess.check_output(['gh','api',f'repos/{os.environ["GITHUB_REPOSITORY"]}/actions/runs/{probe}']))
+              if info['head_branch']!='gpt/T13b-earnings' or info['head_sha']!=sha or info['path']!='.github/workflows/test-t13b-earnings-history.yml' or info['status']!='completed' or info['conclusion']!='success':raise ValueError('来源探测身份/成功状态不符')
+              subprocess.run(['git','merge-base','--is-ancestor',sha,'HEAD'],check=True)
+              with open(os.environ['GITHUB_ENV'],'a') as f:f.write(f'BASELINE_PROBE={probe}\nBASELINE_PROBE_SHA={sha}\n')
+          PY
+      - uses: actions/download-artifact@v4
+        if: env.BASELINE_PROBE != ''
+        with:
+          name: T13b-采集-${{ env.BASELINE_PROBE }}
+          run-id: ${{ env.BASELINE_PROBE }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/t13b-baseline-probe
+      - name: 只读沙盒复检探测原文（不提交Git，不写正式财报）
+        if: env.BASELINE_PROBE != ''
+        env:
+          BASELINE_DIR: ${{ runner.temp }}/t13b-baseline-probe
+        run: |
+          python - <<'PY'
+          import json,os,sys
+          from pathlib import Path
+          sys.path.insert(0,'scripts')
+          from earnings_history_publish import publish
+          files=list(Path(os.environ['BASELINE_DIR']).glob('*/artifact.json'))
+          if len(files)!=1 or json.loads(files[0].read_text())['报告']['模式']!='probe':raise ValueError('只接受唯一探测artifact')
+          publish(Path.cwd(),files[0],os.environ['BASELINE_PROBE'],os.environ['BASELINE_PROBE_SHA'])
+          PY
+      - name: 限时逐股抓取（默认先探测3只，不写Git分支）
+        env:
+          INPUT_MODE: ${{ inputs.mode }}
+          INPUT_MAX: ${{ inputs.max_stocks }}
+          INPUT_BUDGET: ${{ inputs.budget }}
+          INPUT_REFRESH: ${{ inputs.refresh }}
+        run: |
+          python - <<'PY'
+          import json,os,re,subprocess,sys
+          from pathlib import Path
+          request=json.loads(Path('logs/test/T13b/采集请求.json').read_text()) if os.environ['GITHUB_EVENT_NAME']=='push' else {}
+          mode=request.get('mode',os.environ.get('INPUT_MODE') or 'probe')
+          maximum=int(request.get('max_stocks',os.environ.get('INPUT_MAX') or 400))
+          budget=int(request.get('budget',os.environ.get('INPUT_BUDGET') or 2700))
+          refresh=request.get('refresh',os.environ.get('INPUT_REFRESH')=='true')
+          if mode not in ('probe','batch') or not isinstance(refresh,bool):raise ValueError('采集请求格式无效')
+          args=[sys.executable,'-u','scripts/earnings_history.py','--mode',mode,'--max-stocks',str(maximum),'--budget',str(budget)]
+          codes=request.get('codes')
+          if codes is not None:
+            if not isinstance(codes,list) or not codes or any(not isinstance(c,str) or not re.fullmatch(r'\d{6}',c) for c in codes):raise ValueError('探测代码必须为六位字符串数组')
+            args+=['--codes',','.join(codes)]
+          if refresh:args.append('--refresh')
+          raise SystemExit(subprocess.call(args))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T13b-采集-${{ github.run_id }}
+          path: logs/test/T13b/产物/
+          if-no-files-found: error
+          retention-days: 30

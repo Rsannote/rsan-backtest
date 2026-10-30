@@ -1,0 +1,155 @@
+{
+  "results": [
+    {
+      "name": "wrong_branch",
+      "status": "PASS",
+      "detail": "产物分支/运行/SHA与发布请求不一致"
+    },
+    {
+      "name": "bad_fingerprint",
+      "status": "PASS",
+      "detail": "成分快照指纹或家数已变化"
+    },
+    {
+      "name": "missing_stock",
+      "status": "PASS",
+      "detail": "成功股票、单季载荷、响应集合不完整或不一致"
+    },
+    {
+      "name": "extra_stock",
+      "status": "PASS",
+      "detail": "成功股票、单季载荷、响应集合不完整或不一致"
+    },
+    {
+      "name": "duplicate_code",
+      "status": "PASS",
+      "detail": "股票代码无效或重复"
+    },
+    {
+      "name": "missing_timestamp",
+      "status": "PASS",
+      "detail": "采集产物缺字段或类型不符：'采集时间'"
+    },
+    {
+      "name": "bad_timestamp",
+      "status": "PASS",
+      "detail": "采集时间必须为完整北京时间"
+    },
+    {
+      "name": "wrong_timezone",
+      "status": "PASS",
+      "detail": "采集时间必须为完整北京时间"
+    },
+    {
+      "name": "future_timestamp",
+      "status": "PASS",
+      "detail": "采集时间晚于当前时间"
+    },
+    {
+      "name": "missing_revenue",
+      "status": "PASS",
+      "detail": "财报载荷必需字段或原值类型不完整"
+    },
+    {
+      "name": "object_revenue",
+      "status": "PASS",
+      "detail": "财报载荷必需字段或原值类型不完整"
+    },
+    {
+      "name": "infinite_revenue",
+      "status": "PASS",
+      "detail": "财务原值非有限数字或已知缺值标记：inf"
+    },
+    {
+      "name": "unrecognized_revenue",
+      "status": "PASS",
+      "detail": "财务原值非有限数字或已知缺值标记：不明值"
+    },
+    {
+      "name": "wrong_source",
+      "status": "PASS",
+      "detail": "产物来源或可见边界不符"
+    },
+    {
+      "name": "wrong_visibility",
+      "status": "PASS",
+      "detail": "产物来源或可见边界不符"
+    },
+    {
+      "name": "extra_field",
+      "status": "PASS",
+      "detail": "财报载荷必需字段或原值类型不完整"
+    },
+    {
+      "name": "probe_missing_html",
+      "status": "PASS",
+      "detail": "成功股票、单季载荷、响应集合不完整或不一致"
+    },
+    {
+      "name": "probe_request_path",
+      "status": "PASS",
+      "detail": "探测证据路径或SHA无效"
+    },
+    {
+      "name": "probe_reparse_mismatch_despite_valid_hash",
+      "status": "PASS",
+      "detail": "探测HTML重解析与manifest不一致"
+    },
+    {
+      "name": "three_distinct_probe_evidence_roundtrip",
+      "status": "PASS",
+      "detail": "三只不同股票闭环通过，逐只删除HTML均阻止解锁"
+    },
+    {
+      "name": "watermark_unchanged_and_valid_empty",
+      "status": "PASS",
+      "detail": "首次3条；重放0；不变值推进高水位；valid-empty推进高水位；旧产物均整份拒绝且字节不变"
+    },
+    {
+      "name": "rollback_existing_False_stage_False",
+      "status": "PASS",
+      "detail": "所有已有文件完整恢复，新建文件和事务目录均清除"
+    },
+    {
+      "name": "rollback_existing_False_stage_True",
+      "status": "PASS",
+      "detail": "所有已有文件完整恢复，新建文件和事务目录均清除"
+    },
+    {
+      "name": "rollback_existing_True_stage_False",
+      "status": "PASS",
+      "detail": "所有已有文件完整恢复，新建文件和事务目录均清除"
+    },
+    {
+      "name": "rollback_existing_True_stage_True",
+      "status": "PASS",
+      "detail": "所有已有文件完整恢复，新建文件和事务目录均清除"
+    },
+    {
+      "name": "known_delayed_announcement_preserved",
+      "status": "PASS",
+      "detail": "新旧记录合并后仍保留09-05实际公告日，09-06才可见"
+    },
+    {
+      "name": "annual_reader_last_empty_append_idempotent",
+      "status": "PASS",
+      "detail": "基表字节不变，年度last空值覆盖旧值，asof过滤、28/31隔离、真修订分年、双跑幂等通过"
+    },
+    {
+      "name": "workflow_failed_publisher_commit_guard",
+      "status": "PASS",
+      "detail": "静态工作流检查：promote失败时signals与commit均跳过；只有上传日志always；采集只读55min/发布repo-writer20min"
+    }
+  ],
+  "sha256": {
+    "scripts/earnings_history.py": "574e712f2864e25ccacd26ef701f8f005443f29fc4a984c6d7c7a5fd805854c4",
+    "scripts/earnings_history_publish.py": "6c9b5d66bb230eb22c9339f14bb7e1e2e42efa884ba05feb0e1959319ddc2e27",
+    "scripts/earnings_history_transaction.py": "4e6df12679fd8712ce14e830c4963d7c39ee5db82b46adfbd00803b5488b3977",
+    "scripts/mainline_signal_store.py": "368dd9ecc92fb811671f63c1483efef3705738306aa4d8d9a84c1bdaf871f30b",
+    "scripts/mainline_signals.py": "f11489743132e3ce261c321a7887dde5dac87a98512ebf837fee07746707102a",
+    "scripts/mainline_sources.py": "04f1243e8078fa02a8c073e6d6eb9de458ed552144a5e4ea0c7101e3a0663020",
+    "tests/verify_t13_signals.py": "7ccdc0d340796c9f79ffac9836b6908e3f497aedfa5ce68e16ca421839a4da79",
+    ".github/workflows/test-t13b-publish-earnings-history.yml": "a7451be83566f3b33f510ab0f0e5a5e36e3883323c65102b539156975b8e721d"
+  },
+  "bundle_sha256": "a635f93038f8f46803321ed125b966d1c02cfa4c044f107d4da315ac585b2ce7"
+}

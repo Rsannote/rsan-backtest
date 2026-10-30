@@ -1,0 +1,14 @@
+{
+  "mode": "batch",
+  "max_stocks": 2,
+  "budget": 180,
+  "refresh": false,
+  "codes": [
+    "300760",
+    "300761"
+  ],
+  "批次": 4,
+  "probe_run_id": "41094326134",
+  "probe_sha": "bd0720af1a152b1adfdc4c0c450a6d03454e8e13",
+  "说明": "新网络等待下五股同源探测已成功；归档最后两只财报，字段与40秒墙钟不变"
+}

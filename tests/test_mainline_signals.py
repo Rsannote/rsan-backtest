@@ -87,7 +87,7 @@ class SignalsTests(unittest.TestCase):
     def test_macro_revision_cannot_leak_before_its_visibility(self):
         self.write('data/宏观/派生.csv',['date','指标','value','可见时刻'],[{'date':'2026-10-29','指标':'中国10年国债','value':10,'可见时刻':'2026-10-29T18:00:00+08:00'},{'date':'2026-10-29','指标':'中国10年国债','value':999,'可见时刻':'2026-10-30T18:00:00+08:00'}])
         s=self.source();c=self.ordinary[0];s.names[c]['久期']='长';r=s.for_day('2026-10-29',c);self.assertEqual(r['环境_中国10年20日变化bp'],10);self.assertEqual(r['环境_中国久期适配bp'],-10)
-        c=self.ordinary[1];s.names[c]['久期']='中';self.assertIsNone(s.for_day('2026-10-29',c)['环境_中国久期适配bp'])
+        c=self.ordinary[1];s.names[c]['久期']='中';self.assertEqual(s.for_day('2026-10-29',c)['环境_中国久期适配bp'],0)
     def quarter_fixture(self,announcement=''):
         code=self.ordinary[0];self.json('data/v3/申万成分.json',{code:{'date':'2020-01-01','rows':[{'证券代码':'000001'},{'证券代码':'000002'}]}})
         self.write('data/财报/单季/000001.csv',['报告期','扣非净利润','净利润','营业总收入','公告日'],[{'报告期':d,'扣非净利润':kf,'净利润':kf,'营业总收入':rev,'公告日':announcement if d=='2026-06-30' else ''} for d,kf,rev in [('2025-03-31',100,100),('2025-06-30',100,100),('2026-03-31',130,110),('2026-06-30',160,120)]])
@@ -95,9 +95,52 @@ class SignalsTests(unittest.TestCase):
     def test_quarter_after_deadline_exact_v3_and_incomplete_industry_not_zero(self):
         c=self.quarter_fixture();s=self.source();self.assertIsNone(s.quarter('2026-08-31',c)['业绩_样本加速占比']);r=s.quarter('2026-09-01',c)
         self.assertEqual(r['业绩_样本加速占比'],1);self.assertEqual(r['业绩_季报覆盖率'],.5);self.assertEqual(r['业绩_可评估家数'],1);self.assertIsNone(r['业绩_利润加速占比'])
-    def test_delayed_actual_announcement_and_membership_future_guard(self):
+    def test_delayed_actual_announcement_and_snapshot_backcast(self):
         c=self.quarter_fixture('2026-09-05');s=self.source();self.assertIsNone(s.quarter('2026-09-05',c)['业绩_样本加速占比']);self.assertEqual(s.quarter('2026-09-06',c)['业绩_样本加速占比'],1)
-        s.members[c]['date']='2026-09-10';self.assertIsNone(s.quarter('2026-09-09',c)['业绩_可评估家数'])
+        s.members[c]['date']='2026-09-10';self.assertEqual(s.quarter('2026-09-09',c)['业绩_可评估家数'],1)
+    def test_industry_thresholds_and_sample_denominator(self):
+        c=self.quarter_fixture();template=src.csv_rows(self.root/'data/财报/单季/000001.csv')
+        for total,valid,expected in [(20,12,1),(20,11,None),(15,9,None),(16,10,1)]:
+            with self.subTest(total=total,valid=valid):
+                s=self.source();s.members[c]={'date':'2026-10-21','rows':[{'证券代码':str(i).zfill(6)} for i in range(total)]}
+                s.quarters={str(i).zfill(6):template for i in range(valid)}
+                r=s.quarter('2026-09-01',c)
+                self.assertEqual(r['业绩_可评估家数'],valid);self.assertEqual(r['业绩_利润加速占比'],expected)
+                self.assertEqual(r['业绩_样本加速占比'],1);self.assertEqual(r['业绩_季报覆盖率'],valid/total)
+        s=self.source();s.members[c]={'date':'2026-10-21','rows':[{'证券代码':str(i).zfill(6)} for i in range(20)]}
+        not_accelerating=[dict(r,扣非净利润=100) for r in template]
+        s.quarters={str(i).zfill(6):template if i<6 else not_accelerating for i in range(12)}
+        r=s.quarter('2026-09-01',c);self.assertEqual(r['业绩_加速家数'],6)
+        self.assertEqual(r['业绩_利润加速占比'],.5);self.assertEqual(r['业绩_季报覆盖率'],.6)
+    def test_new_history_overrides_cache_and_retains_legal_boundary(self):
+        from earnings_history import FIELDS,visibility,deadline
+        c=self.quarter_fixture();rows=src.csv_rows(self.root/'data/财报/单季/000001.csv')
+        for row in rows:row.pop('公告日',None)
+        self.write('data/财报/全市场单季/000001.csv',FIELDS,[dict(r,法定截止=deadline(r['报告期']).isoformat(),可见时刻=visibility(r['报告期'])) for r in rows]+[dict(rows[-1],扣非净利润='',净利润='',法定截止='2026-08-31',可见时刻=visibility('2026-06-30'))])
+        s=self.source();self.assertIsNone(s.quarter('2026-09-01',c)['业绩_样本加速占比'])
+    def test_known_delayed_announcement_survives_new_history_overlay(self):
+        from earnings_history import FIELDS,visibility,deadline
+        c=self.quarter_fixture('2026-09-05');rows=src.csv_rows(self.root/'data/财报/单季/000001.csv')
+        for row in rows:row.pop('公告日',None)
+        self.write('data/财报/全市场单季/000001.csv',FIELDS,[dict(r,法定截止=deadline(r['报告期']).isoformat(),可见时刻=visibility(r['报告期'])) for r in rows])
+        s=self.source()
+        for day in ('2026-09-01','2026-09-05'):self.assertEqual(s.quarter(day,c)['业绩_可评估家数'],0)
+        self.assertEqual(s.quarter('2026-09-06',c)['业绩_可评估家数'],1)
+
+    def test_neutral_note_and_missing_rates_keep_raw_missing(self):
+        self.flow();names=src.registry(self.root);c=self.ordinary[0];names[c]['久期']='中';s=src.Sources(self.root,names)
+        r=s.for_day('2026-10-29',c);self.assertEqual(r['环境_中国久期适配bp'],0);self.assertEqual(r['环境_美国久期适配bp'],0)
+        self.assertIsNone(r['环境_中国10年20日变化bp']);self.assertEqual(r['环境_中国可见时刻'],'')
+        table=sig.build(sig.flow_latest(self.root),names,s,28);self.assertTrue(table[table.code==c]['使用时点说明'].str.contains('中性定义，非缺失').all())
+    def test_size_failure_leaves_both_csv_and_derivatives_unchanged(self):
+        from unittest.mock import patch
+        self.flow();sig.run(self.root,now=dt.datetime(2026,10,30,17,tzinfo=src.BJ))
+        before={p:p.read_bytes() for p in (self.root/'data/主线').rglob('*') if p.is_file()}
+        path=self.root/'data/资金轮动/日表.csv';frame=pd.read_csv(path,dtype={'code':str});frame.loc[0,'相对沪深300_20']=.1234;frame.to_csv(path,index=False)
+        with patch('mainline_signal_store.LIMIT',1):
+            with self.assertRaisesRegex(ValueError,'100MiB'):sig.run(self.root,now=dt.datetime(2026,10,30,17,tzinfo=src.BJ))
+        self.assertTrue(all(p.read_bytes()==value for p,value in before.items()))
+
     def test_eps_year_mapping_and_observation_timestamp_are_respected(self):
         c=self.ordinary[0];self.write('data/一致预期/行业上修.csv',['日期','申万一级代码','预测年度','上修占比','可比家数'],[{'日期':'2026-10-29','申万一级代码':c,'预测年度':'2026','上修占比':0,'可比家数':5},{'日期':'2026-10-29','申万一级代码':c,'预测年度':'2027','上修占比':.4,'可比家数':5}])
         self.write('data/一致预期/2026-10/2026-10-29.csv',['抓取时间'],[{'抓取时间':'2026-10-29T10:00:00+08:00'}]);r=self.source().for_day('2026-10-29',c);self.assertEqual(r['业绩_EPS本年上修占比'],0);self.assertEqual(r['业绩_EPS次年上修占比'],.4)
@@ -108,7 +151,7 @@ class SignalsTests(unittest.TestCase):
         self.assertEqual(r['status'],'失败');self.assertTrue(any('资金占比均缺' in e for e in r['errors']))
     def test_full_backfill_idempotent_and_inputs_and_claude_tables_unchanged(self):
         self.flow();inputs={str(p):p.read_bytes() for p in (self.root/'system').glob('*.csv')};now=dt.datetime(2026,10,30,15,tzinfo=src.BJ)
-        first=sig.run(self.root,now=now);before={p:p.read_bytes() for p in (self.root/'data/主线').glob('*.csv')};second=sig.run(self.root,now=now+dt.timedelta(hours=1))
+        first=sig.run(self.root,now=now);before={p:p.read_bytes() for p in (self.root/'data/主线').rglob('*.csv')};second=sig.run(self.root,now=now+dt.timedelta(hours=1))
         self.assertTrue(all(n==0 for n in second['新增行'].values()));self.assertTrue(all(p.read_bytes()==b for p,b in before.items()));self.assertTrue(all(Path(p).read_bytes()==b for p,b in inputs.items()))
         self.assertIn('缺',(self.root/'data/主线/最新.md').read_text());self.assertNotIn('建议买入',(self.root/'data/主线/最新.md').read_text())
 

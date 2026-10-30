@@ -1,5 +1,4 @@
 """T13只读输入适配；不联网、不改Claude表，不把缺来源变成0。"""
-import ast
 import csv
 import datetime as dt
 import json
@@ -9,6 +8,8 @@ import re
 
 import numpy as np
 import pandas as pd
+
+from earnings_history import deadline, load_v3, visibility
 
 BJ=dt.timezone(dt.timedelta(hours=8))
 NEW={'801960','801970','801980'}
@@ -96,21 +97,30 @@ class Sources:
         p=self.root/'data/v3/申万成分.json'
         if p.exists():self.members=json.loads(p.read_text())
         for p in (self.root/'data/财报/单季').glob('*.csv'):self.quarters[p.stem]=csv_rows(p) or []
-        # 复用v3实际函数和配置，避免导入旧选股模块时建缓存、改全局告警设置。
-        source=self.root/'scripts/v3_select.py';tree=ast.parse(source.read_text());body=[];cfg={}
-        for node in tree.body:
-            if isinstance(node,ast.FunctionDef) and node.name in ('num','q_signal'):body.append(node)
-            if isinstance(node,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='CFG' for t in node.targets):cfg=ast.literal_eval(node.value)
-        namespace={'dt':dt,'math':math,'re':re};exec(compile(ast.Module(body=body,type_ignores=[]),str(source),'exec'),namespace)
-        if 'q_signal' not in namespace:raise ValueError('未找到原v3季度条件')
-        self.q_signal=namespace['q_signal'];self.qcfg=cfg
-        config=self.root/'data/v3/config.json'
-        if config.exists():self.qcfg.update(json.loads(config.read_text()))
+        # 新目录按报告期最后修订覆盖股票池缓存；缺值修订不回退旧值。
+        for p in (self.root/'data/财报/全市场单季').glob('*.csv'):
+            existing=self.quarters.get(p.stem,[])
+            # 实际公告日是已知信息，新源没有该列时也不能将延迟披露提前。
+            announcements={}
+            for r in existing:
+                if r.get('公告日'):
+                    dt.date.fromisoformat(r['公告日'])
+                    announcements[r['报告期']]=max(announcements.get(r['报告期'],''),r['公告日'])
+            revisions={r['报告期']:r for r in existing}
+            for row in csv_rows(p) or []:
+                if row.get('法定截止')!=deadline(row['报告期']).isoformat() or row.get('可见时刻')!=visibility(row['报告期']):
+                    raise ValueError('全市场季报可见边界错误：'+str(p))
+                row=dict(row)
+                if row['报告期'] in announcements:row['公告日']=announcements[row['报告期']]
+                revisions[row['报告期']]=row
+            self.quarters[p.stem]=list(revisions.values())
+        self.num,self.q_signal,self.qcfg=load_v3(self.root)
+        self.stock_quarter_cache={};self.quarter_notes={}
     def quarter(self,day,code):
         key=(day,code)
         if key in self.quarter_cache:return self.quarter_cache[key]
         member=self.members.get(code);out={'业绩_利润加速占比':None,'业绩_样本加速占比':None,'业绩_成分家数':None,'业绩_可评估家数':None,'业绩_加速家数':None,'业绩_季报覆盖率':None,'业绩_季报期':''}
-        if not member or not member.get('date') or member['date']>day:return out
+        if not member or not member.get('date'):return out
         codes=sorted({str(r['证券代码']).zfill(6) for r in member['rows']});asof=dt.date.fromisoformat(day);passed=0;valid=0;periods=set()
         eligible=[]
         for year in (asof.year-1,asof.year):
@@ -119,17 +129,24 @@ class Sources:
                 if dt.date(year+(month==12),m,d)<asof:eligible.append(report.isoformat())
         latest_period=max(eligible) if eligible else ''
         for stock in codes:
-            rows=[]
-            for r in self.quarters.get(stock,[]):
-                announcement=r.get('公告日','')
-                # 披露截止日的控制由原q_signal执行；实际延迟公告还须过公告日。
-                if announcement and re.fullmatch(r'\d{4}-\d{2}-\d{2}',announcement) and announcement>=day:continue
-                rows.append(r)
-            sig=self.q_signal(rows,asof)
+            original=self.quarters.get(stock,[])
+            # 有实际公告日的旧缓存仍逐日过滤；截止日推定数据按季度复用计算。
+            stock_key=(stock,day if any(r.get('公告日') for r in original) else latest_period)
+            if stock_key not in self.stock_quarter_cache:
+                rows=[]
+                for r in original:
+                    announcement=r.get('公告日','')
+                    if announcement and re.fullmatch(r'\d{4}-\d{2}-\d{2}',announcement) and announcement>=day:continue
+                    if r.get('可见时刻') and timestamp(r['可见时刻'])>dt.datetime.combine(asof,dt.time.max,BJ):continue
+                    rows.append(r)
+                self.stock_quarter_cache[stock_key]=self.q_signal(rows,asof)
+            sig=self.stock_quarter_cache[stock_key]
             if not sig or sig['q']!=latest_period or any(not math.isfinite(sig[k]) for k in ('g','gprev','grev')):continue
             valid+=1;periods.add(sig['q'])
             passed+=int(self.qcfg['g_min']<sig['g']<=self.qcfg['g_max'] and sig['acc']>0 and sig['gprev']>self.qcfg['prev_min'] and sig['grev']>0)
-        out.update({'业绩_成分家数':len(codes),'业绩_可评估家数':valid,'业绩_加速家数':passed if valid else None,'业绩_季报覆盖率':valid/len(codes) if codes else None,'业绩_样本加速占比':passed/valid if valid else None,'业绩_利润加速占比':passed/len(codes) if codes and valid==len(codes) else None,'业绩_季报期':';'.join(sorted(periods))})
+        coverage=valid/len(codes) if codes else None
+        out.update({'业绩_成分家数':len(codes),'业绩_可评估家数':valid,'业绩_加速家数':passed if valid else None,'业绩_季报覆盖率':coverage,'业绩_样本加速占比':passed/valid if valid else None,'业绩_利润加速占比':passed/valid if valid>=10 and valid*5>=len(codes)*3 else None,'业绩_季报期':';'.join(sorted(periods))})
+        self.quarter_notes[key]=';D='+deadline(latest_period).isoformat()+';V='+visibility(latest_period)+';M='+member['date'] if latest_period else ';M='+member['date']
         self.quarter_cache[key]=out;return dict(out)
     def for_day(self,day,code):
         cache_key=(day,code)
@@ -141,8 +158,8 @@ class Sources:
             x=visible[-1] if visible else {};delta=number(x.get('value'))
             out['环境_'+label+'10年20日变化bp']=delta
             out['环境_'+label+'可见时刻']=x.get('可见时刻','')
-            direction={'长':-1,'短':1}.get(r['久期'])
-            out['环境_'+label+'久期适配bp']=delta*direction if delta is not None and direction is not None else None
+            direction={'长':-1,'短':1,'中':0}.get(r['久期'])
+            out['环境_'+label+'久期适配bp']=0 if direction==0 else delta*direction if delta is not None and direction is not None else None
         market=self.market.get(day,{})
         out['环境_大盘攻守']=market.get('市场',{}).get('结论','');out['市场可见时刻']=market.get('生成时间','')
         for year,tag in [(day[:4],'本年'),(str(int(day[:4])+1),'次年')]:

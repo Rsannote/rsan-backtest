@@ -1,0 +1,32 @@
+{
+  "run": "41083555632",
+  "来源SHA": "ad110b43dd2b740356e5d163efda64f64cdc5ecd",
+  "ZIP摘要与完整预检通过": true,
+  "本批尝试": 1958,
+  "断点跳过": 395,
+  "状态": {
+    "成功": 1956,
+    "失败": 2
+  },
+  "合计季度": 80812,
+  "失败": [
+    {
+      "代码": "300760",
+      "采集时间": "2026-10-30T23:45:28.924811+08:00",
+      "来源版本": "同花顺main.simple-v2",
+      "成分SHA256": "3dadc9f3bc69d4a130b5c217142f3e18bd69a0f8c82113d0dbda772cff154509",
+      "来源": "https://basic.10jqka.com.cn/new/300760/finance.html",
+      "状态": "失败",
+      "错误": "ReadTimeout: HTTPSConnectionPool(host='basic.10jqka.com.cn', port=443): Read timed out. (read timeout=15)"
+    },
+    {
+      "代码": "300761",
+      "采集时间": "2026-10-30T23:45:28.924811+08:00",
+      "来源版本": "同花顺main.simple-v2",
+      "成分SHA256": "3dadc9f3bc69d4a130b5c217142f3e18bd69a0f8c82113d0dbda772cff154509",
+      "来源": "https://basic.10jqka.com.cn/new/300761/finance.html",
+      "状态": "失败",
+      "错误": "ReadTimeout: HTTPSConnectionPool(host='basic.10jqka.com.cn', port=443): Read timed out. (read timeout=10)"
+    }
+  ]
+}

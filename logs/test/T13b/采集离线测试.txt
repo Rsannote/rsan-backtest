@@ -1,0 +1,29 @@
+test_all_four_legal_deadlines_and_original_v3_exclusive_day (test_earnings_history.EarningsTests.test_all_four_legal_deadlines_and_original_v3_exclusive_day) ... ok
+test_append_plan_matches_actual_bytes_and_zero_on_repeat (test_earnings_history.EarningsTests.test_append_plan_matches_actual_bytes_and_zero_on_repeat) ... ok
+test_batch_requires_published_probe_before_network (test_earnings_history.EarningsTests.test_batch_requires_published_probe_before_network) ... ok
+test_batch_resume_retries_only_failure_and_is_append_only (test_earnings_history.EarningsTests.test_batch_resume_retries_only_failure_and_is_append_only) ... 000001 成功 1
+000002 失败 
+000002 成功 1
+000001 成功 1
+000002 成功 1
+000001 成功 1
+000002 成功 1
+ok
+test_budget_and_batch_size_and_no_local_network (test_earnings_history.EarningsTests.test_budget_and_batch_size_and_no_local_network) ... 000001 成功 1
+ok
+test_empty_old_history_distinct_from_http_or_schema_error (test_earnings_history.EarningsTests.test_empty_old_history_distinct_from_http_or_schema_error) ... ok
+test_official_matrix_transpose_keeps_raw_units_and_fallback (test_earnings_history.EarningsTests.test_official_matrix_transpose_keeps_raw_units_and_fallback) ... ok
+test_probe_does_not_write_official_data (test_earnings_history.EarningsTests.test_probe_does_not_write_official_data) ... 000001 成功 1
+ok
+test_publish_rejects_bad_legal_visibility_before_any_write (test_earnings_history.EarningsTests.test_publish_rejects_bad_legal_visibility_before_any_write) ... 000001 成功 1
+000002 成功 1
+ok
+test_publish_validates_origin_and_is_idempotent (test_earnings_history.EarningsTests.test_publish_validates_origin_and_is_idempotent) ... 000001 成功 1
+000002 成功 1
+ok
+test_pure_note_change_keeps_existing_version (test_earnings_history.EarningsTests.test_pure_note_change_keeps_existing_version) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.248s
+
+OK

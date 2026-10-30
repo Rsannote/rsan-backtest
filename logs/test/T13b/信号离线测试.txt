@@ -1,0 +1,28 @@
+test_catalysts_with_partial_dates_are_display_only (test_mainline_signals.SignalsTests.test_catalysts_with_partial_dates_are_display_only) ... ok
+test_concept_counts_a_row_once_and_late_capture_is_not_used (test_mainline_signals.SignalsTests.test_concept_counts_a_row_once_and_late_capture_is_not_used) ... ok
+test_delayed_actual_announcement_and_snapshot_backcast (test_mainline_signals.SignalsTests.test_delayed_actual_announcement_and_snapshot_backcast) ... ok
+test_eps_year_mapping_and_observation_timestamp_are_respected (test_mainline_signals.SignalsTests.test_eps_year_mapping_and_observation_timestamp_are_respected) ... ok
+test_excluded_composite_only_in_denominator_not_ranks (test_mainline_signals.SignalsTests.test_excluded_composite_only_in_denominator_not_ranks) ... ok
+test_fixed_28_and_31_are_separate_and_new_three_never_enter_history (test_mainline_signals.SignalsTests.test_fixed_28_and_31_are_separate_and_new_three_never_enter_history) ... ok
+test_flow_reads_last_revision_even_when_new_value_missing (test_mainline_signals.SignalsTests.test_flow_reads_last_revision_even_when_new_value_missing) ... ok
+test_full_backfill_idempotent_and_inputs_and_claude_tables_unchanged (test_mainline_signals.SignalsTests.test_full_backfill_idempotent_and_inputs_and_claude_tables_unchanged) ... ok
+test_full_rank_blank_when_any_candidate_missing_and_zero_is_real (test_mainline_signals.SignalsTests.test_full_rank_blank_when_any_candidate_missing_and_zero_is_real) ... ok
+test_industry_thresholds_and_sample_denominator (test_mainline_signals.SignalsTests.test_industry_thresholds_and_sample_denominator) ... ok
+test_latest_all_funding_values_missing_is_failure_not_successful_empty_table (test_mainline_signals.SignalsTests.test_latest_all_funding_values_missing_is_failure_not_successful_empty_table) ... ok
+test_macro_revision_cannot_leak_before_its_visibility (test_mainline_signals.SignalsTests.test_macro_revision_cannot_leak_before_its_visibility) ... ok
+test_missing_claude_tables_fail_without_creating_empty_replacements (test_mainline_signals.SignalsTests.test_missing_claude_tables_fail_without_creating_empty_replacements) ... ok
+test_missing_news_is_unknown_observed_no_match_is_zero (test_mainline_signals.SignalsTests.test_missing_news_is_unknown_observed_no_match_is_zero) ... ok
+test_neutral_note_and_missing_rates_keep_raw_missing (test_mainline_signals.SignalsTests.test_neutral_note_and_missing_rates_keep_raw_missing) ... ok
+test_new_history_overrides_cache_and_retains_legal_boundary (test_mainline_signals.SignalsTests.test_new_history_overrides_cache_and_retains_legal_boundary) ... ok
+test_news_four_week_windows_require_all_56_dates_and_deduplicate_ids (test_mainline_signals.SignalsTests.test_news_four_week_windows_require_all_56_dates_and_deduplicate_ids) ... ok
+test_quarter_after_deadline_exact_v3_and_incomplete_industry_not_zero (test_mainline_signals.SignalsTests.test_quarter_after_deadline_exact_v3_and_incomplete_industry_not_zero) ... ok
+test_size_failure_leaves_both_csv_and_derivatives_unchanged (test_mainline_signals.SignalsTests.test_size_failure_leaves_both_csv_and_derivatives_unchanged) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.384s
+
+OK
+{"数据日期": "2026-10-29", "31唯一行": 62, "28唯一行": 84, "新增": {"31": 62, "28": 84}, "维度覆盖": {"环境适配": {"有值": 0, "部分缺": 0, "缺": 30, "排除": 1}, "业绩预期": {"有值": 0, "部分缺": 0, "缺": 30, "排除": 1}, "热度催化": {"有值": 0, "部分缺": 0, "缺": 30, "排除": 1}, "资金": {"有值": 30, "部分缺": 0, "缺": 0, "排除": 1}, "拥挤度": {"有值": 30, "部分缺": 0, "缺": 0, "排除": 1}}}
+{"数据日期": "2026-10-29", "31唯一行": 62, "28唯一行": 84, "新增": {"31": 0, "28": 0}, "维度覆盖": {"环境适配": {"有值": 0, "部分缺": 0, "缺": 30, "排除": 1}, "业绩预期": {"有值": 0, "部分缺": 0, "缺": 30, "排除": 1}, "热度催化": {"有值": 0, "部分缺": 0, "缺": 30, "排除": 1}, "资金": {"有值": 30, "部分缺": 0, "缺": 0, "排除": 1}, "拥挤度": {"有值": 30, "部分缺": 0, "缺": 0, "排除": 1}}}
+{"数据日期": "2026-10-29", "31唯一行": 62, "28唯一行": 84, "新增": {"31": 62, "28": 84}, "维度覆盖": {"环境适配": {"有值": 0, "部分缺": 0, "缺": 30, "排除": 1}, "业绩预期": {"有值": 0, "部分缺": 0, "缺": 30, "排除": 1}, "热度催化": {"有值": 0, "部分缺": 0, "缺": 30, "排除": 1}, "资金": {"有值": 0, "部分缺": 30, "缺": 0, "排除": 1}, "拥挤度": {"有值": 30, "部分缺": 0, "缺": 0, "排除": 1}}}
+{"数据日期": "2026-10-29", "31唯一行": 62, "28唯一行": 84, "新增": {"31": 62, "28": 84}, "维度覆盖": {"环境适配": {"有值": 0, "部分缺": 0, "缺": 30, "排除": 1}, "业绩预期": {"有值": 0, "部分缺": 0, "缺": 30, "排除": 1}, "热度催化": {"有值": 0, "部分缺": 0, "缺": 30, "排除": 1}, "资金": {"有值": 30, "部分缺": 0, "缺": 0, "排除": 1}, "拥挤度": {"有值": 30, "部分缺": 0, "缺": 0, "排除": 1}}}
