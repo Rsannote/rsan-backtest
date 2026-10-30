@@ -1,0 +1,113 @@
+{
+  "Actions": "https://github.com/Rsannote/rsan-backtest/actions/runs/40992609467",
+  "批次数": 10,
+  "最长单批秒": 1187,
+  "全部单批小于60分钟": true,
+  "提交任务秒": 11,
+  "jobs": [
+    {
+      "name": "prepare",
+      "id": 123858322520,
+      "seconds": 36,
+      "started": "2026-10-30T02:35:52Z",
+      "ended": "2026-10-30T02:36:28Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "fetch (5)",
+      "id": 123858516556,
+      "seconds": 551,
+      "started": "2026-10-30T02:46:13Z",
+      "ended": "2026-10-30T02:55:24Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "fetch (6)",
+      "id": 123858516589,
+      "seconds": 662,
+      "started": "2026-10-30T02:46:21Z",
+      "ended": "2026-10-30T02:57:23Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "fetch (1)",
+      "id": 123858516600,
+      "seconds": 1187,
+      "started": "2026-10-30T02:36:30Z",
+      "ended": "2026-10-30T02:56:17Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "fetch (0)",
+      "id": 123858516618,
+      "seconds": 579,
+      "started": "2026-10-30T02:36:31Z",
+      "ended": "2026-10-30T02:46:10Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "fetch (4)",
+      "id": 123858516620,
+      "seconds": 579,
+      "started": "2026-10-30T02:45:48Z",
+      "ended": "2026-10-30T02:55:27Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "fetch (3)",
+      "id": 123858516630,
+      "seconds": 555,
+      "started": "2026-10-30T02:36:30Z",
+      "ended": "2026-10-30T02:45:45Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "fetch (7)",
+      "id": 123858516645,
+      "seconds": 590,
+      "started": "2026-10-30T02:55:27Z",
+      "ended": "2026-10-30T03:05:17Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "fetch (8)",
+      "id": 123858516653,
+      "seconds": 603,
+      "started": "2026-10-30T02:55:29Z",
+      "ended": "2026-10-30T03:05:32Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "fetch (2)",
+      "id": 123858516663,
+      "seconds": 587,
+      "started": "2026-10-30T02:36:31Z",
+      "ended": "2026-10-30T02:46:18Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "fetch (9)",
+      "id": 123858516827,
+      "seconds": 465,
+      "started": "2026-10-30T02:56:20Z",
+      "ended": "2026-10-30T03:04:05Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "persist",
+      "id": 123867219740,
+      "seconds": 11,
+      "started": "2026-10-30T03:06:06Z",
+      "ended": "2026-10-30T03:06:17Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "alert",
+      "id": 123867454693,
+      "seconds": -1,
+      "started": "2026-10-30T03:06:18Z",
+      "ended": "2026-10-30T03:06:17Z",
+      "conclusion": "skipped"
+    }
+  ]
+}
