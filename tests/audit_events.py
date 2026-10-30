@@ -8,6 +8,7 @@ from pathlib import Path
 import shutil
 import sys
 import tempfile
+from unittest.mock import patch
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'))
@@ -23,8 +24,8 @@ def main():
     original={p:(ROOT/p).read_bytes() for p in paths}
     counts={}
     for path in paths:
-        rows=list(csv.DictReader((ROOT/path).open(newline='',encoding='utf-8')))
-        assert all(not row[f] for row in rows for f in events.HUMAN)
+        with (ROOT/path).open(newline='',encoding='utf-8') as stream:
+            rows=list(csv.DictReader(stream))
         assert list(rows[0])[:len(events.PUBLIC)]==events.PUBLIC
         counts[path]=len({row['事件id'] for row in rows})
     # 用隔离目录复跑，不改仓库CSV，也不让临时生成时间混入验收产物。
@@ -33,10 +34,17 @@ def main():
         for name in list(inputs)+paths+['system/事件库格式.md']:
             dest=root/name;dest.parent.mkdir(parents=True,exist_ok=True)
             shutil.copyfile(ROOT/name,dest)
-        for _ in range(2):
-            result=events.run(root,events.dt.datetime.fromisoformat(report['generated_at']))
-            assert all(n==0 for n in result['inserted'].values()),result['inserted']
-            for name,raw in original.items():assert (root/name).read_bytes()==raw,name
+        # 已存人工原文可以非空；只检查程序本次生成的候选记录留空。
+        make_record=events.record
+        def checked_record(*args,**kwargs):
+            row=make_record(*args,**kwargs)
+            assert all(not row[f] for f in events.HUMAN),'程序生成了人工判读'
+            return row
+        with patch.object(events,'record',side_effect=checked_record):
+            for _ in range(2):
+                result=events.run(root,events.dt.datetime.fromisoformat(report['generated_at']))
+                assert all(n==0 for n in result['inserted'].values()),result['inserted']
+                for name,raw in original.items():assert (root/name).read_bytes()==raw,name
     # 不调用distances：直接按JSON中历史原值和总体标准差重算六个平方差。
     current=report['当前特征'];sigma=report['标准化']['总体标准差']
     verification=[]
@@ -48,12 +56,12 @@ def main():
     run_id=os.environ.get('GITHUB_RUN_ID')
     proof={'源Actions':f'https://github.com/Rsannote/rsan-backtest/actions/runs/{run_id}' if run_id else None,
            '数据基准':report['data_date'],'输入SHA256逐项一致':True,'事件数':counts,
-           '新增事件人工六列全空':True,'隔离同输入复跑次数':2,'CSV原字节不变':True,
+           '程序生成候选人工六列全空':True,'既有人工原文允许非空且逐字节保留':True,'隔离同输入复跑次数':2,'CSV原字节不变':True,
            '六维距离独立核对':verification}
     out=ROOT/'logs/test/T9';out.mkdir(parents=True,exist_ok=True)
     (out/'离线核对.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')
     lines=['# T9 离线核对','',f"数据基准：{report['data_date']}；六项输入SHA256逐项一致。",'',
-           '公共字段顺序与六个人工列留空已检查；隔离目录连续复跑两次，三个CSV无新增且原字节一致。人工原文/CRLF保留另有单元测试。','',
+           '公共字段顺序与程序新生成候选的六个人工列留空已检查；既有人工原文允许非空。隔离目录连续复跑两次，三个CSV无新增且包含人工原文的旧字节一致。人工原文/CRLF保留另有单元测试。','',
            '|事件id|六维平方差之和|独立开方|程序距离|绝对差|','|---|---:|---:|---:|---:|']
     for row in verification:
         lines.append(f"|{row['事件id']}|{row['平方和']:.12g}|{row['独立开方']:.12g}|{row['程序距离']:.12g}|{row['绝对差']:.3g}|")

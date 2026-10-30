@@ -1,0 +1,279 @@
+test_existing_human_text_and_crlf_are_accepted_and_unchanged (test_audit_events.AuditTests.test_existing_human_text_and_crlf_are_accepted_and_unchanged) ... 事件库：{"大调整15": 2, "大反弹20": 2, "大调整10": 2}；主对照完整候选0
+事件库：{"大调整15": 2, "大反弹20": 2, "大调整10": 2}；主对照完整候选0
+事件库：{"大调整15": 2, "大反弹20": 2, "大调整10": 2}；主对照完整候选0
+ok
+test_program_generated_human_conclusion_is_rejected (test_audit_events.AuditTests.test_program_generated_human_conclusion_is_rejected) ... {"源Actions": null, "数据基准": "2026-06-29", "输入SHA256逐项一致": true, "事件数": {"data/事件库/大调整.csv": 2, "data/事件库/大反弹.csv": 2, "data/事件库/大调整_10.csv": 2}, "程序生成候选人工六列全空": true, "既有人工原文允许非空且逐字节保留": true, "隔离同输入复跑次数": 2, "CSV原字节不变": true, "六维距离独立核对": []}
+事件库：{"大调整15": 2, "大反弹20": 2, "大调整10": 2}；主对照完整候选0
+ok
+test_silent_old_text_rewrite_is_rejected (test_audit_events.AuditTests.test_silent_old_text_rewrite_is_rejected) ... 事件库：{"大调整15": 2, "大反弹20": 2, "大调整10": 2}；主对照完整候选0
+事件库：{"大调整15": 2, "大反弹20": 2, "大调整10": 2}；主对照完整候选0
+ok
+test_atomic_prevalidation_and_conflicting_same_event (test_auto_judgments.AutoTests.test_atomic_prevalidation_and_conflicting_same_event) ... ok
+test_default_disabled_no_formal_writes_and_logs_all_rules (test_auto_judgments.AutoTests.test_default_disabled_no_formal_writes_and_logs_all_rules) ... ok
+test_factor_duplicate_nan_and_bad_fixed_date (test_auto_judgments.AutoTests.test_factor_duplicate_nan_and_bad_fixed_date) ... ok
+test_future_temperature_does_not_change_past_trigger_and_missing_prior (test_auto_judgments.AutoTests.test_future_temperature_does_not_change_past_trigger_and_missing_prior) ... ok
+test_global_sequence_all_files_and_midnight_source_date (test_auto_judgments.AutoTests.test_global_sequence_all_files_and_midnight_source_date) ... ok
+test_midnight_idempotence_and_rule_revision (test_auto_judgments.AutoTests.test_midnight_idempotence_and_rule_revision) ... ok
+test_missing_middle_or_target_not_rolled_forward (test_auto_judgments.AutoTests.test_missing_middle_or_target_not_rolled_forward) ... ok
+test_no_existing_result_overwrite (test_auto_judgments.AutoTests.test_no_existing_result_overwrite) ... ok
+test_original_seven_raw_bytes_preserved_with_append_review (test_auto_judgments.AutoTests.test_original_seven_raw_bytes_preserved_with_append_review) ... ok
+test_replay_only_and_reserved_cannot_be_forced (test_auto_judgments.AutoTests.test_replay_only_and_reserved_cannot_be_forced) ... ok
+test_same_month_crlf_manual_bytes_survive_append_and_review (test_auto_judgments.AutoTests.test_same_month_crlf_manual_bytes_survive_append_and_review) ... ok
+test_schema_rejects_invalid_types_and_path_traversal (test_auto_judgments.AutoTests.test_schema_rejects_invalid_types_and_path_traversal) ... ok
+test_stale_latest_signal_cannot_create_hindsight_formal_forecast (test_auto_judgments.AutoTests.test_stale_latest_signal_cannot_create_hindsight_formal_forecast) ... ok
+test_stats_cross_product_program_and_manual (test_auto_judgments.AutoTests.test_stats_cross_product_program_and_manual) ... ok
+test_t4b_approval_policy_and_legacy_compatibility (test_auto_judgments.AutoTests.test_t4b_approval_policy_and_legacy_compatibility) ... ok
+test_t4b_drawdown_factor_fixed_window_and_bad_threshold (test_auto_judgments.AutoTests.test_t4b_drawdown_factor_fixed_window_and_bad_threshold) ... ok
+test_t4b_enter_requires_previous_trading_day_non_defend (test_auto_judgments.AutoTests.test_t4b_enter_requires_previous_trading_day_non_defend) ... ok
+test_t4b_full_history_pending_denominators_and_isolation (test_auto_judgments.AutoTests.test_t4b_full_history_pending_denominators_and_isolation) ... ok
+test_t4b_start_drawdown_is_neither_endpoint_nor_rolling_peak (test_auto_judgments.AutoTests.test_t4b_start_drawdown_is_neither_endpoint_nor_rolling_peak) ... ok
+test_three_conditions_same_calendar_and_no_future (test_auto_judgments.AutoTests.test_three_conditions_same_calendar_and_no_future) ... ok
+test_unapproved_enable_and_reserved_enable_fail_closed (test_auto_judgments.AutoTests.test_unapproved_enable_and_reserved_enable_fail_closed) ... ok
+test_append_preserves_crlf_human_text_and_idempotence (test_build_events.EventTests.test_append_preserves_crlf_human_text_and_idempotence) ... ok
+test_current_missing_disables_ranking_and_constant_dimension_zero (test_build_events.EventTests.test_current_missing_disables_ranking_and_constant_dimension_zero) ... ok
+test_exact_threshold_and_confirmation_not_extreme_date (test_build_events.EventTests.test_exact_threshold_and_confirmation_not_extreme_date) ... ok
+test_features_use_past_macro_and_lagged_margin (test_build_events.EventTests.test_features_use_past_macro_and_lagged_margin) ... ok
+test_missing_history_not_zero_and_current_not_future_day (test_build_events.EventTests.test_missing_history_not_zero_and_current_not_future_day) ... ok
+test_nested_recovery_creates_new_local_event_without_new_all_time_high (test_build_events.EventTests.test_nested_recovery_creates_new_local_event_without_new_all_time_high) ... ok
+test_no_false_small_move_or_nan_and_duplicate_dates (test_build_events.EventTests.test_no_false_small_move_or_nan_and_duplicate_dates) ... ok
+test_plateau_keeps_first_peak_and_first_trough (test_build_events.EventTests.test_plateau_keeps_first_peak_and_first_trough) ... ok
+test_real_library_required_years_human_columns_and_top_five (test_build_events.EventTests.test_real_library_required_years_human_columns_and_top_five) ... ok
+test_standard_euclidean_fitted_on_history_and_complete_cases (test_build_events.EventTests.test_standard_euclidean_fitted_on_history_and_complete_cases) ... ok
+test_append_prefix_crlf_and_idempotence (test_flow.FlowTests.test_append_prefix_crlf_and_idempotence) ... ok
+test_distribution_zero_is_not_a_win_and_missing_not_zero (test_flow.FlowTests.test_distribution_zero_is_not_a_win_and_missing_not_zero) ... ok
+test_entry_condition_and_forward_conditional_count (test_flow.FlowTests.test_entry_condition_and_forward_conditional_count) ... ok
+test_fixed_28_and_31_do_not_splice_or_include_new_three (test_flow.FlowTests.test_fixed_28_and_31_do_not_splice_or_include_new_three) ... ok
+test_future_intermediate_price_gap_excludes_sample (test_flow.FlowTests.test_future_intermediate_price_gap_excludes_sample) ... ok
+test_new_three_only_enter_daily_from_2021_breakpoint (test_flow.FlowTests.test_new_three_only_enter_daily_from_2021_breakpoint) ... ok
+test_rank_requires_full_universe_and_ties_use_code (test_flow.FlowTests.test_rank_requires_full_universe_and_ties_use_code) ... ok
+test_raw_parser_identity_duplicates_missing_and_nonfinite (test_flow.FlowTests.test_raw_parser_identity_duplicates_missing_and_nonfinite) ... ok
+test_source_network_guard_before_openssl (test_flow.FlowTests.test_source_network_guard_before_openssl) ... ok
+test_strict_lags_percentiles_relative_returns_and_ma60 (test_flow.FlowTests.test_strict_lags_percentiles_relative_returns_and_ma60) ... ok
+test_tls_failure_uses_etf_columns_even_when_cached_sw_complete (test_flow.FlowTests.test_tls_failure_uses_etf_columns_even_when_cached_sw_complete) ... 程序判断落档：2026-10-22；事件0条；正常；正式草案未启用不会作为失败。
+程序判断落档：2026-10-22；事件0条；正常；正式草案未启用不会作为失败。
+程序判断落档：2026-10-22；事件1条；正常；正式草案未启用不会作为失败。
+程序判断落档：2026-10-22；事件1条；正常；正式草案未启用不会作为失败。
+程序判断落档：2026-10-22；事件1条；正常；正式草案未启用不会作为失败。
+自动复核：核对1条；复核写入0条；待人工1条；待数据0条。 状态：正常
+自动复核：核对13条；复核写入1条；待人工2条；待数据0条。 状态：正常
+自动复核：核对13条；复核写入0条；待人工2条；待数据0条。 状态：正常
+程序判断隔离回放：2026-10-22；事件3条；正常；正式草案未启用不会作为失败。
+自动复核：核对13条；复核写入1条；待人工2条；待数据0条。 状态：正常
+程序判断落档：2026-10-22；事件0条；失败；正式草案未启用不会作为失败。
+全历史回放：市场6日、温度5日；进入守势2次；仅写/private/var/folders/yt/_78jxhl55k1_9z4cbr_vkkbc0000gn/T/tmpeevb_qvm/logs/test/T4
+{"数据日期": "2022-02-25", "资金来源": "ETF 近似", "日表": 8565, "ETF日表": 300, "errors": ["申万本次抓取/证书失败：ValueError: 模拟链验证失败"], "warnings": ["资金维度切换ETF近似，申万列不接入ETF", "占比一年分位_31有值比例0/31低于90%"]}
+{"数据日期": "2022-02-25", "资金来源": "申万官网", "日表": 8565, "ETF日表": 300, "errors": [], "warnings": ["占比一年分位_31有值比例0/31低于90%"]}
+ok
+test_daily_notes_and_ma_use_observed_values (test_flow_gaps.GapWindowTests.test_daily_notes_and_ma_use_observed_values) ... ok
+test_exact_ninety_percent_boundary_and_warmup (test_flow_gaps.GapWindowTests.test_exact_ninety_percent_boundary_and_warmup) ... ok
+test_gap_repair_reason_is_recorded_and_old_bytes_preserved (test_flow_gaps.GapWindowTests.test_gap_repair_reason_is_recorded_and_old_bytes_preserved) ... /Users/zhangyiyi/Documents/ChatGPT/股票/rsan-backtest-T12/tests/test_flow_gaps.py:59: ResourceWarning: unclosed file <_io.TextIOWrapper name='/var/folders/yt/_78jxhl55k1_9z4cbr_vkkbc0000gn/T/tmp2udgzenk/raw.csv' mode='r' encoding='UTF-8'>
+  self.assertTrue(p.read_bytes().startswith(old));self.assertEqual(list(csv.DictReader(p.open()))[-1]['修订原因'],'缺口真实重抓修订')
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_no_nan_zero_fill_no_current_value_no_rank_and_ties (test_flow_gaps.GapWindowTests.test_no_nan_zero_fill_no_current_value_no_rank_and_ties) ... ok
+test_single_middle_gap_keeps_calendar_window_and_actual_rank_denominator (test_flow_gaps.GapWindowTests.test_single_middle_gap_keeps_calendar_window_and_actual_rank_denominator) ... ok
+test_structural_new_three_are_not_pre_2021_gaps (test_flow_gaps.GapWindowTests.test_structural_new_three_are_not_pre_2021_gaps) ... ok
+test_thirty_gaps_exceed_both_sixty_and_year_tolerance (test_flow_gaps.GapWindowTests.test_thirty_gaps_exceed_both_sixty_and_year_tolerance) ... ok
+test_last_revision_wins (test_flow_gaps.KeyCoverageTests.test_last_revision_wins) ... ok
+test_missing_whole_rows_count_in_denominator_and_wrong_date_not_used (test_flow_gaps.KeyCoverageTests.test_missing_whole_rows_count_in_denominator_and_wrong_date_not_used) ... ok
+test_successful_program_with_empty_key_columns_is_partial_failure (test_flow_gaps.KeyCoverageTests.test_successful_program_with_empty_key_columns_is_partial_failure) ... ok
+test_zero_is_valid_ninety_percent_passes_and_nan_inf_fail (test_flow_gaps.KeyCoverageTests.test_zero_is_valid_ninety_percent_passes_and_nan_inf_fail) ... ok
+test_beijing_day_used_even_when_input_is_utc (test_health_alert.AlertTests.test_beijing_day_used_even_when_input_is_utc) ... ok
+test_broken_manifest_does_not_close_scheduled_output_alert (test_health_alert.AlertTests.test_broken_manifest_does_not_close_scheduled_output_alert) ... ok
+test_fresh_client_avoids_lagging_label_index_and_disables_get_cache (test_health_alert.AlertTests.test_fresh_client_avoids_lagging_label_index_and_disables_get_cache) ... ok
+test_malformed_foreign_marker_is_ignored (test_health_alert.AlertTests.test_malformed_foreign_marker_is_ignored) ... ok
+test_missing_completion_time_does_not_recover (test_health_alert.AlertTests.test_missing_completion_time_does_not_recover) ... ok
+test_namespaces_do_not_close_real_alerts_during_drill (test_health_alert.AlertTests.test_namespaces_do_not_close_real_alerts_during_drill) ... ok
+test_new_day_has_one_issue_and_recovery_closes_previous_days (test_health_alert.AlertTests.test_new_day_has_one_issue_and_recovery_closes_previous_days) ... ok
+test_old_run_rerun_cannot_be_recovered_by_earlier_higher_id_success (test_health_alert.AlertTests.test_old_run_rerun_cannot_be_recovered_by_earlier_higher_id_success) ... ok
+test_recover_closes_then_same_day_relapse_reopens_same_issue (test_health_alert.AlertTests.test_recover_closes_then_same_day_relapse_reopens_same_issue) ... ok
+test_running_success_not_a_recovery (test_health_alert.AlertTests.test_running_success_not_a_recovery) ... ok
+test_same_client_reuses_created_issue_when_entire_list_lags (test_health_alert.AlertTests.test_same_client_reuses_created_issue_when_entire_list_lags) ... ok
+test_same_day_repeat_comments_without_duplicate_issue (test_health_alert.AlertTests.test_same_day_repeat_comments_without_duplicate_issue) ... ok
+test_stale_list_snapshot_cannot_undo_successful_patch (test_health_alert.AlertTests.test_stale_list_snapshot_cannot_undo_successful_patch) ... ok
+test_successful_rerun_same_id_higher_attempt_recovers (test_health_alert.AlertTests.test_successful_rerun_same_id_higher_attempt_recovers) ... ok
+test_unfiltered_pagination_keeps_issue_on_second_page (test_health_alert.AlertTests.test_unfiltered_pagination_keeps_issue_on_second_page) ... ok
+test_workflow_failure_needs_new_success_not_just_old_output (test_health_alert.AlertTests.test_workflow_failure_needs_new_success_not_just_old_output) ... ok
+test_all_failed_is_failure (test_health_check.HealthTests.test_all_failed_is_failure) ... ok
+test_before_close_deadline_still_expects_previous_day (test_health_check.HealthTests.test_before_close_deadline_still_expects_previous_day) ... ok
+test_community_reads_existing_source_and_discussion_failures (test_health_check.HealthTests.test_community_reads_existing_source_and_discussion_failures) ... ok
+test_current_trading_day_from_official_coverage (test_health_check.HealthTests.test_current_trading_day_from_official_coverage) ... ok
+test_failures_are_not_hidden_by_late_data (test_health_check.HealthTests.test_failures_are_not_hidden_by_late_data) ... ok
+test_four_501_failures_keep_code_name_and_partial_state (test_health_check.HealthTests.test_four_501_failures_keep_code_name_and_partial_state) ... ok
+test_freshness_accepts_seven_hours_across_midnight (test_health_check.HealthTests.test_freshness_accepts_seven_hours_across_midnight) ... ok
+test_freshness_all_failed_can_report_explicit_older_success (test_health_check.HealthTests.test_freshness_all_failed_can_report_explicit_older_success) ... ok
+test_freshness_all_failed_never_counts_latest_attempt_as_success (test_health_check.HealthTests.test_freshness_all_failed_never_counts_latest_attempt_as_success) ... ok
+test_freshness_morning_and_evening_ignore_slots_and_same_day (test_health_check.HealthTests.test_freshness_morning_and_evening_ignore_slots_and_same_day) ... ok
+test_freshness_partial_failures_win_even_with_recent_success (test_health_check.HealthTests.test_freshness_partial_failures_win_even_with_recent_success) ... ok
+test_freshness_threshold_equal_is_healthy_and_one_second_over_is_delay (test_health_check.HealthTests.test_freshness_threshold_equal_is_healthy_and_one_second_over_is_delay) ... ok
+test_freshness_tophub_cross_midnight_and_configured_state_path (test_health_check.HealthTests.test_freshness_tophub_cross_midnight_and_configured_state_path) ... ok
+test_freshness_tophub_uses_last_successful_log_block_after_total_failure (test_health_check.HealthTests.test_freshness_tophub_uses_last_successful_log_block_after_total_failure) ... ok
+test_full_json_and_chinese_report_written_even_when_outputs_missing (test_health_check.HealthTests.test_full_json_and_chinese_report_written_even_when_outputs_missing) ... ok
+test_future_artifact_timestamp_fails (test_health_check.HealthTests.test_future_artifact_timestamp_fails) ... ok
+test_invalid_freshness_threshold_is_failed_instead_of_silent_grace (test_health_check.HealthTests.test_invalid_freshness_threshold_is_failed_instead_of_silent_grace) ... ok
+test_judgment_report_disabled_is_normal_and_due_missing_is_partial (test_health_check.HealthTests.test_judgment_report_disabled_is_normal_and_due_missing_is_partial) ... ok
+test_known_historical_holiday_is_not_weekday (test_health_check.HealthTests.test_known_historical_holiday_is_not_weekday) ... ok
+test_malformed_manifest_still_generates_machine_readable_failure (test_health_check.HealthTests.test_malformed_manifest_still_generates_machine_readable_failure) ... ok
+test_market_state_data_warning_is_partial (test_health_check.HealthTests.test_market_state_data_warning_is_partial) ... ok
+test_missing_today_from_csv_does_not_mean_holiday (test_health_check.HealthTests.test_missing_today_from_csv_does_not_mean_holiday) ... ok
+test_news_bad_json_and_missing_file_are_failure (test_health_check.HealthTests.test_news_bad_json_and_missing_file_are_failure) ... ok
+test_news_morning_slot_deadline_is_observed_at_0820 (test_health_check.HealthTests.test_news_morning_slot_deadline_is_observed_at_0820) ... ok
+test_news_partial_failure_with_successful_sources (test_health_check.HealthTests.test_news_partial_failure_with_successful_sources) ... ok
+test_news_same_day_does_not_satisfy_evening_slot (test_health_check.HealthTests.test_news_same_day_does_not_satisfy_evening_slot) ... ok
+test_news_slot_before_and_at_deadline (test_health_check.HealthTests.test_news_slot_before_and_at_deadline) ... ok
+test_news_zero_new_is_not_failure (test_health_check.HealthTests.test_news_zero_new_is_not_failure) ... ok
+test_pool_requires_last_check_time_even_when_data_date_is_today (test_health_check.HealthTests.test_pool_requires_last_check_time_even_when_data_date_is_today) ... ok
+test_previous_mode_community_latest_failure_not_hidden_in_prior_folder (test_health_check.HealthTests.test_previous_mode_community_latest_failure_not_hidden_in_prior_folder) ... ok
+test_previous_mode_evening_uses_calibrated_grace_before_today_is_due (test_health_check.HealthTests.test_previous_mode_evening_uses_calibrated_grace_before_today_is_due) ... ok
+test_previous_mode_failure_is_not_hidden_by_evening_grace (test_health_check.HealthTests.test_previous_mode_failure_is_not_hidden_by_evening_grace) ... ok
+test_previous_mode_morning_is_strictly_previous_even_after_early_schedule (test_health_check.HealthTests.test_previous_mode_morning_is_strictly_previous_even_after_early_schedule) ... ok
+test_previous_mode_pool_checks_source_date_without_previous_slot_timestamp (test_health_check.HealthTests.test_previous_mode_pool_checks_source_date_without_previous_slot_timestamp) ... ok
+test_previous_mode_saturday_rotation_waits_for_calibrated_deadline (test_health_check.HealthTests.test_previous_mode_saturday_rotation_waits_for_calibrated_deadline) ... ok
+test_previous_mode_seven_hour_delay_crossing_midnight_covers_source_day (test_health_check.HealthTests.test_previous_mode_seven_hour_delay_crossing_midnight_covers_source_day) ... ok
+test_previous_mode_weekend_holiday_and_pool_use_trading_calendar (test_health_check.HealthTests.test_previous_mode_weekend_holiday_and_pool_use_trading_calendar) ... ok
+test_saturday_rotation_is_checked_separately_from_trade_date (test_health_check.HealthTests.test_saturday_rotation_is_checked_separately_from_trade_date) ... ok
+test_sentiment_all_components_one_day_old_is_delay (test_health_check.HealthTests.test_sentiment_all_components_one_day_old_is_delay) ... ok
+test_sentiment_is_registered_without_cron_and_stale_temperature_detected (test_health_check.HealthTests.test_sentiment_is_registered_without_cron_and_stale_temperature_detected) ... ok
+test_tophub_0820_has_not_passed_0837_cutoff (test_health_check.HealthTests.test_tophub_0820_has_not_passed_0837_cutoff) ... ok
+test_tophub_only_latest_run_failures_count (test_health_check.HealthTests.test_tophub_only_latest_run_failures_count) ... ok
+test_uncovered_weekday_is_unknown_and_failed (test_health_check.HealthTests.test_uncovered_weekday_is_unknown_and_failed) ... ok
+test_v3_non_rotation_month_does_not_require_daily_files (test_health_check.HealthTests.test_v3_non_rotation_month_does_not_require_daily_files) ... ok
+test_v3_rotation_first_deadline_and_failure_guard (test_health_check.HealthTests.test_v3_rotation_first_deadline_and_failure_guard) ... ok
+test_v3_valid_period_not_daily_date (test_health_check.HealthTests.test_v3_valid_period_not_daily_date) ... ok
+test_weekend_uses_friday_without_optional_closures (test_health_check.HealthTests.test_weekend_uses_friday_without_optional_closures) ... ok
+test_cli_uses_merged_items_and_does_not_modify_base (test_health_fragments.HealthFragmentTests.test_cli_uses_merged_items_and_does_not_modify_base) ... ok
+test_duplicate_or_fragment_calendar_override_rejected (test_health_fragments.HealthFragmentTests.test_duplicate_or_fragment_calendar_override_rejected) ... ok
+test_legacy_replay_api_preserves_explicit_main_manifest_scope (test_health_fragments.HealthFragmentTests.test_legacy_replay_api_preserves_explicit_main_manifest_scope) ... ok
+test_27_candidate_rank_excludes_comprehensive_new_and_no_positive_filter (test_mainline_cases.CaseTests.test_27_candidate_rank_excludes_comprehensive_new_and_no_positive_filter) ... ok
+test_append_original_bytes_latest_nonempty_human_and_idempotent (test_mainline_cases.CaseTests.test_append_original_bytes_latest_nonempty_human_and_idempotent) ... ok
+test_benchmark_latest_revision_applied_before_sort_no_blank_fallback (test_mainline_cases.CaseTests.test_benchmark_latest_revision_applied_before_sort_no_blank_fallback) ... ok
+test_end_to_end_actual_prices_public_features_missing_t13_and_repeat_bytes (test_mainline_cases.CaseTests.test_end_to_end_actual_prices_public_features_missing_t13_and_repeat_bytes) ... ok
+test_five_bridges_six_confirms_and_does_not_backfill_failure (test_mainline_cases.CaseTests.test_five_bridges_six_confirms_and_does_not_backfill_failure) ... ok
+test_forty_actual_hits_not_bridge_span_and_formed_only_at_fortieth (test_mainline_cases.CaseTests.test_forty_actual_hits_not_bridge_span_and_formed_only_at_fortieth) ... ok
+test_global_published_cutoff_cannot_regress_after_all_events_closed (test_mainline_cases.CaseTests.test_global_published_cutoff_cannot_regress_after_all_events_closed) ... ok
+test_last_revision_blank_before_filter_and_aggregation_never_falls_back (test_mainline_cases.CaseTests.test_last_revision_blank_before_filter_and_aggregation_never_falls_back) ... ok
+test_missing_comprehensive_invalidates_share_total_but_not_known_relative_failure (test_mainline_cases.CaseTests.test_missing_comprehensive_invalidates_share_total_but_not_known_relative_failure) ... ok
+test_missing_whole_date_is_unknown_and_ties_use_code (test_mainline_cases.CaseTests.test_missing_whole_date_is_unknown_and_ties_use_code) ... ok
+test_price_source_last_empty_does_not_fall_back_to_older_close (test_mainline_cases.CaseTests.test_price_source_last_empty_does_not_fall_back_to_older_close) ... ok
+test_public_document_network_guard_prevents_local_request (test_mainline_cases.CaseTests.test_public_document_network_guard_prevents_local_request) ... ok
+test_real_concurrent_append_keeps_every_successful_version_and_human (test_mainline_cases.CaseTests.test_real_concurrent_append_keeps_every_successful_version_and_human) ... 健康检查 2026-10-28T22:30:00+08:00：正常3项，延迟1项，失败6项，部分失败0项
+健康检查 2026-10-28T22:30:00+08:00：正常0项，延迟0项，失败1项，部分失败0项
+健康检查 2026-10-30T08:20:00+08:00：正常2项，延迟0项，失败0项，部分失败0项
+{"计算截止": "2026-07-01", "数据起点": "2026-03-26", "案例数": 3, "追加行数": 3, "状态计数": {"待中断确认": 3}}
+{"计算截止": "2026-07-01", "数据起点": "2026-03-26", "案例数": 3, "追加行数": 0, "状态计数": {"待中断确认": 3}}
+{"计算截止": "2026-07-01", "数据起点": "2026-03-26", "案例数": 3, "追加行数": 3, "状态计数": {"已确认结束": 3}}
+ok
+test_registry_and_parameter_guards (test_mainline_cases.CaseTests.test_registry_and_parameter_guards) ... ok
+test_second_is_overall_second_including_self_and_needs_complete_endpoints (test_mainline_cases.CaseTests.test_second_is_overall_second_including_self_and_needs_complete_endpoints) ... ok
+test_signal_reader_no_revision_directory_preserves_base_behavior (test_mainline_cases.CaseTests.test_signal_reader_no_revision_directory_preserves_base_behavior) ... ok
+test_signal_reader_overlays_sorted_year_shards_and_latest_blank_28_31 (test_mainline_cases.CaseTests.test_signal_reader_overlays_sorted_year_shards_and_latest_blank_28_31) ... ok
+test_signal_window_last_revision_twenty_prior_and_future_visibility (test_mainline_cases.CaseTests.test_signal_window_last_revision_twenty_prior_and_future_visibility) ... ok
+test_signal_window_uses_year_revision_without_changing_condition_source (test_mainline_cases.CaseTests.test_signal_window_uses_year_revision_without_changing_condition_source) ... ok
+test_tail_five_unconfirmed_six_confirmed_and_no_future_formation (test_mainline_cases.CaseTests.test_tail_five_unconfirmed_six_confirmed_and_no_future_formation) ... ok
+test_top_twenty_percent_means_five_of_27_not_six (test_mainline_cases.CaseTests.test_top_twenty_percent_means_five_of_27_not_six) ... ok
+test_unknown_bridge_does_not_count_as_hit_or_prove_exit (test_mainline_cases.CaseTests.test_unknown_bridge_does_not_count_as_hit_or_prove_exit) ... ok
+test_catalysts_with_partial_dates_are_display_only (test_mainline_signals.SignalsTests.test_catalysts_with_partial_dates_are_display_only) ... ok
+test_concept_counts_a_row_once_and_late_capture_is_not_used (test_mainline_signals.SignalsTests.test_concept_counts_a_row_once_and_late_capture_is_not_used) ... ok
+test_delayed_actual_announcement_and_membership_future_guard (test_mainline_signals.SignalsTests.test_delayed_actual_announcement_and_membership_future_guard) ... ok
+test_eps_year_mapping_and_observation_timestamp_are_respected (test_mainline_signals.SignalsTests.test_eps_year_mapping_and_observation_timestamp_are_respected) ... ok
+test_excluded_composite_only_in_denominator_not_ranks (test_mainline_signals.SignalsTests.test_excluded_composite_only_in_denominator_not_ranks) ... ok
+test_fixed_28_and_31_are_separate_and_new_three_never_enter_history (test_mainline_signals.SignalsTests.test_fixed_28_and_31_are_separate_and_new_three_never_enter_history) ... ok
+test_flow_reads_last_revision_even_when_new_value_missing (test_mainline_signals.SignalsTests.test_flow_reads_last_revision_even_when_new_value_missing) ... ok
+test_full_backfill_idempotent_and_inputs_and_claude_tables_unchanged (test_mainline_signals.SignalsTests.test_full_backfill_idempotent_and_inputs_and_claude_tables_unchanged) ... ok
+test_full_rank_blank_when_any_candidate_missing_and_zero_is_real (test_mainline_signals.SignalsTests.test_full_rank_blank_when_any_candidate_missing_and_zero_is_real) ... ok
+test_latest_all_funding_values_missing_is_failure_not_successful_empty_table (test_mainline_signals.SignalsTests.test_latest_all_funding_values_missing_is_failure_not_successful_empty_table) ... ok
+test_macro_revision_cannot_leak_before_its_visibility (test_mainline_signals.SignalsTests.test_macro_revision_cannot_leak_before_its_visibility) ... ok
+test_missing_claude_tables_fail_without_creating_empty_replacements (test_mainline_signals.SignalsTests.test_missing_claude_tables_fail_without_creating_empty_replacements) ... ok
+test_missing_news_is_unknown_observed_no_match_is_zero (test_mainline_signals.SignalsTests.test_missing_news_is_unknown_observed_no_match_is_zero) ... ok
+test_news_four_week_windows_require_all_56_dates_and_deduplicate_ids (test_mainline_signals.SignalsTests.test_news_four_week_windows_require_all_56_dates_and_deduplicate_ids) ... ok
+test_quarter_after_deadline_exact_v3_and_incomplete_industry_not_zero (test_mainline_signals.SignalsTests.test_quarter_after_deadline_exact_v3_and_incomplete_industry_not_zero) ... ok
+test_exact_eps_years_mean_and_counts (test_probe_consensus.ConsensusTests.test_exact_eps_years_mean_and_counts) ... ok
+test_invalid_response_and_network_guard (test_probe_consensus.ConsensusTests.test_invalid_response_and_network_guard) ... ok
+test_no_coverage_explicit_and_missing_not_zero (test_probe_consensus.ConsensusTests.test_no_coverage_explicit_and_missing_not_zero) ... ok
+test_profit_history_and_single_year_are_not_eps (test_probe_consensus.ConsensusTests.test_profit_history_and_single_year_are_not_eps) ... ok
+test_sample_denominator_from_stock_universe (test_probe_consensus.ConsensusTests.test_sample_denominator_from_stock_universe) ... ok
+test_secondary_year_mapping_and_report_count_not_org_count (test_probe_consensus.ConsensusTests.test_secondary_year_mapping_and_report_count_not_org_count) ... ok
+test_invalid_dates_duplicates_and_nonfinite (test_probe_flow.FlowProbeTests.test_invalid_dates_duplicates_and_nonfinite) ... ok
+test_listing_must_be_complete (test_probe_flow.FlowProbeTests.test_listing_must_be_complete) ... ok
+test_official_amount_and_identity (test_probe_flow.FlowProbeTests.test_official_amount_and_identity) ... ok
+test_sina_volume_not_amount_and_empty (test_probe_flow.FlowProbeTests.test_sina_volume_not_amount_and_empty) ... ok
+test_tencent_price_only_not_amount (test_probe_flow.FlowProbeTests.test_tencent_price_only_not_amount) ... ok
+test_calibrated_modes_use_measured_success_gap (test_run_delay_stats.DelayStatsTests.test_calibrated_modes_use_measured_success_gap) ... ok
+test_git_snapshot_handles_chinese_paths_and_preserves_exact_bytes (test_run_delay_stats.DelayStatsTests.test_git_snapshot_handles_chinese_paths_and_preserves_exact_bytes) ... ok
+test_margin_is_measured_and_covers_observed_maximum (test_run_delay_stats.DelayStatsTests.test_margin_is_measured_and_covers_observed_maximum) ... ok
+test_nearest_rank_does_not_underestimate_small_tail (test_run_delay_stats.DelayStatsTests.test_nearest_rank_does_not_underestimate_small_tail) ... ok
+test_no_samples_are_not_presented_as_measured_p95 (test_run_delay_stats.DelayStatsTests.test_no_samples_are_not_presented_as_measured_p95) ... ok
+test_only_successful_scheduled_run_calibrates (test_run_delay_stats.DelayStatsTests.test_only_successful_scheduled_run_calibrates) ... ok
+test_rolling_window_does_not_reset_multislot_sequence_to_inception (test_run_delay_stats.DelayStatsTests.test_rolling_window_does_not_reset_multislot_sequence_to_inception) ... ok
+test_invalid_offline_source_does_not_overwrite_existing_file (test_trade_calendar.CalendarNoticeTests.test_invalid_offline_source_does_not_overwrite_existing_file) ... 日历失败，未写入：ValueError: 未取得 2026 年完整年度休市公告，不推测交易日
+ok
+test_official_notice_has_full_year_and_all_holidays (test_trade_calendar.CalendarNoticeTests.test_official_notice_has_full_year_and_all_holidays) ... ok
+test_script_text_cannot_override_visible_notice (test_trade_calendar.CalendarNoticeTests.test_script_text_cannot_override_visible_notice) ... ok
+test_wrong_year_and_missing_holiday_rejected (test_trade_calendar.CalendarNoticeTests.test_wrong_year_and_missing_holiday_rejected) ... ok
+test_501_after_valid_history_is_failure (test_update_hangqing.HistoryTests.test_501_after_valid_history_is_failure) ... ok
+test_all_empty_fails_without_writing (test_update_hangqing.HistoryTests.test_all_empty_fails_without_writing) ... ok
+test_existing_file_survives_network_failure (test_update_hangqing.HistoryTests.test_existing_file_survives_network_failure) ... ok
+test_full_starts_at_stored_tencent_first_year (test_update_hangqing.HistoryTests.test_full_starts_at_stored_tencent_first_year) ... ok
+test_incremental_501_is_failure (test_update_hangqing.HistoryTests.test_incremental_501_is_failure) ... ok
+test_non_501_errors_and_bad_json_are_not_swallowed (test_update_hangqing.HistoryTests.test_non_501_errors_and_bad_json_are_not_swallowed) ... ok
+test_unknown_year_skips_501_and_empty_prefix (test_update_hangqing.HistoryTests.test_unknown_year_skips_501_and_empty_prefix) ... ok
+test_unknown_year_uses_prefix_fallback (test_update_hangqing.HistoryTests.test_unknown_year_uses_prefix_fallback) ... ok
+test_reprobe_empty_or_exhausted_501_is_uncertain_and_fails (test_update_hangqing.PrefixGuardTests.test_reprobe_empty_or_exhausted_501_is_uncertain_and_fails) ... ok
+test_reprobe_keeps_going_back_if_recovered_data_also_touches_boundary (test_update_hangqing.PrefixGuardTests.test_reprobe_keeps_going_back_if_recovered_data_also_touches_boundary) ... ok
+test_reprobe_recovers_previous_segment (test_update_hangqing.PrefixGuardTests.test_reprobe_recovers_previous_segment) ... ok
+test_ten_day_boundary_is_inclusive (test_update_hangqing.PrefixGuardTests.test_ten_day_boundary_is_inclusive) ... ok
+test_uncertain_prefix_does_not_write_price_or_events (test_update_hangqing.PrefixGuardTests.test_uncertain_prefix_does_not_write_price_or_events) ... ok
+test_mixed_network_errors_never_become_empty_prefix (test_update_hangqing.RetryTests.test_mixed_network_errors_never_become_empty_prefix) ... ok
+test_normal_501_still_retries_five_times_then_fails (test_update_hangqing.RetryTests.test_normal_501_still_retries_five_times_then_fails) ... ok
+test_prefix_501_only_escapes_after_three_backoff_attempts (test_update_hangqing.RetryTests.test_prefix_501_only_escapes_after_three_backoff_attempts) ... ok
+test_transient_prefix_501_retries_same_segment_and_keeps_history (test_update_hangqing.RetryTests.test_transient_prefix_501_retries_same_segment_and_keeps_history) ... ok
+test_append_revision_asof_and_exact_original_bytes (test_update_macro.MacroTests.test_append_revision_asof_and_exact_original_bytes) ... ok
+test_chinabond_before_eighteen_does_not_request_empty_today_tail (test_update_macro.MacroTests.test_chinabond_before_eighteen_does_not_request_empty_today_tail) ... ok
+test_currency_identity_and_not_mixing_fred (test_update_macro.MacroTests.test_currency_identity_and_not_mixing_fred) ... ok
+test_derived_fixed_twenty_a_sessions_and_no_future_observation (test_update_macro.MacroTests.test_derived_fixed_twenty_a_sessions_and_no_future_observation) ... ok
+test_earlier_visibility_policy_requires_explicit_audited_migration (test_update_macro.MacroTests.test_earlier_visibility_policy_requires_explicit_audited_migration) ... ok
+test_future_visible_row_is_not_latest_and_precision_idempotent (test_update_macro.MacroTests.test_future_visible_row_is_not_latest_and_precision_idempotent) ... ok
+test_guard_empty_duplicates_nan_and_network (test_update_macro.MacroTests.test_guard_empty_duplicates_nan_and_network) ... ok
+test_health_manifest_reads_macro_errors_not_observation_dates (test_update_macro.MacroTests.test_health_manifest_reads_macro_errors_not_observation_dates) ... ok
+test_official_failure_leaves_existing_raw_csv_untouched (test_update_macro.MacroTests.test_official_failure_leaves_existing_raw_csv_untouched) ... {"数据日期": "2026-10-29", "31唯一行": 62, "28唯一行": 84, "新增": {"31": 62, "28": 84}, "维度覆盖": {"环境适配": {"有值": 0, "部分缺": 0, "缺": 30, "排除": 1}, "业绩预期": {"有值": 0, "部分缺": 0, "缺": 30, "排除": 1}, "热度催化": {"有值": 0, "部分缺": 0, "缺": 30, "排除": 1}, "资金": {"有值": 30, "部分缺": 0, "缺": 0, "排除": 1}, "拥挤度": {"有值": 30, "部分缺": 0, "缺": 0, "排除": 1}}}
+{"数据日期": "2026-10-29", "31唯一行": 62, "28唯一行": 84, "新增": {"31": 0, "28": 0}, "维度覆盖": {"环境适配": {"有值": 0, "部分缺": 0, "缺": 30, "排除": 1}, "业绩预期": {"有值": 0, "部分缺": 0, "缺": 30, "排除": 1}, "热度催化": {"有值": 0, "部分缺": 0, "缺": 30, "排除": 1}, "资金": {"有值": 30, "部分缺": 0, "缺": 0, "排除": 1}, "拥挤度": {"有值": 30, "部分缺": 0, "缺": 0, "排除": 1}}}
+{"数据日期": "2026-10-29", "31唯一行": 62, "28唯一行": 84, "新增": {"31": 62, "28": 84}, "维度覆盖": {"环境适配": {"有值": 0, "部分缺": 0, "缺": 30, "排除": 1}, "业绩预期": {"有值": 0, "部分缺": 0, "缺": 30, "排除": 1}, "热度催化": {"有值": 0, "部分缺": 0, "缺": 30, "排除": 1}, "资金": {"有值": 0, "部分缺": 30, "缺": 0, "排除": 1}, "拥挤度": {"有值": 30, "部分缺": 0, "缺": 0, "排除": 1}}}
+取数开始：中国10年国债
+取数完成：中国10年国债，2条，2015-01-02—2026-10-29
+取数开始：美国10年国债
+取数完成：美国10年国债，2条，2015-01-02—2026-10-29
+取数开始：美元兑人民币
+取数完成：美元兑人民币，2条，2015-01-02—2026-10-29
+取数开始：美元兑人民币_FRED历史补充
+取数完成：美元兑人民币_FRED历史补充，2条，2015-01-02—2026-10-29
+取数开始：美元指数
+取数完成：美元指数，2条，2015-01-02—2026-10-29
+取数开始：布伦特原油
+取数完成：布伦特原油，2条，2015-01-02—2026-10-29
+取数开始：COMEX黄金
+取数完成：COMEX黄金，2条，2015-01-02—2026-10-29
+取数开始：M1
+取数完成：M1，2条，2015-01-02—2026-10-29
+取数开始：M2
+取数完成：M2，2条，2015-01-02—2026-10-29
+取数开始：CPI同比
+取数完成：CPI同比，2条，2015-01-02—2026-10-29
+取数开始：PPI同比
+取数完成：PPI同比，2条，2015-01-02—2026-10-29
+取数开始：制造业PMI
+取数完成：制造业PMI，2条，2015-01-02—2026-10-29
+宏观更新：失败；来源12项，错误1项，警告0项；官方核对0行
+官方抽查失败：官方原文不可达
+ok
+test_official_parser_sign_units_and_nominal_not_tips (test_update_macro.MacroTests.test_official_parser_sign_units_and_nominal_not_tips) ... ok
+test_visibility_same_day_time_and_holiday_next_session (test_update_macro.MacroTests.test_visibility_same_day_time_and_holiday_next_session) ... ok
+test_yahoo_uses_local_session_and_excludes_unfinished_quote (test_update_macro.MacroTests.test_yahoo_uses_local_session_and_excludes_unfinished_quote) ... ok
+test_all_production_workflows_have_failure_alert_and_permissions (test_workflow_alerts.WorkflowAlertTests.test_all_production_workflows_have_failure_alert_and_permissions) ... ok
+test_every_cron_workflow_is_in_manifest (test_workflow_alerts.WorkflowAlertTests.test_every_cron_workflow_is_in_manifest) ... ok
+test_failure_shell_runs_with_and_without_checkout (test_workflow_alerts.WorkflowAlertTests.test_failure_shell_runs_with_and_without_checkout) ... ok
+test_health_schedule_and_recovery_access (test_workflow_alerts.WorkflowAlertTests.test_health_schedule_and_recovery_access) ... ok
+
+----------------------------------------------------------------------
+Ran 214 tests in 19.373s
+
+OK
