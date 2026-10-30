@@ -20,6 +20,22 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install pandas numpy requests
+      - name: 诊断并补全官网缺发的公开中间CA
+        run: |
+          set -euo pipefail
+          mkdir -p logs/test/T8
+          timeout 20 openssl s_client -connect www.swsresearch.com:443 -servername www.swsresearch.com -showcerts </dev/null > /tmp/sw-server-chain.pem 2>logs/test/T8/TLS链验证.txt || true
+          openssl x509 -in /tmp/sw-server-chain.pem -out /tmp/sw-leaf.pem
+          openssl x509 -in /tmp/sw-leaf.pem -noout -subject -issuer -ext authorityInfoAccess >> logs/test/T8/TLS链验证.txt
+          # 证书发布者的公开中间CA；最终仍必须能链到系统可信根且主机名匹配。
+          ca_url='https://cacerts.digicert.cn/GeoTrustG2TLSCNRSA4096SHA2562022CA1.crt'
+          if curl --fail --silent --show-error --max-time 20 "$ca_url" -o /tmp/sw-issuer.der; then
+            openssl x509 -inform DER -in /tmp/sw-issuer.der -out /tmp/sw-issuer.pem
+            if openssl verify -CAfile /etc/ssl/certs/ca-certificates.crt -untrusted /tmp/sw-issuer.pem -purpose sslserver -verify_hostname www.swsresearch.com /tmp/sw-leaf.pem >> logs/test/T8/TLS链验证.txt 2>&1; then
+              cat /etc/ssl/certs/ca-certificates.crt /tmp/sw-issuer.pem > /tmp/sw-verified-ca.pem
+              echo 'FLOW_CA_BUNDLE=/tmp/sw-verified-ca.pem' >> "$GITHUB_ENV"
+            fi
+          fi
       - name: 离线验证与固定引擎
         run: |
           set -euo pipefail

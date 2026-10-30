@@ -24,9 +24,10 @@ class FlowHTTP(HTTP):
         if os.environ.get('GITHUB_ACTIONS')!='true':raise RuntimeError('仅允许Actions联网')
         if time.monotonic()>self.deadline-20:raise TimeoutError('预算不足，未发起请求')
         time.sleep(.6);started=time.monotonic()
-        entry={'url':address,'北京时间':dt.datetime.now(BJ).isoformat(),'HTTPS证书验证':True,'客户端':'requests标准CA包'};self.trace.append(entry)
+        bundle=os.environ.get('FLOW_CA_BUNDLE',True)
+        entry={'url':address,'北京时间':dt.datetime.now(BJ).isoformat(),'HTTPS证书验证':True,'客户端':'requests标准CA包' if bundle is True else '系统根CA+经openssl完整链验证的公开中间CA'};self.trace.append(entry)
         try:
-            with requests.get(address,headers={'User-Agent':'Mozilla/5.0','Referer':'https://www.swsresearch.com/'},timeout=12,stream=True) as response:
+            with requests.get(address,headers={'User-Agent':'Mozilla/5.0','Referer':'https://www.swsresearch.com/'},timeout=12,stream=True,verify=bundle) as response:
                 entry['HTTP']=response.status_code;response.raise_for_status()
                 raw=b''
                 for chunk in response.iter_content(65536):
