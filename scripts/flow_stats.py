@@ -19,6 +19,8 @@ def describe(C,benchmark,names,metrics):
     for code in codes:
         for n in (5,10,20):
             future=(C[code].shift(-n)/C[code]-1)-(benchmark.shift(-n)/benchmark-1)
+            complete=(C[code].rolling(n+1,min_periods=n+1).count().shift(-n)==n+1)&(benchmark.rolling(n+1,min_periods=n+1).count().shift(-n)==n+1)
+            future=future.where(complete)
             values=future.reindex(entry.index).where(entry[code]==1).dropna()
             performance.append({'code':code,'行业':names[code],'后续交易日':n,**distribution(values)})
     pairs=[]

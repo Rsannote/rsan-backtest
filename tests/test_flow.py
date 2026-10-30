@@ -66,6 +66,12 @@ class FlowTests(unittest.TestCase):
         pair=pairs[(pairs.A代码=='a')&(pairs.B代码=='b')&(pairs.后续窗口==5)].iloc[0]
         self.assertEqual(pair['条件样本'],1);self.assertEqual(pair['B随后进入次数'],1);self.assertEqual(pair['条件概率'],1)
         self.assertFalse((pairs.A代码==pairs.B代码).any())
+    def test_future_intermediate_price_gap_excludes_sample(self):
+        index=pd.bdate_range('2022-01-03',periods=40).strftime('%Y-%m-%d');names={'a':'合成A','b':'合成B'}
+        C=pd.DataFrame(100.,index=index,columns=['a','b']);C.loc[index[7],'a']=np.nan;B=pd.Series(100.,index=index)
+        rank=pd.DataFrame(6.,index=index,columns=['a','b']);rank.loc[index[5],'a']=4
+        report,_=st.describe(C,B,names,{'占比5日变化排名_28':rank})
+        self.assertEqual(next(r for r in report['事件表现'] if r['code']=='a' and r['后续交易日']==5)['样本数'],0)
     def write(self,name,fields,rows):
         path=self.root/name;path.parent.mkdir(parents=True,exist_ok=True)
         with path.open('w',newline='') as out:w=csv.writer(out);w.writerow(fields);w.writerows(rows)
@@ -87,6 +93,9 @@ class FlowTests(unittest.TestCase):
         self.assertEqual(r['资金来源'],'ETF 近似');self.assertEqual(r['status'],'失败');self.assertEqual(r['申万'],[])
         self.assertTrue(r['ETF备用']);self.assertIn('ETF_占比',r['ETF备用'][0]);self.assertNotIn('占比_31',r['ETF备用'][0]);self.assertFalse(r['本次在线TLS验证通过'])
         alert=json.loads((self.root/'logs/资金轮动_告警.json').read_text());self.assertEqual(alert['items'][0]['status'],'失败')
+        before=(self.root/'logs/资金轮动_最新.json').read_bytes();f.run(self.root,offline=True,now=now)
+        self.assertEqual((self.root/'logs/资金轮动_最新.json').read_bytes(),before)
+        self.assertEqual(json.loads((self.root/'logs/资金轮动_告警.json').read_text())['items'][0]['status'],'失败')
     def test_new_three_only_enter_daily_from_2021_breakpoint(self):
         last=self.fixture();B,names,C,A=m.read_inputs(self.root,last);daily,_=m.compute_sw(C,A,B,names)
         self.assertTrue((daily[daily.code.isin(s.NEW)].date>=s.START31).all())

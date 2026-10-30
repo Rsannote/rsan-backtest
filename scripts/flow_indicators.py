@@ -77,7 +77,9 @@ def run(root=ROOT,offline=False,capture=None,now=None):
             '统计口径':'固定28行业，描述性条件统计；无信号测试、无交易回测','说明':'资金指标与拥挤度；解释【待判读】',
             '输入SHA256':{'沪深300':hashlib.sha256((root/'data/行情库/指数/sh000300.csv').read_bytes()).hexdigest(),'市场日指标':hashlib.sha256((root/'data/市场状态/日指标.csv').read_bytes()).hexdigest()},
             '采集证据':{'证书':source.get('TLS'),'行业数':source.get('完整行业数')}}
-    dump(base/'最新.json',report);dump(root/'logs/资金轮动_最新.json',report)
+    if not offline:
+        dump(base/'最新.json',report);dump(root/'logs/资金轮动_最新.json',report)
+    else:dump(root/'logs/test/T8b/离线复现/最新.json',report)
     display=['# 资金轮动最新','',f'北京时间：{stamp}；数据日期：{target}；资金来源：{report["资金来源"]}。','',
              '两套申万列独立，ETF值只在备用表显示；缺失不补0。解释【待判读】。','', '|行业|代码|占比_28|占比_31|相对沪深300_20|占比一年分位_31|偏离60日线|','|---|---|---:|---:|---:|---:|---:|']
     def v(n):return '缺' if n is None or pd.isna(n) else str(round(float(n),8))
@@ -85,10 +87,12 @@ def run(root=ROOT,offline=False,capture=None,now=None):
     display+=['','## ETF备用（独立近似列）','', '|ETF|代码|ETF_占比|ETF_相对沪深300_20|ETF_偏离60日线|','|---|---|---:|---:|---:|']
     for r in etf_current.to_dict('records'):display.append('|'+ '|'.join([r['name'],r['code']]+[v(r[k]) for k in ('ETF_占比','ETF_相对沪深300_20','ETF_偏离60日线')])+'|')
     display+=['','错误：'+json.dumps(errors,ensure_ascii=False),'警告：'+json.dumps(warnings,ensure_ascii=False),'']
-    atomic_text(base/'最新.md','\n'.join(display));atomic_text(root/'logs/资金轮动_最新.md','\n'.join(display))
+    if not offline:
+        atomic_text(base/'最新.md','\n'.join(display));atomic_text(root/'logs/资金轮动_最新.md','\n'.join(display))
+    else:atomic_text(root/'logs/test/T8b/离线复现/最新.md','\n'.join(display))
     alert={'checked_at':stamp,'items':[{'id':'flow','name':'资金轮动','status':report['status'],'expected':{'申万':'本次TLS通过且当日完整'},
                                      'actual':{'资金来源':report['资金来源'],'data_date':target},'reasons':errors or ['申万完整，本次运行正常']}]}
-    dump(root/'logs/资金轮动_告警.json',alert)
+    if not offline:dump(root/'logs/资金轮动_告警.json',alert)
     print(json.dumps({'数据日期':target,'资金来源':report['资金来源'],'日表':len(daily),'ETF日表':len(etf),'errors':errors,'warnings':warnings},ensure_ascii=False),flush=True)
     return clean(report)
 
