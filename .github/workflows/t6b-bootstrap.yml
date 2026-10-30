@@ -1,0 +1,24 @@
+name: T6b 只读同步与接口结构核对
+on:
+  push:
+    branches: [gpt/T6b-macro]
+    paths: ['.github/workflows/t6b-bootstrap.yml']
+permissions:
+  contents: read
+concurrency:
+  group: t6b-readonly-bootstrap
+  cancel-in-progress: false
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: 导出主分支只读Git快照
+        run: git bundle create /tmp/main.bundle refs/remotes/origin/main
+      - uses: actions/upload-artifact@v4
+        with:
+          name: T6b-main-git-snapshot
+          path: /tmp/main.bundle
