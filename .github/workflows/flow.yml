@@ -37,12 +37,26 @@ jobs:
         if: github.ref == 'refs/heads/gpt/T8b-flow'
         run: python tests/verify_flow_delivery.py --negative-tls
       - name: 分支告警开出与恢复关闭验收
-        if: github.ref == 'refs/heads/gpt/T8b-flow' && hashFiles('logs/test/T8b/告警创建.json') == ''
+        if: github.ref == 'refs/heads/gpt/T8b-flow' && hashFiles('logs/test/T8b/告警闭环通过.json') == ''
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          python scripts/health_alert.py --report logs/test/T8b/模拟故障告警.json --namespace test-T8b --result-file logs/test/T8b/告警创建.json
-          python scripts/health_alert.py --report logs/test/T8b/恢复告警.json --namespace test-T8b --result-file logs/test/T8b/告警恢复.json
+          python - <<'PYALERT'
+          import json, os, sys
+          from pathlib import Path
+          sys.path.insert(0, 'scripts')
+          from health_alert import GitHub, sync_report
+          api = GitHub(os.environ['GITHUB_REPOSITORY'], os.environ['GITHUB_TOKEN'])
+          root = Path('logs/test/T8b')
+          for report_name, result_name in [('模拟故障告警', '告警创建'), ('恢复告警', '告警恢复')]:
+              report = json.loads((root / (report_name + '.json')).read_text())
+              events = sync_report(api, report, 'test-T8b')
+              result = {'checked_at': report['checked_at'], 'events': events}
+              (root / (result_name + '.json')).write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n')
+              if result_name == '告警恢复':
+                  assert any(e['action'] == '关闭' and e['state'] == 'closed' for e in events), events
+                  (root / '告警闭环通过.json').write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n')
+          PYALERT
       - name: 生产源故障和恢复即时同步
         if: github.ref == 'refs/heads/main'
         env:
