@@ -1,0 +1,208 @@
+[
+  {
+    "url": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2015-01-01&endDate=2015-12-26&gjqx=0&qxId=ycqx&locale=cn_ZH",
+    "北京时间": "2026-10-30T08:47:06.928059+08:00",
+    "HTTP": 200,
+    "字节数": 247202,
+    "SHA256": "ea5e5c36a74defe7dbfd2e4a530ddc8f45972d0d5e017a100857db9e812fff7c"
+  },
+  {
+    "url": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2015-12-27&endDate=2016-12-20&gjqx=0&qxId=ycqx&locale=cn_ZH",
+    "北京时间": "2026-10-30T08:47:24.735430+08:00",
+    "HTTP": 200,
+    "字节数": 248184,
+    "SHA256": "1b3c61e35aa2c8ac4f302d30cc6a03c3e94110721a9f8b57901b9708177bffb6"
+  },
+  {
+    "url": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2016-12-21&endDate=2017-12-15&gjqx=0&qxId=ycqx&locale=cn_ZH",
+    "北京时间": "2026-10-30T08:47:36.910722+08:00",
+    "HTTP": 200,
+    "字节数": 250148,
+    "SHA256": "fe4f84ea1fffc3b385e1735f41c66f8fa4b05b0dbc3bae77b0b83a06b5dbd87c"
+  },
+  {
+    "url": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2017-12-16&endDate=2018-12-10&gjqx=0&qxId=ycqx&locale=cn_ZH",
+    "北京时间": "2026-10-30T08:47:49.408103+08:00",
+    "HTTP": 200,
+    "字节数": 249166,
+    "SHA256": "1adb334564b59c857d655f12dc5e9c0453efb0703d82e5f2d2034c94a4615c43"
+  },
+  {
+    "url": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2018-12-11&endDate=2019-12-05&gjqx=0&qxId=ycqx&locale=cn_ZH",
+    "北京时间": "2026-10-30T08:48:03.764038+08:00",
+    "HTTP": 200,
+    "字节数": 251130,
+    "SHA256": "03d3353c5d13401b906d8608403d16c4805a88a59d7471e38f4f6fab7fd75fc1"
+  },
+  {
+    "url": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2019-12-06&endDate=2020-11-29&gjqx=0&qxId=ycqx&locale=cn_ZH",
+    "北京时间": "2026-10-30T08:48:18.062657+08:00",
+    "HTTP": 200,
+    "字节数": 245238,
+    "SHA256": "9117ccccaf695089f72d42a6400a7732751cae9c275f5aa4a4ab8843f8a11d2d"
+  },
+  {
+    "url": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2020-11-30&endDate=2021-11-24&gjqx=0&qxId=ycqx&locale=cn_ZH",
+    "北京时间": "2026-10-30T08:48:35.930928+08:00",
+    "HTTP": 200,
+    "字节数": 249166,
+    "SHA256": "2e1028c35f3e29e42240784daf63d0b8af82fcb956406fa34837609448a387be"
+  },
+  {
+    "url": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2021-11-25&endDate=2022-11-19&gjqx=0&qxId=ycqx&locale=cn_ZH",
+    "北京时间": "2026-10-30T08:48:52.333964+08:00",
+    "HTTP": 200,
+    "字节数": 248184,
+    "SHA256": "b2c157a3d5bcb03fd6a1eb4b6bb8fb13a798cc2433dba9745fc0350bd4fadcfd"
+  },
+  {
+    "url": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2022-11-20&endDate=2023-11-14&gjqx=0&qxId=ycqx&locale=cn_ZH",
+    "北京时间": "2026-10-30T08:49:05.251469+08:00",
+    "HTTP": 200,
+    "字节数": 249166,
+    "SHA256": "fa875a22c597d5d8370b31e737b4deb8e6214a74cc36f5a8be688d1082bc3ac9"
+  },
+  {
+    "url": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2023-11-15&endDate=2024-11-08&gjqx=0&qxId=ycqx&locale=cn_ZH",
+    "北京时间": "2026-10-30T08:49:21.821731+08:00",
+    "HTTP": 200,
+    "字节数": 250148,
+    "SHA256": "1b1d841f5b038b59d40c909be3124fe89eb07e47e846bcc0f42cd10b19d11b9d"
+  },
+  {
+    "url": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2024-11-09&endDate=2025-11-03&gjqx=0&qxId=ycqx&locale=cn_ZH",
+    "北京时间": "2026-10-30T08:49:34.757061+08:00",
+    "HTTP": 200,
+    "字节数": 245238,
+    "SHA256": "c4de3ce9e0089a1eaed445ec0e7d649c25e61bfa4ece8a08999e50c7c8601e72"
+  },
+  {
+    "url": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2025-11-04&endDate=2026-10-29&gjqx=0&qxId=ycqx&locale=cn_ZH",
+    "北京时间": "2026-10-30T08:49:50.859272+08:00",
+    "HTTP": 200,
+    "字节数": 247202,
+    "SHA256": "7e30ff79147f208bd81832575e636444caf73fd7f76b8d442fbb359986737341"
+  },
+  {
+    "url": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2026-10-30&endDate=2026-10-30&gjqx=0&qxId=ycqx&locale=cn_ZH",
+    "北京时间": "2026-10-30T08:50:02.785812+08:00",
+    "HTTP": 200,
+    "字节数": 6613,
+    "SHA256": "2bc0f84ef43920b8c1c1eb873aeaf4d468a0ea9533c06350927e6f89d3bf448c"
+  },
+  {
+    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2015-01-01",
+    "北京时间": "2026-10-30T08:50:03.738205+08:00",
+    "错误": "HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)"
+  },
+  {
+    "url": "https://www.chinamoney.com.cn/r/cms/www/chinamoney/data/fx/ccpr.json",
+    "北京时间": "2026-10-30T08:50:33.986622+08:00",
+    "HTTP": 200,
+    "字节数": 10995,
+    "SHA256": "14c7642011a8c1abd47512f765f1782dd4eea077892629e61517ffde47519e6c"
+  },
+  {
+    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXCHUS&cosd=2015-01-01",
+    "北京时间": "2026-10-30T08:50:34.899997+08:00",
+    "错误": "HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)"
+  },
+  {
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/DX-Y.NYB?period1=1420070400&period2=1793321226&interval=1d",
+    "北京时间": "2026-10-30T08:51:05.263419+08:00",
+    "HTTP": 200,
+    "字节数": 328282,
+    "SHA256": "c28741bdabb8399cc415a8582ed6e23b8190d1c5f5fbe39a2c1f18b08433a6ce"
+  },
+  {
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/BZ%3DF?period1=1420070400&period2=1793321226&interval=1d",
+    "北京时间": "2026-10-30T08:51:05.624025+08:00",
+    "HTTP": 200,
+    "字节数": 312484,
+    "SHA256": "03c7020ef88720d4edfb0387fd78ae87aa5f78846d0d6b5adefc7467c9a2a41a"
+  },
+  {
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1420070400&period2=1793321226&interval=1d",
+    "北京时间": "2026-10-30T08:51:05.944046+08:00",
+    "HTTP": 200,
+    "字节数": 283172,
+    "SHA256": "6c142cc4c2365a14ac361dfe78ea4c111df396a5e6d9413950f3fda8974ff505"
+  },
+  {
+    "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_CURRENCY_SUPPLY&columns=ALL&pageSize=500&pageNumber=1&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
+    "北京时间": "2026-10-30T08:51:07.474367+08:00",
+    "HTTP": 200,
+    "字节数": 70175,
+    "SHA256": "fb7c6ce5bdc84debd1f6738fd34e7785c632b672a65ff35e50645b0e649a5b90"
+  },
+  {
+    "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_CPI&columns=ALL&pageSize=500&pageNumber=1&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
+    "北京时间": "2026-10-30T08:51:10.126890+08:00",
+    "HTTP": 200,
+    "字节数": 76364,
+    "SHA256": "eee1bd0effff84e377396a35215f27a2f1bc24d27657ba8f7380b33bc41163b3"
+  },
+  {
+    "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_PPI&columns=ALL&pageSize=500&pageNumber=1&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
+    "北京时间": "2026-10-30T08:51:12.117019+08:00",
+    "HTTP": 200,
+    "字节数": 29237,
+    "SHA256": "fc9804a7b36967bdd2678bc2852f13b85e1d2e56383a8bc9043aeced5efd9523"
+  },
+  {
+    "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_PMI&columns=ALL&pageSize=500&pageNumber=1&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
+    "北京时间": "2026-10-30T08:51:14.074358+08:00",
+    "HTTP": 200,
+    "字节数": 33095,
+    "SHA256": "6b1c8f1b20e9334d6bb1ba6ecc7f982d3cf0ff18bdb4b0ff3c08db308b6b245b"
+  },
+  {
+    "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=1&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
+    "北京时间": "2026-10-30T08:51:16.114408+08:00",
+    "HTTP": 200,
+    "字节数": 136623,
+    "SHA256": "e96fe3c4dacaefb44a7e3efe1dc57005410b06ffd88ec2cdf0b109ecd39650f2"
+  },
+  {
+    "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=2&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
+    "北京时间": "2026-10-30T08:51:18.577259+08:00",
+    "HTTP": 200,
+    "字节数": 137096,
+    "SHA256": "829ff11a8ea2931ef21872402436886d0296f7bb35b826104739681d0bd6b303"
+  },
+  {
+    "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=3&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
+    "北京时间": "2026-10-30T08:51:21.137834+08:00",
+    "HTTP": 200,
+    "字节数": 136850,
+    "SHA256": "a036a91f7be86d411fe1f7b8edcd96c525c9faf5244cc390221361b23c693fbe"
+  },
+  {
+    "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=4&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
+    "北京时间": "2026-10-30T08:51:23.573843+08:00",
+    "HTTP": 200,
+    "字节数": 136786,
+    "SHA256": "64af1561ea50c9ea0bf4f5b4d8a2a0cf771a70e6b5fc23266e80c4b8af91efec"
+  },
+  {
+    "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=5&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
+    "北京时间": "2026-10-30T08:51:25.939825+08:00",
+    "HTTP": 200,
+    "字节数": 136806,
+    "SHA256": "49132729331af155f02e6464ee488d2ab5f7ffb7f72a7bd77d93a985f9f2b8c7"
+  },
+  {
+    "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=6&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
+    "北京时间": "2026-10-30T08:51:28.092392+08:00",
+    "HTTP": 200,
+    "字节数": 136705,
+    "SHA256": "554a64322d675ce8729c78e1d3014fd88271bc894d2bec824ec7a58567240b28"
+  },
+  {
+    "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=7&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
+    "北京时间": "2026-10-30T08:51:29.992405+08:00",
+    "HTTP": 200,
+    "字节数": 136796,
+    "SHA256": "b93e9a88ce5043619999d2db2f8a9387b0d63fb906e815cb291de2cbc6fb150b"
+  }
+]
