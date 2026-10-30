@@ -9,12 +9,33 @@ from pathlib import Path
 import sys
 import time
 import urllib.parse
+import requests
 
 from auto_judgment_common import BJ, TradingCalendar, atomic_text
 from probe_consensus import HTTP
 
 ROOT=Path(__file__).resolve().parents[1]
 SW='https://www.swsresearch.com/institute-sw/api/index_publish/'
+
+
+class FlowHTTP(HTTP):
+    def get(self,address,encoding='utf-8'):
+        if not address.startswith(SW):return super().get(address,encoding)
+        if os.environ.get('GITHUB_ACTIONS')!='true':raise RuntimeError('仅允许Actions联网')
+        if time.monotonic()>self.deadline-20:raise TimeoutError('预算不足，未发起请求')
+        time.sleep(.6);started=time.monotonic()
+        entry={'url':address,'北京时间':dt.datetime.now(BJ).isoformat(),'HTTPS证书验证':True,'客户端':'requests标准CA包'};self.trace.append(entry)
+        try:
+            with requests.get(address,headers={'User-Agent':'Mozilla/5.0','Referer':'https://www.swsresearch.com/'},timeout=12,stream=True) as response:
+                entry['HTTP']=response.status_code;response.raise_for_status()
+                raw=b''
+                for chunk in response.iter_content(65536):
+                    raw+=chunk
+                    if len(raw)>2*1024*1024:raise ValueError('响应超过2MiB')
+            entry.update(字节数=len(raw),SHA256=hashlib.sha256(raw).hexdigest(),内容开头=raw[:350].decode(encoding,errors='replace'))
+            return raw.decode(encoding)
+        except Exception as exc:entry['错误']=type(exc).__name__+': '+str(exc);raise
+        finally:entry['耗时秒']=round(time.monotonic()-started,3)
 
 
 def number(value,positive=False):
@@ -75,7 +96,7 @@ def parse_history(text,source,symbol):
 
 
 def run(root=ROOT):
-    root=Path(root);now=dt.datetime.now(BJ);client=HTTP(time.monotonic()+840)
+    root=Path(root);now=dt.datetime.now(BJ);client=FlowHTTP(time.monotonic()+840)
     calendar=TradingCalendar(root);target=now.date()
     if now.time()<dt.time(18) or not calendar.is_open(target):target=calendar.previous(target)
     obj={'任务':'T8申万一级行业日线及成交额探测；未接生产','北京时间':now.isoformat(),
@@ -107,6 +128,7 @@ def run(root=ROOT):
             else:
                 address='https://quotes.sina.cn/cn/api/json_v2.php/CN_MarketDataService.getKLineData?'+urllib.parse.urlencode({'symbol':symbol,'scale':240,'ma':'no','datalen':1023})
             item={'来源':source,'code':code,'名称':codes[code],'url':address,'轮次':1,'合格价格及成交额':False};obj['探测'].append(item)
+            before=len(client.trace)
             try:
                 result=parse_history(client.get(address),source,symbol);rows=result.pop('_rows');item.update(result)
                 item['收尾日覆盖']=any(r['date']==target.isoformat() for r in rows)
@@ -115,21 +137,24 @@ def run(root=ROOT):
                 if item['合格价格及成交额'] and not viable:
                     viable=True;todo.extend(c for c in sorted(codes) if c not in sample)
             except Exception as exc:item['失败']=type(exc).__name__+': '+str(exc)
+            item['已发起请求']=len(client.trace)>before
             save();print(f"{source} {code}：{item.get('失败',item['合格价格及成交额'])}",flush=True)
         # 三次独立重取；同源相同规范历史SHA才计短时一致。
         for first in [r for r in obj['探测'] if r['来源']==source and r['轮次']==1][:3]:
             item={'来源':source,'code':first['code'],'轮次':2,'合格价格及成交额':False};obj['探测'].append(item)
+            before=len(client.trace)
             try:
                 symbol=first['code'] if source=='申万官网' else ('sz' if source=='腾讯sz前缀' else 'sw')+first['code']
                 result=parse_history(client.get(first['url']),source,symbol);result.pop('_rows');item.update(result)
                 item['规范历史与首轮一致']=result['规范数据SHA256']==first.get('规范数据SHA256')
                 item['合格价格及成交额']=result['全部日期含有效成交额'] and first.get('收尾日覆盖',False)
             except Exception as exc:item['失败']=type(exc).__name__+': '+str(exc)
+            item['已发起请求']=len(client.trace)>before
             save()
     obj['汇总']={}
     for source in ('申万官网','腾讯sw前缀','腾讯sz前缀','新浪sw前缀'):
         rows=[r for r in obj['探测'] if r['来源']==source];first=[r for r in rows if r['轮次']==1]
-        obj['汇总'][source]={'实测行业数':len(first),'价格及成交额合格数':sum(r['合格价格及成交额'] for r in first),
+        obj['汇总'][source]={'计划探测行业数':len(first),'实测行业数':sum(r['已发起请求'] for r in first),'价格及成交额合格数':sum(r['合格价格及成交额'] for r in first),
                             '2013覆盖数':sum(r.get('2013年历史覆盖',False) for r in first),
                             '重复合格且一致数':sum(r.get('规范历史与首轮一致',False) and r['合格价格及成交额'] for r in rows if r['轮次']==2)}
     obj['程序完成']=True;obj['结束北京时间']=dt.datetime.now(BJ).isoformat();save();return obj
