@@ -16,13 +16,14 @@ from consensus_common import BJ, HTTP, RULE, RULE_SHA, compare_row, decide, fetc
 ROOT=Path(__file__).resolve().parents[1]
 
 
-def run(root=ROOT):
-    root=Path(root);now=dt.datetime.now(BJ);client=HTTP(time.monotonic()+900);out=root/'logs/test/T12b';out.mkdir(parents=True,exist_ok=True)
+def run(root=ROOT,out=None):
+    root=Path(root);now=dt.datetime.now(BJ);client=HTTP(time.monotonic()+900);out=Path(out) if out else root/'logs/test/T12b';out.mkdir(parents=True,exist_ok=True)
     # 完整取东财后，固定随机种子一次取50只；任何失败不重抽或剔除。
     full=fetch_em(client,now.year);chosen=random.Random(RULE['随机种子']).sample(full['rows'],50)
     report={'北京时间':now.isoformat(),'year':now.year,'规则SHA256':RULE_SHA,'规则':RULE,
             'Actions':f"https://github.com/{os.environ.get('GITHUB_REPOSITORY')}/actions/runs/{os.environ.get('GITHUB_RUN_ID')}",
             '源提交':os.environ.get('GITHUB_SHA'),'东财全量':{'总数':full['总数'],'页数':full['页数']},
+            '抽样总体代码':[r['code'] for r in full['rows']],
             '固定抽样代码':[r['code'] for r in chosen],'比对':[],'请求':client.trace,'程序完成':False}
     atomic_text(out/'东财全量.json',json.dumps(full,ensure_ascii=False,indent=2,allow_nan=False)+'\n')
     def save():atomic_text(out/'来源比对_50.json',json.dumps(report,ensure_ascii=False,indent=2,allow_nan=False)+'\n')

@@ -7,7 +7,7 @@ from pathlib import Path
 import re
 import urllib.parse
 
-from probe_consensus import HTTP, numeric, parse_ths
+from probe_consensus import HTTP, Table, numeric, parse_ths
 
 BJ=dt.timezone(dt.timedelta(hours=8))
 REVIEW='https://github.com/Rsannote/rsan-backtest/pull/17#issuecomment-6513023799'
@@ -59,12 +59,35 @@ def fetch_em(client,year):
     return {'year':year,'总数':total,'页数':pages,'rows':[rows[k] for k in sorted(rows)],'抓取时间':dt.datetime.now(BJ).isoformat()}
 
 
-def fetch_ths(client,code,year):
+def parse_ths_partial(text,year):
+    """保留明确年度表里的单年/缺失预测；格式错误仍失败，不猜无覆盖。"""
+    try:return parse_ths(text,year)
+    except ValueError as exc:
+        if not str(exc).startswith('缺本年/次年EPS'):raise
+    match=re.search(r'(?:预测年报每股收益|每股收益预测|预测每股收益)[\s\S]{0,3000}?(<table\b[\s\S]*?</table>)',text,re.I)
+    if not match:raise ValueError('未找到EPS表')
+    table=Table();table.feed(match[1]);header=None;eps={};counts={};raw={}
+    for row in table.rows:
+        if '年度' in row and any(c in row for c in ('均值','平均值')):header=row;continue
+        if not header or len(row)<len(header):continue
+        y=re.search(r'20\d{2}',row[header.index('年度')])
+        if not y or int(y[0]) not in (year,year+1):continue
+        y=y[0]
+        if y in eps:raise ValueError('EPS预测年度重复')
+        eps[y]=numeric(row[header.index('均值' if '均值' in header else '平均值')]);raw[y]=row
+        col=next((header.index(c) for c in ('预测机构数','机构数') if c in header),None)
+        value=numeric(row[col]) if col is not None else None
+        if value is not None and (value<0 or int(value)!=value):raise ValueError('机构数无效')
+        counts[y]=int(value) if value is not None else None
+    return {'状态':'EPS表有效，部分年度缺预测','eps':eps,'机构数':counts,'字段':header,'EPS原表行':raw,'来源更新时间':None}
+
+
+def fetch_ths(client,code,year,allow_partial=False):
     address=f'https://basic.10jqka.com.cn/new/{code}/worth.html'
     text=client.get(address,'gbk')
     title=re.search(r'<title>(.*?)</title>',text,re.S|re.I)
     if not title or code not in title[1]:raise ValueError('同花顺页面证券身份无法核验')
-    result=parse_ths(text,year)
+    result=parse_ths_partial(text,year) if allow_partial else parse_ths(text,year)
     result.update(来源=address,抓取时间=dt.datetime.now(BJ).isoformat())
     return result
 

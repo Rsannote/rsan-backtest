@@ -1,0 +1,162 @@
+name: 一致预期每日快照
+on:
+  schedule:
+    - cron: '47 1 * * 1-5' # 北京时间周一至周五09:47；官方日历再判断休市
+  workflow_dispatch:
+  push:
+    branches: [gpt/T12b-consensus]
+    paths: ['logs/test/T12b/每日快照请求.json']
+permissions:
+  contents: write
+  issues: write
+# 抓取不占全仓写锁；只有最后提交任务使用repo-writer。
+concurrency:
+  group: consensus-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  prepare:
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/gpt/T12b-consensus'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      execute: ${{ steps.prepare.outputs.execute }}
+      matrix: ${{ steps.prepare.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          path: .consensus-main-input
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: 准备完整范围与审核定的主源
+        id: prepare
+        env:
+          TASK_BRANCH: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          export CONSENSUS_INPUT_SHA=$(git -C .consensus-main-input rev-parse HEAD)
+          if [ "$TASK_BRANCH" = gpt/T12b-consensus ]; then
+            python - <<'PY'
+          import json,datetime
+          obj=json.load(open('logs/test/T12b/每日快照请求.json'))
+          today=datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).date().isoformat()
+          assert obj.get('mode')=='full' and obj.get('date')==today,'只允许当日完整请求，过期请求不复用'
+          PY
+            python scripts/update_consensus.py prepare --work "${RUNNER_TEMP}/prepared" --inputs-root .consensus-main-input --comparison logs/test/T12b/来源比对_50.json
+          else
+            python scripts/update_consensus.py prepare --work "${RUNNER_TEMP}/prepared" --inputs-root .consensus-main-input
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 一致预期-准备
+          path: ${{ runner.temp }}/prepared/
+  fetch:
+    needs: prepare
+    if: needs.prepare.outputs.execute == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 55
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        batch: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          name: 一致预期-准备
+          path: ${{ runner.temp }}/prepared
+      - name: 抓取有界批次
+        env:
+          BATCH_INDEX: ${{ matrix.batch }}
+        run: python scripts/update_consensus.py batch --prepared "${RUNNER_TEMP}/prepared/准备.json" --index "$BATCH_INDEX" --out "${RUNNER_TEMP}/parts/批次_${BATCH_INDEX}.json"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 一致预期-批次-${{ matrix.batch }}
+          path: ${{ runner.temp }}/parts/
+  persist:
+    needs: [prepare, fetch]
+    if: always() && needs.prepare.outputs.execute == 'true'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: repo-writer
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          name: 一致预期-准备
+          path: ${{ runner.temp }}/prepared
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: 一致预期-批次-*
+          merge-multiple: true
+          path: ${{ runner.temp }}/parts
+      - name: 完整性与追加保护汇总
+        id: assemble
+        run: python scripts/update_consensus.py assemble --prepared "${RUNNER_TEMP}/prepared/准备.json" --batches "${RUNNER_TEMP}/parts"
+      - name: 保存已校验的真实快照或失败报告
+        if: always()
+        env:
+          TASK_BRANCH: ${{ github.ref_name }}
+          ASSEMBLED: ${{ steps.assemble.outcome }}
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email actions@users.noreply.github.com
+          if [ "$ASSEMBLED" = success ]; then git add -- data/一致预期; fi
+          for file in logs/一致预期_最新.json logs/一致预期_最新.md; do
+            if [ -f "$file" ]; then git add -- "$file"; fi
+          done
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "一致预期真实快照 $(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M')"
+          for attempt in 1 2 3; do
+            git pull --rebase origin "$TASK_BRANCH" && git push origin "HEAD:$TASK_BRANCH" && exit 0
+            sleep 5
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 一致预期-汇总
+          path: |
+            data/一致预期/
+            logs/一致预期_最新.*
+  alert:
+    needs: [prepare, fetch, persist]
+    if: failure() && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 工作流失败告警
+        if: failure()
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          HEALTH_ITEM_ID: consensus
+          HEALTH_ITEM_NAME: 一致预期快照
+          HEALTH_WORKFLOW_FILE: .github/workflows/consensus.yml
+        run: |
+          alert_script="${GITHUB_WORKSPACE}/scripts/health_alert.py"
+          if [ ! -f "$alert_script" ]; then
+            alert_script="${RUNNER_TEMP}/health_alert.py"
+            curl --fail --silent --show-error --retry 2 -H "Authorization: Bearer ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.raw+json' "https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/scripts/health_alert.py?ref=${GITHUB_SHA}" -o "$alert_script"
+          fi
+          python3 "$alert_script" --workflow-failure
