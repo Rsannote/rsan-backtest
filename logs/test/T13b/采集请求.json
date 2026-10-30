@@ -1,10 +1,14 @@
 {
   "mode": "batch",
-  "max_stocks": 2000,
-  "budget": 2700,
+  "max_stocks": 2,
+  "budget": 180,
   "refresh": false,
-  "批次": 2,
+  "codes": [
+    "300760",
+    "300761"
+  ],
+  "批次": 3,
   "probe_run_id": "41079314091",
   "probe_sha": "f5919976719c0158bfd933e25b460d7df44f1be2",
-  "说明": "已归档395家，剩余1958家；只读核验公开八股成功artifact后限时45分钟采集，正式发布仍等repo-writer，不改main"
+  "说明": "累计抓取2351/2353，仅重试本批两只ReadTimeout；不更换来源、不改解析器"
 }
