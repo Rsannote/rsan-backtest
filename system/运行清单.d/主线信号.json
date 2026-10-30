@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "items": [{
+    "id": "mainline_signals",
+    "name": "主线五维信号（当前31、历史28）",
+    "workflow": ".github/workflows/mainline-signals.yml",
+    "kind": "judgment_report",
+    "trading_days_only": true,
+    "trigger": "成功资金轮动更新后；资金轮动位于市场状态之后",
+    "times": ["16:40"],
+    "grace_minutes": 536,
+    "check_mode": "previous_trading_day",
+    "outputs": ["logs/主线信号_最新.json", "data/主线/信号表.csv", "data/主线/历史信号表_28.csv", "data/主线/最新.json", "data/主线/最新.md"],
+    "说明": "缺来源维度明确留空；本项独立登记，未修改原清单或已有宽限。当前暂无独立P95，暂继承最大已审核宽限，满四周后再校准。"
+  }]
+}
