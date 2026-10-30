@@ -196,7 +196,7 @@ class Client:
         previous = signal.signal(signal.SIGALRM, expired)
         signal.alarm(seconds)
         try:
-            response = self.session.get(URL.format(code=code), timeout=(10, 15))
+            response = self.session.get(URL.format(code=code), timeout=(20, 30))
             response.raise_for_status()
             response.encoding = response.apparent_encoding or 'utf-8'
             return response.text
