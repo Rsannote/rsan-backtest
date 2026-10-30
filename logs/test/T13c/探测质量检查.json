@@ -1,0 +1,61 @@
+{
+  "审查职责": [
+    "独立Code Quality",
+    "独立Anti-pattern"
+  ],
+  "结论": "可提交来源探测阶段",
+  "必须修复": [],
+  "限定范围": "只批准已冻结来源探测源码和证据提交；不代表来源真实可达、27行业完整性或正式T13c实现验收已通过。",
+  "冻结核对": {
+    "文件数": 7,
+    "当前字节匹配": true,
+    "成分与IPO源码SHA256": "34c1c7cd212e2ef1f93152564396661914135acc2f38f3444124f06c7af598f6",
+    "探测源码SHA256": "0ad3624f6b013c02be1a3dfd309749264bdc02e083a8b970229bb850e9e8bf17",
+    "专项测试SHA256": "1a5f60c42cc9ad725768caec6658fcb70a98ee2fcf0a354d88fd45f9249400b8"
+  },
+  "接口依据": {
+    "一级资料": "https://github.com/akfamily/akshare/blob/5def33b2d0ba51529e386cb86d7da0c85e5a5626/akshare/index/index_research_sw.py",
+    "已核对": [
+      "index_component_sw使用相同HTTPS endpoint",
+      "swindexcode/page/page_size参数名一致，页大小为显式探测选择",
+      "stockcode/stockname/newweight/beginningdate字段一致",
+      "beginningdate为计入日期，程序未用作上市日期"
+    ],
+    "限制": "上游实现不是申万稳定API契约；count/total字段和公司页明示日期必须由后续Actions原响应验证，严格未知/失败可接受。"
+  },
+  "审查通过项": [
+    "金融HTTP客户端和既有TLS函数均在Actions环境检查后建立网络请求；本次审查HTTP请求次数为0，未调用probe或verify_tls。",
+    "SW复用已合并verify_tls：中间CA哈希、系统根、当前叶证书主机名/有效性及sslserver用途校验；请求携带验证后的CA包。THS/Sina保留系统TLS校验，没有关闭验证。",
+    "固定9只公司URL与SW接口构成明确探测范围；最终重定向必须HTTPS且同域。原响应在状态/域名检验前保存以便排查，报告不会把拒绝的响应当作成功来源。",
+    "requests连接/读取timeout=(10,20)，整次GET由SIGALRM最多40秒约束；finally取消本轮alarm并恢复handler。workflow显式budget1500秒，deadline在TLS检查前建立，各GET受剩余总预算约束。",
+    "原响应使用response.content按字节保存bin并记录SHA256/编码/实际URL/HTTP，解析用同一响应解码文本；没有用text重写原HTML，CRLF回放证据已由独立Verification验证。",
+    "全阶段只写logs/test/T13c；workflow contents:read，无仓库提交、无生产定时器；只读任务使用独立concurrency组合理，无需repo-writer。",
+    "北京时间用于快照/时间戳和IPO未来日期边界；计入日期、成立日期未替代IPO。A/B/H市场标签、完整日期token、错误身份和冲突日期均失败，不沿用无效日期。",
+    "成分分页总数漂移、跨页重复/空后页、27候选跨行业重复均拒绝完整；未知上市日期明确不进入分母，不记为上市前或利润指标0。",
+    "两生产探测模块无未使用导入；参数end/bundle/directory/interval/root/budget/client/today均参与路径或控制；未发现绕过校验的死分支。",
+    "离线compile通过三份冻结Python源码；未重复已通过18专项/9独立反例或全库测试。受保护正式目录tracked diff为空。"
+  ],
+  "非阻断观察": [
+    {
+      "路径": "tests/test_earnings_universe.py",
+      "内容": "导入SAMPLES但测试未使用；仅测试代码冗余，不影响探测行为，不要求修改冻结版本。"
+    }
+  ],
+  "反模式检索": {
+    "检查路径": [
+      "scripts/earnings_universe.py",
+      "scripts/probe_earnings_coverage.py",
+      ".github/workflows/test-t13c-coverage-probe.yml"
+    ],
+    "命中": [],
+    "目标": [
+      "verify=False/CERT_NONE/关闭主机名验证",
+      "eval/exec或shell=True/os.system",
+      "git push/git commit及contents:write",
+      "POST/PUT/PATCH/DELETE请求"
+    ]
+  },
+  "范围隔离": "未读取或改动正在实现的earnings_coverage.py及mainline_*等文件；本轮仅新增本JSON。",
+  "独立验证引用": "logs/test/T13c/独立探测复验.json：18专项+9独立反例通过，冻结一致。",
+  "审查北京时间": "2026-10-31T06:05:13.505305+08:00"
+}

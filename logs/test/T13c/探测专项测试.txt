@@ -1,0 +1,24 @@
+test_actual_27_candidates_and_missing_14_not_13 (test_earnings_universe.UniverseSourceTests.test_actual_27_candidates_and_missing_14_not_13) ... ok
+test_b_and_h_share_listing_dates_cannot_be_used_for_a_share (test_earnings_universe.UniverseSourceTests.test_b_and_h_share_listing_dates_cannot_be_used_for_a_share) ... ok
+test_b_share_target_only_accepts_own_market_label (test_earnings_universe.UniverseSourceTests.test_b_share_target_only_accepts_own_market_label) ... ok
+test_chinese_date_and_sina_page (test_earnings_universe.UniverseSourceTests.test_chinese_date_and_sina_page) ... ok
+test_component_exact_fields_keep_index_inclusion_separate (test_earnings_universe.UniverseSourceTests.test_component_exact_fields_keep_index_inclusion_separate) ... ok
+test_conflicting_dates_future_and_impossible_dates_fail (test_earnings_universe.UniverseSourceTests.test_conflicting_dates_future_and_impossible_dates_fail) ... ok
+test_disagreeing_total_duplicate_invalid_codes_fail (test_earnings_universe.UniverseSourceTests.test_disagreeing_total_duplicate_invalid_codes_fail) ... ok
+test_duplicate_identical_listing_labels_are_consistent (test_earnings_universe.UniverseSourceTests.test_duplicate_identical_listing_labels_are_consistent) ... ok
+test_established_or_index_inclusion_dates_are_not_ipo (test_earnings_universe.UniverseSourceTests.test_established_or_index_inclusion_dates_are_not_ipo) ... ok
+test_financial_http_rejected_on_local_host (test_earnings_universe.UniverseSourceTests.test_financial_http_rejected_on_local_host) ... ok
+test_label_and_nested_markup_keep_raw_date (test_earnings_universe.UniverseSourceTests.test_label_and_nested_markup_keep_raw_date) ... ok
+test_listing_date_must_be_a_complete_token (test_earnings_universe.UniverseSourceTests.test_listing_date_must_be_a_complete_token) ... ok
+test_missing_total_and_empty_or_wrong_shapes_fail (test_earnings_universe.UniverseSourceTests.test_missing_total_and_empty_or_wrong_shapes_fail) ... ok
+test_nonfinite_or_wrongly_typed_weights_are_rejected (test_earnings_universe.UniverseSourceTests.test_nonfinite_or_wrongly_typed_weights_are_rejected) ... ok
+test_page_identity_error_is_not_missing_ipo (test_earnings_universe.UniverseSourceTests.test_page_identity_error_is_not_missing_ipo) ... ok
+test_whole_probe_rejects_partial_pages_and_preserves_formal_files (test_earnings_universe.UniverseSourceTests.test_whole_probe_rejects_partial_pages_and_preserves_formal_files) ... {"状态": "探测失败", "完整候选数": 0, "独立股票数": 0, "成功上市日期样本数": 9, "错误": [{"行业": "801010", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801030", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801040", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801050", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801080", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801110", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801120", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801130", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801140", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801150", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801160", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801170", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801180", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801200", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801210", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801710", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801720", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801730", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801740", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801750", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801760", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801770", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801780", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801790", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801880", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801890", "错误": "ValueError: 成分跨页重复或超过总数"}, {"行业": "801950", "错误": "ValueError: 成分跨页重复或超过总数"}]}
+ok
+test_wrong_source_cannot_supply_listing_field (test_earnings_universe.UniverseSourceTests.test_wrong_source_cannot_supply_listing_field) ... ok
+test_zero_weight_is_not_unknown (test_earnings_universe.UniverseSourceTests.test_zero_weight_is_not_unknown) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.009s
+
+OK

@@ -1,0 +1,17 @@
+test_b_share_only_cannot_become_a_share_ipo (__main__.IndependentProbeTests.test_b_share_only_cannot_become_a_share_ipo) ... ok
+test_cross_sector_duplicate_cannot_pass_even_with_27_complete_pages (__main__.IndependentProbeTests.test_cross_sector_duplicate_cannot_pass_even_with_27_complete_pages) ... {"状态": "探测失败", "完整候选数": 27, "独立股票数": 1, "成功上市日期样本数": 9, "错误": [{"错误": "完整候选成分存在跨行业重复，不选择性丢弃"}]}
+ok
+test_empty_following_page_is_not_a_complete_sector (__main__.IndependentProbeTests.test_empty_following_page_is_not_a_complete_sector) ... {"状态": "探测失败", "完整候选数": 26, "独立股票数": 26, "成功上市日期样本数": 9, "错误": [{"行业": "801010", "错误": "ValueError: 分页未完整时返回空页"}]}
+ok
+test_h_share_only_cannot_become_a_share_ipo (__main__.IndependentProbeTests.test_h_share_only_cannot_become_a_share_ipo) ... ok
+test_https_ca_raw_bytes_and_deadline_are_enforced_without_network (__main__.IndependentProbeTests.test_https_ca_raw_bytes_and_deadline_are_enforced_without_network) ... ok
+test_local_guard_precedes_session_creation (__main__.IndependentProbeTests.test_local_guard_precedes_session_creation) ... ok
+test_malformed_date_cannot_be_silently_truncated (__main__.IndependentProbeTests.test_malformed_date_cannot_be_silently_truncated) ... ok
+test_nonfinite_weight_does_not_become_valid_component_number (__main__.IndependentProbeTests.test_nonfinite_weight_does_not_become_valid_component_number) ... ok
+test_total_drift_rejects_just_that_sector_and_fails_whole_probe (__main__.IndependentProbeTests.test_total_drift_rejects_just_that_sector_and_fails_whole_probe) ... {"状态": "探测失败", "完整候选数": 26, "独立股票数": 26, "成功上市日期样本数": 9, "错误": [{"行业": "801010", "错误": "ValueError: 翻页时成分总数变化"}]}
+ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.027s
+
+OK
