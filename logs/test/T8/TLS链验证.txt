@@ -1,0 +1,18 @@
+depth=0 C = CN, ST = \E4\B8\8A\E6\B5\B7\E5\B8\82, O = \E4\B8\8A\E6\B5\B7\E7\94\B3\E9\93\B6\E4\B8\87\E5\9B\BD\E8\AF\81\E5\88\B8\E7\A0\94\E7\A9\B6\E6\89\80\E6\9C\89\E9\99\90\E5\85\AC\E5\8F\B8, CN = *.swsresearch.com
+verify error:num=20:unable to get local issuer certificate
+verify return:1
+depth=0 C = CN, ST = \E4\B8\8A\E6\B5\B7\E5\B8\82, O = \E4\B8\8A\E6\B5\B7\E7\94\B3\E9\93\B6\E4\B8\87\E5\9B\BD\E8\AF\81\E5\88\B8\E7\A0\94\E7\A9\B6\E6\89\80\E6\9C\89\E9\99\90\E5\85\AC\E5\8F\B8, CN = *.swsresearch.com
+verify error:num=21:unable to verify the first certificate
+verify return:1
+depth=0 C = CN, ST = \E4\B8\8A\E6\B5\B7\E5\B8\82, O = \E4\B8\8A\E6\B5\B7\E7\94\B3\E9\93\B6\E4\B8\87\E5\9B\BD\E8\AF\81\E5\88\B8\E7\A0\94\E7\A9\B6\E6\89\80\E6\9C\89\E9\99\90\E5\85\AC\E5\8F\B8, CN = *.swsresearch.com
+verify return:1
+DONE
+subject=C = CN, ST = \E4\B8\8A\E6\B5\B7\E5\B8\82, O = \E4\B8\8A\E6\B5\B7\E7\94\B3\E9\93\B6\E4\B8\87\E5\9B\BD\E8\AF\81\E5\88\B8\E7\A0\94\E7\A9\B6\E6\89\80\E6\9C\89\E9\99\90\E5\85\AC\E5\8F\B8, CN = *.swsresearch.com
+issuer=C = US, O = "DigiCert, Inc.", CN = GeoTrust G2 TLS CN RSA4096 SHA256 2022 CA1
+Authority Information Access: 
+    OCSP - URI:http://ocsp.digicert.cn
+    CA Issuers - URI:http://cacerts.digicert.cn/GeoTrustG2TLSCNRSA4096SHA2562022CA1.crt
+公开中间CA地址：https://cacerts.digicert.cn/GeoTrustG2TLSCNRSA4096SHA2562022CA1.crt
+curl: (35) OpenSSL/3.0.13: error:0A000410:SSL routines::sslv3 alert handshake failure
+公开中间CA地址：https://cacerts.digicert.com/GeoTrustG2TLSCNRSA4096SHA2562022CA1.crt
+/tmp/sw-leaf.pem: OK

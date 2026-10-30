@@ -1,0 +1,59 @@
+name: T8 申万行业行情探测
+on:
+  push:
+    branches: [gpt/T8-flow]
+    paths: ['scripts/probe_flow.py', 'tests/test_probe_flow.py', '.github/workflows/test-t8-flow.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t8-readonly-probe
+  cancel-in-progress: false
+jobs:
+  probe:
+    if: github.ref == 'refs/heads/gpt/T8-flow'
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pandas numpy requests
+      - name: 诊断并补全官网缺发的公开中间CA
+        run: |
+          set -euo pipefail
+          mkdir -p logs/test/T8
+          timeout 20 openssl s_client -connect www.swsresearch.com:443 -servername www.swsresearch.com -showcerts </dev/null > /tmp/sw-server-chain.pem 2>logs/test/T8/TLS链验证.txt || true
+          openssl x509 -in /tmp/sw-server-chain.pem -out /tmp/sw-leaf.pem
+          openssl x509 -in /tmp/sw-leaf.pem -noout -subject -issuer -ext authorityInfoAccess >> logs/test/T8/TLS链验证.txt
+          # 证书发布者的公开中间CA；最终仍必须能链到系统可信根且主机名匹配。
+          for ca_url in 'https://cacerts.digicert.cn/GeoTrustG2TLSCNRSA4096SHA2562022CA1.crt' 'https://cacerts.digicert.com/GeoTrustG2TLSCNRSA4096SHA2562022CA1.crt' 'http://cacerts.digicert.cn/GeoTrustG2TLSCNRSA4096SHA2562022CA1.crt'; do
+            echo "公开中间CA地址：$ca_url" >> logs/test/T8/TLS链验证.txt
+            if curl --fail --silent --show-error --max-time 20 "$ca_url" -o /tmp/sw-issuer.der 2>>logs/test/T8/TLS链验证.txt; then break; fi
+          done
+          if [ -s /tmp/sw-issuer.der ]; then
+            openssl x509 -inform DER -in /tmp/sw-issuer.der -out /tmp/sw-issuer.pem
+            if openssl verify -CAfile /etc/ssl/certs/ca-certificates.crt -untrusted /tmp/sw-issuer.pem -purpose sslserver -verify_hostname www.swsresearch.com /tmp/sw-leaf.pem >> logs/test/T8/TLS链验证.txt 2>&1; then
+              cat /etc/ssl/certs/ca-certificates.crt /tmp/sw-issuer.pem > /tmp/sw-verified-ca.pem
+              echo 'FLOW_CA_BUNDLE=/tmp/sw-verified-ca.pem' >> "$GITHUB_ENV"
+            fi
+          fi
+      - name: 离线验证与固定引擎
+        run: |
+          set -euo pipefail
+          mkdir -p logs/test/T8
+          python -m unittest discover -s tests -v 2>&1 | tee logs/test/T8/离线测试.txt
+          md5sum -c engine/ENGINE_MD5.txt
+      - name: 实测申万、腾讯和新浪
+        run: python -u scripts/probe_flow.py
+      - name: 正式目录保护
+        if: always()
+        run: test -z "$(git status --porcelain -- data engine archive judgments system graph)"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T8-行业行情探测
+          path: |
+            logs/资金轮动探测.txt
+            logs/test/T8/
