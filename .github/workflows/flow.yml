@@ -1,0 +1,99 @@
+name: 资金轮动更新
+on:
+  workflow_run:
+    workflows: ['市场状态']
+    types: [completed]
+  workflow_dispatch:
+  push:
+    branches: [gpt/T8b-flow]
+    paths: ['logs/test/T8b/运行请求.json']
+permissions:
+  contents: write
+  issues: write
+  actions: read
+concurrency:
+  group: repo-writer
+  cancel-in-progress: false
+jobs:
+  update:
+    if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/gpt/T8b-flow') && (github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pandas numpy requests
+      - name: 申万主源与独立ETF备用
+        id: flow
+        run: |
+          md5sum -c engine/ENGINE_MD5.txt
+          python -u scripts/flow_indicators.py
+      - name: 分支真实数据与TLS负例验收
+        if: github.ref == 'refs/heads/gpt/T8b-flow'
+        run: python tests/verify_flow_delivery.py --negative-tls
+      - name: 分支告警开出与恢复关闭验收
+        if: github.ref == 'refs/heads/gpt/T8b-flow'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python scripts/health_alert.py --report logs/test/T8b/模拟故障告警.json --namespace test-T8b --result-file logs/test/T8b/告警创建.json
+          python scripts/health_alert.py --report logs/test/T8b/恢复告警.json --namespace test-T8b --result-file logs/test/T8b/告警恢复.json
+      - name: 生产源故障和恢复即时同步
+        if: github.ref == 'refs/heads/main'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python scripts/health_alert.py --report logs/资金轮动_告警.json --result-file logs/test/T8b/生产告警同步.json
+      - name: 保存追加指标和采集证据
+        if: always()
+        env:
+          TASK_BRANCH: ${{ github.ref_name }}
+          FLOW_OUTCOME: ${{ steps.flow.outcome }}
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email actions@users.noreply.github.com
+          if [ "$FLOW_OUTCOME" = success ]; then git add -- data/资金轮动; fi
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess
+          files=[p for p in Path('logs/test/T8b').rglob('*') if p.is_file() and p.suffix in ('.json','.md','.txt')]
+          files += [p for p in Path('logs').glob('资金轮动_*.json')] + [p for p in Path('logs').glob('资金轮动_*.md')]
+          if files:subprocess.run(['git','add','--',*[str(p) for p in files]],check=True)
+          PY
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "资金轮动更新 $(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M')"
+          for attempt in 1 2 3; do
+            git pull --rebase origin "$TASK_BRANCH" && git push origin "HEAD:$TASK_BRANCH" && exit 0
+            sleep 5
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T8b-正式指标与验收
+          path: |
+            data/资金轮动/
+            logs/资金轮动_*.json
+            logs/资金轮动_*.md
+            logs/test/T8b/**/*.json
+            logs/test/T8b/**/*.md
+            logs/test/T8b/**/*.txt
+      - name: 工作流失败告警
+        if: failure() && github.ref == 'refs/heads/main'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          HEALTH_ITEM_ID: flow
+          HEALTH_ITEM_NAME: 资金轮动
+          HEALTH_WORKFLOW_FILE: .github/workflows/flow.yml
+        run: |
+          alert_script="${GITHUB_WORKSPACE}/scripts/health_alert.py"
+          if [ ! -f "$alert_script" ]; then
+            alert_script="${RUNNER_TEMP}/health_alert.py"
+            curl --fail --silent --show-error --retry 2 -H "Authorization: Bearer ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.raw+json' "https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/scripts/health_alert.py?ref=${GITHUB_SHA}" -o "$alert_script"
+          fi
+          python3 "$alert_script" --workflow-failure

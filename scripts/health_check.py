@@ -481,8 +481,24 @@ def check_item(root: Path, item: dict[str, Any], now: dt.datetime, cal: Calendar
     return row
 
 
-def check(root: Path, now: dt.datetime) -> dict[str, Any]:
+def load_manifest(root: Path) -> dict[str, Any]:
+    """主清单保持兼容；独立任务片段只追加items，不覆盖日历或既有策略。"""
     manifest = read_json(root / "system/运行清单.json")
+    if manifest.get("schema_version") != 1 or not isinstance(manifest.get("items"), list):
+        raise ValueError("运行清单schema_version/items无效")
+    for path in sorted((root / "system/运行清单.d").glob("*.json")):
+        fragment = read_json(path)
+        if set(fragment) != {"schema_version", "items"} or fragment["schema_version"] != 1 or not isinstance(fragment["items"], list):
+            raise ValueError("独立运行清单片段格式无效：" + str(path))
+        manifest["items"].extend(fragment["items"])
+    if len({i["id"] for i in manifest["items"]}) != len(manifest["items"]):
+        raise ValueError("运行清单id重复")
+    return manifest
+
+
+def check(root: Path, now: dt.datetime, *, manifest=None) -> dict[str, Any]:
+    # 旧库调用（包括T11的历史延迟回放）保持原主清单口径；生产CLI显式传合并清单。
+    manifest = read_json(root / "system/运行清单.json") if manifest is None else manifest
     if manifest.get("schema_version") != 1 or not isinstance(manifest.get("items"), list):
         raise ValueError("运行清单schema_version/items无效")
     if len({i["id"] for i in manifest["items"]}) != len(manifest["items"]):
@@ -538,7 +554,7 @@ def main(argv: list[str] | None = None) -> int:
     root = args.root.resolve()
     code = 0
     try:
-        report = check(root, now)
+        report = check(root, now, manifest=load_manifest(root))
     except (OSError, ValueError, KeyError, TypeError) as exc:
         code = 2
         report = {"schema_version": 1, "checked_at": now.isoformat(), "timezone": "Asia/Shanghai", "items": [{"id": "manifest", "name": "运行清单", "status": "失败", "expected": {}, "actual": {}, "reasons": [f"清单无法读取或格式错误：{exc}"]}]}

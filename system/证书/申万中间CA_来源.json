@@ -1,0 +1,10 @@
+{
+  "名称": "GeoTrust G2 TLS CN RSA4096 SHA256 2022 CA1",
+  "来源": "https://cacerts.digicert.com/GeoTrustG2TLSCNRSA4096SHA2562022CA1.crt",
+  "原始AIA": "http://cacerts.digicert.cn/GeoTrustG2TLSCNRSA4096SHA2562022CA1.crt",
+  "证书DER_SHA256": "05dc9edc0fddfa975a1432ef806ec780078b5362ad45af76db15c907630db25d",
+  "PEM_SHA256": "2182efcbf5b27c34ba8901fae4715a6c6bdc54d9e186adc7b43523ce2e9176c1",
+  "核验Actions": "https://github.com/Rsannote/rsan-backtest/actions/runs/41007408850",
+  "证书信息": "subject= /C=US/O=DigiCert, Inc./CN=GeoTrust G2 TLS CN RSA4096 SHA256 2022 CA1\nissuer= /C=US/O=DigiCert Inc/OU=www.digicert.com/CN=DigiCert Global Root G2\nnotBefore=Dec 15 00:00:00 2022 GMT\nnotAfter=Dec 14 23:59:59 2032 GMT\nSHA256 Fingerprint=05:DC:9E:DC:0F:DD:FA:97:5A:14:32:EF:80:6E:C7:80:07:8B:53:62:AD:45:AF:76:DB:15:C9:07:63:0D:B2:5D\n",
+  "说明": "公开中间证书，不是私钥；每次抓取还须链到系统可信根并匹配主机名，不能仅信此指纹跳过验证。"
+}

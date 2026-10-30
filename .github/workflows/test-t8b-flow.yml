@@ -1,0 +1,33 @@
+name: T8b 资金轮动离线验收
+on:
+  push:
+    branches: [gpt/T8b-flow]
+    paths: ['scripts/flow_*.py', 'scripts/health_check.py', 'tests/test_flow.py', 'tests/test_health_fragments.py', 'tests/verify_flow_delivery.py', 'system/资金轮动格式.md', 'system/证书/**', 'system/运行清单.d/**', '.github/workflows/flow.yml', '.github/workflows/test-t8b-flow.yml']
+  pull_request:
+    paths: ['scripts/flow_*.py', 'scripts/health_check.py', 'tests/test_flow.py', 'tests/test_health_fragments.py', 'system/证书/**', 'system/运行清单.d/**']
+permissions:
+  contents: read
+concurrency:
+  group: t8b-readonly-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pandas numpy requests
+      - name: 全套离线测试与固定引擎
+        run: |
+          set -euo pipefail
+          mkdir -p logs/test/T8b
+          python -m unittest discover -s tests -v 2>&1 | tee logs/test/T8b/离线测试.txt
+          md5sum -c engine/ENGINE_MD5.txt
+          test -z "$(git status --porcelain -- data engine archive judgments graph)"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T8b-离线验收
+          path: logs/test/T8b/离线测试.txt
