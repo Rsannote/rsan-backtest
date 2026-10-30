@@ -31,6 +31,7 @@ class MacroTests(unittest.TestCase):
         self.assertEqual(macro.visible_at('美元兑人民币','2026-10-29',self.calendar).time(),dt.time(9,15))
         self.assertEqual(macro.visible_at('美国10年国债','2026-09-30',self.calendar).isoformat(),'2026-10-08T09:30:00+08:00')
         self.assertEqual(macro.visible_at('COMEX黄金','2026-10-30',self.calendar).date(),dt.date(2026,11,2))
+        self.assertEqual(macro.visible_at('COMEX黄金','2026-10-29',self.calendar).hour,18)
         self.assertEqual(macro.visible_at('M1','2026-12',self.calendar).isoformat(),'2027-01-15T23:59:59+08:00')
         self.assertEqual(macro.visible_at('制造业PMI','2026-09',self.calendar).isoformat(),'2026-10-01T23:59:59+08:00')
 
@@ -54,6 +55,15 @@ class MacroTests(unittest.TestCase):
         self.assertEqual(macro.asof(rows,self.now),[])
         path.write_text(content)
         self.assertEqual(macro.prepare(path,'美国10年国债',[('2026-10-29',value,'https://official.test/')],self.calendar,self.now)[1],0)
+
+    def test_earlier_visibility_policy_requires_explicit_audited_migration(self):
+        path=self.root/'test.csv'
+        content,n=macro.prepare(path,'COMEX黄金',[('2026-10-28',4000,'https://official.test/')],self.calendar,self.now)
+        path.write_text(content.replace('2026-10-29T18:00:00','2026-10-29T09:30:00'))
+        original=path.read_bytes()
+        with self.assertRaisesRegex(ValueError,'可见时刻早于'):
+            macro.prepare(path,'COMEX黄金',[('2026-10-28',4000,'https://official.test/')],self.calendar,self.now)
+        self.assertEqual(path.read_bytes(),original)
 
     def test_currency_identity_and_not_mixing_fred(self):
         source='https://www.chinamoney.com.cn/test'

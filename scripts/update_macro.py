@@ -123,7 +123,10 @@ def visible_at(name, period, calendar):
         return dt.datetime.combine(d,dt.time(9,15),BJ)
     if name=='美元兑人民币_FRED历史补充':
         d += dt.timedelta(days=7)
-    return dt.datetime.combine(next_open(calendar,d),dt.time(9,30),BJ)
+    # Yahoo实测日线标签覆盖纽约自然日（23:59结束），其下一北京时间中午才收尾。
+    # 审核只定D+1，取该A股日18:00，不声称开盘前已可见完整日线。
+    clock=dt.time(18) if name in ('美元指数','布伦特原油','COMEX黄金') else dt.time(9,30)
+    return dt.datetime.combine(next_open(calendar,d),clock,BJ)
 
 
 def validated(points, monthly=False):
@@ -196,9 +199,9 @@ def fetch_yahoo(client, symbol, now):
     result = []
     for stamp,value in zip(obj['timestamp'],obj['indicators']['quote'][0]['close']):
         d = dt.datetime.fromtimestamp(stamp,tz).date()
-        end = dt.datetime.combine(d,dt.time(18),tz)
+        end = dt.datetime.combine(d+dt.timedelta(days=1),dt.time(),tz)
         if regular_end and dt.datetime.fromtimestamp(regular_end,tz).date()==d:
-            end = dt.datetime.fromtimestamp(regular_end,tz)
+            end = max(end,dt.datetime.fromtimestamp(regular_end,tz))
         if value is not None and end<=now:
             result.append((d.isoformat(),value,address))
     return validated(result)
@@ -227,9 +230,11 @@ def prepare(path, name, points, calendar, now):
     added = []
     for period,value,source in points:
         previous = latest.get(period)
+        visible = visible_at(name,period,calendar)
+        if previous and dt.datetime.fromisoformat(previous['可见时刻'])<visible:
+            raise ValueError('已有记录可见时刻早于当前规则；须显式保留旧候选并迁移，不静默覆盖')
         if previous and number(previous['value'])==value:
             continue
-        visible = visible_at(name,period,calendar)
         note = note_for(name)
         if previous:
             visible = max(visible,now,dt.datetime.fromisoformat(previous['可见时刻']))
@@ -308,7 +313,7 @@ def h15(text):
             values = [number(v) for v in row[1:]]
             if len(values)!=len(dates): raise ValueError('H15日期与名义10年列不匹配')
             return dict(zip(dates,values))  # 第一个10-year为名义期限，不取后面的TIPS。
-    evidence=[r for r in table.rows if any('2026' in c or '10-year' in c for c in r)][:4]
+    evidence=[r for r in table.rows if any(re.search(r'20\d\d|10-year',c) for c in r)][:4]
     raise ValueError('H15官方表缺名义10年或五个日期；表头/目标行='+repr(evidence))
 
 
