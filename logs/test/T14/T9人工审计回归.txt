@@ -1,0 +1,15 @@
+test_existing_human_text_and_crlf_are_accepted_and_unchanged (test_audit_events.AuditTests.test_existing_human_text_and_crlf_are_accepted_and_unchanged) ... 事件库：{"大调整15": 2, "大反弹20": 2, "大调整10": 2}；主对照完整候选0
+事件库：{"大调整15": 2, "大反弹20": 2, "大调整10": 2}；主对照完整候选0
+事件库：{"大调整15": 2, "大反弹20": 2, "大调整10": 2}；主对照完整候选0
+ok
+test_program_generated_human_conclusion_is_rejected (test_audit_events.AuditTests.test_program_generated_human_conclusion_is_rejected) ... {"源Actions": null, "数据基准": "2026-06-29", "输入SHA256逐项一致": true, "事件数": {"data/事件库/大调整.csv": 2, "data/事件库/大反弹.csv": 2, "data/事件库/大调整_10.csv": 2}, "程序生成候选人工六列全空": true, "既有人工原文允许非空且逐字节保留": true, "隔离同输入复跑次数": 2, "CSV原字节不变": true, "六维距离独立核对": []}
+事件库：{"大调整15": 2, "大反弹20": 2, "大调整10": 2}；主对照完整候选0
+ok
+test_silent_old_text_rewrite_is_rejected (test_audit_events.AuditTests.test_silent_old_text_rewrite_is_rejected) ... 事件库：{"大调整15": 2, "大反弹20": 2, "大调整10": 2}；主对照完整候选0
+事件库：{"大调整15": 2, "大反弹20": 2, "大调整10": 2}；主对照完整候选0
+ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.029s
+
+OK
