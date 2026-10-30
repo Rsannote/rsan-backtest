@@ -1,0 +1,30 @@
+{
+  "受保护路径": [
+    "engine",
+    "archive",
+    "judgments",
+    "graph",
+    "data/行情库",
+    "data/资金轮动",
+    "data/主线",
+    "data/财报",
+    "data/一致预期",
+    "data/宏观",
+    "data/市场状态",
+    "data/社区情绪",
+    "scripts/build_events.py",
+    "scripts/mainline_sources.py",
+    "scripts/mainline_signals.py",
+    "system/行业清单.csv",
+    "system/催化日历.csv",
+    "system/主线规则.md",
+    "system/开发计划.md",
+    "system/运行清单.json",
+    "README.md"
+  ],
+  "已更改": [],
+  "T9说明旧字节保留为前缀": true,
+  "引擎MD5": "c06e2dd885eb8ac18f9cd4e1021a9b8c",
+  "必要边界测试通过数": 22,
+  "说明": "实现阶段本地离线证据；GHA尚未推送运行，独立审核另行安排"
+}
