@@ -13,7 +13,7 @@ T14 历史主线案例库，对应 `system/开发计划.md` 的T14；核心仅�
 
 ## 怎么验证的
 
-实现阶段本地验证已完成；独立Verification对修复的复验与GitHub Actions尚待执行，不能据此勾为通过。
+实现阶段和独立Verification复验均已完成；冻结版本211项全库测试（含22项T14专项）通过。源码提交 `ebf666a8ae5506fd88691b4e210b1e7ab80a710c` 的只读GitHub Actions验收已通过：[运行41072704783](https://github.com/Rsannote/rsan-backtest/actions/runs/41072704783)。
 
 ```bash
 python -m unittest discover -s tests -p 'test_mainline_cases*.py' -v
@@ -27,7 +27,7 @@ git diff --check
 - 真实覆盖2014-02-21至2026-10-29，18段独立命中位置分组、成立日、价格收益差、整体第2行业核对通过；重复运行0行追加，CSV与总表SHA256不变。
 - 引擎MD5仍为`c06e2dd885eb8ac18f9cd4e1021a9b8c`；受保护路径无改动，不碰T11/T12b/T13b代码、T13基表/最新、行情快照、判断或回测引擎。
 - 证据：`logs/test/T14/离线测试.txt`、`增量复验.json`、`受保护检查.json`、`重复幂等.json`、`建库报告.json`、`日条件审计.json`、`验收与对照.md/json`、`公开记录出处.json`。
-- GHA：工作流`.github/workflows/test-t14-mainline-cases.yml`已备；待Commit代理推送后附运行链接。手动公开PDF重取只证明文件可达性与哈希，不能代替文本支持或草案触发核验。
+- GHA：工作流`.github/workflows/test-t14-mainline-cases.yml` 的push验收[41072704783](https://github.com/Rsannote/rsan-backtest/actions/runs/41072704783)已通过，覆盖22项边界测试、引擎、真实回补、字节幂等及固定窗口核对。公开PDF重取仅workflow_dispatch执行，本次push未执行；手动重取只证明可达性与哈希，不能代替文本支持或草案触发核验。
 
 ## 验收标准逐条对照
 
@@ -35,8 +35,8 @@ git diff --check
 - [x] T9公共字段及行业、超额、五维T-20..T-1、大盘攻守、同期整体第2行业齐备；缺数留空，来源/覆盖明确。
 - [x] 人工列默认空、最近非空保护、旧字节只追加、同输入幂等、修订后失效可追溯。
 - [x] 补充说明与按时间总表；固定六组十二对象公开窗口对照如下，不为匹配调参。
-- [ ] 修复后的独立Verification复验通过并附证据。
-- [ ] 推送后GHA通过并附运行链接；公开文件重取结果另列。
+- [x] 修复后的独立Verification复验通过，原始日志、21文件冻结哈希及摘要见 `logs/test/T14/独立复验.md` 和同名目录。
+- [x] 推送后GHA通过：[运行41072704783](https://github.com/Rsannote/rsan-backtest/actions/runs/41072704783)。公开文件手动重取未执行，未计为通过。
 
 ### 固定公开窗口十二对象
 
@@ -68,4 +68,4 @@ git diff --check
 - T8/T13历史读取最后修订，当前行业映射回溯，不是严格逐日时点数据库。五维日末23:59:59与T9公共宏观18:00基准分别注明。
 - 2015计算机相关[国泰区位优势半年报](https://static.cninfo.com.cn/finalpage/2015-08-28/1201560479.PDF)仅搜索返回原文、全文打开超时，明确未完成全文复验；不能声称六组每个细节均已独立核验。
 - 2019–2021公开材料是分期支持，2019主要四季度，不能等同连续三年满足草案；2024普通红利全年未跑赢300，不能混央企红利全收益或申万银行价格收益。
-- 未新增生产定时调度，不改主运行清单；T11/T12b继续代码冻结攒日数。独立验证和GHA尚未完成的项保持未勾选。
+- 未新增生产定时调度，不改主运行清单；T11/T12b继续代码冻结攒日数。独立验证与push GHA均已通过；公开文件手动重取未执行，全文复验限制保留。
