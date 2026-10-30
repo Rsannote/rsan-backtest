@@ -81,6 +81,30 @@ class MacroTests(unittest.TestCase):
         with patch.dict(os.environ,{'GITHUB_ACTIONS':'false'}):
             with self.assertRaises(RuntimeError):macro.Client().get('https://example.invalid')
 
+    def test_official_failure_leaves_existing_raw_csv_untouched(self):
+        output=self.root/'data/宏观';output.mkdir(parents=True)
+        path=output/'中国10年国债.csv'
+        before=macro.prepare(path,'中国10年国债',[('2026-10-28',2.0,'https://official.test/')],self.calendar,self.now)[0].encode()
+        path.write_bytes(before)
+        points=[('2015-01-02',2.0,'https://official.test/'),('2026-10-29',2.1,'https://official.test/')]
+        class Fake:
+            trace=[]
+            def get(self,unused):return '{}'
+        with patch.object(macro,'fetch_cn',return_value=points),patch.object(macro,'fetch_fred',return_value=points),patch.object(macro,'cfets',return_value=points),patch.object(macro,'fetch_yahoo',return_value=points),patch.object(macro,'em_points',return_value=points),patch.object(macro,'verify_sources',side_effect=ValueError('官方原文不可达')):
+            report=macro.run(self.root,verify=True,client=Fake(),now=self.now)
+        self.assertEqual(report['status'],'失败')
+        self.assertEqual(path.read_bytes(),before)
+        self.assertFalse((output/'美国10年国债.csv').exists())
+        self.assertIn('官方原文不可达',report['errors'][0])
+
+    def test_health_manifest_reads_macro_errors_not_observation_dates(self):
+        import health_check
+        item=next(i for i in json.loads((Path(__file__).resolve().parents[1]/'system/运行清单.json').read_text())['items'] if i['id']=='macro')
+        path=self.root/item['outputs'][0];path.parent.mkdir(parents=True)
+        path.write_text(json.dumps({'data_date':'2026-10-29','generated_at':self.now.isoformat(),'status':'失败','errors':['中债源超时'],'sources':{'M1':{'最新观测':'2026-09'}}}))
+        actual,issues,success=health_check.load_actual(self.root,item,{'data_date':'2026-10-29'})
+        self.assertEqual(actual['data_date'],'2026-10-29');self.assertIn('中债源超时',issues);self.assertEqual(success,0)
+
     def test_yahoo_uses_local_session_and_excludes_unfinished_quote(self):
         class Fake:
             def get(self,unused):
@@ -89,6 +113,20 @@ class MacroTests(unittest.TestCase):
         now=dt.datetime(2026,10,30,8,tzinfo=BJ)
         points=macro.fetch_yahoo(Fake(),'GC=F',now)
         self.assertTrue(all(d<='2026-10-29' for d,_,_ in points))
+
+    def test_chinabond_before_eighteen_does_not_request_empty_today_tail(self):
+        from urllib.parse import urlparse,parse_qs
+        requested=[]
+        class Fake:
+            def get(self,address):
+                q=parse_qs(urlparse(address).query);requested.append(q)
+                d=q['endDate'][0]
+                return '<table><tr><th>曲线名称</th><th>日期</th><th>10年</th></tr><tr><td>中债国债收益率曲线</td><td>'+d+'</td><td>2.0</td></tr></table>'
+        now=dt.datetime(2026,10,30,9,tzinfo=BJ)
+        points=macro.fetch_cn(Fake(),self.root,now,full=True)
+        self.assertEqual(points[-1][0],'2026-10-29')
+        self.assertEqual(requested[-1]['startDate'],['2026-01-01'])
+        self.assertTrue(all(q['endDate'][0]<'2026-10-30' for q in requested))
 
     def test_derived_fixed_twenty_a_sessions_and_no_future_observation(self):
         # 自备覆盖日历，防止源数据缺日被误当A股休市。

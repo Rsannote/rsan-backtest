@@ -12,6 +12,8 @@ from pathlib import Path
 import random
 import re
 import time
+import urllib.request
+import urllib.error
 from zoneinfo import ZoneInfo
 
 import requests
@@ -49,6 +51,19 @@ class Client:
         self.trace.append(entry)
         headers = {'User-Agent':'Mozilla/5.0 (compatible; RsanMacro/1.0)', 'Referer':address.split('/')[0]+'//'+address.split('/')[2]+'/'}
         try:
+            if 'fred.stlouisfed.org' in address:
+                # 沿用已探测通过的标准库传输；FRED对Session请求本轮实测超时。
+                for attempt in range(2):
+                    try:
+                        req=urllib.request.Request(address,headers={'User-Agent':'Mozilla/5.0 (compatible; RsanMacroProbe/1.0)','Accept':'*/*'})
+                        with urllib.request.urlopen(req,timeout=30) as response:
+                            raw=response.read(8*1024*1024+1);entry['HTTP']=response.status
+                        if len(raw)>8*1024*1024: raise ValueError('FRED响应超过8MiB')
+                        entry.update(字节数=len(raw),SHA256=hashlib.sha256(raw).hexdigest(),尝试次数=attempt+1)
+                        return raw.decode('utf-8-sig')
+                    except (OSError,urllib.error.URLError):
+                        if attempt: raise
+                        time.sleep(2)
             with self.session.get(address, headers=headers, timeout=(10,30), stream=True) as response:
                 entry['HTTP'] = response.status_code
                 response.raise_for_status()
@@ -140,8 +155,10 @@ def fetch_cn(client, root, now, full=False):
     if old.exists() and not full:
         first = max(first,dt.date.fromisoformat(max(r['date'] for r in read_csv(old)))-dt.timedelta(days=40))
     result = []
-    while first<=now.date():
-        end = min(first+dt.timedelta(days=359),now.date())
+    cutoff=now.date() if now.timetz().replace(tzinfo=None)>=dt.time(18) else now.date()-dt.timedelta(days=1)
+    while first<=cutoff:
+        # 沿用探测已通过的自然年窗口，避免360日切片刚好留下未公布的当日空尾段。
+        end = min(dt.date(first.year,12,31),cutoff)
         address = url('https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery',startDate=first.isoformat(),endDate=end.isoformat(),gjqx='0',qxId='ycqx',locale='cn_ZH')
         values = china_bond(client.get(address))
         if any(not first.isoformat()<=d<=end.isoformat() for d in values):
@@ -361,12 +378,6 @@ def verify_sources(client, candidates):
     return checks
 
 
-def csv_text(rows, fields):
-    stream = io.StringIO(newline=''); writer = csv.DictWriter(stream,fields,lineterminator='\n')
-    writer.writeheader(); writer.writerows(rows)
-    return stream.getvalue()
-
-
 def append_derived(path, rows, now):
     if not rows: raise ValueError('中美国债没有可用20日派生窗口')
     fields = list(rows[0])
@@ -394,11 +405,17 @@ def run(root=ROOT, verify=False, full=False, client=None, now=None):
             'status':'正常','errors':[],'warnings':[],'summary':[],'sources':{},'审核依据':'PR #12 Claude 2026-10-30'}
     candidates={}
     def capture(name,fetch):
+        print('取数开始：'+name,flush=True)
         try:
-            result=fetch(); candidates[name]=result
+            result=fetch()
+            if name!='美元兑人民币' and (full or not (output/(name+'.csv')).exists()) and result[0][0]>'2015-01-31':
+                raise ValueError('首次建库未覆盖2015年1月，不能把截断历史算成功')
+            candidates[name]=result
             report['sources'][name]={'状态':'取得数据','条数':len(result),'起始':result[0][0],'最新观测':result[-1][0]}
+            print(f'取数完成：{name}，{len(result)}条，{result[0][0]}—{result[-1][0]}',flush=True)
         except Exception as exc:
             report['errors'].append(name+'：'+str(exc));report['sources'][name]={'状态':'失败','原因':str(exc)}
+            print('取数失败：'+name+'：'+str(exc),flush=True)
     capture('中国10年国债',lambda:fetch_cn(client,root,now,full))
     capture('美国10年国债',lambda:fetch_fred(client,'DGS10'))
     address='https://www.chinamoney.com.cn/r/cms/www/chinamoney/data/fx/ccpr.json'
