@@ -1,0 +1,54 @@
+name: T6 宏观数据源探测
+
+on:
+  push:
+    branches: [gpt/T6-macro]
+    paths: ['scripts/probe_macro.py', '.github/workflows/probe-t6-macro.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: repo-writer
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    if: github.ref == 'refs/heads/gpt/T6-macro'
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gpt/T6-macro
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: 离线校验与引擎检查
+        run: |
+          python scripts/probe_macro.py --self-test
+          md5sum -c engine/ENGINE_MD5.txt
+      - name: 从 GitHub 服务器探测来源
+        run: python -u scripts/probe_macro.py
+      - name: 上传探测结果
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: T6-宏观数据源探测
+          path: logs/宏观探测.txt
+          if-no-files-found: error
+      - name: 仅将探测日志存回 T6 分支
+        if: always()
+        run: |
+          set -euo pipefail
+          test -s logs/宏观探测.txt
+          git diff --exit-code -- data engine archive judgments system
+          git config user.name github-actions
+          git config user.email actions@users.noreply.github.com
+          git add -- logs/宏观探测.txt
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'T6：保存宏观数据源 Actions 探测结果'
+          git pull --rebase origin gpt/T6-macro
+          git push origin HEAD:gpt/T6-macro
