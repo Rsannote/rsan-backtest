@@ -145,6 +145,9 @@ def parse_page(text, code, num, start='2013-01-01'):
         values = dict(zip(labels, (r[i] for r in matrix[1:])))
         def raw(key):
             v = values.get(key)
+            # 同花顺真实页面用JSON false表示缺值；沿v3保留False标记，不能当0。
+            if v is False:
+                return 'False'
             if isinstance(v, (dict, list, bool)):
                 raise ValueError('财务原值类型无效：' + key)
             return '' if v is None else str(v)

@@ -78,6 +78,17 @@ class EarningsTests(unittest.TestCase):
             with self.subTest(html=html[:50]), self.assertRaises((ValueError, KeyError)):
                 earnings.parse_page(html, '000001', self.num)
 
+    def test_source_false_is_explicit_missing_but_numeric_zero_is_not(self):
+        rows=earnings.parse_page(page(dates=['2013-03-31','2013-06-30'],kf=[False,0]),'000001',self.num)
+        self.assertEqual(rows[0]['扣非净利润'],'False')
+        self.assertEqual(rows[0]['利润口径'],'净利润回退')
+        self.assertNotEqual(self.num(rows[0]['扣非净利润']),self.num(rows[0]['扣非净利润']))
+        self.assertEqual(rows[1]['扣非净利润'],'0')
+        self.assertEqual(rows[1]['利润口径'],'扣非净利润')
+        for value in (True,{},[]):
+            with self.subTest(value=value),self.assertRaises(ValueError):
+                earnings.parse_page(page(dates=['2013-03-31'],kf=[value]),'000001',self.num)
+
     def test_batch_resume_retries_only_failure_and_is_append_only(self):
         client = FakeClient({'000001': page(), '000002': requests.HTTPError('503')})
         first = earnings.collect(self.root, mode='batch', client=client)
