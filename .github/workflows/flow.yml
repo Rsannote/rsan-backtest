@@ -78,7 +78,7 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           import subprocess
-          files=[p for p in Path('logs/test/T8b').rglob('*') if p.is_file() and p.suffix in ('.json','.md','.txt')]
+          files=[p for p in Path('logs/test/T8b').rglob('*') if p.is_file() and p.suffix in ('.json','.md','.txt','.csv')]
           files += [p for p in Path('logs').glob('资金轮动_*.json')] + [p for p in Path('logs').glob('资金轮动_*.md')]
           if files:subprocess.run(['git','add','--',*[str(p) for p in files]],check=True)
           PY
@@ -100,6 +100,7 @@ jobs:
             logs/test/T8b/**/*.json
             logs/test/T8b/**/*.md
             logs/test/T8b/**/*.txt
+            logs/test/T8b/**/*.csv
       - name: 工作流失败告警
         if: failure() && github.ref == 'refs/heads/main'
         env:

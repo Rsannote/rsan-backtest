@@ -38,7 +38,16 @@ def main():
     raw=git_bytes('data/资金轮动/日表.csv');before=pd.read_csv(io.BytesIO(raw),dtype={'date':str,'code':str},low_memory=False).drop_duplicates(['date','code'],keep='last')
     after=pd.read_csv(ROOT/'data/资金轮动/日表.csv',dtype={'date':str,'code':str},low_memory=False).drop_duplicates(['date','code'],keep='last')
     after=after[after.date<=before.date.max()];rows=coverage_rows(before,after)
-    buf=io.StringIO();w=csv.DictWriter(buf,fieldnames=list(rows[0]));w.writeheader();w.writerows(rows);atomic_text(out/'覆盖率_逐年各列.csv',buf.getvalue())
+    detailed=['# 各数值列逐年覆盖率（PR21复审）','','每个行业×交易日一票，按日期/代码最后修订；28排除新三行业，31起点前不适用。所有数字与同次覆盖率CSV由相同rows输出。','']
+    for column in dict.fromkeys(r['列'] for r in rows):
+        detailed+=['## '+column,'','|年份|应有|修复前有值|修复后有值|修复前比例|修复后比例|','|---|---:|---:|---:|---:|---:|']
+        for row in [r for r in rows if r['列']==column]:
+            before_ratio='—' if row['修复前比例'] is None else f"{row['修复前比例']:.2%}"
+            after_ratio='—' if row['修复后比例'] is None else f"{row['修复后比例']:.2%}"
+            detailed.append('|'+ '|'.join(str(v) for v in [row['年份'],row['应有'],row['修复前有值'],row['修复后有值'],before_ratio,after_ratio])+'|')
+        detailed+=['']
+    atomic_text(out/'覆盖率_逐列完整表.md','\n'.join(detailed)+'\n')
+    buf=io.StringIO();w=csv.DictWriter(buf,fieldnames=list(rows[0]),lineterminator=chr(10));w.writeheader();w.writerows(rows);atomic_text(out/'覆盖率_逐年各列.csv',buf.getvalue())
     keys=['占比60日分位_28','占比一年分位_28','占比60日分位_31','占比一年分位_31','偏离60日线']
     lines=['# PR21滚动缺口修复覆盖率','',f'比较基线{BASE}与当前，日期固定截至{before.date.max()}；每个行业×交易日一票，按日/代码取最后修订。28排除新三行业，31仅2021-12-13起；不适用用—，不算缺失。所有数值列的逐年分子/分母见覆盖率_逐年各列.csv。','', '|年份|'+ '|'.join(keys)+'|','|---|'+ '|'.join(['---:']*len(keys))+'|']
     for year in sorted(before.date.str[:4].unique()):
