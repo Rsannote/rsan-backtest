@@ -1,0 +1,42 @@
+name: T9 事件库验收
+on:
+  push:
+    branches: [gpt/T9-events]
+    paths: ['scripts/build_events.py', 'tests/test_build_events.py', 'tests/audit_events.py', 'tests/verify_events_public.py', 'system/事件库格式.md', '.github/workflows/test-t9-events.yml', '.github/workflows/events.yml']
+  pull_request:
+    paths: ['scripts/build_events.py', 'tests/test_build_events.py', 'tests/audit_events.py', 'tests/verify_events_public.py', 'data/事件库/**']
+permissions:
+  contents: read
+concurrency:
+  group: t9-readonly-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pandas numpy requests
+      - name: 单元与引擎校验
+        run: |
+          set -euo pipefail
+          mkdir -p logs/test/T9
+          python -m unittest discover -s tests -v 2>&1 | tee logs/test/T9/离线测试.txt
+          md5sum -c engine/ENGINE_MD5.txt
+      - name: 建库与公开历史端点核对
+        run: |
+          set -euo pipefail
+          python scripts/build_events.py
+          python tests/verify_events_public.py
+          python tests/audit_events.py
+          git diff --exit-code -- engine archive graph judgments data/行情库 data/宏观 data/市场状态 data/社区情绪
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T9-事件库验收
+          path: |
+            data/事件库/
+            logs/事件库_最新.*
+            logs/test/T9/

@@ -404,6 +404,40 @@
         "sample_n": 0,
         "fallback": "沿用现有任务最大已审核宽限，非本任务P95；新鲜度=最长计划间隔15小时+536分钟"
       }
+    },
+    {
+      "id": "events",
+      "name": "历史事件库与当前对照",
+      "workflow": ".github/workflows/events.yml",
+      "kind": "judgment_report",
+      "trigger": "成功的行情库/宏观更新后运行；不联网",
+      "trading_days_only": false,
+      "times": [
+        "09:35",
+        "18:35"
+      ],
+      "grace_minutes": 536,
+      "check_mode": "freshness",
+      "max_age_minutes": 1436,
+      "freshness_success_paths": [
+        {
+          "path": "logs/事件库_最新.json",
+          "field": "generated_at"
+        }
+      ],
+      "outputs": [
+        "logs/事件库_最新.json",
+        "data/事件库/大调整.csv",
+        "data/事件库/大反弹.csv",
+        "data/事件库/大调整_10.csv",
+        "data/事件库/当前对照.md"
+      ],
+      "说明": "历史缺少宏观/情绪等不填0，未参与对照逐项列出；当前缺特征写失败。数据基准为最近已存且18:00已收尾的交易日，源日期不等于执行日。",
+      "delay_basis": {
+        "inherit_from": "macro",
+        "sample_n": 0,
+        "说明": "无独立运行样本，继承宏观最长计划间隔与现有已审核宽限，未放宽其他任务；后续实测校准"
+      }
     }
   ]
 }
