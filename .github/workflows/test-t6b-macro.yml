@@ -1,0 +1,35 @@
+name: T6b 宏观离线与派生核对
+on:
+  pull_request:
+    paths: ['scripts/update_macro.py', 'tests/test_update_macro.py', 'tests/verify_macro_delivery.py', 'data/宏观/**', '.github/workflows/test-t6b-macro.yml']
+  push:
+    branches: [gpt/T6b-macro]
+    paths: ['tests/verify_macro_delivery.py', '.github/workflows/test-t6b-macro.yml']
+permissions:
+  contents: read
+concurrency:
+  group: t6b-readonly-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pandas numpy requests
+      - name: 离线校验与独立派生核对
+        run: |
+          set -euo pipefail
+          mkdir -p logs/test/T6b
+          python -m unittest discover -s tests -v 2>&1 | tee logs/test/T6b/最终离线测试.txt
+          md5sum -c engine/ENGINE_MD5.txt
+          python tests/verify_macro_delivery.py
+          git diff --exit-code -- engine archive graph judgments data
+      - uses: actions/upload-artifact@v4
+        with:
+          name: T6b-离线派生核对
+          path: |
+            logs/test/T6b/派生核对.*
+            logs/test/T6b/最终离线测试.txt

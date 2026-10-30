@@ -203,7 +203,7 @@ class AutoTests(unittest.TestCase):
         self.assertTrue(path.read_bytes().startswith(original))
         review.run(self.root,'2026-10-30',directory,now=self.now+dt.timedelta(days=10))
         self.assertTrue(path.read_bytes().startswith(original))
-        self.assertEqual(path.read_bytes()[:len(original)].count(b'\r\n'),7)
+        self.assertEqual(path.read_bytes()[:len(original)].count(b'\r\n'),len(original.splitlines()))
 
     def test_stats_cross_product_program_and_manual(self):
         directory=self.root/'logs/test/T4/stats'; directory.mkdir(parents=True)
