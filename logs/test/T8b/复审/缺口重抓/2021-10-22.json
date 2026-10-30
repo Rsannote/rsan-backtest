@@ -1,0 +1,10 @@
+{
+  "code": "200",
+  "message": "ok",
+  "data": {
+    "count": 0,
+    "next": null,
+    "previous": null,
+    "results": []
+  }
+}
