@@ -1,0 +1,41 @@
+name: T12 一致预期来源探测
+on:
+  push:
+    branches: [gpt/T12-consensus]
+    paths: ['scripts/probe_consensus.py', 'tests/test_probe_consensus.py', '.github/workflows/test-t12-consensus.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+# 只读来源并上传artifact，不提交仓库，不占repo-writer。
+concurrency:
+  group: t12-readonly-probe
+  cancel-in-progress: false
+jobs:
+  probe:
+    if: github.ref == 'refs/heads/gpt/T12-consensus'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pandas numpy requests
+      - name: 离线解析检查与固定引擎
+        run: |
+          set -euo pipefail
+          mkdir -p logs/test/T12
+          python -m unittest discover -s tests -v 2>&1 | tee logs/test/T12/离线测试.txt
+          md5sum -c engine/ENGINE_MD5.txt
+      - name: 从Actions实测来源
+        run: python -u scripts/probe_consensus.py
+      - name: 正式目录保护
+        if: always()
+        run: git diff --exit-code -- data engine archive judgments system graph
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T12-一致预期探测
+          path: |
+            logs/一致预期探测.txt
+            logs/test/T12/
