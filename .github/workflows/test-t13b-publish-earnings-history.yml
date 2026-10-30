@@ -71,12 +71,13 @@ jobs:
           if len(files)!=1:raise ValueError('必须且只能有一份采集产物')
           subprocess.run([sys.executable,'scripts/earnings_history_publish.py','--artifact',str(files[0]),'--run-id',os.environ['RUN_ID'],'--sha',os.environ['SOURCE_SHA']],check=True)
           PY
-      - name: 独立预算与年度主线修订
+      - name: 请求重建时才预检预算并写年度主线修订
         id: signals
-        if: steps.promote.outcome == 'success'
+        if: steps.promote.outcome == 'success' && env.REBUILD == 'true'
         run: |
           python scripts/mainline_signals.py --estimate-only
-          if [ "$REBUILD" = true ]; then python scripts/mainline_signals.py --backfill; fi
+          python scripts/mainline_signals.py --backfill
+          python tests/verify_t13_signals.py
       - name: 仅保存已成功晋升的产物
         if: always() && steps.promote.outcome == 'success'
         env:
