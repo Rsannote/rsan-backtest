@@ -1,0 +1,28 @@
+name: T12b 年度字段结构探测
+on:
+  push:
+    branches: [gpt/T12b-consensus]
+    paths: ['.github/workflows/test-t12b-structure.yml']
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 仅取三行核对年度标记
+        run: |
+          mkdir -p logs/test/T12b
+          PYTHONPATH=scripts python - <<'PY'
+          import json,pathlib,time,urllib.parse
+          from probe_consensus import HTTP
+          params={'reportName':'RPT_WEB_RESPREDICT','columns':'WEB_RESPREDICT','pageNumber':1,'pageSize':3,'sortTypes':-1,'sortColumns':'RATING_ORG_NUM'}
+          client=HTTP(time.monotonic()+60)
+          obj=json.loads(client.get('https://datacenter-web.eastmoney.com/api/data/v1/get?'+urllib.parse.urlencode(params)))
+          pathlib.Path('logs/test/T12b/年度字段结构.json').write_text(json.dumps({'response':obj,'trace':client.trace},ensure_ascii=False,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T12b-年度结构
+          path: logs/test/T12b/年度字段结构.json
