@@ -2,9 +2,9 @@ name: T9 事件库验收
 on:
   push:
     branches: [gpt/T9-events]
-    paths: ['scripts/build_events.py', 'tests/test_build_events.py', 'tests/verify_events_public.py', 'system/事件库格式.md', '.github/workflows/test-t9-events.yml', '.github/workflows/events.yml']
+    paths: ['scripts/build_events.py', 'tests/test_build_events.py', 'tests/audit_events.py', 'tests/verify_events_public.py', 'system/事件库格式.md', '.github/workflows/test-t9-events.yml', '.github/workflows/events.yml']
   pull_request:
-    paths: ['scripts/build_events.py', 'tests/test_build_events.py', 'tests/verify_events_public.py', 'data/事件库/**']
+    paths: ['scripts/build_events.py', 'tests/test_build_events.py', 'tests/audit_events.py', 'tests/verify_events_public.py', 'data/事件库/**']
 permissions:
   contents: read
 concurrency:
@@ -30,6 +30,7 @@ jobs:
           set -euo pipefail
           python scripts/build_events.py
           python tests/verify_events_public.py
+          python tests/audit_events.py
           git diff --exit-code -- engine archive graph judgments data/行情库 data/宏观 data/市场状态 data/社区情绪
       - uses: actions/upload-artifact@v4
         if: always()
