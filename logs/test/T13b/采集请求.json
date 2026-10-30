@@ -1,6 +1,8 @@
 {
-  "mode": "probe",
-  "max_stocks": 3,
-  "budget": 180,
-  "refresh": false
+  "mode": "batch",
+  "max_stocks": 400,
+  "budget": 2700,
+  "refresh": false,
+  "批次": 1,
+  "说明": "三股原始HTML及55季度金额/可见时刻独立核验已通过，按冻结解析器限时回补"
 }
