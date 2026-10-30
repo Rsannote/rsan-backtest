@@ -300,7 +300,7 @@ def h15(text):
         parsed = []
         for cell in row:
             cleaned = re.sub(r'\s+',' ',cell).strip()
-            match = re.search(r'(20\d\d)\s+([A-Za-z]{3})\s+(\d{1,2})',cleaned)
+            match = re.search(r'(20\d\d)\s*([A-Za-z]{3})\s*(\d{1,2})',cleaned)
             if match:
                 parsed.append(dt.datetime.strptime(' '.join(match.groups()),'%Y %b %d').date().isoformat())
         if len(parsed)>=5: dates=parsed
@@ -308,7 +308,8 @@ def h15(text):
             values = [number(v) for v in row[1:]]
             if len(values)!=len(dates): raise ValueError('H15日期与名义10年列不匹配')
             return dict(zip(dates,values))  # 第一个10-year为名义期限，不取后面的TIPS。
-    raise ValueError('H15官方表缺名义10年或五个日期')
+    evidence=[r for r in table.rows if any('2026' in c or '10-year' in c for c in r)][:4]
+    raise ValueError('H15官方表缺名义10年或五个日期；表头/目标行='+repr(evidence))
 
 
 def official_month(text, name):
@@ -400,6 +401,7 @@ def append_derived(path, rows, now):
 
 def run(root=ROOT, verify=False, full=False, client=None, now=None):
     root=Path(root).resolve(); output=root/'data/宏观'; output.mkdir(parents=True,exist_ok=True)
+    fixed_clock=now is not None  # 合成测试可固定时钟；正式记录用取数完成后的实际时刻。
     now=now or dt.datetime.now(BJ); calendar=TradingCalendar(root); client=client or Client()
     report={'title':'宏观数据更新','generated_at':now.isoformat(),'data_date':now.date().isoformat(),
             'status':'正常','errors':[],'warnings':[],'summary':[],'sources':{},'审核依据':'PR #12 Claude 2026-10-30'}
@@ -444,6 +446,9 @@ def run(root=ROOT, verify=False, full=False, client=None, now=None):
             checks=verify_sources(client,candidates)
             report['errors'].extend(str(c) for c in checks if not c['通过'])
         except Exception as exc: report['errors'].append('官方抽查失败：'+str(exc))
+    if not fixed_clock:
+        now=dt.datetime.now(BJ)
+        report.update(generated_at=now.isoformat(),data_date=now.date().isoformat())
     # 抽查失败时整批不晋升；正常增量中其他来源失败也不覆盖已存有效文件。
     staged={}
     if not (verify and report['errors']):

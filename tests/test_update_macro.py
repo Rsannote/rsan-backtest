@@ -70,7 +70,7 @@ class MacroTests(unittest.TestCase):
         self.assertEqual(macro.official_month('全国工业生产者出厂价格同比下降2.3%','PPI同比')[0],-2.3)
         self.assertEqual(macro.official_month('全国居民消费价格同比持平','CPI同比')[0],0)
         self.assertEqual(macro.official_month('制造业采购经理指数（ PMI ）为49.8%','制造业PMI')[0],49.8)
-        header='<tr><th>Instruments</th>'+''.join(f'<th>2026 Oct {d}</th>' for d in (22,23,26,27,28))+'</tr>'
+        header='<tr><th>Instruments</th>'+''.join(f'<th>2026<br>Oct<br>{d}</th>' for d in (22,23,26,27,28))+'</tr>'
         text='<table>'+header+'<tr><td>10-year</td>'+''.join('<td>4.0</td>' for _ in range(5))+'</tr><tr><td>10-year</td>'+''.join('<td>2.0</td>' for _ in range(5))+'</tr></table>'
         self.assertEqual(set(macro.h15(text).values()),{4.0})
         with self.assertRaises(ValueError):macro.official_month('非制造业商务活动指数为50.1%','制造业PMI')
