@@ -103,6 +103,8 @@ def run(root=ROOT,asof=None,now=None):
     current=tables[31][tables[31].date==last].to_dict('records') if not tables[31].empty else []
     errors=[];warnings=[]
     if last>=START31 and len(current)!=31:errors.append('最新31行业信号行数不是31，见T8日期范围')
+    if current and not any(number(r.get('资金_成交占比')) is not None for r in current if r['主线判定']=='参与'):
+        errors.append('最新所有候选的申万资金占比均缺，不能仅凭文件有行报正常')
     if not (root/'data/一致预期/行业上修.csv').exists():warnings.append('T12b尚未提供主分支一致预期上修表，相应维度缺失，不读未合并分支')
     warnings+=['当前行业成分仅14行业，季报缓存为股票池样本；全行业占比须成分全部可评估，否则只列样本占比与覆盖率','新闻4周变化需完整两段28自然日，不足留空；中久期适配无定量规则，适配bp留空','人工行业映射为当前分类回溯；T8按要求读取最后修订，历史不是严格逐日版本']
     for path,digest in before.items():

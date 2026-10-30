@@ -102,6 +102,10 @@ class SignalsTests(unittest.TestCase):
         c=self.ordinary[0];self.write('data/一致预期/行业上修.csv',['日期','申万一级代码','预测年度','上修占比','可比家数'],[{'日期':'2026-10-29','申万一级代码':c,'预测年度':'2026','上修占比':0,'可比家数':5},{'日期':'2026-10-29','申万一级代码':c,'预测年度':'2027','上修占比':.4,'可比家数':5}])
         self.write('data/一致预期/2026-10/2026-10-29.csv',['抓取时间'],[{'抓取时间':'2026-10-29T10:00:00+08:00'}]);r=self.source().for_day('2026-10-29',c);self.assertEqual(r['业绩_EPS本年上修占比'],0);self.assertEqual(r['业绩_EPS次年上修占比'],.4)
         self.write('data/一致预期/2026-10/2026-10-29.csv',['抓取时间'],[{'抓取时间':'2026-10-29T20:00:00+00:00'}]);self.assertIsNone(self.source().for_day('2026-10-29',c)['业绩_EPS本年上修占比'])
+    def test_latest_all_funding_values_missing_is_failure_not_successful_empty_table(self):
+        self.flow();p=self.root/'data/资金轮动/日表.csv';x=pd.read_csv(p,dtype={'code':str});x.loc[x.date=='2026-10-29','占比_31']=np.nan;x.to_csv(p,index=False)
+        r=sig.run(self.root,now=dt.datetime(2026,10,30,17,tzinfo=src.BJ))
+        self.assertEqual(r['status'],'失败');self.assertTrue(any('资金占比均缺' in e for e in r['errors']))
     def test_full_backfill_idempotent_and_inputs_and_claude_tables_unchanged(self):
         self.flow();inputs={str(p):p.read_bytes() for p in (self.root/'system').glob('*.csv')};now=dt.datetime(2026,10,30,15,tzinfo=src.BJ)
         first=sig.run(self.root,now=now);before={p:p.read_bytes() for p in (self.root/'data/主线').glob('*.csv')};second=sig.run(self.root,now=now+dt.timedelta(hours=1))
