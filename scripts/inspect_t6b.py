@@ -7,10 +7,11 @@ from probe_macro import request, url
 
 deadline = time.monotonic() + 400
 sources = {
-    "外汇历史": url("https://www.chinamoney.com.cn/ags/ms/cm-u-bk-ccpr/CcprHisNew", startDate="2015-01-01", endDate="2015-02-01", currency="USD/CNY", pageNum="1", pageSize="500"),
-    "美债官方": url("https://home.treasury.gov/resource-center-data-chart-center/interest-rates/TextView", type="daily_treasury_yield_curve", field_tdr_date_value="2026"),
-    "人民银行": "https://www.pbc.gov.cn/diaochatongjisi/116219/116225/index.html",
+    "美联储H15": "https://www.federalreserve.gov/releases/h15/",
+    "人行九月": "https://www.pbc.gov.cn/diaochatongjisi/116219/116225/2026101417073743604/index.html",
     "统计局": "https://www.stats.gov.cn/sj/zxfb/",
+    "统计局次页": "https://www.stats.gov.cn/sj/zxfb/index_1.html",
+    "统计局CPI九月": "https://www.stats.gov.cn/sj/zxfb/202610/t20261014_1965477.html",
 }
 for name, source in sources.items():
     trace = []
@@ -21,8 +22,8 @@ for name, source in sources.items():
         else:
             links = [(urllib.parse.urljoin(source, href), re.sub("<[^>]+>", "", title).strip())
                      for href, title in re.findall(r'<a\b[^>]*href=[\"\x27]([^\"\x27]+)[\"\x27][^>]*>(.*?)</a>', text, re.S|re.I)]
-            selected = [x for x in links if any(k in str(x) for k in ("csv", "金融统计", "居民消费", "工业生产者", "采购经理", "PMI"))]
-            print(name, json.dumps(selected[:35], ensure_ascii=False), flush=True)
+            print(name, json.dumps(links[:120], ensure_ascii=False), flush=True)
+            print(name+'正文', re.sub(r'\s+', ' ', re.sub('<[^>]+>', ' ', text))[-22000:], flush=True)
             if name == "美债官方":
                 from probe_macro import Tables
                 table = Tables(); table.feed(text)
