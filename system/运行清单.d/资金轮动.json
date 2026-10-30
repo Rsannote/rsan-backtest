@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "items": [
+    {
+      "id": "flow",
+      "name": "资金轮动（申万28/31与ETF备用）",
+      "workflow": ".github/workflows/flow.yml",
+      "kind": "judgment_report",
+      "trading_days_only": true,
+      "trigger": "成功的市场状态更新后运行",
+      "times": [
+        "16:40"
+      ],
+      "grace_minutes": 536,
+      "check_mode": "previous_trading_day",
+      "outputs": [
+        "logs/资金轮动_最新.json",
+        "data/资金轮动/日表.csv",
+        "data/资金轮动/ETF日表.csv",
+        "data/资金轮动/最新.json",
+        "data/资金轮动/统计.md"
+      ],
+      "说明": "源失败/TLS失败即使有ETF近似仍列errors并告警，申万/ETF列不混合；当前源日不足不拿昨日值冒充。只继承已有最大已审核536分钟宽限，不改其他任务。",
+      "delay_basis": {
+        "sample_n": 0,
+        "inherit_from": "macro",
+        "说明": "独立任务暂无P95；四周后校准须补片段统计支持，当前不修改T11冻结的延迟统计脚本。"
+      },
+      "key_value_coverage": {
+        "path": "data/资金轮动/日表.csv",
+        "columns": [
+          "占比一年分位_31",
+          "偏离60日线"
+        ],
+        "minimum": 0.9,
+        "expected_count": 31
+      }
+    }
+  ]
+}
