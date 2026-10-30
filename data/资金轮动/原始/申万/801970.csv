@@ -1172,3 +1172,4 @@ date,open,high,low,close,volume,amount,来源,采集时间,修订原因
 2026-10-27,1708.49,1720.14,1667.34,1667.34,12.02616613,104.06709017,https://www.swsresearch.com/institute-sw/api/index_publish/trend/?swindexcode=801970&period=DAY,2026-10-30T13:43:22.751893+08:00,首次记录
 2026-10-28,1673.85,1694.24,1666.16,1688.88,12.16241846,103.60919362,https://www.swsresearch.com/institute-sw/api/index_publish/trend/?swindexcode=801970&period=DAY,2026-10-30T13:43:22.751893+08:00,首次记录
 2026-10-29,1685.81,1688.85,1658.5,1659.63,11.92139816,100.25041176,https://www.swsresearch.com/institute-sw/api/index_publish/trend/?swindexcode=801970&period=DAY,2026-10-30T13:43:22.751893+08:00,首次记录
+2026-10-30,1641.05,1669.85,1619.47,1619.47,14.35992816,114.86290588,https://www.swsresearch.com/institute-sw/api/index_publish/trend/?swindexcode=801970&period=DAY,2026-10-31T00:01:47.952702+08:00,首次记录

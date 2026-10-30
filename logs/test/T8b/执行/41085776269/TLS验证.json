@@ -1,0 +1,9 @@
+{
+  "北京时间": "2026-10-31T00:00:07.635906+08:00",
+  "中间CA_DER_SHA256": "05dc9edc0fddfa975a1432ef806ec780078b5362ad45af76db15c907630db25d",
+  "服务器叶证书PEM_SHA256": "fbec4d4fff7b0817d0cc32869a476209c1145d4d917072a3b263d200e06d3643",
+  "系统根CA": "/usr/lib/ssl/cert.pem",
+  "verify_exit": 0,
+  "验证输出": "/home/runner/work/rsan-backtest/rsan-backtest/logs/test/T8b/执行/41085776269/leaf.pem: OK\n",
+  "策略": "系统根+中间CA、sslserver用途、当前www.swsresearch.com主机名，全部必须通过"
+}
