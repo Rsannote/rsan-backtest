@@ -41,7 +41,7 @@ jobs:
           INPUT_REFRESH: ${{ inputs.refresh }}
         run: |
           python - <<'PY'
-          import json,os,subprocess,sys
+          import json,os,re,subprocess,sys
           from pathlib import Path
           request=json.loads(Path('logs/test/T13b/采集请求.json').read_text()) if os.environ['GITHUB_EVENT_NAME']=='push' else {}
           mode=request.get('mode',os.environ.get('INPUT_MODE') or 'probe')
@@ -50,6 +50,10 @@ jobs:
           refresh=request.get('refresh',os.environ.get('INPUT_REFRESH')=='true')
           if mode not in ('probe','batch') or not isinstance(refresh,bool):raise ValueError('采集请求格式无效')
           args=[sys.executable,'-u','scripts/earnings_history.py','--mode',mode,'--max-stocks',str(maximum),'--budget',str(budget)]
+          codes=request.get('codes')
+          if codes is not None:
+            if not isinstance(codes,list) or not codes or any(not isinstance(c,str) or not re.fullmatch(r'\d{6}',c) for c in codes):raise ValueError('探测代码必须为六位字符串数组')
+            args+=['--codes',','.join(codes)]
           if refresh:args.append('--refresh')
           raise SystemExit(subprocess.call(args))
           PY

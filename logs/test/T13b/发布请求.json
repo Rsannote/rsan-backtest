@@ -1,5 +1,6 @@
 {
-  "run_id": "41073389018",
-  "sha": "7751481cc89d8a003ad679038a8a7338668ac150",
-  "rebuild_signals": false
+  "run_id": "41076116966",
+  "sha": "5d093b9ac84fc241dd5862d7b3efc73984847c4a",
+  "rebuild_signals": false,
+  "说明": "完整manifest及artifact摘要通过，发布395家有效记录，5家保持格式失败"
 }
