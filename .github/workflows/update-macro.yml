@@ -84,4 +84,10 @@ jobs:
           HEALTH_ITEM_ID: macro
           HEALTH_ITEM_NAME: 宏观数据
           HEALTH_WORKFLOW_FILE: .github/workflows/update-macro.yml
-        run: python3 scripts/health_alert.py --workflow-failure
+        run: |
+          alert_script="${GITHUB_WORKSPACE}/scripts/health_alert.py"
+          if [ ! -f "$alert_script" ]; then
+            alert_script="${RUNNER_TEMP}/health_alert.py"
+            curl --fail --silent --show-error --retry 2 -H "Authorization: Bearer ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.raw+json' "https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/scripts/health_alert.py?ref=${GITHUB_SHA}" -o "$alert_script"
+          fi
+          python3 "$alert_script" --workflow-failure

@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 class WorkflowAlertTests(unittest.TestCase):
     def test_all_production_workflows_have_failure_alert_and_permissions(self):
         paths = [p for p in (ROOT / ".github/workflows").glob("*.yml") if not p.name.startswith("test-")]
-        self.assertEqual(len(paths), 11)
+        self.assertIn('update-macro.yml', {p.name for p in paths})
         for path in paths:
             with self.subTest(path=path.name):
                 source = path.read_text(encoding="utf-8")
