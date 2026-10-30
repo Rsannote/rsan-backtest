@@ -1,0 +1,46 @@
+{
+  "宏观Actions": 40983704974,
+  "宏观实现提交": "e48ac5c7f8bd18d2c130a55a169cbf05d73f32e2",
+  "宏观artifact_SHA256": "fbf5bf6ba32e871522b4b8ef2b5f10b731b194aef39f4b90e0f3f5304558b7e4",
+  "离线Actions": 40983987001,
+  "离线artifact_SHA256": "65ba1030fcad28139b0dcdc7f040fd563e950145eb4463723e2a557c6754cb51",
+  "单元测试通过数": 128,
+  "官方核对通过数": 25,
+  "派生独立核对通过数": 6,
+  "旧候选保留与新可见性": {
+    "美元指数": {
+      "候选原始SHA256": "48b00df16a1ccaf288fc063292533c638a4b72e9458c1d74f87545011535d03b",
+      "日期数值完全相同": true,
+      "新可见时刻": "下一A股日18:00",
+      "行数": 2974
+    },
+    "布伦特原油": {
+      "候选原始SHA256": "ea7a8fafac6c46aa59060eabc6a1897eecb4fc4712d072e2f6cc8bf140406dc4",
+      "日期数值完全相同": true,
+      "新可见时刻": "下一A股日18:00",
+      "行数": 2974
+    },
+    "COMEX黄金": {
+      "候选原始SHA256": "dc7ba8545a257e770b3d31eb50904bf0a4fe09802788e29c4ba5288cab8452bc",
+      "日期数值完全相同": true,
+      "新可见时刻": "下一A股日18:00",
+      "行数": 2973
+    }
+  },
+  "原生产保护路径差异": "",
+  "当前正式CSV_SHA256": {
+    "data/宏观/COMEX黄金.csv": "4ca2f63ba1140ffe0438165a6fbed10dfe2000e31216a1e7a537d7ce7bfc4038",
+    "data/宏观/CPI同比.csv": "5ac571d4dd8fe277405749a47284a60ac77e099546d5ee0ecf6ead3b68029793",
+    "data/宏观/M1.csv": "a30d1d2585e9ad1c3b563f0a23ae1d18043b2d80fcf783c25319d217bbba7d5a",
+    "data/宏观/M2.csv": "bbc82ab3eb73c86cbb4af5f0e9a9d06efaf1c04b06ab3fd81e4b15fbb64dd7db",
+    "data/宏观/PPI同比.csv": "d913cceebcd2abd5be6fe673874c1a13711a8fa014d3ccbe7ebb38488ccb12f8",
+    "data/宏观/中国10年国债.csv": "a36f38a066c338cb255e97d1098af9d4ea508305f5f333f15a1131f85c3808b6",
+    "data/宏观/制造业PMI.csv": "6756a5b8664ceb19545ecb8dbc89d74839391c223a2050d005488b11613fa2d3",
+    "data/宏观/布伦特原油.csv": "7117d1cc3ae59e576fe236c017d28c4ecdfde0a228fa2d4b0708ddc43b7d3a8d",
+    "data/宏观/派生.csv": "50a0731c49b61ecad861b1dfb7ba0ab3b9f6b3640048d685fa8c8310f8d38651",
+    "data/宏观/美元兑人民币.csv": "ee9c9f68664bc7338f88feda8bcfbaed6eca0765deb45354d29b9c32c92ee00e",
+    "data/宏观/美元兑人民币_FRED历史补充.csv": "83d64c2c449027cd510db106a133876443203bd187a956e40de6950826729358",
+    "data/宏观/美元指数.csv": "eadba36127624ab4b4e01feb4e7d1d7e30231720ed6caa98b3efcc7b8667a3cf",
+    "data/宏观/美国10年国债.csv": "47ca22f69ac195024ae31aa1a7025ed056fa0c1041a92fc80d0358979ecb3f6e"
+  }
+}
