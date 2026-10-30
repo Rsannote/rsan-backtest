@@ -1,0 +1,30 @@
+name: T6b Yahoo交易日标签核对
+on:
+  push:
+    branches: [gpt/T6b-macro]
+    paths: ['.github/workflows/test-t6b-yahoo.yml']
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install requests
+      - name: 仅核对已批准Yahoo来源元信息
+        run: |
+          python - <<'PY'
+          import sys,json,datetime as dt
+          from zoneinfo import ZoneInfo
+          sys.path.insert(0,'scripts')
+          from update_macro import Client,url
+          c=Client()
+          for s in ['DX-Y.NYB','BZ=F','GC=F']:
+              u=url('https://query1.finance.yahoo.com/v8/finance/chart/'+__import__('requests').utils.quote(s,safe=''),range='10d',interval='1d')
+              o=json.loads(c.get(u))['chart']['result'][0]
+              tz=ZoneInfo(o['meta']['exchangeTimezoneName'])
+              m={k:o['meta'].get(k) for k in ['symbol','exchangeTimezoneName','regularMarketTime','currentTradingPeriod','instrumentType']}
+              print(json.dumps(m,ensure_ascii=False))
+              for stamp,value in list(zip(o['timestamp'],o['indicators']['quote'][0]['close']))[-4:]:
+                  print(s,stamp,dt.datetime.fromtimestamp(stamp,tz).isoformat(),value)
+          PY
