@@ -35,7 +35,7 @@ class FlowTests(unittest.TestCase):
         benchmark=pd.Series(100.,index=index);daily,metrics=m.compute_sw(C,A,benchmark,self.names)
         code=self.old[0];last=daily[daily.code==code].iloc[-1]
         self.assertAlmostEqual(last['相对沪深300_20'],369/349-1);self.assertAlmostEqual(last['偏离60日线'],369/339.5-1)
-        self.assertAlmostEqual(last['占比一年分位_28'],100);self.assertTrue(metrics['占比一年分位_28'].iloc[248].isna().all())
+        self.assertAlmostEqual(last['占比一年分位_28'],100);self.assertTrue(metrics['占比一年分位_28'].iloc[223].isna().all())
         self.assertAlmostEqual(last['占比5日变化_28'],metrics['占比_28'][code].iloc[-1]-metrics['占比_28'][code].iloc[-6])
     def test_rank_requires_full_universe_and_ties_use_code(self):
         x=pd.DataFrame({'b':[1,np.nan],'a':[1,2]});r=m.rank_complete(x,['b','a'])

@@ -61,12 +61,7 @@ def valid_rolling(values,window,method='mean'):
     minimum=(window*9+9)//10
     roll=values.rolling(window,min_periods=minimum)
     result=roll.mean() if method=='mean' else roll.rank(method='max',pct=True)*100
-    # 暖启动不以225个观测假装已有250日历史；新31口径独立起算。
-    def mature(series):
-        valid=series.notna().to_numpy();positions=np.arange(len(series));first=int(np.argmax(valid)) if valid.any() else len(series)
-        return pd.Series(positions-first+1>=window,index=series.index)
-    mask=values.apply(mature) if isinstance(values,pd.DataFrame) else mature(values)
-    return result.where(mask)
+    return result
 
 
 def window_notes(values,windows,prefix):
@@ -78,10 +73,9 @@ def window_notes(values,windows,prefix):
         for code in values:
             first=values[code].first_valid_index()
             if first is None:continue
-            begin=values.index.get_loc(first);mature=positions-begin+1>=window
+            begin=values.index.get_loc(first)
             text=pd.Series('',index=values.index)
-            if window in (60,250):text.loc[(positions>=begin)&~mature]=f'{prefix}{window}日窗口不足{window}交易日；'
-            missing=window-counts[code];mask=mature&(missing>0)
+            missing=window-counts[code];mask=(positions>=begin)&(missing>0)
             text.loc[mask]=f'{prefix}{window}日窗口内缺 '+missing.loc[mask].astype(int).astype(str)+' 天；'
             notes[code]+=text
     return notes

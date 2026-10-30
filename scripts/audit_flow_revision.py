@@ -47,7 +47,7 @@ def main():
             r=next(r for r in rows if r['年份']==year and r['列']==key)
             cells.append('—' if not r['应有'] else f"{r['修复前比例']:.2%} → {r['修复后比例']:.2%}")
         lines.append('|'+year+'|'+ '|'.join(cells)+'|')
-    lines+=['','保持完整60/250个交易日跨度后才启用，窗口内有效数要求54/225；当日原始缺失不填，故覆盖率不冒充100%。缺口恢复详情见缺口重抓/结果.json。','']
+    lines+=['','固定60/250个交易日窗口，最少有效数54/225；起步期也须满足该门槛，不提前凑值；当日原始缺失不填，故覆盖率不冒充100%。缺口恢复详情见缺口重抓/结果.json。','']
     atomic_text(out/'覆盖率_修复前后.md','\n'.join(lines))
     # 真实旧行前缀检查，派生CSV允许按修订追加，禁止删改。
     paths=subprocess.check_output(['git','-c','core.quotepath=false','ls-tree','-r','--name-only',BASE,'data/资金轮动'],cwd=ROOT).decode().splitlines()

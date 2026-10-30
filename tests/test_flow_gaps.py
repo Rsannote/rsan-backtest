@@ -37,7 +37,7 @@ class GapWindowTests(unittest.TestCase):
             x=self.series();x.iloc[-allowed-1:-1]=np.nan
             self.assertTrue(np.isfinite(m.valid_rolling(x,window).iloc[-1]))
             x.iloc[-allowed-2]=np.nan;self.assertTrue(np.isnan(m.valid_rolling(x,window).iloc[-1]))
-        x=self.series();self.assertTrue(np.isnan(m.valid_rolling(x,250,'rank').iloc[248]));self.assertEqual(m.valid_rolling(x,250,'rank').iloc[249],100)
+        x=self.series();self.assertTrue(np.isnan(m.valid_rolling(x,250,'rank').iloc[223]));self.assertEqual(m.valid_rolling(x,250,'rank').iloc[224],100)
     def test_no_nan_zero_fill_no_current_value_no_rank_and_ties(self):
         x=self.series();x.iloc[-1]=np.nan;self.assertTrue(np.isnan(m.valid_rolling(x,250,'rank').iloc[-1]))
         x[:]=2;x.iloc[275]=np.nan;self.assertEqual(m.valid_rolling(x,250,'rank').iloc[-1],100)
