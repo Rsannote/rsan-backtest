@@ -1,0 +1,23 @@
+name: T9 主分支只读同步
+on:
+  push:
+    branches: [gpt/T9-events]
+    paths: ['.github/workflows/test-t9-bootstrap.yml']
+permissions:
+  contents: read
+concurrency:
+  group: t9-readonly-bootstrap
+  cancel-in-progress: false
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - run: git bundle create /tmp/main.bundle refs/remotes/origin/main
+      - uses: actions/upload-artifact@v4
+        with:
+          name: T9-main-git-snapshot
+          path: /tmp/main.bundle
