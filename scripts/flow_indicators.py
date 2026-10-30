@@ -63,7 +63,17 @@ def run(root=ROOT,offline=False,capture=None,now=None):
     if not units['全部通过']:warnings.append('最近10日单位量级核对未全部通过，原字段不擅自换算')
     stats,pairs=describe(C,benchmark,names,metrics)
     dump(base/'统计.json',stats);atomic_text(base/'统计.md',markdown(stats,pairs))
-    atomic_text(base/'领先滞后.csv',pairs.to_csv(index=False,lineterminator='\n'));dump(base/'领先滞后.json',pairs.to_dict('records'))
+    if not pairs.empty:
+        pair_path=base/'领先滞后.csv';before=pair_path.read_bytes() if pair_path.exists() else b''
+        # 汇总CSV也按配对键追加修订，不重写旧历史；生成时段与追加区间另存只追加日志。
+        pair_rows=[{k:'' if pd.isna(v) else str(v) for k,v in row.items()} for row in pairs.to_dict('records')]
+        added=append_rows(pair_path,list(pairs.columns),pair_rows,['A代码','B代码','后续窗口'],stamp)
+        if added:
+            journal=base/'领先滞后_版本.jsonl';old=journal.read_text() if journal.exists() else ''
+            version={'统计截止':target,'生成时间':stamp,'旧SHA256':hashlib.sha256(before).hexdigest(),'新SHA256':hashlib.sha256(pair_path.read_bytes()).hexdigest(),
+                     '追加行数':added,'原因':'按同一描述统计口径重算，保留旧CSV版本；同配对键读取最后一条'}
+            atomic_text(journal,old+json.dumps(version,ensure_ascii=False)+'\n')
+    dump(base/'领先滞后.json',pairs.to_dict('records'))
     dump(root/'logs/test/T8b/成交额单位核对.json',units)
     lines=['# 31行业成交额单位核对','',units['口径'],'', '|日期|申万31合计原值|市场成交额亿|市场来源|相对偏差|±15%内|','|---|---:|---:|---|---:|---|']
     for r in units['rows']:lines.append(f"|{r['date']}|{r['申万31合计原值']:.8f}|{r['市场成交额亿']:.4f}|{r['市场来源']}|{r['相对偏差']:.6%}|{r['±15%内']}|")

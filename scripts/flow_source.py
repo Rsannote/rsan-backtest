@@ -42,7 +42,7 @@ def append_rows(path,fields,rows,keys,stamp):
         if before and all(row[f]==before[f] for f in comparable):continue
         if '采集时间' in row:row['采集时间']=stamp
         if '生成时间' in row:row['生成时间']=stamp
-        row['修订原因']='上游或计算结果变化，保留旧版本' if before else '首次记录'
+        if '修订原因' in fields:row['修订原因']='上游或计算结果变化，保留旧版本' if before else '首次记录'
         pending.append(row);previous[key]=row
     if not pending and old:return 0
     out=io.StringIO(newline='');writer=csv.DictWriter(out,fields,lineterminator='\n')

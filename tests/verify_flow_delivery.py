@@ -53,7 +53,7 @@ def main():
             src=ROOT/path;dest=root/path;dest.parent.mkdir(parents=True,exist_ok=True)
             if src.is_dir():shutil.copytree(src,dest)
             else:shutil.copyfile(src,dest)
-        history={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in (root/'data/资金轮动').rglob('*.csv') if p.name not in ('领先滞后.csv',)}
+        history={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in (root/'data/资金轮动').rglob('*.csv')}
         repeated=run(root,offline=True)
         assert repeated['新增日表行']==0 and repeated['新增ETF行']==0
         assert all(hashlib.sha256((root/p).read_bytes()).hexdigest()==sha for p,sha in history.items())
