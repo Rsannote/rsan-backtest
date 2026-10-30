@@ -110,3 +110,28 @@ jobs:
             data/主线/最新.md
             logs/主线信号_最新.json
             logs/主线信号_最新.md
+      - name: 保存main同步上下文（只读副本）
+        if: always() && steps.promote.outcome == 'success'
+        run: |
+          python - <<'PY'
+          import hashlib,json,os,shutil,subprocess
+          from pathlib import Path
+          base='4b3050b6d34ca9ffa9981c6fc9885b3147501204'
+          main='242097ff75269932a6873ab9304064ea8b90d591'
+          subprocess.run(['git','merge-base','--is-ancestor',main,'HEAD'],check=True)
+          out=Path(os.environ['RUNNER_TEMP'])/'t13b-main-context'
+          paths=subprocess.check_output(['git','diff','--name-only','-z',base,main]).decode().split('\0')
+          rows=[]
+          for s in filter(None,paths):
+              p=Path(s)
+              if p.is_absolute() or '..' in p.parts or p.is_symlink():raise ValueError('上下文路径非法')
+              if not p.is_file():continue
+              b=p.read_bytes();target=out/p;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(b)
+              rows.append({'path':s,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
+          (out/'上下文.json').write_text(json.dumps({'base':base,'main':main,'head':subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),'files':rows},ensure_ascii=False,indent=2)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.promote.outcome == 'success'
+        with:
+          name: T13b-main同步-${{ github.run_id }}
+          path: ${{ runner.temp }}/t13b-main-context/
