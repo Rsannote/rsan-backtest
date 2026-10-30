@@ -265,7 +265,14 @@ def run(root=ROOT,now=None):
     summary=[schema,'\n# 事件总表\n','|表|事件id|开始|结束（极值）|幅度|持续交易日|成立日期|确认结束|状态|','|---|---|---|---|---:|---:|---|---|---|']
     for name,rows in [('大调整15%',declines),('大反弹20%',rebounds),('大调整10%',alternate)]:
         for r in rows:summary.append(f"|{name}|{r['事件id']}|{r['开始']}|{r['结束']}|{r['幅度']:.4%}|{r['持续交易日']}|{r['成立日期']}|{r['确认结束日期']}|{r['状态']}|")
-    atomic_text(output/'说明.md','\n'.join(summary)+'\n')
+    description='\n'.join(summary)+'\n'
+    # T14在共用说明末尾追加独立规则；日常T9刷新不能擦掉该扩展及人工说明。
+    description_path=output/'说明.md'
+    previous=description_path.read_bytes() if description_path.exists() else b''
+    marker='\n## T14 历史主线案例'.encode('utf-8')
+    if marker in previous:
+        description+=previous[previous.index(marker):].decode('utf-8')
+    atomic_text(description_path,description)
     atomic_text(root/'logs/事件库_最新.json',json.dumps(report,ensure_ascii=False,indent=2,allow_nan=False)+'\n')
     atomic_text(root/'logs/事件库_最新.md',f"# 事件库运行\n\n北京时间：{now.isoformat()}\n\n数据基准：{data.days[-1]}；状态：{report['status']}\n\n{json.dumps(report['counts'],ensure_ascii=False)}\n\n当前完整候选：{len(ranked)}；前五数字见data/事件库/当前对照.md。\n\n{json.dumps(report['errors'],ensure_ascii=False)}\n")
     print('事件库：'+json.dumps(report['counts'],ensure_ascii=False)+f'；主对照完整候选{len(ranked)}',flush=True)

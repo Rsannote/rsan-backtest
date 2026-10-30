@@ -226,6 +226,9 @@ class CaseTests(unittest.TestCase):
         self.assertEqual(window['各字段有效日数']['资金']['资金_成交占比'], 19)
         self.assertIn('历史信号修订/2026.csv', window['来源'])
         self.assertEqual(path.read_bytes(), before)
+        self.write('data/主线/历史信号修订/2027.csv',fields,
+                   [dict(base[0],date='2027-01-04',资金_成交占比='.9')])
+        self.assertEqual(storage.SignalWindow(self.root,days).window(24,code),window)
         # T13只改变附属窗口；核心日条件仍直接取T8，与分片资金值没有关联。
         states, _, _ = cases.daily_conditions(self.flow([days[-1]]), [days[-1]], self.codes, self.candidates, self.config)
         self.assertIs(states[code][0], True)

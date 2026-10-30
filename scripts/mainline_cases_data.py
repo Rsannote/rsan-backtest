@@ -214,7 +214,9 @@ class SignalWindow:
             counts[name] = {c: sum(r['原值'] is not None and r['原值'].get(c) is not None for r in rows)
                             for c in cols}
         source = 'data/主线/历史信号表_28.csv；同日行业最后修订，初建非严格时点版本'
-        shards = [str(p.relative_to(self.path.parent.parent.parent)) for p in self.paths if p != self.path]
+        years={day[:4] for day in dates}
+        # 未来无关年片只进入运行清单，不改变旧窗口的来源文字或制造案例修订。
+        shards = [str(p.relative_to(self.path.parent.parent.parent)) for p in self.paths if p != self.path and p.stem in years]
         if shards:
             source += '；基表后依次叠加年度分片：' + '；'.join(shards)
         return {'窗口': 'T-20..T-1，严格排除开始日；各观测日23:59:59收尾',

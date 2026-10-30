@@ -101,5 +101,18 @@ class EventTests(unittest.TestCase):
         self.assertTrue(all(r['幅度']>=.20-1e-10 for r in rows if r['类型']=='大反弹'))
         ranked,_,_=events.distances(data.features(len(data.days)-1),rows);self.assertGreaterEqual(len(ranked),5)
 
+    def test_daily_t9_refresh_preserves_mainline_appendix_bytes(self):
+        self.fixture()
+        schema=self.root/'system/事件库格式.md';schema.parent.mkdir(parents=True);schema.write_text('当前T9格式\n')
+        description=self.root/'data/事件库/说明.md';description.parent.mkdir(parents=True)
+        appendix='\n## T14 历史主线案例（独立草案v0）\r\n规则与人工补充原文：保留。\r\n'.encode()
+        description.write_bytes('旧T9说明\n'.encode()+appendix)
+        events.run(self.root,self.now)
+        first=description.read_bytes()
+        self.assertTrue(first.startswith('当前T9格式\n'.encode()))
+        self.assertTrue(first.endswith(appendix))
+        events.run(self.root,self.now)
+        self.assertEqual(description.read_bytes(),first)
+
 
 if __name__=='__main__':unittest.main()
