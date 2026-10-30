@@ -1,0 +1,62 @@
+# 本分支专用手工验收工作流；只读Git，正式追加由独立发布验收处理。
+name: T13b 业绩历史采集
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        type: choice
+        options: [probe, batch]
+        default: probe
+      max_stocks:
+        default: '400'
+      budget:
+        default: '2700'
+      refresh:
+        type: boolean
+        default: false
+  push:
+    branches: [gpt/T13b-earnings]
+    paths: ['logs/test/T13b/采集请求.json']
+permissions:
+  contents: read
+concurrency:
+  group: t13b-collector-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  collect:
+    if: github.ref == 'refs/heads/gpt/T13b-earnings'
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pandas numpy requests
+      - name: 限时逐股抓取（默认先探测3只，不写Git分支）
+        env:
+          INPUT_MODE: ${{ inputs.mode }}
+          INPUT_MAX: ${{ inputs.max_stocks }}
+          INPUT_BUDGET: ${{ inputs.budget }}
+          INPUT_REFRESH: ${{ inputs.refresh }}
+        run: |
+          python - <<'PY'
+          import json,os,subprocess,sys
+          from pathlib import Path
+          request=json.loads(Path('logs/test/T13b/采集请求.json').read_text()) if os.environ['GITHUB_EVENT_NAME']=='push' else {}
+          mode=request.get('mode',os.environ.get('INPUT_MODE') or 'probe')
+          maximum=int(request.get('max_stocks',os.environ.get('INPUT_MAX') or 400))
+          budget=int(request.get('budget',os.environ.get('INPUT_BUDGET') or 2700))
+          refresh=request.get('refresh',os.environ.get('INPUT_REFRESH')=='true')
+          if mode not in ('probe','batch') or not isinstance(refresh,bool):raise ValueError('采集请求格式无效')
+          args=[sys.executable,'-u','scripts/earnings_history.py','--mode',mode,'--max-stocks',str(maximum),'--budget',str(budget)]
+          if refresh:args.append('--refresh')
+          raise SystemExit(subprocess.call(args))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T13b-采集-${{ github.run_id }}
+          path: logs/test/T13b/产物/
+          if-no-files-found: error
+          retention-days: 30

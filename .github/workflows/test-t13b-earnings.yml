@@ -1,0 +1,21 @@
+name: T13b 业绩历史离线验收
+on:
+  push:
+    branches: [gpt/T13b-earnings]
+    paths: ['scripts/earnings_history*.py', 'scripts/mainline_*.py', 'tests/test_earnings_history*.py', 'tests/test_mainline_signals.py', '.github/workflows/*t13b*.yml']
+  pull_request:
+    paths: ['scripts/earnings_history*.py', 'scripts/mainline_*.py', 'tests/test_earnings_history*.py', 'tests/test_mainline_signals.py']
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pandas numpy requests
+      - run: python -m unittest discover -s tests -v
+      - run: md5sum -c engine/ENGINE_MD5.txt

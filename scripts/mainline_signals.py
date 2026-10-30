@@ -14,6 +14,7 @@ from auto_judgment_common import atomic_text
 from flow_source import append_rows
 from mainline_sources import BJ,NEW,Sources,registry,number
 from flow_source import START,START31
+from mainline_signal_store import plan_revisions,write_revisions
 
 ROOT=Path(__file__).resolve().parents[1]
 FLOW={'成交额原值':'资金_成交额亿','占比':'资金_成交占比','总额':'资金_行业合计亿','占比5日变化':'资金_占比5日变化','占比20日变化':'资金_占比20日变化',
@@ -71,6 +72,9 @@ def build(flow,names,sources,scope):
             out['缺失说明']='；'.join(missing)
             out['T8数据说明']=str(raw.get('数据说明','')) if pd.notna(raw.get('数据说明')) else ''
             out['使用时点说明']='收盘后指标；市场/社区实际可见时刻另列；初次历史建库非逐日版本'
+            quarter_note=sources.quarter_notes.get((day,code),'')
+            if quarter_note or item['久期']=='中':
+                out['使用时点说明']='T13b-v2'+quarter_note+(';中性定义，非缺失' if item['久期']=='中' else '')
             rows.append(out)
     result=pd.DataFrame(rows)
     if result.empty:return result
@@ -88,29 +92,32 @@ def json_safe(value):
 def dump(path,value):atomic_text(path,json.dumps(json_safe(value),ensure_ascii=False,indent=2,allow_nan=False)+'\n')
 
 
-def run(root=ROOT,asof=None,now=None):
+def run(root=ROOT,asof=None,now=None,estimate_only=False):
     root=Path(root).resolve();now=(now or dt.datetime.now(BJ)).astimezone(BJ);stamp=now.isoformat();names=registry(root)
     inputs=[root/'system/行业清单.csv',root/'system/催化日历.csv'];before={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in inputs}
     flow=flow_latest(root,asof);last=flow.date.max()
     if not set(flow.code).issubset(names):raise ValueError('T8输入含Claude申万清单以外代码，不以ETF替代申万')
     if last>now.date().isoformat():raise ValueError('T8输入数据日期在当前时间之后')
     sources=Sources(root,names);tables={scope:build(flow,names,sources,scope) for scope in (31,28)}
-    base=root/'data/主线';base.mkdir(parents=True,exist_ok=True);added={}
+    base=root/'data/主线';added={};plans={};changes={}
     for scope,table in tables.items():
         if table.empty:continue
-        path=base/('信号表.csv' if scope==31 else '历史信号表_28.csv')
-        added[str(scope)]=append_rows(path,list(table.columns)+['生成时间','修订原因'],table.to_dict('records'),['date','code'],stamp,revision_reason='T13五维输入或映射变化，保留旧行；同日行业读取最后修订')
+        table,updates,plan=plan_revisions(root,scope,table,stamp)
+        tables[scope]=table;changes.update(updates);plans[str(scope)]=plan;added[str(scope)]=plan['追加行']
+    dump(root/'logs/test/T13b/信号追加预算.json',{'生成时间':stamp,'逐口径':plans,'说明':'原CSV字节保持不变；只追加真正变化行到年度修订分片；逐分片精确预检100MiB'})
+    if estimate_only:return {'追加预算':plans,'errors':[]}
+    write_revisions(root,changes,plans)
     current=tables[31][tables[31].date==last].to_dict('records') if not tables[31].empty else []
     errors=[];warnings=[]
     if last>=START31 and len(current)!=31:errors.append('最新31行业信号行数不是31，见T8日期范围')
     if current and not any(number(r.get('资金_成交占比')) is not None for r in current if r['主线判定']=='参与'):
         errors.append('最新所有候选的申万资金占比均缺，不能仅凭文件有行报正常')
     if not (root/'data/一致预期/行业上修.csv').exists():warnings.append('T12b尚未提供主分支一致预期上修表，相应维度缺失，不读未合并分支')
-    warnings+=['当前行业成分仅14行业，季报缓存为股票池样本；全行业占比须成分全部可评估，否则只列样本占比与覆盖率','新闻4周变化需完整两段28自然日，不足留空；中久期适配无定量规则，适配bp留空','人工行业映射为当前分类回溯；T8按要求读取最后修订，历史不是严格逐日版本']
+    warnings+=['当前成分快照回溯有幸存者偏差，非历史成分/PIT财报库；利润加速占比仅在可评估>=10家且>=60%成分时=加速/可评估，否则缺','新闻历史不能回补，历史潜伏的先行维度只能用业绩；中久期适配0为中性定义，非缺失，原中美利率缺值仍保留','人工行业映射为当前分类回溯；T8按要求读取最后修订，历史不是严格逐日版本']
     for path,digest in before.items():
         if hashlib.sha256((root/path).read_bytes()).hexdigest()!=digest:raise AssertionError('Claude表被改动：'+path)
     counts={d:{s:sum(r[d+'_状态']==s for r in current) for s in ('有值','部分缺','缺','排除')} for d in ('环境适配','业绩预期','热度催化','资金','拥挤度')}
-    report={'title':'主线信号表','generated_at':stamp,'data_date':last,'status':'失败' if errors else '正常','errors':errors,'warnings':warnings,'观察对象':'申万一级31行业；综合排除候选，只参与合计','历史回放口径':'固定28行业，排除2021新增三行业；独立历史信号表_28.csv，不与31列拼接','维度覆盖':counts,'新增行':added,'当前行':current,'维护表SHA256':before,'输入T8_SHA256':hashlib.sha256((root/'data/资金轮动/日表.csv').read_bytes()).hexdigest(),'催化日历':sources.catalysts,'解释':'【待判读】；不判阶段、不设主线参数、不生成判断'}
+    report={'title':'主线信号表','generated_at':stamp,'data_date':last,'status':'失败' if errors else '正常','errors':errors,'warnings':warnings,'观察对象':'申万一级31行业；综合排除候选，只参与合计','历史回放口径':'固定28行业，排除2021新增三行业；独立历史信号表_28.csv，不与31列拼接','维度覆盖':counts,'新增行':added,'追加预算':plans,'当前行':current,'维护表SHA256':before,'输入T8_SHA256':hashlib.sha256((root/'data/资金轮动/日表.csv').read_bytes()).hexdigest(),'催化日历':sources.catalysts,'解释':'【待判读】；不判阶段、不设主线参数、不生成判断'}
     dump(base/'最新.json',report);dump(root/'logs/主线信号_最新.json',report)
     lines=['# 主线信号表','',f'数据日期：{last}；生成：{stamp}（北京时间）。当前31，历史回放固定28分文件。','', '|行业|代码|主线判定|环境适配|业绩预期|热度催化|资金|拥挤度|占比|20日相对|一年分位|','|---|---|---|---|---|---|---|---|---:|---:|---:|']
     def show(v):return '缺' if v is None or (isinstance(v,float) and not np.isfinite(v)) or v=='' else str(round(v,8)) if isinstance(v,float) else str(v)
@@ -123,7 +130,7 @@ def run(root=ROOT,asof=None,now=None):
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,default=ROOT);p.add_argument('--asof');p.add_argument('--backfill',action='store_true',help='一条命令全量回补两套独立口径，幂等仅追加修订');a=p.parse_args();r=run(a.root,a.asof);return 1 if r['errors'] else 0
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,default=ROOT);p.add_argument('--asof');p.add_argument('--estimate-only',action='store_true',help='只计算精确追加字节，不写正式信号/最新派生');p.add_argument('--backfill',action='store_true',help='一条命令全量回补两套独立口径，幂等仅追加修订');a=p.parse_args();r=run(a.root,a.asof,estimate_only=a.estimate_only);return 1 if r['errors'] else 0
 
 
 if __name__=='__main__':raise SystemExit(main())

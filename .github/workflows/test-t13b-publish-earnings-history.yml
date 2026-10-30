@@ -1,0 +1,102 @@
+# 本分支专用手工验收工作流；不接生产调度。采集独立只读，不抢生产写锁。
+name: T13b 业绩历史短发布
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        required: true
+      sha:
+        required: true
+      rebuild_signals:
+        type: boolean
+        default: false
+  push:
+    branches: [gpt/T13b-earnings]
+    paths: ['logs/test/T13b/发布请求.json']
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: repo-writer
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/gpt/T13b-earnings'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gpt/T13b-earnings
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pandas numpy requests
+      - name: 锁内拉最新分支并验证采集运行身份
+        env:
+          INPUT_RUN: ${{ inputs.run_id }}
+          INPUT_SHA: ${{ inputs.sha }}
+          INPUT_REBUILD: ${{ inputs.rebuild_signals }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git pull --rebase origin gpt/T13b-earnings
+          python - <<'PY'
+          import json,os,re,subprocess
+          from pathlib import Path
+          request=json.loads(Path('logs/test/T13b/发布请求.json').read_text()) if os.environ['GITHUB_EVENT_NAME']=='push' else {}
+          run=str(request.get('run_id',os.environ.get('INPUT_RUN','')))
+          sha=request.get('sha',os.environ.get('INPUT_SHA',''))
+          rebuild=request.get('rebuild_signals',os.environ.get('INPUT_REBUILD')=='true')
+          if not re.fullmatch(r'\d+',run) or not re.fullmatch(r'[0-9a-f]{40}',sha) or not isinstance(rebuild,bool):raise ValueError('发布请求格式无效')
+          info=json.loads(subprocess.check_output(['gh','api',f'repos/{os.environ["GITHUB_REPOSITORY"]}/actions/runs/{run}']))
+          if info['head_branch']!='gpt/T13b-earnings' or info['head_sha']!=sha or info['path']!='.github/workflows/test-t13b-earnings-history.yml' or info['status']!='completed':raise ValueError('来源运行身份/工作流/完成状态不符')
+          with open(os.environ['GITHUB_ENV'],'a') as f:f.write(f'RUN_ID={run}\nSOURCE_SHA={sha}\nREBUILD={str(rebuild).lower()}\n')
+          PY
+      - uses: actions/download-artifact@v4
+        with:
+          name: T13b-采集-${{ env.RUN_ID }}
+          run-id: ${{ env.RUN_ID }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/t13b-artifact
+      - name: 整份预检和事务晋升财报
+        id: promote
+        env:
+          ARTIFACT_DIR: ${{ runner.temp }}/t13b-artifact
+        run: |
+          python - <<'PY'
+          import os,subprocess,sys
+          from pathlib import Path
+          files=list(Path(os.environ['ARTIFACT_DIR']).glob('*/artifact.json'))
+          if len(files)!=1:raise ValueError('必须且只能有一份采集产物')
+          subprocess.run([sys.executable,'scripts/earnings_history_publish.py','--artifact',str(files[0]),'--run-id',os.environ['RUN_ID'],'--sha',os.environ['SOURCE_SHA']],check=True)
+          PY
+      - name: 独立预算与年度主线修订
+        id: signals
+        if: steps.promote.outcome == 'success'
+        run: |
+          python scripts/mainline_signals.py --estimate-only
+          if [ "$REBUILD" = true ]; then python scripts/mainline_signals.py --backfill; fi
+      - name: 仅保存已成功晋升的产物
+        if: always() && steps.promote.outcome == 'success'
+        env:
+          SIGNALS_OUTCOME: ${{ steps.signals.outcome }}
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email actions@users.noreply.github.com
+          for path in data/财报/全市场单季 logs/test/T13b; do
+            if [ -e "$path" ]; then git add -- "$path"; fi
+          done
+          if [ "$SIGNALS_OUTCOME" = success ]; then
+            git add -- data/主线 logs/主线信号_最新.json logs/主线信号_最新.md
+          fi
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "T13b 业绩历史发布 $(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M')"
+          git pull --rebase origin gpt/T13b-earnings
+          git push origin HEAD:gpt/T13b-earnings
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T13b-发布-${{ github.run_id }}
+          path: logs/test/T13b/

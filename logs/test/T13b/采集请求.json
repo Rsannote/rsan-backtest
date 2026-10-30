@@ -1,0 +1,6 @@
+{
+  "mode": "probe",
+  "max_stocks": 3,
+  "budget": 180,
+  "refresh": false
+}
