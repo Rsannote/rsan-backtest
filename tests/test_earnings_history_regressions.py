@@ -77,6 +77,23 @@ class RegressionTests(unittest.TestCase):
         (self.root/'logs/test/T13b/发布_123.json').write_text(json.dumps(evidence))
         with self.assertRaisesRegex(ValueError,'3只不同股票'):eh.probe_ready(self.root)
 
+    def test_real_html_crlf_survives_publish_and_probe_gate(self):
+        codes=['000001','600519','000063']
+        text=page().replace('><','>\r\n<')+'\r\n'
+        eh.collect(self.root,mode='probe',codes=codes,client=FakeClient({c:text for c in codes}))
+        path=next((self.root/'logs/test/T13b/产物').glob('*/artifact.json'))
+        payload=json.loads(path.read_text())
+        payload['报告'].update({'来源分支':'gpt/T13b-earnings','来源运行':'123','来源SHA':'a'*40})
+        path.write_text(json.dumps(payload,ensure_ascii=False))
+        publisher.publish(self.root,path,'123','a'*40,check_ancestry=False)
+        eh.probe_ready(self.root)
+        for record in payload['报告']['结果']:
+            self.assertEqual((self.root/record['响应文件']).read_bytes(),text.encode())
+        # 语义不变的换行篡改也必须被原始响应SHA拒绝。
+        raw=self.root/payload['报告']['结果'][0]['响应文件']
+        raw.write_bytes(raw.read_bytes().replace(b'\r\n',b'\n'))
+        with self.assertRaisesRegex(ValueError,'3只不同股票'):eh.probe_ready(self.root)
+
     def test_probe_cannot_write_request_or_mismatch_html_manifest(self):
         path,original=self.probe()
         payload=copy.deepcopy(original);payload['报告']['结果'][0]['响应文件']='logs/test/T13b/发布请求.json'

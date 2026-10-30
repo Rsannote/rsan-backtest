@@ -138,7 +138,8 @@ def validate_probe_evidence(root,evidence):
         if '响应文件' in record:
             expected=capture_path(report['生成时间'],record['代码'])
             if record['响应文件']!=expected.as_posix():raise ValueError('探测证据路径不规范')
-            captures[record['代码']]=(root/expected).read_text()
+            # 原始HTML含CRLF；read_text会归一化换行，使真实响应SHA失配。
+            captures[record['代码']]=(root/expected).read_bytes().decode('utf-8')
     payload={'报告':report,'单季记录':evidence['探测单季记录'],'探测响应':captures}
     _,results,_,_=validate_payload(root,payload,evidence['来源运行'],evidence['来源SHA'])
     if len({code for code,r in results.items() if r['状态']=='成功'})<3:
@@ -215,7 +216,7 @@ def publish(root,artifact,expected_run,expected_sha,*,check_ancestry=True):
             changes[state]=old+(b'\n' if old and not old.endswith(b'\n') and pending else b'')+''.join(x+'\n' for x in pending).encode()
     for code,text in captures.items():
         target=root/capture_path(stamp,code)
-        if target.exists() and target.read_text()!=text:raise ValueError('同名探测HTML证据冲突')
+        if target.exists() and target.read_bytes()!=text.encode('utf-8'):raise ValueError('同名探测HTML证据冲突')
         changes[target]=text.encode()
     summary={'来源运行':str(expected_run),'来源SHA':expected_sha,'产物SHA256':artifact_hash,
              '追加行':added,'采集报告':report,'探测单季记录':rows_by_code if report['模式']=='probe' else {}}
