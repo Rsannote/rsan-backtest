@@ -1,0 +1,4 @@
+2026-10-30T05:54:41.0134049Z [36;1mpython -m unittest discover -s tests -v 2>&1 | tee logs/test/T8b/离线测试.txt[0m
+2026-10-30T05:54:45.9389216Z Ran 163 tests in 4.262s
+2026-10-30T05:54:45.9390054Z OK
+2026-10-30T05:54:46.0689155Z engine/backtest.py: OK
