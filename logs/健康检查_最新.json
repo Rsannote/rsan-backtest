@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-31T13:50:00.319055+08:00",
+  "checked_at": "2026-11-01T02:40:14.834947+08:00",
   "timezone": "Asia/Shanghai",
   "items": [
     {
@@ -11,46 +11,36 @@
         "data_date": "2026-10-30",
         "scheduled_at": "2026-10-30T16:40:00+08:00",
         "deadline": "2026-10-31T01:24:00+08:00",
-        "check_mode": "previous_trading_day"
+        "check_mode": "previous_trading_day",
+        "run_after": "2026-10-31T10:17:00+08:00"
       },
       "actual": {
         "data_date": "2026-10-30",
-        "updated_at": "2026-10-30T23:58:00+08:00",
-        "run_at": "2026-10-30T23:58:00+08:00",
-        "stale_symbols": [
-          {
-            "code": "688981",
-            "name": "中芯国际",
-            "date": "2026-10-29"
-          },
-          {
-            "code": "515880",
-            "name": "通信ETF国泰",
-            "date": "2026-10-29"
-          },
-          {
-            "code": "562500",
-            "name": "机器人ETF华夏",
-            "date": "2026-10-29"
-          },
-          {
-            "code": "515030",
-            "name": "新能源车ETF华夏",
-            "date": "2026-10-29"
-          }
-        ],
+        "updated_at": "2026-10-31T17:30:00+08:00",
+        "run_at": "2026-10-31T17:30:00+08:00",
+        "stale_symbols": [],
         "failed": [
-          "688981 中芯国际：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh688981,day,2026-09-19,2026-10-31,900, -> <HTTPError 501: 'Not Implemented'>",
-          "515880 通信ETF国泰：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh515880,day,2026-09-19,2026-10-31,900, -> <HTTPError 501: 'Not Implemented'>",
-          "562500 机器人ETF华夏：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh562500,day,2026-09-19,2026-10-31,900, -> <HTTPError 501: 'Not Implemented'>",
-          "515030 新能源车ETF华夏：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh515030,day,2026-09-19,2026-10-31,900, -> <HTTPError 501: 'Not Implemented'>"
+          "300502 新易盛：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz300502,day,2026-09-20,2026-11-01,900, -> <HTTPError 501: 'Not Implemented'>",
+          "300760 迈瑞医疗：sz300760 全量起点 2018-01-01：取已存腾讯日线首年（首日 2018-10-16），未手填上市日期；RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz300760,day,2021-01-01,2023-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+          "300801 泰和科技：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz300801,day,2026-09-20,2026-11-01,900, -> <HTTPError 501: 'Not Implemented'>",
+          "300999 金龙鱼：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz300999,day,2026-09-20,2026-11-01,900, -> <HTTPError 501: 'Not Implemented'>",
+          "603019 中科曙光：sh603019 全量起点 2014-01-01：取已存腾讯日线首年（首日 2014-11-06），未手填上市日期；RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh603019,day,2023-01-01,2025-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+          "603233 大参林：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh603233,day,2026-09-20,2026-11-01,900, -> <HTTPError 501: 'Not Implemented'>",
+          "603259 药明康德：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh603259,day,2026-09-20,2026-11-01,900, -> <HTTPError 501: 'Not Implemented'>",
+          "603288 海天味业：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh603288,day,2026-09-20,2026-11-01,900, -> <HTTPError 501: 'Not Implemented'>",
+          "603606 东方电缆、603700 宁水集团、603881 数据港、603939 益丰药房、603993 洛阳钼业、605090 九丰能源、688041 海光信息、688235 百济神州、688256 寒武纪、688271 联影医疗、688498 源杰科技、512480 半导体ETF国联安、512720 计算机ETF国泰、159819 人工智能ETF易方达、512980 传媒ETF广发、159869 游戏ETF华夏、159755 电池ETF广发、515790 光伏ETF华泰柏瑞、512660 军工ETF国泰、159992 创新药ETF银华、512880 证券ETF国泰、512800 银行ETF华宝、512070 证券保险ETF易方达、512010 医药ETF易方达、512170 医疗ETF华宝、512690 酒ETF鹏华、515170 食品饮料ETF华夏、159996 家电ETF国泰、516110 汽车ETF国泰、159766 旅游ETF富国、159865 养殖ETF国泰、159825 农业ETF富国、515220 煤炭ETF国泰、512400 有色金属ETF南方、515210 钢铁ETF国泰、159870 化工ETF鹏华、512200 房地产ETF南方、516950 基建ETF银华、159930 能源ETF汇添富、159611 电力ETF广发、159301 公用事业ETF华夏、159666 交通运输ETF华夏"
         ]
       },
       "reasons": [
-        "688981 中芯国际：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh688981,day,2026-09-19,2026-10-31,900, -> <HTTPError 501: 'Not Implemented'>",
-        "515880 通信ETF国泰：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh515880,day,2026-09-19,2026-10-31,900, -> <HTTPError 501: 'Not Implemented'>",
-        "562500 机器人ETF华夏：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh562500,day,2026-09-19,2026-10-31,900, -> <HTTPError 501: 'Not Implemented'>",
-        "515030 新能源车ETF华夏：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh515030,day,2026-09-19,2026-10-31,900, -> <HTTPError 501: 'Not Implemented'>"
+        "300502 新易盛：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz300502,day,2026-09-20,2026-11-01,900, -> <HTTPError 501: 'Not Implemented'>",
+        "300760 迈瑞医疗：sz300760 全量起点 2018-01-01：取已存腾讯日线首年（首日 2018-10-16），未手填上市日期；RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz300760,day,2021-01-01,2023-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+        "300801 泰和科技：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz300801,day,2026-09-20,2026-11-01,900, -> <HTTPError 501: 'Not Implemented'>",
+        "300999 金龙鱼：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz300999,day,2026-09-20,2026-11-01,900, -> <HTTPError 501: 'Not Implemented'>",
+        "603019 中科曙光：sh603019 全量起点 2014-01-01：取已存腾讯日线首年（首日 2014-11-06），未手填上市日期；RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh603019,day,2023-01-01,2025-12-31,900, -> <HTTPError 501: 'Not Implemented'>",
+        "603233 大参林：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh603233,day,2026-09-20,2026-11-01,900, -> <HTTPError 501: 'Not Implemented'>",
+        "603259 药明康德：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh603259,day,2026-09-20,2026-11-01,900, -> <HTTPError 501: 'Not Implemented'>",
+        "603288 海天味业：RuntimeError: 请求失败：https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh603288,day,2026-09-20,2026-11-01,900, -> <HTTPError 501: 'Not Implemented'>",
+        "603606 东方电缆、603700 宁水集团、603881 数据港、603939 益丰药房、603993 洛阳钼业、605090 九丰能源、688041 海光信息、688235 百济神州、688256 寒武纪、688271 联影医疗、688498 源杰科技、512480 半导体ETF国联安、512720 计算机ETF国泰、159819 人工智能ETF易方达、512980 传媒ETF广发、159869 游戏ETF华夏、159755 电池ETF广发、515790 光伏ETF华泰柏瑞、512660 军工ETF国泰、159992 创新药ETF银华、512880 证券ETF国泰、512800 银行ETF华宝、512070 证券保险ETF易方达、512010 医药ETF易方达、512170 医疗ETF华宝、512690 酒ETF鹏华、515170 食品饮料ETF华夏、159996 家电ETF国泰、516110 汽车ETF国泰、159766 旅游ETF富国、159865 养殖ETF国泰、159825 农业ETF富国、515220 煤炭ETF国泰、512400 有色金属ETF南方、515210 钢铁ETF国泰、159870 化工ETF鹏华、512200 房地产ETF南方、516950 基建ETF银华、159930 能源ETF汇添富、159611 电力ETF广发、159301 公用事业ETF华夏、159666 交通运输ETF华夏"
       ]
     },
     {
@@ -78,17 +68,17 @@
       "expected": {
         "check_mode": "freshness",
         "max_age_minutes": 739,
-        "cutoff": "2026-10-31T01:31:00.319055+08:00"
+        "cutoff": "2026-10-31T14:21:14.834947+08:00"
       },
       "actual": {
-        "data_date": "2026-10-31",
-        "updated_at": "2026-10-31T10:47:00+08:00",
+        "data_date": "2026-11-01",
+        "updated_at": "2026-11-01T01:44:00+08:00",
         "slot_evidence": "状态文件只保留最近一次运行；不据此声称历史四次均成功",
-        "last_success_at": "2026-10-31T10:47:00+08:00",
-        "age_minutes": 183.005318
+        "last_success_at": "2026-11-01T01:44:00+08:00",
+        "age_minutes": 56.247249
       },
       "reasons": [
-        "最近成功产出距今 183.005 分钟，未超过阈值 739 分钟"
+        "最近成功产出距今 56.2472 分钟，未超过阈值 739 分钟"
       ]
     },
     {
@@ -136,18 +126,18 @@
       "expected": {
         "check_mode": "freshness",
         "max_age_minutes": 1120,
-        "cutoff": "2026-10-30T19:10:00.319055+08:00"
+        "cutoff": "2026-10-31T08:00:14.834947+08:00"
       },
       "actual": {
-        "data_date": "2026-10-31",
-        "updated_at": "2026-10-31T13:28:00+08:00",
+        "data_date": "2026-11-01",
+        "updated_at": "2026-11-01T01:39:00+08:00",
         "boards": 57,
         "successful_boards": 57,
-        "last_success_at": "2026-10-31T13:28:00+08:00",
-        "age_minutes": 22.005318
+        "last_success_at": "2026-11-01T01:39:00+08:00",
+        "age_minutes": 61.247249
       },
       "reasons": [
-        "最近成功产出距今 22.0053 分钟，未超过阈值 1120 分钟"
+        "最近成功产出距今 61.2472 分钟，未超过阈值 1120 分钟"
       ]
     },
     {
@@ -157,16 +147,16 @@
       "expected": {
         "check_mode": "freshness",
         "max_age_minutes": 144000,
-        "cutoff": "2026-07-23T13:50:00.319055+08:00"
+        "cutoff": "2026-07-24T02:40:14.834947+08:00"
       },
       "actual": {
         "data_date": "2026-10-28",
         "updated_at": "2026-10-28T21:54:00+08:00",
         "last_success_at": "2026-10-28T21:54:00+08:00",
-        "age_minutes": 3836.005318
+        "age_minutes": 4606.247249
       },
       "reasons": [
-        "最近成功产出距今 3836.01 分钟，未超过阈值 144000 分钟"
+        "最近成功产出距今 4606.25 分钟，未超过阈值 144000 分钟"
       ]
     },
     {
@@ -174,11 +164,11 @@
       "name": "业绩加速选股",
       "status": "正常",
       "expected": {
-        "skipped": "非换股月，无本月更新要求"
+        "skipped": "本期尚未到截止 2026-11-01T19:03:00+08:00"
       },
       "actual": {},
       "reasons": [
-        "非换股月，无本月更新要求"
+        "本期尚未到截止 2026-11-01T19:03:00+08:00"
       ]
     },
     {
@@ -186,7 +176,7 @@
       "name": "交易所日历刷新",
       "status": "正常",
       "expected": {
-        "data_date": "2026-10-31"
+        "data_date": "2026-11-01"
       },
       "actual": {
         "coverage_start": "2026-01-01",
@@ -202,11 +192,11 @@
       "name": "运行健康检查",
       "status": "正常",
       "expected": {
-        "data_date": "2026-10-31"
+        "data_date": "2026-11-01"
       },
       "actual": {
-        "updated_at": "2026-10-31T13:50:00.319055+08:00",
-        "data_date": "2026-10-31"
+        "updated_at": "2026-11-01T02:40:14.834947+08:00",
+        "data_date": "2026-11-01"
       },
       "reasons": [
         "本次检查成功生成报告；工作流整体失败由Actions失败告警处理"
@@ -273,16 +263,16 @@
       "expected": {
         "check_mode": "freshness",
         "max_age_minutes": 1436,
-        "cutoff": "2026-10-30T13:54:00.319055+08:00"
+        "cutoff": "2026-10-31T02:44:14.834947+08:00"
       },
       "actual": {
         "data_date": "2026-10-30",
         "updated_at": "2026-10-30T09:09:51.581923+08:00",
         "last_success_at": "2026-10-30T09:09:51.581923+08:00",
-        "age_minutes": 1720.145619
+        "age_minutes": 2490.38755
       },
       "reasons": [
-        "最近成功产出距今 1720.15 分钟，超过阈值 1436 分钟（最早应为 2026-10-30T13:54:00.319055+08:00）"
+        "最近成功产出距今 2490.39 分钟，超过阈值 1436 分钟（最早应为 2026-10-31T02:44:14.834947+08:00）"
       ]
     },
     {
@@ -292,16 +282,16 @@
       "expected": {
         "check_mode": "freshness",
         "max_age_minutes": 1436,
-        "cutoff": "2026-10-30T13:54:00.319055+08:00"
+        "cutoff": "2026-10-31T02:44:14.834947+08:00"
       },
       "actual": {
         "data_date": "2026-10-29",
         "updated_at": "2026-10-30T09:45:14.298081+08:00",
         "last_success_at": "2026-10-30T09:45:14.298081+08:00",
-        "age_minutes": 1684.767016
+        "age_minutes": 2455.008948
       },
       "reasons": [
-        "最近成功产出距今 1684.77 分钟，超过阈值 1436 分钟（最早应为 2026-10-30T13:54:00.319055+08:00）"
+        "最近成功产出距今 2455.01 分钟，超过阈值 1436 分钟（最早应为 2026-10-31T02:44:14.834947+08:00）"
       ]
     },
     {
@@ -316,7 +306,7 @@
       },
       "actual": {
         "data_date": "2026-10-30",
-        "updated_at": "2026-10-31T01:38:33.903714+08:00"
+        "updated_at": "2026-10-31T22:11:44.418856+08:00"
       },
       "reasons": [
         "产出已覆盖要求的交易日"
