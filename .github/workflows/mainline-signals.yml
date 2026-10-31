@@ -30,6 +30,9 @@ jobs:
       - run: pip install pandas numpy requests
       - name: 全量回补与增量修订
         run: python -u scripts/mainline_signals.py --backfill
+      - name: 主线阶段判定（T15）
+        if: github.ref == 'refs/heads/main'
+        run: python -u scripts/mainline_stage.py
       - name: 随机三行业三日期与原字节核对
         if: github.ref == 'refs/heads/gpt/T13-signals'
         run: |
@@ -44,6 +47,7 @@ jobs:
           git config user.name github-actions
           git config user.email actions@users.noreply.github.com
           git add -- data/主线 logs/主线信号_最新.json logs/主线信号_最新.md
+          if [ -f logs/主线阶段_最新.json ]; then git add -- logs/主线阶段_最新.json; fi
           if [ -d logs/test/T13 ]; then git add -- logs/test/T13; fi
           if git diff --cached --quiet; then exit 0; fi
           git commit -m "主线信号更新 $(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M')"

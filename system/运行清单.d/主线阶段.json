@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "items": [{
+    "id": "mainline_stage",
+    "name": "主线阶段判定（当前31、历史28）",
+    "workflow": ".github/workflows/mainline-signals.yml",
+    "kind": "judgment_report",
+    "trading_days_only": true,
+    "trigger": "主线信号更新同一工作流内，信号之后运行",
+    "times": ["16:40"],
+    "grace_minutes": 536,
+    "check_mode": "previous_trading_day",
+    "outputs": ["logs/主线阶段_最新.json", "data/主线/阶段_最新.json", "data/主线/阶段_最新.md", "data/主线/阶段日表_28.csv", "data/主线/阶段日表_31.csv"],
+    "说明": "T15。与主线信号同一工作流，宽限沿用主线信号；满四周后随延迟统计一起校准。"
+  }]
+}
