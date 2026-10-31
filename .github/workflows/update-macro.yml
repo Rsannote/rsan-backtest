@@ -30,12 +30,12 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install pandas numpy requests
-      - name: 离线测试与引擎保护
+      - name: 引擎保护
+        # 生产运行只核对引擎；全量测试归 PR 验收工作流。日志写临时目录，不改动仓库里已跟踪的文件，
+        # 否则后面的 git pull --rebase 会因工作区不干净而失败（2026-10-30 至 11-01 每次定时运行都因此失败）。
         run: |
           set -euo pipefail
-          mkdir -p logs/test/T6b
-          python -m unittest discover -s tests -v 2>&1 | tee logs/test/T6b/离线测试.txt
-          md5sum -c engine/ENGINE_MD5.txt | tee logs/test/T6b/引擎校验.txt
+          md5sum -c engine/ENGINE_MD5.txt | tee "$RUNNER_TEMP/引擎校验.txt"
       - name: 正式来源取数与可见性计算
         env:
           BRANCH_REF: ${{ github.ref_name }}
