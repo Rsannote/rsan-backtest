@@ -438,6 +438,34 @@
         "sample_n": 0,
         "说明": "无独立运行样本，继承宏观最长计划间隔与现有已审核宽限，未放宽其他任务；后续实测校准"
       }
+    },
+    {
+      "id": "panorama",
+      "name": "每周市场全景",
+      "workflow": ".github/workflows/panorama.yml",
+      "kind": "judgment_report",
+      "trading_days_only": false,
+      "trigger": "主线信号更新后（只在本周最后交易日数据齐时生成）；周五17:37定时；周六12:17兜底",
+      "times": [
+        "17:37"
+      ],
+      "check_mode": "freshness",
+      "max_age_minutes": 10800,
+      "freshness_success_paths": [
+        {
+          "path": "logs/全景_最新.json",
+          "field": "last_success_at"
+        }
+      ],
+      "outputs": [
+        "logs/全景_最新.json",
+        "logs/全景_最新.md"
+      ],
+      "说明": "每周一期，panorama/<本周最后交易日>.md。全周休市时只更新运行记录、不出全景。max_age=7天+12小时：覆盖周五正常生成到周六兜底的间隔，待审核；四周后按实测再校准。",
+      "delay_basis": {
+        "sample_n": 0,
+        "说明": "新任务无运行样本；周频任务按一周加周六兜底时刻定阈值，未放宽其他任务"
+      }
     }
   ]
 }
