@@ -33,6 +33,11 @@ jobs:
       - name: 主线阶段判定（T15）
         if: github.ref == 'refs/heads/main'
         run: python -u scripts/mainline_stage.py
+      - name: 共振型启动提醒（开 Issue）
+        if: github.ref == 'refs/heads/main'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python -u scripts/mainline_alert.py
       - name: 随机三行业三日期与原字节核对
         if: github.ref == 'refs/heads/gpt/T13-signals'
         run: |
