@@ -139,6 +139,12 @@ class FormalCollectorBoundaryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'重复'):
             batch.probe_universe(report)
 
+    def test_legacy_non_candidate_does_not_survive_new_27_scope(self):
+        with tempfile.TemporaryDirectory() as directory, patch.object(cov, 'candidate_industries', return_value={'801010':'农林牧渔'}):
+            legacy={'801010':{'date':'2026-01-01','rows':[{'证券代码':'000001'}]},
+                    '801960':{'date':'2026-01-01','rows':[{'证券代码':'600028'}]}}
+            self.assertEqual(set(cov.read_members(Path(directory), legacy)), {'801010'})
+
 
 class CoverageSideTableTests(unittest.TestCase):
     def setUp(self):

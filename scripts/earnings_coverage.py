@@ -34,9 +34,12 @@ def membership_key(rows):
 def read_members(root, legacy=None):
     """完整27候选快照覆盖自身；旧v3范围及其文件不改，来源时间单独保留。"""
     root = Path(root)
-    result = {code: dict(value) for code, value in (legacy if legacy is not None else current_legacy_members(root)).items()}
+    names = candidate_industries(root)
+    # 旧 v3 快照含历史28口径外的石油石化；这里只保留27个候选，不能让旧额外键
+    # 在新快照覆盖时残留成“第28个候选”。原 data/v3 文件本身仍保持不变。
+    result = {code: dict(value) for code, value in (legacy if legacy is not None else current_legacy_members(root)).items()
+              if code in names}
     first = {code: {membership_key(value['rows']): value['date']} for code, value in result.items()}
-    names = None
     snapshots = []
     for path in (root / 'data/财报/成分快照').glob('*.json'):
         raw = json.loads(path.read_text())
@@ -47,7 +50,6 @@ def read_members(root, legacy=None):
     latest_at = None
     latest_digest = None
     for stamp, path, raw in sorted(snapshots, key=lambda x: (x[0], str(x[1]))):
-        names = names or candidate_industries(root)
         if set(raw['成分']) != set(names):
             raise ValueError('成分快照不是完整27候选集合')
         seen = set()
