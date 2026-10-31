@@ -1,8 +1,7 @@
 name: T8 申万行业行情探测
 on:
-  push:
-    branches: [gpt/T8-flow]
-    paths: ['scripts/probe_flow.py', 'tests/test_probe_flow.py', '.github/workflows/test-t8-flow.yml']
+  pull_request:
+    paths: ['.github/workflows/test-t8-flow.yml']
   workflow_dispatch:
 permissions:
   contents: read

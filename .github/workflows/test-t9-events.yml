@@ -1,8 +1,6 @@
 name: T9 事件库验收
 on:
-  push:
-    branches: [gpt/T9-events]
-    paths: ['scripts/build_events.py', 'tests/test_build_events.py', 'tests/audit_events.py', 'tests/verify_events_public.py', 'system/事件库格式.md', '.github/workflows/test-t9-events.yml', '.github/workflows/events.yml']
+  workflow_dispatch:
   pull_request:
     paths: ['scripts/build_events.py', 'tests/test_build_events.py', 'tests/audit_events.py', 'tests/verify_events_public.py', 'data/事件库/**']
 permissions:

@@ -1,8 +1,5 @@
 name: T4b 规则与全历史回放验收
 on:
-  push:
-    branches: [gpt/T4b-rules]
-    paths: ['scripts/**', 'tests/**', 'system/自动判断规则.json', 'system/判断记录格式.md', '.github/workflows/test-t4b-rules.yml']
   pull_request:
     paths: ['scripts/auto_judgment*', 'scripts/check_judgments.py', 'tests/test_auto_judgments.py', 'system/自动判断规则.json']
   workflow_dispatch:

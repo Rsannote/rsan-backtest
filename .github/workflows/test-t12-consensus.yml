@@ -1,8 +1,7 @@
 name: T12 一致预期来源探测
 on:
-  push:
-    branches: [gpt/T12-consensus]
-    paths: ['scripts/probe_consensus.py', 'tests/test_probe_consensus.py', '.github/workflows/test-t12-consensus.yml']
+  pull_request:
+    paths: ['.github/workflows/test-t12-consensus.yml']
   workflow_dispatch:
 permissions:
   contents: read

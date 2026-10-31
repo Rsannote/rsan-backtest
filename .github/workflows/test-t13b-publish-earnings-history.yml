@@ -1,6 +1,8 @@
 # 本分支专用手工验收工作流；不接生产调度。采集独立只读，不抢生产写锁。
 name: T13b 业绩历史短发布
 on:
+  pull_request:
+    paths: ['.github/workflows/test-t13b-publish-earnings-history.yml']
   workflow_dispatch:
     inputs:
       run_id:
@@ -10,9 +12,6 @@ on:
       rebuild_signals:
         type: boolean
         default: false
-  push:
-    branches: [gpt/T13b-earnings]
-    paths: ['logs/test/T13b/发布请求.json']
 permissions:
   contents: write
   actions: read

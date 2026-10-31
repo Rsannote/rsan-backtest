@@ -6,16 +6,6 @@ on:
         description: '在Actions重取已定位的一手公开PDF（可达性另记，不代替文本/规则核验）'
         type: boolean
         default: true
-  push:
-    branches: [gpt/T14b-cases]
-    paths:
-      - 'scripts/mainline_cases*.py'
-      - 'tests/test_mainline_cases*.py'
-      - 'tests/verify_t14*.py'
-      - 'system/主线案例*'
-      - 'data/事件库/主线*'
-      - 'logs/test/T14/公开记录出处.json'
-      - '.github/workflows/*t14*.yml'
   pull_request:
     paths:
       - 'scripts/mainline_cases*.py'
