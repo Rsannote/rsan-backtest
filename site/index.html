@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>市场看板</title>
+<style>
+:root{--bg:#f6f5f2;--card:#fff;--ink:#1d1d1f;--sub:#6b6b70;--line:#e4e2dc;--warn:#b7791f;--warnbg:#fdf3dc;
+--up:#c0392b;--down:#2e7d4f;--accent:#2b5bb8;--chip:#efede8}
+@media (prefers-color-scheme:dark){:root{--bg:#141416;--card:#1e1e21;--ink:#ececee;--sub:#9a9aa1;--line:#2e2e33;
+--warn:#e0b25c;--warnbg:#3a2f18;--up:#e5675a;--down:#5cbf86;--accent:#7aa2f0;--chip:#2a2a2f}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 -apple-system,"PingFang SC","Noto Sans SC",sans-serif}
+header{padding:20px 16px 8px;max-width:920px;margin:auto}h1{font-size:20px;margin:0}header p{margin:4px 0 0;color:var(--sub);font-size:13px}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap;padding:8px max(16px,calc((100% - 888px)/2))}
+nav a{color:var(--sub);text-decoration:none;font-size:13px;margin-right:14px}nav a:hover{color:var(--ink)}
+main{max-width:920px;margin:auto;padding:8px 16px 40px}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin:14px 0}
+section h2{font-size:16px;margin:0 0 4px;display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.date{font-size:12px;color:var(--sub);font-weight:400}.stale{background:var(--warnbg);border-color:var(--warn)}
+.stale .date{color:var(--warn);font-weight:600}
+.big{font-size:28px;font-weight:700}.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:10px 0}
+.kpi{background:var(--chip);border-radius:8px;padding:8px 10px}.kpi b{display:block;font-size:18px}.kpi span{font-size:12px;color:var(--sub)}
+.muted{color:var(--sub);font-size:13px}.chip{display:inline-block;background:var(--chip);border-radius:999px;padding:2px 10px;margin:3px 4px 3px 0;font-size:13px;cursor:pointer}
+.stage{margin:8px 0}.stage h3{font-size:14px;margin:0 0 2px}
+table{border-collapse:collapse;width:100%;font-size:13px}td,th{padding:4px 6px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--sub);font-weight:500}td.num{text-align:right;font-variant-numeric:tabular-nums}
+.heat{overflow-x:auto}.heat table{width:auto}.heat table td{padding:0;width:8px;height:16px;border:none}.heat table td.name{width:auto;padding-right:6px;white-space:nowrap;font-size:12px}
+.up{color:var(--up)}.down{color:var(--down)}.tabs button{background:var(--chip);border:0;color:var(--ink);border-radius:6px;padding:4px 10px;margin-right:6px;font:inherit;font-size:13px}
+.tabs button.on{background:var(--accent);color:#fff}details{margin-top:6px}summary{cursor:pointer;color:var(--sub);font-size:13px}
+.alert{border-left:3px solid var(--accent);padding-left:10px;white-space:pre-wrap;font-size:13px}
+footer{max-width:920px;margin:auto;padding:0 16px 30px;color:var(--sub);font-size:12px}
+</style>
+</head>
+<body>
+<header><h1>市场看板</h1><p id="gen">加载中…</p></header>
+<nav><a href="#market">大盘</a><a href="#mainline">主线雷达</a><a href="#flow">资金轮动</a><a href="#history">历史对照</a><a href="#macro">宏观</a><a href="#judgments">命中率</a><a href="#health">系统状态</a></nav>
+<main>
+<section id="market"><h2>大盘<span class="date"></span></h2><div class="body"></div></section>
+<section id="mainline"><h2>主线雷达<span class="date"></span></h2><div class="body"></div></section>
+<section id="flow"><h2>资金轮动<span class="date"></span></h2><div class="body"></div></section>
+<section id="history"><h2>历史对照<span class="date"></span></h2><div class="body"></div></section>
+<section id="macro"><h2>宏观<span class="date"></span></h2><div class="body"></div></section>
+<section id="judgments"><h2>判断命中率<span class="date"></span></h2><div class="body"></div></section>
+<section id="health"><h2>系统状态<span class="date"></span></h2><div class="body"></div></section>
+</main>
+<footer>指标由程序按规则生成，不构成投资建议。数据来源与规则见仓库 Rsannote/rsan-backtest。</footer>
+<script>
+const $=s=>document.querySelector(s);
+const pct=(x,d=2)=>x==null?'—':(x*100).toFixed(d)+'%';
+const num=(x,d=2)=>x==null?'—':Number(x).toFixed(d);
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+async function get(n){try{const r=await fetch('data/'+n+'.json',{cache:'no-store'});return await r.json()}catch(e){return {错误:String(e),过期:true}}}
+function head(id,d){const s=$('#'+id);s.querySelector('.date').textContent=d&&d.数据日期?('数据日期 '+d.数据日期+(d.过期?' · 可能过期':'')):(d&&d.过期?'可能过期':'');
+ if(d&&d.过期)s.classList.add('stale');if(d&&d.错误){s.querySelector('.body').innerHTML='<p class="muted">暂无数据：'+d.错误+'</p>';return false}return true}
+function line(el,labels,sets,yfmt){ // 无外部依赖的 SVG 折线图
+ const W=640,H=240,P={l:62,r:10,t:12,b:30};const all=sets.flatMap(s=>s.data).filter(v=>v!=null);if(!all.length){el.innerHTML='';return}
+ let lo=Math.min(...all),hi=Math.max(...all);if(lo===hi){lo-=1;hi+=1}const n=Math.max(...sets.map(s=>s.data.length));
+ const X=i=>P.l+(W-P.l-P.r)*(n<2?0:i/(n-1)),Y=v=>P.t+(H-P.t-P.b)*(1-(v-lo)/(hi-lo));
+ const cols=[css('--accent'),'#c08a2b','#8e6cc4','#3aa6a0','#9a9aa1'];const fmt=yfmt||(v=>Math.round(v*10)/10);
+ let g='';for(let k=0;k<=3;k++){const v=lo+(hi-lo)*k/3;g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${Y(v)}" y2="${Y(v)}" stroke="${css('--line')}"/><text x="${P.l-4}" y="${Y(v)+4}" text-anchor="end" font-size="15" fill="${css('--sub')}">${fmt(v)}</text>`}
+ if(lo<0&&hi>0)g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${Y(0)}" y2="${Y(0)}" stroke="${css('--sub')}" stroke-dasharray="3 3"/>`;
+ [0,Math.floor((n-1)/2),n-1].forEach((i,k)=>{if(labels[i]!=null)g+=`<text x="${X(i)}" y="${H-6}" text-anchor="${['start','middle','end'][k]}" font-size="15" fill="${css('--sub')}">${labels[i]}</text>`});
+ const paths=sets.map((s,j)=>{let d='',pen=false;s.data.forEach((v,i)=>{if(v==null){pen=false;return}d+=(pen?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1);pen=true});
+  return `<path d="${d}" fill="none" stroke="${s.color||cols[j%5]}" stroke-width="2.6"/>`}).join('');
+ const legend=sets.length>1?'<div class="muted">'+sets.map((s,j)=>`<span style="color:${s.color||cols[j%5]}">■</span> ${s.label}`).join('　')+'</div>':'';
+ el.outerHTML=`<div><svg viewBox="0 0 ${W} ${H}" width="100%" style="max-width:680px;display:block" role="img">${g}${paths}</svg>${legend}</div>`}
+
+function market(d){if(!head('market',d))return;const b=$('#market .body');
+ b.innerHTML=`<div class="big">${d.结论||'—'} · ${d.冷热||'—'}</div><div class="muted">规则总分 ${d.总分??'—'}；${(d.冷信号||[]).concat(d.热信号||[]).join('；')}</div>
+ <div class="kpis"><div class="kpi"><span>情绪温度（${d.情绪日期}）</span><b>${num(d.情绪温度,1)}</b></div>
+ <div class="kpi"><span>两市成交</span><b>${num(d.成交额亿,0)} 亿</b><span>近一年分位 ${num(d.成交额一年分位,0)}</span></div>
+ <div class="kpi"><span>融资余额（${d.融资日期}）</span><b>${num(d.融资余额亿,0)} 亿</b><span>5日 ${pct(d.融资5日变化)}</span></div></div>
+ <div id="tempc"></div><details><summary>依据</summary><ul class="muted">${(d.依据||[]).map(x=>'<li>'+x+'</li>').join('')}</ul></details>`;
+ line($('#tempc'),d.情绪走势.date,[{label:'情绪温度',data:d.情绪走势.温度}])}
+
+function mainline(d){if(!head('mainline',d))return;const b=$('#mainline .body');const order=['确认','拥挤','启动','退潮','潜伏','无'];
+ const by={};order.forEach(o=>by[o]=[]);(d.行业||[]).forEach(r=>(by[r.阶段]||(by[r.阶段]=[])).push(r));
+ let h=d.提醒&&!/没有新的共振/.test(d.提醒)?`<div class="alert">${d.提醒.replace(/^# .*\n/,'')}</div>`:'';
+ h+=order.map(o=>`<div class="stage"><h3>${o}（${by[o].length}）</h3>${by[o].map(r=>`<span class="chip" data-c="${r.code}">${r.行业}</span>`).join('')||'<span class="muted">无</span>'}</div>`).join('');
+ h+='<div id="mldetail" class="muted"></div>';
+ const ch=d.近5日阶段变化||[];h+='<details open><summary>近5个交易日阶段变化</summary>'+(ch.length?'<table><tr><th>日期</th><th>行业</th><th>变化</th><th>类型</th></tr>'+
+  ch.map(e=>{const r=(d.行业||[]).find(x=>x.code===e.code)||{};return `<tr><td>${e.date}</td><td>${r.行业||e.code}</td><td>${e.from}→${e.to}</td><td>${e.上位类型||''}</td></tr>`}).join('')+'</table>':'<p class="muted">无</p>')+'</details>';
+ h+=`<p class="muted">${d.回放要点} 参数：${d.参数版本}</p>`;b.innerHTML=h;
+ b.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{const r=d.行业.find(x=>x.code===c.dataset.c);
+  $('#mldetail').innerHTML=`<b>${r.行业}</b>：20日强弱排名 ${r['20日强弱排名']??'—'}，占比5日均较20日均 ${pct(r.占比5日均较20日均,1)}，占比60日分位 ${num(r.占比60日分位,0)}，一年分位 ${num(r.占比一年分位,0)}，偏离60日线 ${pct(r.偏离60日线,1)}<br>近20日：${(r.近20日||[]).join(' ')}`})}
+
+function heatColor(v,m){if(v==null)return 'transparent';const a=Math.min(1,Math.abs(v)/m);return v>0?`rgba(192,57,43,${a})`:`rgba(46,125,79,${a})`}
+function flow(d){if(!head('flow',d))return;const b=$('#flow .body');
+ b.innerHTML=`<div class="tabs"><button data-s="31" class="on">31行业</button><button data-s="28">28行业</button></div>
+ <p class="muted">成交占比5日变化（百分点），红=资金流入、绿=流出，近60个交易日</p><div class="heat" id="heat"></div>
+ <details><summary>20日相对沪深300强弱排名</summary><table>${(d.强弱排名||[]).map((r,i)=>`<tr><td>${i+1}</td><td>${r.行业}</td><td class="num ${r.相对沪深300_20>0?'up':'down'}">${pct(r.相对沪深300_20)}</td></tr>`).join('')}</table></details>`;
+ const draw=s=>{const rows=d.行业[s]||[];const m=Math.max(0.2,...rows.flatMap(r=>r.占比5日变化.filter(v=>v!=null).map(Math.abs)))*0.6;
+  $('#heat').innerHTML='<table>'+rows.map(r=>`<tr><td class="name">${r.行业}</td>${r.占比5日变化.map((v,i)=>`<td title="${d.日期[i]} ${v==null?'缺':v.toFixed(2)}" style="background:${heatColor(v,m)}"></td>`).join('')}</tr>`).join('')+'</table>'};
+ draw('31');b.querySelectorAll('.tabs button').forEach(x=>x.onclick=()=>{b.querySelectorAll('.tabs button').forEach(y=>y.classList.remove('on'));x.classList.add('on');draw(x.dataset.s)})}
+
+function history(d){if(!head('history',d))return;const b=$('#history .body');const f=d.当前特征||{};
+ b.innerHTML=`<p class="muted">当前：60日涨幅 ${pct(f.启动前60日涨幅,1)}，成交额分位 ${num(f.启动时成交额分位,0)}，情绪 ${num(f.启动时情绪温度,0)}，中/美10年 ${num(f.启动时中国10年国债)} / ${num(f.启动时美国10年国债)}</p>
+ <div id="histc"></div><table><tr><th>历史事件</th><th>距离</th><th>当时</th></tr>${(d.最像||[]).map(r=>`<tr><td>${r.类型} ${r.开始}→${r.结束}</td><td class="num">${num(r.距离)}</td><td>${(r.判读.触发事件||'')}<br><span class="muted">像在哪：${r.像在哪}</span></td></tr>`).join('')}</table>`;
+ const L=(d.最像||[]);const n=Math.max(...L.map(r=>r.之后走势.length),1);line($('#histc'),[...Array(n).keys()].map(i=>'第'+i+'日'),L.map(r=>({label:r.类型+' '+r.开始,data:r.之后走势})),v=>v.toFixed(1)+'%')}
+
+function macro(d){if(!head('macro',d))return;const b=$('#macro .body');const c=d['20日变化bp']||{};
+ b.innerHTML=`<table><tr><th>指标</th><th>日期</th><th class="num">最新</th><th class="num">上期</th></tr>${(d.指标||[]).map(r=>`<tr><td>${r.指标}${c[r.指标]!=null?`<br><span class="muted">20日 ${c[r.指标]>0?'+':''}${c[r.指标]}bp</span>`:''}</td><td>${r.日期}</td><td class="num">${num(r.值,r.值>1000?0:2)}</td><td class="num">${num(r.上期,r.上期>1000?0:2)}</td></tr>`).join('')}</table>`}
+
+function judgments(d){const b=$('#judgments .body');const g=d.分组||{};const ks=Object.keys(g);
+ b.innerHTML=ks.length?`<p class="muted">共 ${d.总数} 条判断</p><table><tr><th>模块·置信度</th><th class="num">待验证</th><th class="num">证实</th><th class="num">证伪</th><th class="num">命中率</th></tr>${ks.map(k=>`<tr><td>${k}</td><td class="num">${g[k].待验证}</td><td class="num">${g[k].证实}</td><td class="num">${g[k].证伪}</td><td class="num">${pct(g[k].命中率,0)}</td></tr>`).join('')}</table>`:'<p class="muted">暂无判断</p>'}
+
+function health(d){const b=$('#health .body');$('#health .date').textContent=d._checked_at?'检查于 '+d._checked_at.slice(0,16).replace('T',' '):'';
+ const rows=Object.entries(d).filter(([k])=>k[0]!=='_');if(rows.some(([,v])=>v.状态!=='正常'))$('#health').classList.add('stale');
+ b.innerHTML='<table>'+rows.map(([,v])=>`<tr><td>${v.名称}${v.状态==='正常'?'':`<br><span class="muted" style="word-break:break-all">${v.原因}</span>`}</td><td class="${v.状态==='正常'?'down':'up'}" style="white-space:nowrap">${v.状态}</td></tr>`).join('')+'</table>'}
+
+(async()=>{const m=await get('meta');$('#gen').textContent='生成于 '+(m.generated_at||'').slice(0,16).replace('T',' ')+'（北京时间）'+(m.errors&&m.errors.length?' · 部分栏目出错':'');
+ const [a,b,c,d,e,f,g]=await Promise.all(['market','mainline','flow','history','macro','judgments','health'].map(get));
+ market(a);mainline(b);flow(c);history(d);macro(e);judgments(f);health(g)})();
+</script>
+</body>
+</html>
