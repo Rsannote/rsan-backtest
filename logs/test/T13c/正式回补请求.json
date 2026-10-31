@@ -1,0 +1,7 @@
+{
+  "probe_run": "41135878304",
+  "probe_sha": "f3cca6a68eeace0cb8220cba5d0ccb4e66d6c864",
+  "shards": 4,
+  "budget_seconds_per_shard": 3200,
+  "说明": "复用已验证的27行业探测产物；四个分片全部财报成功后才原子晋升，上市日未知单列且不进入分母。"
+}

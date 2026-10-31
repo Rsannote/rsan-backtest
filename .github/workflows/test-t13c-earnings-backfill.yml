@@ -1,0 +1,162 @@
+# T13c 分支专用验收：金融 HTTP 只在 Actions；四个只读分片全部成功后才短时写分支。
+name: T13c 27行业上市日与财报回补
+on:
+  workflow_dispatch:
+  push:
+    branches: [gpt/T13c-earnings]
+    paths: ['logs/test/T13c/正式回补请求.json']
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: repo-writer
+  cancel-in-progress: false
+jobs:
+  component:
+    if: github.ref == 'refs/heads/gpt/T13c-earnings'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      resume_run: ${{ steps.request.outputs.resume_run }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: 核验探测运行与可选断点运行
+        id: request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json,os,re,subprocess
+          from pathlib import Path
+          req=json.loads(Path('logs/test/T13c/正式回补请求.json').read_text())
+          run=str(req.get('probe_run',''));sha=req.get('probe_sha','')
+          if not re.fullmatch(r'\d+',run) or not re.fullmatch(r'[0-9a-f]{40}',sha):raise ValueError('探测身份格式无效')
+          info=json.loads(subprocess.check_output(['gh','api',f'repos/{os.environ["GITHUB_REPOSITORY"]}/actions/runs/{run}']))
+          if info['head_branch']!='gpt/T13c-earnings' or info['head_sha']!=sha or info['path']!='.github/workflows/test-t13c-coverage-probe.yml' or info['status']!='completed' or info['conclusion']!='success':raise ValueError('探测运行身份/工作流/结论不符')
+          resume=str(req.get('resume_run',''))
+          if resume:
+              if not re.fullmatch(r'\d+',resume):raise ValueError('断点运行格式无效')
+              old=json.loads(subprocess.check_output(['gh','api',f'repos/{os.environ["GITHUB_REPOSITORY"]}/actions/runs/{resume}']))
+              if old['head_branch']!='gpt/T13c-earnings' or old['path']!='.github/workflows/test-t13c-earnings-backfill.yml' or old['status']!='completed':raise ValueError('断点运行身份/工作流/完成状态不符')
+          with open(os.environ['GITHUB_ENV'],'a') as f:f.write(f'PROBE_RUN={run}\nPROBE_SHA={sha}\n')
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:f.write(f'resume_run={resume}\n')
+          PY
+      - uses: actions/download-artifact@v4
+        with:
+          name: T13c-覆盖探测-${{ env.PROBE_RUN }}
+          run-id: ${{ env.PROBE_RUN }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/probe-raw
+      - name: 唯一结果与请求SHA核对
+        run: |
+          mkdir -p "${{ runner.temp }}/component"
+          python - <<'PY'
+          import hashlib,json,os,shutil
+          from pathlib import Path
+          files=list(Path(os.environ['RUNNER_TEMP']).joinpath('probe-raw').rglob('结果.json'))
+          if len(files)!=1:raise ValueError('探测artifact必须且只能有一个结果.json')
+          obj=json.loads(files[0].read_text())
+          if obj.get('来源运行')!=os.environ['PROBE_RUN'] or obj.get('来源SHA')!=os.environ['PROBE_SHA'] or obj.get('状态')!='探测通过':raise ValueError('探测结果身份/状态不符')
+          target=Path(os.environ['RUNNER_TEMP'])/'component/结果.json';shutil.copyfile(files[0],target)
+          print('probe_sha256='+hashlib.sha256(target.read_bytes()).hexdigest())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: T13c-正式成分-${{ github.run_id }}
+          path: ${{ runner.temp }}/component/结果.json
+          if-no-files-found: error
+  collect:
+    needs: component
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3]
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pandas numpy requests
+      - uses: actions/download-artifact@v4
+        with:
+          name: T13c-正式成分-${{ github.run_id }}
+          path: ${{ runner.temp }}/component
+      - uses: actions/download-artifact@v4
+        if: needs.component.outputs.resume_run != ''
+        with:
+          pattern: T13c-正式批次-${{ needs.component.outputs.resume_run }}-*
+          run-id: ${{ needs.component.outputs.resume_run }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/resume
+      - name: 分片抓取上市日与缺失财报
+        run: python -u scripts/earnings_coverage_batch.py --probe-result "${{ runner.temp }}/component/结果.json" --shard ${{ matrix.shard }} --shards 4 --budget 3200 --resume-dir "${{ runner.temp }}/resume"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T13c-正式批次-${{ github.run_id }}-${{ matrix.shard }}
+          path: logs/test/T13c/批次产物/${{ matrix.shard }}.json
+          if-no-files-found: error
+          retention-days: 30
+  publish:
+    needs: [component, collect]
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gpt/T13c-earnings
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pandas numpy requests
+      - uses: actions/download-artifact@v4
+        with:
+          name: T13c-正式成分-${{ github.run_id }}
+          path: ${{ runner.temp }}/component
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: T13c-正式批次-${{ github.run_id }}-*
+          path: ${{ runner.temp }}/batches
+      - name: 锁内拉最新并严格预检、原子晋升
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git pull --rebase origin gpt/T13c-earnings
+          python - <<'PY'
+          import json,os,subprocess
+          from pathlib import Path
+          req=json.loads(Path('logs/test/T13c/正式回补请求.json').read_text())
+          run=str(req['probe_run']);sha=req['probe_sha']
+          subprocess.run(['python','scripts/earnings_coverage_publish.py','--probe-result',str(Path(os.environ['RUNNER_TEMP'])/'component/结果.json'),'--batch-dir',str(Path(os.environ['RUNNER_TEMP'])/'batches'),'--probe-run',run,'--probe-sha',sha],check=True)
+          PY
+      - name: 重建两套信号并复验
+        run: |
+          python scripts/mainline_signals.py --backfill
+          python -m unittest tests.test_earnings_coverage tests.test_mainline_signals
+          python tests/verify_t13_signals.py
+          python tests/verify_t13c_earnings.py --require-complete
+          md5sum -c engine/ENGINE_MD5.txt
+      - name: 只提交T13c明确范围
+        run: |
+          git config user.name github-actions
+          git config user.email actions@users.noreply.github.com
+          git add -- data/财报/成分快照 data/财报/上市日期.jsonl data/财报/全市场单季 data/财报/覆盖率明细.csv
+          git add -- data/主线/历史信号修订 data/主线/信号修订 data/主线/最新.json data/主线/最新.md
+          git add -- logs/test/T13c logs/主线信号_最新.json logs/主线信号_最新.md
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "T13c：补齐27行业上市分母与2013年单季扣非"
+          git pull --rebase origin gpt/T13c-earnings
+          git push origin HEAD:gpt/T13c-earnings
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T13c-正式发布-${{ github.run_id }}
+          path: |
+            logs/test/T13c/
+            data/财报/覆盖率明细.csv
+            data/主线/最新.json
+            data/主线/最新.md
+          if-no-files-found: warn

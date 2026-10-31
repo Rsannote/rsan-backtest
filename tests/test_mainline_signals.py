@@ -91,6 +91,10 @@ class SignalsTests(unittest.TestCase):
     def quarter_fixture(self,announcement=''):
         code=self.ordinary[0];self.json('data/v3/申万成分.json',{code:{'date':'2020-01-01','rows':[{'证券代码':'000001'},{'证券代码':'000002'}]}})
         self.write('data/财报/单季/000001.csv',['报告期','扣非净利润','净利润','营业总收入','公告日'],[{'报告期':d,'扣非净利润':kf,'净利润':kf,'营业总收入':rev,'公告日':announcement if d=='2026-06-30' else ''} for d,kf,rev in [('2025-03-31',100,100),('2025-06-30',100,100),('2026-03-31',130,110),('2026-06-30',160,120)]])
+        from earnings_coverage import LISTING_VERSION
+        from earnings_universe import THS_COMPANY
+        p=self.root/'data/财报/上市日期.jsonl'
+        p.write_text(''.join(json.dumps({'代码':str(i).zfill(6),'状态':'成功','上市日期':'2010-01-01','原始日期':'2010-01-01','来源字段':'上市日期','来源':THS_COMPANY.format(code=str(i).zfill(6)),'实现版本':LISTING_VERSION,'响应SHA256':'a'*64,'采集时间':'2026-10-30T12:00:00+08:00'})+'\n' for i in range(20)))
         return code
     def test_quarter_after_deadline_exact_v3_and_incomplete_industry_not_zero(self):
         c=self.quarter_fixture();s=self.source();self.assertIsNone(s.quarter('2026-08-31',c)['业绩_样本加速占比']);r=s.quarter('2026-09-01',c)

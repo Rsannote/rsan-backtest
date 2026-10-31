@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 
 from earnings_history import deadline, load_v3, visibility
+from earnings_coverage import listed_members, read_listings, read_members
 
 BJ=dt.timezone(dt.timedelta(hours=8))
 NEW={'801960','801970','801980'}
@@ -96,6 +97,9 @@ class Sources:
         self.members={};self.quarters={}
         p=self.root/'data/v3/申万成分.json'
         if p.exists():self.members=json.loads(p.read_text())
+        self.members=read_members(self.root,self.members)
+        self.listings=read_listings(self.root)
+        self.quarter_details={}
         for p in (self.root/'data/财报/单季').glob('*.csv'):self.quarters[p.stem]=csv_rows(p) or []
         # 新目录按报告期最后修订覆盖股票池缓存；缺值修订不回退旧值。
         for p in (self.root/'data/财报/全市场单季').glob('*.csv'):
@@ -128,7 +132,13 @@ class Sources:
                 report=dt.date(year,month,dd);m,d={3:(4,30),6:(8,31),9:(10,31),12:(4,30)}[month]
                 if dt.date(year+(month==12),m,d)<asof:eligible.append(report.isoformat())
         latest_period=max(eligible) if eligible else ''
-        for stock in codes:
+        # 资金日表早于首个可见季度时，没有可用于冻结上市分母的规则日。
+        # 保持季度维度为“缺”，不能把空字符串送进 visibility/deadline 猜一个日期。
+        if not latest_period:
+            self.quarter_cache[key]=out
+            return dict(out)
+        listing=listed_members(codes,latest_period,self.listings)
+        for stock in listing['已上市代码']:
             original=self.quarters.get(stock,[])
             # 有实际公告日的旧缓存仍逐日过滤；截止日推定数据按季度复用计算。
             stock_key=(stock,day if any(r.get('公告日') for r in original) else latest_period)
@@ -144,9 +154,15 @@ class Sources:
             if not sig or sig['q']!=latest_period or any(not math.isfinite(sig[k]) for k in ('g','gprev','grev')):continue
             valid+=1;periods.add(sig['q'])
             passed+=int(self.qcfg['g_min']<sig['g']<=self.qcfg['g_max'] and sig['acc']>0 and sig['gprev']>self.qcfg['prev_min'] and sig['grev']>0)
-        coverage=valid/len(codes) if codes else None
-        out.update({'业绩_成分家数':len(codes),'业绩_可评估家数':valid,'业绩_加速家数':passed if valid else None,'业绩_季报覆盖率':coverage,'业绩_样本加速占比':passed/valid if valid else None,'业绩_利润加速占比':passed/valid if valid>=10 and valid*5>=len(codes)*3 else None,'业绩_季报期':';'.join(sorted(periods))})
-        self.quarter_notes[key]=';D='+deadline(latest_period).isoformat()+';V='+visibility(latest_period)+';M='+member['date'] if latest_period else ';M='+member['date']
+        denominator=listing['已上市分母']
+        coverage=valid/denominator if denominator else None
+        out.update({'业绩_成分家数':len(codes),'业绩_可评估家数':valid,'业绩_加速家数':passed if valid else None,'业绩_季报覆盖率':coverage,'业绩_样本加速占比':passed/valid if valid else None,'业绩_利润加速占比':passed/valid if denominator and valid>=10 and valid*5>=denominator*3 else None,'业绩_季报期':';'.join(sorted(periods))})
+        self.quarter_details[key]={'date':day,'code':code,'行业':self.names[code]['行业'],'季报期':latest_period,
+            **{k:listing[k] for k in ('当前成分总量','已上市分母','未上市家数','上市日期未知家数','规则可见日')},
+            '可评估家数':valid,'加速家数':passed if valid else None,'季报覆盖率':coverage,
+            '行业利润加速占比':out['业绩_利润加速占比'],
+            '说明':'当前成分快照回溯有幸存者偏差；上市日期严格早于本季度规则可见日；未知上市日排除并单列'}
+        self.quarter_notes[key]=';D='+deadline(latest_period).isoformat()+';V='+visibility(latest_period)+';M='+member.get('_signal_date',member['date'])+';L='+listing['规则可见日']+';N='+str(denominator)+';U='+str(listing['上市日期未知家数'])
         self.quarter_cache[key]=out;return dict(out)
     def for_day(self,day,code):
         cache_key=(day,code)

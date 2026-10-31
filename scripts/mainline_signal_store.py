@@ -50,7 +50,7 @@ def read_signal_table(root,scope=28,asof=None):
 
 
 def necessary_time(note):
-    return tuple(re.findall(r'(?:^|;)([DVMK]=[^;]+)',str(note or '')))
+    return tuple(re.findall(r'(?:^|;)([DVMKLNU]=[^;]+)',str(note or '')))
 
 
 def plan_revisions(root,scope,table,stamp,reason='T13b-v3'):
@@ -87,7 +87,11 @@ def plan_revisions(root,scope,table,stamp,reason='T13b-v3'):
     return result,changes,report
 
 
-def write_revisions(root,changes,plans):
+def write_revisions(root,changes,plans,extra_changes=None):
     if any(not plan['允许追加'] for plan in plans.values()):
         raise ValueError('年度主线修订CSV预计达到100MiB，正式信号未写')
-    commit_files(root,changes)
+    updates=dict(changes)
+    for path,content in (extra_changes or {}).items():
+        if path in updates:raise ValueError('主线事务包含重复目标')
+        updates[path]=content
+    commit_files(root,updates)
