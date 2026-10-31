@@ -1,0 +1,30 @@
+name: T13c 财报重定向只读诊断
+on:
+  push:
+    branches: [gpt/T13c-earnings]
+    paths:
+      - 'scripts/probe_finance_redirect.py'
+      - 'tests/test_probe_finance_redirect.py'
+      - '.github/workflows/test-t13c-finance-redirect.yml'
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests
+      - name: 离线安全边界
+        run: python -m unittest tests.test_probe_finance_redirect -v
+      - name: 三个控制代码重定向链与解析摘要
+        run: python scripts/probe_finance_redirect.py --codes 000002 600519 001267
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T13c-财报重定向诊断-${{ github.run_id }}
+          path: logs/test/T13c/重定向诊断.json
+          if-no-files-found: error
