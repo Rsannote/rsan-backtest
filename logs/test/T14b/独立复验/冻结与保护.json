@@ -1,0 +1,27 @@
+{
+  "冻结文件核验": 24,
+  "坏SHA": [],
+  "受保护路径无差异": [
+    "engine",
+    "archive",
+    "judgments",
+    "graph",
+    "data/行情库",
+    "data/资金轮动",
+    "data/主线",
+    "data/财报",
+    "data/宏观",
+    "data/市场状态",
+    "data/社区情绪",
+    "data/一致预期",
+    "system/行业清单.csv",
+    "system/催化日历.csv",
+    "system/主线规则.md",
+    "README.md",
+    "system/开发计划.md",
+    "data/事件库/大调整.csv",
+    "data/事件库/大反弹.csv",
+    "data/事件库/大调整_10.csv"
+  ],
+  "引擎MD5": "c06e2dd885eb8ac18f9cd4e1021a9b8c"
+}

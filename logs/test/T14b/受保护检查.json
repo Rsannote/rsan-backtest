@@ -1,0 +1,39 @@
+{
+  "基准main": "3781fe50fc394ddb33bccca97f7aa78a7b0457b9",
+  "引擎MD5": "c06e2dd885eb8ac18f9cd4e1021a9b8c",
+  "受保护输入无差异": [
+    "engine",
+    "archive",
+    "judgments",
+    "graph",
+    "data/日线_*",
+    "data/行情库",
+    "data/资金轮动",
+    "data/主线",
+    "data/财报",
+    "data/宏观",
+    "data/市场状态",
+    "data/社区情绪",
+    "data/一致预期",
+    "system/行业清单.csv",
+    "system/催化日历.csv",
+    "system/主线规则.md",
+    "README.md",
+    "system/开发计划.md"
+  ],
+  "旧数据字节前缀保留": {
+    "data/事件库/主线.csv": {
+      "字节": 1727159,
+      "SHA256": "31285efc8a4ef63152df4c7d0d7dd14434f23331449356028a078f0c531a0332"
+    },
+    "data/事件库/主线_总表.md": {
+      "字节": 6499,
+      "SHA256": "b14f585eb6af563064f7a9a42b923665b202e943eff98f52bc9dd8eaf00da045"
+    },
+    "data/事件库/说明.md": {
+      "字节": 15942,
+      "SHA256": "e2ca30fee3bc1343f5e5ece50601bf21c88073e176ee1d7ae92f439665e6f8ac"
+    }
+  },
+  "解释": "不改README/进度，由T11集中维护；未读未合并的T13c/T12b分支，不改金融原始数据"
+}

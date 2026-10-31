@@ -18,6 +18,41 @@ from mainline_cases_data import price_table
 
 ROOT = Path(__file__).resolve().parents[1]
 VERSION = '主线案例草案v0'
+VERSION_V1 = '主线案例规则v1'
+SUPERSEDED = 'v0 草案，已被 v1 取代'
+
+
+def rule_version(config):
+    return config.get('识别版本', 'v0')
+
+
+def event_rule(row):
+    """事件id区分两代规则，不能把同日起点的v0误覆盖为v1。"""
+    if re.fullmatch(r'EVT-SW\d{6}-ML1-\d{4}-\d{2}-\d{2}', row.get('事件id', '')):
+        return 'v1'
+    if re.fullmatch(r'EVT-SW\d{6}-ML-\d{4}-\d{2}-\d{2}', row.get('事件id', '')):
+        return 'v0'
+    return None
+
+
+def current_records(records, config):
+    version = rule_version(config)
+    return {k: r for k, r in records.items() if event_rule(r) == version
+            and r['状态'] not in ('输入修订后不再满足', SUPERSEDED)}
+
+
+def retired_v0(records):
+    """只修订v0状态及程序说明；原数值、起止日、参数及人工列全部带过。"""
+    result = []
+    for row in records.values():
+        if event_rule(row) != 'v0':
+            continue
+        item = dict(row)
+        if item['状态'] != SUPERSEDED:
+            item['状态'] = SUPERSEDED
+            item['程序说明'] += '；按PR25审核由v1取代，v0数值与人工原文保留，不再计入现行案例'
+        result.append(item)
+    return result
 
 
 def parameters(path):
@@ -26,9 +61,22 @@ def parameters(path):
         value = result[key]
         if isinstance(value, bool) or not isinstance(value, int) or value < (0 if key == '最多桥接交易日' else 1):
             raise ValueError('无效案例草案参数：' + key)
-    share = result['成交占比前比例']
-    if isinstance(share, bool) or not isinstance(share, (int, float)) or not math.isfinite(share) or not 0 < share <= 1:
-        raise ValueError('成交占比前比例须在(0,1]')
+    version = rule_version(result)
+    if version not in ('v0', 'v1'):
+        raise ValueError('识别版本只能为v0或v1')
+    if version == 'v0':
+        share = result['成交占比前比例']
+        if isinstance(share, bool) or not isinstance(share, (int, float)) or not math.isfinite(share) or not 0 < share <= 1:
+            raise ValueError('成交占比前比例须在(0,1]')
+    else:
+        percentile = result['占比一年分位下限']
+        if isinstance(percentile, bool) or not isinstance(percentile, (int, float)) or not math.isfinite(percentile) or not 0 <= percentile <= 100:
+            raise ValueError('占比一年分位下限须在[0,100]')
+        for key in ('采用段数下限', '采用段数上限'):
+            if isinstance(result[key], bool) or not isinstance(result[key], int) or result[key] < 1:
+                raise ValueError('采用段数范围须为正整数')
+        if result['采用段数下限'] > result['采用段数上限']:
+            raise ValueError('采用段数范围倒置')
     return result
 
 
@@ -52,29 +100,45 @@ def daily_conditions(flow, days, codes, candidates, config):
     if selected.duplicated(['date', 'code']).any():
         raise ValueError('T8必须先取同键最后修订')
     matrices = {}
-    for field in ('相对沪深300_60', '占比_28', '收盘'):
+    version = rule_version(config)
+    fields = ['相对沪深300_60', '收盘']
+    fields.append('占比一年分位_28' if version == 'v1' else '占比_28')
+    for field in fields:
+        if field not in selected:
+            raise ValueError('T8缺少规则必需列：' + field)
         selected[field] = numeric(selected[field])
         matrices[field] = selected.pivot(index='date', columns='code', values=field).reindex(index=days, columns=codes)
     relative = matrices['相对沪深300_60'][candidates]
-    shares = matrices['占比_28']
-    # 分母含综合；缺任何一行/负占比/占比和不为1时不冒充完整28行业。
-    share_complete = shares.notna().all(axis=1) & shares.ge(0).all(axis=1) & shares.sum(axis=1).sub(1).abs().le(1e-7)
     relative_complete = relative.notna().all(axis=1)
     relative_rank = relative.rank(axis=1, ascending=False, method='first').where(relative_complete, axis=0)
-    share_rank = shares[candidates].rank(axis=1, ascending=False, method='first').where(share_complete, axis=0)
+    if version == 'v0':
+        shares = matrices['占比_28']
+        # v0分母含综合；仅用于保留的旧规则及同输入对照。
+        share_complete = shares.notna().all(axis=1) & shares.ge(0).all(axis=1) & shares.sum(axis=1).sub(1).abs().le(1e-7)
+        funding = shares[candidates].rank(axis=1, ascending=False, method='first').where(share_complete, axis=0)
+        funding_valid = shares.notna().sum(axis=1)
+    else:
+        percentiles = matrices['占比一年分位_28'][candidates]
+        funding = percentiles.where(percentiles.ge(0) & percentiles.le(100))
+        matrices['占比一年分位_28'] = funding
+        # 自身历史分位只要求该行业有合法观测；其他行业缺分位不应令本行业未知。
+        share_complete = funding.notna().all(axis=1)
+        funding_valid = funding.notna().sum(axis=1)
     states = {}
     for code in candidates:
         values = []
         for day in days:
-            a, b = relative_rank.at[day, code], share_rank.at[day, code]
+            a, b = relative_rank.at[day, code], funding.at[day, code]
             rel_ok = None if pd.isna(a) else bool(a <= config['相对强弱前几名'])
-            share_ok = None if pd.isna(b) else bool(b / len(candidates) <= config['成交占比前比例'])
+            share_ok = (None if pd.isna(b) else bool(b >= config['占比一年分位下限'])) if version == 'v1' else (
+                None if pd.isna(b) else bool(b / len(candidates) <= config['成交占比前比例']))
             values.append(False if rel_ok is False or share_ok is False else
                           True if rel_ok is True and share_ok is True else None)
         states[code] = values
     audit = [{'date': day, '相对完整': bool(relative_complete.at[day]), '占比完整': bool(share_complete.at[day]),
               '相对有效候选': int(relative.loc[day].notna().sum()),
-              '占比有效行业': int(shares.loc[day].notna().sum()),
+              '占比有效行业': int(funding_valid.at[day]),
+              '资金条件字段': '占比一年分位_28' if version == 'v1' else '占比_28的27候选排名',
               '命中行业数': sum(states[c][i] is True for c in candidates),
               '未知行业数': sum(states[c][i] is None for c in candidates)} for i, day in enumerate(days)]
     return states, matrices, audit
@@ -157,7 +221,11 @@ def make_record(data, signals, names, code, event, days, prices, candidates, con
     second = ranked[1] if len(ranked) >= 2 else None
     market, market_notes = signals.row(start, code)
     evidence['五维窗口'] = {'path': 'data/主线/历史信号表_28.csv', '范围': 'T-20..T-1', '时点': '各观测日23:59:59'}
-    row.update({'事件id': f'EVT-SW{code}-ML-{start}', '类型': '主线', '对象': names[code]['行业'],
+    version = rule_version(config)
+    marker = 'ML1' if version == 'v1' else 'ML'
+    rule_source = (f"T8最后修订：相对沪深300_60的27候选前{config['相对强弱前几名']}，且占比一年分位_28>={config['占比一年分位下限']:g}；自身历史比较，28口径；不要求正收益"
+                   if version == 'v1' else 'T8最后修订：相对沪深300_60、占比_28；27候选排名；28分母含综合；不要求正收益')
+    row.update({'事件id': f'EVT-SW{code}-{marker}-{start}', '类型': '主线', '对象': names[code]['行业'],
                 '行业': names[code]['行业'], '申万代码': code, '开始': start, '结束': end,
                 '幅度': amplitude, '区间内相对沪深300超额': excess, '持续交易日': global_end - global_start,
                 '实际命中交易日': event['hits'], '桥接跨度交易日': event['span'],
@@ -170,16 +238,17 @@ def make_record(data, signals, names, code, event, days, prices, candidates, con
                 '同期第二强的行业': names[second[0]]['行业'] if second else None,
                 '同期第二强代码': second[0] if second else None, '同期第二强相对超额': second[1] if second else None,
                 '同期第二强说明': ranking_note, '特征来源': json.dumps(evidence, ensure_ascii=False, sort_keys=True),
-                '程序说明': '；'.join(x for x in notes + market_notes if x), '程序版本': VERSION,
-                '识别来源': 'T8最后修订：相对沪深300_60、占比_28；27候选排名；28分母含综合；不要求正收益',
+                '程序说明': '；'.join(x for x in notes + market_notes if x), '程序版本': VERSION_V1 if version == 'v1' else VERSION,
+                '识别来源': rule_source,
                 '参数': json.dumps(config, ensure_ascii=False, sort_keys=True)})
     return row
 
 
 def total_table(records, cutoff, config):
-    rows = sorted((r for r in records.values() if r['状态'] != '输入修订后不再满足'), key=lambda r: (r['开始'], r['申万代码']))
-    spec = f"{config['相对强弱前几名']} / {config['成交占比前比例']:.0%} / {config['最少实际命中日']}实际命中 / {config['最多桥接交易日']}桥接"
-    lines = ['# 历史主线案例总表', '', f'计算截止：{cutoff}。草案固定{spec}；尚未作为交易信号或正式参数。', '',
+    rows = sorted(current_records(records, config).values(), key=lambda r: (r['开始'], r['申万代码']))
+    funding = f"自身占比一年分位≥{config['占比一年分位下限']:g}" if rule_version(config) == 'v1' else f"绝对占比前{config['成交占比前比例']:.0%}"
+    spec = f"相对前{config['相对强弱前几名']} / {funding} / {config['最少实际命中日']}实际命中 / {config['最多桥接交易日']}桥接"
+    lines = ['# 历史主线案例总表', '', f'计算截止：{cutoff}。{rule_version(config)}固定{spec}；尚未作为交易信号或T15正式参数。', '',
              '幅度为行业价格指数收益，超额为收益差；持续日是端点索引差，跨度含开始日。开始是事后回溯日期，须到成立日才满40个命中。', '',
              '|行业|事件id|开始|结束（最后命中）|幅度|超额|持续日|实际命中|跨度|成立日期|确认结束|状态|同期整体第2行业|',
              '|---|---|---|---|---:|---:|---:|---:|---:|---|---|---|---|']
@@ -190,8 +259,10 @@ def total_table(records, cutoff, config):
                                     pct(r['区间内相对沪深300超额']), str(r['持续交易日']), str(r['实际命中交易日']),
                                     str(r['桥接跨度交易日']), r['成立日期'], r['确认结束日期'], r['状态'],
                                     r['同期第二强的行业'] or '缺']) + '|')
-    invalid = [r['事件id'] for r in records.values() if r['状态'] == '输入修订后不再满足']
+    invalid = [r['事件id'] for r in records.values() if event_rule(r) == rule_version(config) and r['状态'] == '输入修订后不再满足']
+    superseded = [r['事件id'] for r in records.values() if r['状态'] == SUPERSEDED]
     lines += ['', f'现行案例{len(rows)}段；输入修订后失效{len(invalid)}段（CSV历史保留）。', '',
+              f'v0草案已被v1取代的历史案例{len(superseded)}段，只在CSV保留，不计入现行表。', '',
               '五维逐日原值及缺失覆盖见CSV，启动前窗口不含开始日；公共宏观按T9开始日18:00与T6可见时刻。',
               '人工触发事件、上位类型、支撑、退潮原因等由Claude判读，程序留空并保护既有非空。', '']
     return '\n'.join(lines)
@@ -200,10 +271,11 @@ def total_table(records, cutoff, config):
 def published_cutoff(root):
     """全局高水位同时查报告与全部总表快照；不能只查较早结束的事件。"""
     cutoffs = []
-    report_path = Path(root) / 'logs/test/T14/建库报告.json'
-    if report_path.exists():
-        report = json.loads(report_path.read_text())
-        cutoffs.append(report['计算截止'])
+    for directory in ('T14', 'T14b'):
+        report_path = Path(root) / f'logs/test/{directory}/建库报告.json'
+        if report_path.exists():
+            report = json.loads(report_path.read_text())
+            cutoffs.append(report['计算截止'])
     table_path = Path(root) / 'data/事件库/主线_总表.md'
     if table_path.exists():
         text = table_path.read_bytes().decode('utf-8')
@@ -250,28 +322,50 @@ def _run_locked(root, asof=None, now=None):
     target = root / 'data/事件库/主线.csv'
     # --asof写入root为隔离副本；若直接回退生产截止会失效未来记录，明确拒绝。
     previous = latest_records(target)
+    if rule_version(config) == 'v0' and any(event_rule(r) == 'v1' for r in previous.values()):
+        raise ValueError('已有v1历史，禁止用v0覆盖现行规则；v0比较须使用隔离root')
     if previous and any(r['计算截止'] > cutoff for r in previous.values() if r['状态'] != '输入修订后不再满足'):
         raise ValueError('已有案例计算截止晚于本次，拒绝截短历史；请用隔离--root回放')
-    added = append_records(target, records, now)
+    version = rule_version(config)
+    adopted = version == 'v0' or config['采用段数下限'] <= len(records) <= config['采用段数上限']
+    output = root / ('logs/test/T14b' if version == 'v1' else 'logs/test/T14')
+    if adopted and version == 'v1':
+        proof_path = output / 'v0原字节保护.json'
+        if proof_path.exists():
+            proof = json.loads(proof_path.read_text())
+        else:
+            original = target.read_bytes() if target.exists() else b''
+            proof = {'原字节': len(original), 'SHA256': hashlib.sha256(original).hexdigest(),
+                     'v0事件id': sorted(k for k, r in previous.items() if event_rule(r) == 'v0'),
+                     '说明': '采用v1前冻结的完整旧CSV前缀；每次复跑校验，不改写此证明'}
+            dump(proof_path, proof)
+        original = target.read_bytes() if target.exists() else b''
+        if hashlib.sha256(original[:proof['原字节']]).hexdigest() != proof['SHA256']:
+            raise ValueError('v0原字节前缀变化，拒绝写入')
+    added = append_records(target, records + (retired_v0(previous) if version == 'v1' else []), now) if adopted else 0
     latest = latest_records(target)
     # Markdown总表也是data历史，只追加不同内容的快照，不改写旧字节。
     table_path = root / 'data/事件库/主线_总表.md'
     table = total_table(latest, cutoff, config)
     old_table = table_path.read_bytes().decode('utf-8') if table_path.exists() else ''
-    if not old_table or old_table.split('\n<!-- T14快照 -->\n')[-1] != table:
+    if adopted and (not old_table or old_table.split('\n<!-- T14快照 -->\n')[-1] != table):
         atomic_text(table_path, old_table + ('\n<!-- T14快照 -->\n' if old_table else '') + table)
     manifest_paths = [flow_path, config_path, root / 'system/行业清单.csv'] + signals.paths + price_paths
     manifest = dict(data.paths)
     manifest.update({str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in manifest_paths if p.exists()})
-    report = {'title': 'T14历史主线案例', '生成时间': now.isoformat(), '计算截止': cutoff, '数据起点': days[0],
+    report = {'title': 'T14b历史主线案例' if version == 'v1' else 'T14历史主线案例', '生成时间': now.isoformat(), '计算截止': cutoff, '数据起点': days[0],
               '案例数': len(records), '追加行数': added, '状态计数': dict(collections.Counter(r['状态'] for r in records)),
+              '识别版本': version, '采用v1': adopted if version == 'v1' else False,
+              '采用依据': (f"事先约定{config['采用段数下限']}至{config['采用段数上限']}段；本次{len(records)}段，" + ('采用v1' if adopted else '不自动采用，保留v0等待审核')) if version == 'v1' else '保留旧v0规则用于隔离对照',
+              'v0已取代数': sum(r['状态'] == SUPERSEDED for r in latest.values()),
               '观察行业': 28, '候选行业': 27, '参数': config, '输入SHA256': manifest,
               '缺失日期': [r for r in audit if not r['相对完整'] or not r['占比完整']],
               '已知不成立与未知': '一个完整排名条件失败即不命中；不能判定任一失败且缺完整排名为未知；缺不是0',
               '限制': ['T8/T13最后修订，历史非逐日时点版本', '五维不参与识别，业绩缺不阻止建库',
                        '公开叙事的概念/风格未必对应一级行业，不能靠调参强行吻合', '不生成判断、不回测、不执行T15阶段'],
               '现行事件id': [r['事件id'] for r in records]}
-    output = root / 'logs/test/T14'
+    if version == 'v1' and not adopted:
+        dump(output / '未采用v1候选.json', records)
     dump(output / '建库报告.json', report)
     dump(output / '日条件审计.json', audit)
     print(json.dumps({k: report[k] for k in ('计算截止', '数据起点', '案例数', '追加行数', '状态计数')}, ensure_ascii=False))

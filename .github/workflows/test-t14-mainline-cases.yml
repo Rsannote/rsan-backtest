@@ -1,4 +1,4 @@
-name: T14 历史主线案例验收
+name: T14b 主线案例v1验收
 on:
   workflow_dispatch:
     inputs:
@@ -7,7 +7,7 @@ on:
         type: boolean
         default: true
   push:
-    branches: [gpt/T14-cases]
+    branches: [gpt/T14b-cases]
     paths:
       - 'scripts/mainline_cases*.py'
       - 'tests/test_mainline_cases*.py'
@@ -44,8 +44,8 @@ jobs:
       - name: 必要边界测试与固定引擎
         run: |
           set -euo pipefail
-          mkdir -p logs/test/T14
-          python -m unittest discover -s tests -p 'test_mainline_cases*.py' -v 2>&1 | tee logs/test/T14/离线测试.txt
+          mkdir -p logs/test/T14b
+          python -m unittest discover -s tests -p 'test_mainline_cases*.py' -v 2>&1 | tee logs/test/T14b/离线测试.txt
           md5sum -c engine/ENGINE_MD5.txt
       - name: 真实全回补、重复字节幂等与固定窗口核对
         run: |
@@ -72,8 +72,8 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: T14-案例与固定公开对照
+          name: T14b-v0v1案例与固定公开对照
           path: |
             data/事件库/主线.csv
             data/事件库/主线_总表.md
-            logs/test/T14/
+            logs/test/T14b/
