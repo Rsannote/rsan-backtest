@@ -184,7 +184,7 @@ PR21复审按要求先重查19个缺口日期（521个行业日）：官网全�
 
 ### 本轮跟进：财报历史与主线案例
 
-[T13b PR #26](https://github.com/Rsannote/rsan-backtest/pull/26)已于2026-10-31审核合并：当前14行业2353/2353家、101173条季度键，2013年起单季扣非、法定可见时点、中久期0、至少10家且60%覆盖和年度修订分片均已落地。按审核意见继续在[T13c PR #31](https://github.com/Rsannote/rsan-backtest/pull/31)把覆盖分母改为季度规则可见日前已上市的当时成分，并补齐27个候选行业。T13c探测27/27行业、4996只独立股票、上市日样本9/9且0错误；专项57项、全库282项和引擎MD5通过。正式回补[run 41185483231](https://github.com/Rsannote/rsan-backtest/actions/runs/41185483231)等待repo-writer，四个分片全部合格才发布，PR保持Draft。
+[T13b PR #26](https://github.com/Rsannote/rsan-backtest/pull/26)已于2026-10-31审核合并：当前14行业2353/2353家、101173条季度键，2013年起单季扣非、法定可见时点、中久期0、至少10家且60%覆盖和年度修订分片均已落地。按审核意见继续在[T13c PR #31](https://github.com/Rsannote/rsan-backtest/pull/31)把覆盖分母改为季度规则可见日前已上市的当时成分，并补齐27个候选行业。T13c现已完成27行业4996只财报覆盖（新抓2691、复用2305，追加114754条），上市日4995成功、301286未知并排除分母；289项全库、9行手算及[正式Actions 41208259093](https://github.com/Rsannote/rsan-backtest/actions/runs/41208259093)全部通过，PR已转待Claude审核。
 
 [T14 PR #25](https://github.com/Rsannote/rsan-backtest/pull/25)已于2026-10-31审核合并，原v0草案18段完整保留。跟进的[T14b PR #32](https://github.com/Rsannote/rsan-backtest/pull/32)按审核改用“60日相对沪深300前3且占比一年分位_28≥70”，40个实际命中、5日桥接和结束规则不变；原18段只追加“v0草案，已被v1取代”，新建42段v1（41确认、1数据中断）。PR已贴v0/v1超额对照和六组12对象逐项表；专项30项、全库252项及[Actions 41186741600](https://github.com/Rsannote/rsan-backtest/actions/runs/41186741600) verify成功，现待Claude审核。
 
