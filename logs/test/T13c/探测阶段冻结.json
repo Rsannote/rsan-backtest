@@ -1,0 +1,40 @@
+{
+  "阶段": "T13c来源探测，独立验证前冻结",
+  "源main": "3781fe50fc394ddb33bccca97f7aa78a7b0457b9",
+  "专项测试": 18,
+  "全库测试": 263,
+  "全部通过": true,
+  "正式data变动": false,
+  "文件": {
+    "scripts/earnings_universe.py": {
+      "字节": 6452,
+      "SHA256": "34c1c7cd212e2ef1f93152564396661914135acc2f38f3444124f06c7af598f6"
+    },
+    "scripts/probe_earnings_coverage.py": {
+      "字节": 8684,
+      "SHA256": "0ad3624f6b013c02be1a3dfd309749264bdc02e083a8b970229bb850e9e8bf17"
+    },
+    "tests/test_earnings_universe.py": {
+      "字节": 7312,
+      "SHA256": "1a5f60c42cc9ad725768caec6658fcb70a98ee2fcf0a354d88fd45f9249400b8"
+    },
+    ".github/workflows/test-t13c-coverage-probe.yml": {
+      "字节": 1290,
+      "SHA256": "a913e8856302da88356e78400995ae2011782fb5a18f567ac41c343e3b1c7ace"
+    },
+    "logs/test/T13c/探测请求.json": {
+      "字节": 461,
+      "SHA256": "10eaaf7da95600c45799d5f1488e6662563f558ea9a69f1542ec4a6e813a2360"
+    },
+    "logs/test/T13c/探测专项测试.txt": {
+      "字节": 5109,
+      "SHA256": "2aa091c027ab3907b2709e6d7d4dbe3d4022bb7a0b9b82c81bc0b67e5e03e672"
+    },
+    "logs/test/T13c/探测全库测试.txt": {
+      "字节": 10354,
+      "SHA256": "fab09e26103d82a6014eba488e6664d98fa22406c39c9634f4a95f33dc4f3139"
+    }
+  },
+  "说明": "仅来源探测/离线解析；此阶段未从本机请求金融网站。以下四个源码路径暂不再修改，交独立Verification。",
+  "独立复验修复": "A/B/H市场标签隔离；日期完整token；非有限权重拒绝；其它探测结构不变"
+}

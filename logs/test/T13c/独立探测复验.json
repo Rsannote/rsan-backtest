@@ -1,0 +1,66 @@
+{
+  "阶段": "T13c来源探测独立Verification",
+  "核验北京时间": "2026-10-31T06:03:04.012234+08:00",
+  "基准main": "3781fe50fc394ddb33bccca97f7aa78a7b0457b9",
+  "冻结文件": {
+    "scripts/earnings_universe.py": {
+      "字节": 6452,
+      "SHA256": "34c1c7cd212e2ef1f93152564396661914135acc2f38f3444124f06c7af598f6",
+      "匹配冻结": true
+    },
+    "scripts/probe_earnings_coverage.py": {
+      "字节": 8684,
+      "SHA256": "0ad3624f6b013c02be1a3dfd309749264bdc02e083a8b970229bb850e9e8bf17",
+      "匹配冻结": true
+    },
+    "tests/test_earnings_universe.py": {
+      "字节": 7312,
+      "SHA256": "1a5f60c42cc9ad725768caec6658fcb70a98ee2fcf0a354d88fd45f9249400b8",
+      "匹配冻结": true
+    },
+    ".github/workflows/test-t13c-coverage-probe.yml": {
+      "字节": 1290,
+      "SHA256": "a913e8856302da88356e78400995ae2011782fb5a18f567ac41c343e3b1c7ace",
+      "匹配冻结": true
+    },
+    "logs/test/T13c/探测请求.json": {
+      "字节": 461,
+      "SHA256": "10eaaf7da95600c45799d5f1488e6662563f558ea9a69f1542ec4a6e813a2360",
+      "匹配冻结": true
+    },
+    "logs/test/T13c/探测专项测试.txt": {
+      "字节": 5109,
+      "SHA256": "2aa091c027ab3907b2709e6d7d4dbe3d4022bb7a0b9b82c81bc0b67e5e03e672",
+      "匹配冻结": true
+    },
+    "logs/test/T13c/探测全库测试.txt": {
+      "字节": 10354,
+      "SHA256": "fab09e26103d82a6014eba488e6664d98fa22406c39c9634f4a95f33dc4f3139",
+      "匹配冻结": true
+    }
+  },
+  "原专项18项通过": true,
+  "独立反例9项通过": true,
+  "引擎MD5": "c06e2dd885eb8ac18f9cd4e1021a9b8c",
+  "HTTP网络请求次数": 0,
+  "正式受保护目录当前diff": [],
+  "实现代理报告全库测试": 263,
+  "独立复验未重复全库": true,
+  "初轮发现与修复": [
+    "A股股票标题下仅B/H股上市日期不再误用",
+    "畸形日期尾数字/分隔符不再截断",
+    "非有限权重和布尔权重拒绝，合法0保留"
+  ],
+  "独立检查": [
+    "27候选实际集合与原13候选/缺14一致",
+    "同一行业分页total漂移、空后页均拒绝完整",
+    "27行业跨行业重复即使各页完整也不能探测通过",
+    "HTTP仅Actions构造、localhost请求会话创建前拦截",
+    "SWS请求传验证CA、THS/Sina默认系统校验，不关闭验证",
+    "每个GET40秒墙钟与退出alarm清理；全局1500秒预算路径可见",
+    "原始CRLF字节和SHA保留；HTTPS/同域重定向不符拒绝",
+    "工作流仅contents read，无仓库提交，只写logs/artifact"
+  ],
+  "是否允许推送来源探测": true,
+  "范围限制": "仅允许这一冻结来源探测阶段，不代表真实接口已可达或全量/最终T13c验收通过"
+}

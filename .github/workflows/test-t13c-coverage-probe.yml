@@ -1,0 +1,36 @@
+# T13c分支只读探测，无定时触发，不写正式data、不提交Git。
+name: T13c 成分与上市日期探测
+on:
+  workflow_dispatch:
+  pull_request:
+    paths: ['logs/test/T13c/探测请求.json']
+permissions:
+  contents: read
+concurrency:
+  group: t13c-probe-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  probe:
+    if: github.ref == 'refs/heads/gpt/T13c-earnings'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pandas numpy requests
+      - name: 离线来源边界检查
+        run: python -m unittest discover -s tests -p test_earnings_universe.py -v
+      - name: 当前证书验证、27行业完整成分与9只公司上市日期探测
+        run: python -u scripts/probe_earnings_coverage.py --budget 1500
+      - name: 正式目录未改写
+        if: always()
+        run: git diff --exit-code -- data engine archive judgments graph system
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T13c-覆盖探测-${{ github.run_id }}
+          path: logs/test/T13c/探测/
+          if-no-files-found: error
+          retention-days: 30

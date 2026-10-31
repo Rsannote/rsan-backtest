@@ -15,6 +15,7 @@ from flow_source import append_rows
 from mainline_sources import BJ,NEW,Sources,registry,number
 from flow_source import START,START31
 from mainline_signal_store import plan_revisions,write_revisions
+from earnings_coverage import plan_coverage_table
 
 ROOT=Path(__file__).resolve().parents[1]
 FLOW={'成交额原值':'资金_成交额亿','占比':'资金_成交占比','总额':'资金_行业合计亿','占比5日变化':'资金_占比5日变化','占比20日变化':'资金_占比20日变化',
@@ -74,7 +75,7 @@ def build(flow,names,sources,scope):
             out['使用时点说明']='收盘后指标；市场/社区实际可见时刻另列；初次历史建库非逐日版本'
             quarter_note=sources.quarter_notes.get((day,code),'')
             if quarter_note or item['久期']=='中':
-                out['使用时点说明']='T13b-v2'+quarter_note+(';中性定义，非缺失' if item['久期']=='中' else '')
+                out['使用时点说明']='T13c-v1'+quarter_note+(';中性定义，非缺失' if item['久期']=='中' else '')
             rows.append(out)
     result=pd.DataFrame(rows)
     if result.empty:return result
@@ -104,29 +105,41 @@ def run(root=ROOT,asof=None,now=None,estimate_only=False):
         if table.empty:continue
         table,updates,plan=plan_revisions(root,scope,table,stamp)
         tables[scope]=table;changes.update(updates);plans[str(scope)]=plan;added[str(scope)]=plan['追加行']
-    dump(root/'logs/test/T13b/信号追加预算.json',{'生成时间':stamp,'逐口径':plans,'说明':'原CSV字节保持不变；只追加真正变化行到年度修订分片；逐分片精确预检100MiB'})
+    coverage_changes,coverage_plan=plan_coverage_table(root,sources.quarter_details.values(),stamp)
+    dump(root/'logs/test/T13c/信号追加预算.json',{'生成时间':stamp,'逐口径':plans,'覆盖率侧表':coverage_plan,'说明':'原CSV字节保持不变；只追加真正变化行到年度修订分片；覆盖侧表和主信号同一事务，分母严格IPO早于本季度规则可见日'})
     if estimate_only:return {'追加预算':plans,'errors':[]}
-    write_revisions(root,changes,plans)
     current=tables[31][tables[31].date==last].to_dict('records') if not tables[31].empty else []
     errors=[];warnings=[]
     if last>=START31 and len(current)!=31:errors.append('最新31行业信号行数不是31，见T8日期范围')
     if current and not any(number(r.get('资金_成交占比')) is not None for r in current if r['主线判定']=='参与'):
         errors.append('最新所有候选的申万资金占比均缺，不能仅凭文件有行报正常')
     if not (root/'data/一致预期/行业上修.csv').exists():warnings.append('T12b尚未提供主分支一致预期上修表，相应维度缺失，不读未合并分支')
-    warnings+=['当前成分快照回溯有幸存者偏差，非历史成分/PIT财报库；利润加速占比仅在可评估>=10家且>=60%成分时=加速/可评估，否则缺','新闻历史不能回补，历史潜伏的先行维度只能用业绩；中久期适配0为中性定义，非缺失，原中美利率缺值仍保留','人工行业映射为当前分类回溯；T8按要求读取最后修订，历史不是严格逐日版本']
+    warnings+=['当前成分快照回溯有幸存者偏差，非历史成分/PIT财报库；业绩_成分家数仍为当前总量，覆盖分母是IPO严格早于本季度规则可见日的成分；上市日未知另计数且排除','利润加速占比仅在可评估>=10家且>=60%已上市分母时=加速/可评估，否则缺；分母0时覆盖率缺，不用0替代','新闻历史不能回补，历史潜伏的先行维度只能用业绩；中久期适配0为中性定义，非缺失，原中美利率缺值仍保留','人工行业映射为当前分类回溯；T8按要求读取最后修订，历史不是严格逐日版本']
     for path,digest in before.items():
         if hashlib.sha256((root/path).read_bytes()).hexdigest()!=digest:raise AssertionError('Claude表被改动：'+path)
     counts={d:{s:sum(r[d+'_状态']==s for r in current) for s in ('有值','部分缺','缺','排除')} for d in ('环境适配','业绩预期','热度催化','资金','拥挤度')}
-    report={'title':'主线信号表','generated_at':stamp,'data_date':last,'status':'失败' if errors else '正常','errors':errors,'warnings':warnings,'观察对象':'申万一级31行业；综合排除候选，只参与合计','历史回放口径':'固定28行业，排除2021新增三行业；独立历史信号表_28.csv，不与31列拼接','维度覆盖':counts,'新增行':added,'追加预算':plans,'当前行':current,'维护表SHA256':before,'输入T8_SHA256':hashlib.sha256((root/'data/资金轮动/日表.csv').read_bytes()).hexdigest(),'催化日历':sources.catalysts,'解释':'【待判读】；不判阶段、不设主线参数、不生成判断'}
-    dump(base/'最新.json',report);dump(root/'logs/主线信号_最新.json',report)
+    latest_coverage=[r for (day,_),r in sorted(sources.quarter_details.items()) if day==last]
+    report={'title':'主线信号表','generated_at':stamp,'data_date':last,'status':'失败' if errors else '正常','errors':errors,'warnings':warnings,'观察对象':'申万一级31行业；综合排除候选，只参与合计','历史回放口径':'固定28行业，排除2021新增三行业；独立历史信号表_28.csv，不与31列拼接','维度覆盖':counts,'新增行':{k:0 for k in added} if errors else added,'追加预算':plans,'当前行':current,'维护表SHA256':before,'输入T8_SHA256':hashlib.sha256((root/'data/资金轮动/日表.csv').read_bytes()).hexdigest(),'催化日历':sources.catalysts,'季度覆盖明细':latest_coverage,'覆盖率侧表':dict(coverage_plan,已提交=not errors),'解释':'【待判读】；不判阶段、不设主线参数、不生成判断'}
     lines=['# 主线信号表','',f'数据日期：{last}；生成：{stamp}（北京时间）。当前31，历史回放固定28分文件。','', '|行业|代码|主线判定|环境适配|业绩预期|热度催化|资金|拥挤度|占比|20日相对|一年分位|','|---|---|---|---|---|---|---|---|---:|---:|---:|']
     def show(v):return '缺' if v is None or (isinstance(v,float) and not np.isfinite(v)) or v=='' else str(round(v,8)) if isinstance(v,float) else str(v)
     for r in current:lines.append('|'+ '|'.join(show(r.get(k)) for k in ('行业','code','主线判定','环境适配_状态','业绩预期_状态','热度催化_状态','资金_状态','拥挤度_状态','资金_成交占比','资金_相对沪深300_20','拥挤_占比一年分位'))+'|')
+    lines+=['','## 季报覆盖（当前成分总量不是覆盖分母）','','|行业|季度|当前总量|已上市分母|未上市|上市日未知|有效|覆盖率|行业加速占比|','|---|---|---:|---:|---:|---:|---:|---:|---:|']
+    for r in latest_coverage:lines.append('|'+ '|'.join(show(r.get(k)) for k in ('行业','季报期','当前成分总量','已上市分母','未上市家数','上市日期未知家数','可评估家数','季报覆盖率','行业利润加速占比'))+'|')
     lines+=['','## 催化日历（Claude维护，仅具体日期可参与将来的事件判定）','','|日期|事件|相关行业|确定性|具体日期|','|---|---|---|---|---|']
     for r in sources.catalysts:lines.append('|'+ '|'.join(str(r.get(k,'')) for k in ('日期','事件','相关行业','确定性','具体日期'))+'|')
     lines+=['','解释【待判读】。历史指标按数据可用程度留空；排名同时显示有效样本数，只有全部候选有值才给全行业排名。','',*['- '+x for x in warnings],'']
-    atomic_text(base/'最新.md','\n'.join(lines));atomic_text(root/'logs/主线信号_最新.md','\n'.join(lines))
-    print(json.dumps({'数据日期':last,'31唯一行':len(tables[31]),'28唯一行':len(tables[28]),'新增':added,'维度覆盖':counts},ensure_ascii=False));return report
+    encoded=(json.dumps(json_safe(report),ensure_ascii=False,indent=2,allow_nan=False)+'\n').encode()
+    rendered='\n'.join(lines).encode()
+    if errors:
+        # 失败只更新故障日志，既有成功CSV、覆盖侧表和data/主线最新均不变。
+        atomic_text(root/'logs/主线信号_最新.json',encoded.decode())
+        atomic_text(root/'logs/主线信号_最新.md',rendered.decode())
+    else:
+        extras=dict(coverage_changes)
+        extras.update({base/'最新.json':encoded,root/'logs/主线信号_最新.json':encoded,
+                       base/'最新.md':rendered,root/'logs/主线信号_最新.md':rendered})
+        write_revisions(root,changes,plans,extra_changes=extras)
+    print(json.dumps({'数据日期':last,'31唯一行':len(tables[31]),'28唯一行':len(tables[28]),'新增':report['新增行'],'维度覆盖':counts},ensure_ascii=False));return report
 
 
 def main():
