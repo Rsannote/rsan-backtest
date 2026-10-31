@@ -43,7 +43,8 @@ class CaseTests(unittest.TestCase):
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name)
         self.names, self.codes, self.candidates = cases.registry(ROOT)
-        self.config = cases.parameters(ROOT / 'system/主线案例参数.json')
+        # 冻结的v0回归继续验证旧规则；v1边界在下面单独覆盖。
+        self.config = cases.parameters(ROOT / 'system/主线案例参数_v0.json')
         self.now = dt.datetime(2026, 10, 30, 20, tzinfo=cases.BJ)
 
     def write(self, path, fields, rows):
@@ -61,8 +62,8 @@ class CaseTests(unittest.TestCase):
             for i, code in enumerate(self.codes):
                 position = self.candidates.index(code) if code in self.candidates else 100
                 rows.append({'date': day, 'code': code, '相对沪深300_60': -.01 - position * .01,
-                             '占比_28': (28 - i) / 406, '收盘': 100 + i})
-        return pd.DataFrame(rows)
+                             '占比_28': (28 - i) / 406, '占比一年分位_28': 80, '收盘': 100 + i})
+        return pd.DataFrame(rows).astype({'占比一年分位_28': object})
 
     def dates(self, n):
         return pd.bdate_range('2026-01-01', periods=n).strftime('%Y-%m-%d').tolist()
@@ -348,6 +349,7 @@ class CaseTests(unittest.TestCase):
             target = self.root / rel
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes((ROOT / rel).read_bytes())
+        (self.root / 'system/主线案例参数.json').write_text(json.dumps(self.config, ensure_ascii=False))
         self.write('data/行情库/指数/sh000300.csv', ['date', 'close', 'factor'],
                    [{'date': d, 'close': 100 + i * .1, 'factor': 1} for i, d in enumerate(days)])
         for rel, field in [('data/市场状态/日指标.csv', '成交额亿'), ('data/市场状态/融资余额.csv', '融资余额亿'),
@@ -445,6 +447,100 @@ class CaseTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, '禁止本机联网'):
                 public_sources.verify(self.root)
             request.assert_not_called()
+
+    def test_v1_self_percentile_inclusive_70_ignores_absolute_size(self):
+        config = cases.parameters(ROOT / 'system/主线案例参数.json')
+        day = '2026-01-01'
+        frame = self.flow([day])
+        small = self.candidates[-1]
+        frame.loc[frame.code == small, '相对沪深300_60'] = 10
+        frame.loc[frame.code == small, '占比_28'] = .000001
+        frame.loc[frame.code == small, '占比一年分位_28'] = 70
+        states, _, audit = cases.daily_conditions(frame, [day], self.codes, self.candidates, config)
+        self.assertIs(states[small][0], True)
+        self.assertEqual(audit[0]['资金条件字段'], '占比一年分位_28')
+        frame.loc[frame.code == small, '占比一年分位_28'] = 69.999999
+        self.assertIs(cases.daily_conditions(frame, [day], self.codes, self.candidates, config)[0][small][0], False)
+
+    def test_v1_missing_or_invalid_percentile_is_unknown_not_zero_or_global_gate(self):
+        config = cases.parameters(ROOT / 'system/主线案例参数.json')
+        day = '2026-01-01'; target = self.candidates[0]
+        for invalid in ('', 'NaN', float('inf'), -1, 101):
+            frame = self.flow([day]);frame.loc[frame.code == target, '占比一年分位_28'] = invalid
+            states, _, _ = cases.daily_conditions(frame, [day], self.codes, self.candidates, config)
+            self.assertIsNone(states[target][0], invalid)
+            self.assertIs(states[self.candidates[1]][0], True)
+            self.assertIs(states[self.candidates[-1]][0], False)
+        frame = self.flow([day]);frame['占比_28']=frame['占比_28'].astype(object)
+        frame.loc[frame.code == '801230', '占比_28'] = ''
+        self.assertIs(cases.daily_conditions(frame, [day], self.codes, self.candidates, config)[0][target][0], True)
+
+    def test_v1_last_percentile_blank_applied_before_condition(self):
+        config = cases.parameters(ROOT / 'system/主线案例参数.json')
+        day='2026-01-01'; frame=self.flow([day]); original=frame.iloc[0].to_dict()
+        path=self.write('flow.csv',list(frame),frame.to_dict('records')+[dict(original,占比一年分位_28='')])
+        states, _, _=cases.daily_conditions(storage.latest_frame(path),[day],self.codes,self.candidates,config)
+        self.assertIsNone(states[original['code']][0])
+
+    def test_v1_retirement_only_appends_state_preserving_original_bytes_and_latest_human(self):
+        path=self.root/'cases.csv';row={k:'' for k in storage.FIELDS}
+        row.update({'事件id':'EVT-SW801010-ML-2020-01-01','程序版本':cases.VERSION,
+                    '状态':'已确认结束','开始':'2020-01-01','结束':'2020-06-01','幅度':'0.2',
+                    '参数':'旧参数原文','程序说明':'旧程序说明','触发事件':'人工触发原文','支撑':'人工支撑原文'})
+        storage.append_records(path,[row],self.now)
+        # 模拟历史手动修订最后一条为空；更早非空原文仍须逐列带过。
+        blank=dict(storage.latest_records(path)[row['事件id']],触发事件='',支撑='')
+        with path.open('a',newline='') as stream:
+            csv.DictWriter(stream,storage.FIELDS,lineterminator='\n').writerow(blank)
+        before=path.read_bytes()
+        old=storage.latest_records(path)
+        retired=cases.retired_v0(old)
+        self.assertEqual(storage.append_records(path,retired,self.now),1)
+        self.assertTrue(path.read_bytes().startswith(before))
+        latest=storage.latest_records(path)[row['事件id']]
+        self.assertEqual(latest['状态'],cases.SUPERSEDED)
+        for key in ('开始','结束','幅度','参数','触发事件','支撑'):
+            self.assertEqual(latest[key],row[key])
+        frozen=path.read_bytes()
+        self.assertEqual(storage.append_records(path,cases.retired_v0(storage.latest_records(path)),self.now),0)
+        self.assertEqual(path.read_bytes(),frozen)
+        v1=dict(row,事件id='EVT-SW801010-ML1-2020-01-01',程序版本=cases.VERSION_V1,状态='已确认结束')
+        storage.append_records(path,[v1]+cases.retired_v0(storage.latest_records(path)),self.now)
+        config=cases.parameters(ROOT/'system/主线案例参数.json')
+        self.assertEqual(set(cases.current_records(storage.latest_records(path),config)),{v1['事件id']})
+
+    def test_v1_outside_predeclared_adoption_range_does_not_replace_v0_or_tune(self):
+        self.fixture();cases.run(self.root,now=self.now)
+        csv_path=self.root/'data/事件库/主线.csv';before=csv_path.read_bytes()
+        table=self.root/'data/事件库/主线_总表.md';old_table=table.read_bytes()
+        (self.root/'system/主线案例参数.json').write_bytes((ROOT/'system/主线案例参数.json').read_bytes())
+        result=cases.run(self.root,now=self.now)
+        self.assertEqual(result['案例数'],3)
+        self.assertFalse(result['采用v1'])
+        self.assertEqual(result['参数']['占比一年分位下限'],70)
+        self.assertEqual(csv_path.read_bytes(),before)
+        self.assertEqual(table.read_bytes(),old_table)
+        self.assertTrue((self.root/'logs/test/T14b/未采用v1候选.json').exists())
+
+    def test_v1_parameter_guards(self):
+        config=cases.parameters(ROOT/'system/主线案例参数.json')
+        invalid=[dict(config,占比一年分位下限=v) for v in (True,-1,101,float('nan'))]
+        invalid += [dict(config,采用段数下限=True),dict(config,采用段数下限=61),dict(config,识别版本='v2')]
+        for value in invalid:
+            path=self.root/'config.json';path.write_text(json.dumps(value))
+            with self.assertRaises(ValueError):cases.parameters(path)
+
+    def test_v0_cannot_reactivate_after_v1_history_exists(self):
+        self.fixture();cases.run(self.root,now=self.now)
+        path=self.root/'data/事件库/主线.csv';old=storage.latest_records(path)
+        sample=dict(next(iter(old.values())))
+        sample['事件id']=sample['事件id'].replace('-ML-','-ML1-')
+        sample['程序版本']=cases.VERSION_V1
+        storage.append_records(path,list(old.values())+[sample],self.now)
+        original=path.read_bytes()
+        with self.assertRaisesRegex(ValueError,'已有v1历史'):
+            cases.run(self.root,now=self.now)
+        self.assertEqual(path.read_bytes(),original)
 
 
 if __name__ == '__main__':

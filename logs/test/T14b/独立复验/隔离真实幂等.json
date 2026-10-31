@@ -1,0 +1,10 @@
+{
+  "隔离root": "/var/folders/yt/_78jxhl55k1_9z4cbr_vkkbc0000gn/T/t14b-independent-kaaqiauk",
+  "新增": 0,
+  "案例数": 42,
+  "SHA256不变": {
+    "data/事件库/主线.csv": "2b1fdb5070d09426e5ba37febce4ea311e02b0967473f6fef409f15f8d7763b9",
+    "data/事件库/主线_总表.md": "1e51b22f69c71cd8aeaf8016a35b8b9604c2b3dd0bc7a7a2021fe73541f7e0cf",
+    "data/事件库/说明.md": "74787a20e841424bb685757d2dabbed10e273fdf8d3317e67c02d932dadef5d4"
+  }
+}

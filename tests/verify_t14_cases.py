@@ -25,6 +25,9 @@ WINDOWS = [
 def verify(root=ROOT):
     root = Path(root).resolve()
     config = cases.parameters(root / 'system/主线案例参数.json')
+    if cases.rule_version(config) == 'v1':
+        from verify_t14b_cases import verify as verify_v1
+        return verify_v1(root)
     assert [config[k] for k in ('相对强弱前几名', '成交占比前比例', '最少实际命中日', '最多桥接交易日')] == [3, .2, 40, 5], '验收固定草案，不自动校准'
     names, codes, candidates = cases.registry(root)
     report = json.loads((root / 'logs/test/T14/建库报告.json').read_text())

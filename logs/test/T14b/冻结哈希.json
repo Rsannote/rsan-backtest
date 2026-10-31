@@ -1,0 +1,31 @@
+{
+  "基准main": "3781fe50fc394ddb33bccca97f7aa78a7b0457b9",
+  "文件数": 24,
+  "SHA256": {
+    ".github/workflows/test-t14-mainline-cases.yml": "e88064f1acf25639c4873c26595eafafc8482b34cc96e8f81891643ff33ca72a",
+    "AGENTS.md": "8ae6659e7a7be4b6e851e19b7f9d99749597ab64941196339396287d9c436896",
+    "data/事件库/主线.csv": "2b1fdb5070d09426e5ba37febce4ea311e02b0967473f6fef409f15f8d7763b9",
+    "data/事件库/主线_总表.md": "1e51b22f69c71cd8aeaf8016a35b8b9604c2b3dd0bc7a7a2021fe73541f7e0cf",
+    "data/事件库/说明.md": "74787a20e841424bb685757d2dabbed10e273fdf8d3317e67c02d932dadef5d4",
+    "logs/test/T14b/PR说明.md": "eaf54f8e60c2a6c1f3bcb97693480c77f4444275e5188c062a983068599f31ea",
+    "logs/test/T14b/v0原字节保护.json": "41b0ae6a921d5de6fd9b84ca7384fa13a3c4cd757c9b0e9fc1c22fc34b4e1380",
+    "logs/test/T14b/专项测试.txt": "8db578faa29f24034312d8b5d8bd9b4744d6cfa99f29026d86d07119adf86412",
+    "logs/test/T14b/全库测试.txt": "db648fb859664e3065bcb0dca92307c96ff6480cdd5ffd2026609a2d8e30fd1d",
+    "logs/test/T14b/受保护检查.json": "8f91848f395a502cc030b0c2e89d7d6aa5bd0ae4c6281aa2b29f560a5d5187ac",
+    "logs/test/T14b/建库报告.json": "8966d364f371447e75654e073460b4255ecbf05d9e377b7c60c6b054f907a925",
+    "logs/test/T14b/日条件审计.json": "9a1a4d6d48c115dbd71bd0551798b83e5666cc1cfd02e520dd27c4181655453a",
+    "logs/test/T14b/独立核对执行.txt": "127a3353983528ebffec015f26889560f7af451927bfdeddad2c170647519a54",
+    "logs/test/T14b/重复幂等.json": "32d85be3c10b7e9a8ffadf31fd338d4e8949536b6ba755841e09c52e8378dfd3",
+    "logs/test/T14b/首次建库.txt": "4f2ff9b21c113e28714f763b7f5ca529c435435070372d3f3a4b98737a21243f",
+    "logs/test/T14b/验收与对照.json": "b499688437be5ca88c07178c85d17a35d8d27d40015cbadbd62d67013db3bad3",
+    "logs/test/T14b/验收与对照.md": "3b3860e58917c54283a71249e85f0904243ceb62d037b7a176dfa3146f92094d",
+    "scripts/mainline_cases.py": "e5fd064718fcee505a5811eb9bef20c1cea5fc8328b86febddbe2af7916a2fc0",
+    "system/主线案例参数.json": "1b51329d30750c01a0103ec7bbbc5dd67d0a41c92581ef3a1c823722adda9e21",
+    "system/主线案例参数_v0.json": "9bf431909c5ec4d976d24d55543fc8c5346883717035e9f72a6571cfa216a637",
+    "system/主线案例格式.md": "b546163c3444526a0cb97385f3029e588543539044532409471ed485f12ff885",
+    "tests/test_mainline_cases.py": "8e697b7b27c1e97aeb21a625625ed1908c37eebe59e2ff0173e96bf76a0b55ae",
+    "tests/verify_t14_cases.py": "f70c0c9b64bd5688bf599783e7e731298ea4862960d5be6db90fba301722dd73",
+    "tests/verify_t14b_cases.py": "4dcab0ecf9282aa1d8134ed86d70ddb419e92ab41a04879dfc39a612e31c92f1"
+  },
+  "说明": "实现阶段完成后冻结；自身不自哈希。待独立Verification，无提交或推送。"
+}
