@@ -1,7 +1,7 @@
 name: T13c 财报重定向只读诊断
 on:
-  push:
-    branches: [gpt/T13c-earnings]
+  workflow_dispatch:
+  pull_request:
     paths:
       - 'scripts/probe_finance_redirect.py'
       - 'tests/test_probe_finance_redirect.py'

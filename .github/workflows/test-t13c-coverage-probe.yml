@@ -2,8 +2,7 @@
 name: T13c 成分与上市日期探测
 on:
   workflow_dispatch:
-  push:
-    branches: [gpt/T13c-earnings]
+  pull_request:
     paths: ['logs/test/T13c/探测请求.json']
 permissions:
   contents: read

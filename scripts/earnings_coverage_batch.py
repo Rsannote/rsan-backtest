@@ -66,8 +66,23 @@ class HTTP:
         previous = signal.signal(signal.SIGALRM, lambda *_: (_ for _ in ()).throw(TimeoutError('请求墙钟超时')))
         signal.alarm(seconds)
         try:
-            response = self.session.get(url, timeout=(10, 25), allow_redirects=True,
+            response = self.session.get(url, timeout=(10, 25), allow_redirects=False,
                                         headers={'Referer': 'https://finance.sina.com.cn/' if 'sina.com' in url else 'https://basic.10jqka.com.cn/'})
+            if response.status_code in (301, 302, 303, 307, 308):
+                initial = urllib.parse.urlsplit(url)
+                target = urllib.parse.urlsplit(urllib.parse.urljoin(url, response.headers.get('Location', '')))
+                match = re.fullmatch(r'/new/(\d{6})/finance\.html', initial.path)
+                if (not match or initial.hostname != 'basic.10jqka.com.cn' or
+                        target.hostname != initial.hostname or target.username or target.password or
+                        target.port not in (None, 80, 443) or target.scheme not in ('http', 'https') or
+                        target.path != '/' + match[1] + '/finance.html' or target.query or target.fragment):
+                    raise ValueError('拒绝未经验证的来源重定向')
+                # Actions三股验证：仅将同域同代码的新路径升级为HTTPS，绝不发送HTTP。
+                secure = 'https://basic.10jqka.com.cn' + target.path
+                response = self.session.get(secure, timeout=(10, 25), allow_redirects=False,
+                                            headers={'Referer': 'https://basic.10jqka.com.cn/'})
+                if response.status_code in (301, 302, 303, 307, 308):
+                    raise ValueError('HTTPS升级后仍重定向，拒绝继续')
             final = urllib.parse.urlsplit(response.url)
             expected = urllib.parse.urlsplit(url)
             if final.scheme != 'https' or final.hostname != expected.hostname:
@@ -141,8 +156,8 @@ def collect(root, probe_result, shard, shards, budget=3000, client=None, resume_
             financials.append(record)
         if index % 100 == 0:
             print(f'分片 {shard}/{shards} {index}/{len(selected)}', flush=True)
-    report = {'生成时间': stamp, '来源分支': os.environ.get('GITHUB_REF_NAME', '离线测试'),
-              '来源SHA': os.environ.get('GITHUB_SHA', '离线测试'), '来源运行': os.environ.get('GITHUB_RUN_ID', '离线测试'),
+    report = {'生成时间': stamp, '来源分支': os.environ.get('T13C_SOURCE_BRANCH', os.environ.get('GITHUB_REF_NAME', '离线测试')),
+              '来源SHA': os.environ.get('T13C_SOURCE_SHA', os.environ.get('GITHUB_SHA', '离线测试')), '来源运行': os.environ.get('GITHUB_RUN_ID', '离线测试'),
               '探测运行': str(result.get('来源运行')), '探测SHA': result.get('来源SHA'),
               '探测结果SHA256': hashlib.sha256(raw_probe).hexdigest(), '成分业务SHA256': universe_digest,
               '成分家数': len(universe), '分片': shard, '分片总数': shards, '代码': selected,

@@ -1,0 +1,147 @@
+{
+  "生成时间": "2026-10-31T22:00:11.739927+08:00",
+  "来源分支": "gpt/T13c-earnings",
+  "来源SHA": "1ab331c8823f75c98964fb3f57df6964893f3342",
+  "来源运行": "41207199478",
+  "说明": "仅记录跳转协议、域名、路径、状态和解析摘要；不保存正文；TLS验证保持开启。",
+  "结果": [
+    {
+      "代码": "000002",
+      "状态": "解析成功",
+      "hops": [
+        {
+          "request": {
+            "scheme": "https",
+            "host": "basic.10jqka.com.cn",
+            "path": "/new/000002/finance.html",
+            "has_query": false
+          },
+          "status": 301,
+          "location": {
+            "scheme": "http",
+            "host": "basic.10jqka.com.cn",
+            "path": "/000002/finance.html",
+            "has_query": false
+          },
+          "尝试HTTPS升级": {
+            "scheme": "https",
+            "host": "basic.10jqka.com.cn",
+            "path": "/000002/finance.html",
+            "has_query": false
+          }
+        },
+        {
+          "request": {
+            "scheme": "https",
+            "host": "basic.10jqka.com.cn",
+            "path": "/000002/finance.html",
+            "has_query": false
+          },
+          "status": 200
+        }
+      ],
+      "最终URL": {
+        "scheme": "https",
+        "host": "basic.10jqka.com.cn",
+        "path": "/000002/finance.html",
+        "has_query": false
+      },
+      "曾HTTPS升级": true,
+      "响应SHA256": "c81bd66290fda819693e4b82059ccfd7bff79213becd745ae1f8456563b481e9",
+      "响应字节": 477010,
+      "单季记录数": 55
+    },
+    {
+      "代码": "600519",
+      "状态": "解析成功",
+      "hops": [
+        {
+          "request": {
+            "scheme": "https",
+            "host": "basic.10jqka.com.cn",
+            "path": "/new/600519/finance.html",
+            "has_query": false
+          },
+          "status": 301,
+          "location": {
+            "scheme": "http",
+            "host": "basic.10jqka.com.cn",
+            "path": "/600519/finance.html",
+            "has_query": false
+          },
+          "尝试HTTPS升级": {
+            "scheme": "https",
+            "host": "basic.10jqka.com.cn",
+            "path": "/600519/finance.html",
+            "has_query": false
+          }
+        },
+        {
+          "request": {
+            "scheme": "https",
+            "host": "basic.10jqka.com.cn",
+            "path": "/600519/finance.html",
+            "has_query": false
+          },
+          "status": 200
+        }
+      ],
+      "最终URL": {
+        "scheme": "https",
+        "host": "basic.10jqka.com.cn",
+        "path": "/600519/finance.html",
+        "has_query": false
+      },
+      "曾HTTPS升级": true,
+      "响应SHA256": "d4edb63eb9d5139eb04711619e0d4352570e9c155a4efd3489829c9548c8e35b",
+      "响应字节": 458340,
+      "单季记录数": 55
+    },
+    {
+      "代码": "001267",
+      "状态": "解析成功",
+      "hops": [
+        {
+          "request": {
+            "scheme": "https",
+            "host": "basic.10jqka.com.cn",
+            "path": "/new/001267/finance.html",
+            "has_query": false
+          },
+          "status": 301,
+          "location": {
+            "scheme": "http",
+            "host": "basic.10jqka.com.cn",
+            "path": "/001267/finance.html",
+            "has_query": false
+          },
+          "尝试HTTPS升级": {
+            "scheme": "https",
+            "host": "basic.10jqka.com.cn",
+            "path": "/001267/finance.html",
+            "has_query": false
+          }
+        },
+        {
+          "request": {
+            "scheme": "https",
+            "host": "basic.10jqka.com.cn",
+            "path": "/001267/finance.html",
+            "has_query": false
+          },
+          "status": 200
+        }
+      ],
+      "最终URL": {
+        "scheme": "https",
+        "host": "basic.10jqka.com.cn",
+        "path": "/001267/finance.html",
+        "has_query": false
+      },
+      "曾HTTPS升级": true,
+      "响应SHA256": "2af3fbc07ee10250e843494d83f30cf896a969c211bf3e87a05781f27b36a707",
+      "响应字节": 485139,
+      "单季记录数": 55
+    }
+  ]
+}

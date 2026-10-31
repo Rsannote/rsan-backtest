@@ -2,8 +2,7 @@
 name: T13c 27行业上市日与财报回补
 on:
   workflow_dispatch:
-  push:
-    branches: [gpt/T13c-earnings]
+  pull_request:
     paths: ['logs/test/T13c/正式回补请求.json']
 permissions:
   contents: write
@@ -13,13 +12,15 @@ concurrency:
   cancel-in-progress: false
 jobs:
   component:
-    if: github.ref == 'refs/heads/gpt/T13c-earnings'
+    if: github.ref == 'refs/heads/gpt/T13c-earnings' || (github.head_ref == 'gpt/T13c-earnings' && github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-latest
     timeout-minutes: 10
     outputs:
       resume_run: ${{ steps.request.outputs.resume_run }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - name: 核验探测运行与可选断点运行
         id: request
         env:
@@ -67,6 +68,9 @@ jobs:
           if-no-files-found: error
   collect:
     needs: component
+    env:
+      T13C_SOURCE_BRANCH: gpt/T13c-earnings
+      T13C_SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
     strategy:
       fail-fast: false
       matrix:
@@ -75,6 +79,8 @@ jobs:
     timeout-minutes: 55
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
