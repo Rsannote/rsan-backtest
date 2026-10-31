@@ -438,6 +438,30 @@
         "sample_n": 0,
         "说明": "无独立运行样本，继承宏观最长计划间隔与现有已审核宽限，未放宽其他任务；后续实测校准"
       }
+    },
+    {
+      "id": "consensus",
+      "name": "一致预期每日快照",
+      "workflow": ".github/workflows/consensus.yml",
+      "kind": "judgment_report",
+      "trading_days_only": true,
+      "times": [
+        "09:47"
+      ],
+      "grace_minutes": 536,
+      "check_mode": "previous_trading_day",
+      "outputs": [
+        "logs/一致预期_最新.json",
+        "data/一致预期/最新.json",
+        "data/一致预期/最新.md",
+        "data/一致预期/行业上修.csv"
+      ],
+      "说明": "真实交易日按审核规则自动选择主源；同花顺限定业绩加速申万成分，分批完整后一次提交。四周不足的行业变化留空不算失败，源失败/批次不全写errors；不拿旧值填今天。只继承已有已审核最大宽限536分钟，暂无本任务独立P95，不改其他项。",
+      "delay_basis": {
+        "sample_n": 0,
+        "inherit_from": "macro",
+        "说明": "新任务无独立样本，临时沿用已审核最大宽限；按实际08:20/22:30检查点核验，后续实测校准。"
+      }
     }
   ]
 }

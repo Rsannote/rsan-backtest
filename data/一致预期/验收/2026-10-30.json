@@ -1,0 +1,14 @@
+{
+  "日期": "2026-10-30",
+  "状态": "完整真实交易日",
+  "完整范围": 2353,
+  "主来源": "同花顺",
+  "实现指纹": "dab2335311647aa975bcc7d9c8840661f8e10e4c1b478c48d93e439af932a74d",
+  "规则SHA256": "d8177db705b445d6d51336c2ffc1ac257754f7478c7eae1ec9d2d40126ebef1d",
+  "快照SHA256": "c999746d5ca54a7e401452d9b2eeeaebe05c70781866a8467a6281df4da3899d",
+  "Actions": "https://github.com/Rsannote/rsan-backtest/actions/runs/40992609467",
+  "来源输入提交": "b35f388eed7c751c38726cedd2a0cf36407e993f",
+  "成分SHA256": "3dadc9f3bc69d4a130b5c217142f3e18bd69a0f8c82113d0dbda772cff154509",
+  "计入五交易日验收": true,
+  "完成北京时间": "2026-10-30T11:06:12.869546+08:00"
+}
