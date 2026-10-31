@@ -1,10 +1,8 @@
 name: T6b 宏观离线与派生核对
 on:
+  workflow_dispatch:
   pull_request:
     paths: ['scripts/update_macro.py', 'tests/test_update_macro.py', 'tests/verify_macro_delivery.py', 'data/宏观/**', '.github/workflows/test-t6b-macro.yml']
-  push:
-    branches: [gpt/T6b-macro]
-    paths: ['tests/verify_macro_delivery.py', '.github/workflows/test-t6b-macro.yml']
 permissions:
   contents: read
 concurrency:

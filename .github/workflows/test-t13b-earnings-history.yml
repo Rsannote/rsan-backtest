@@ -1,6 +1,8 @@
 # 本分支专用手工验收工作流；只读Git，正式追加由独立发布验收处理。
 name: T13b 业绩历史采集
 on:
+  pull_request:
+    paths: ['.github/workflows/test-t13b-earnings-history.yml']
   workflow_dispatch:
     inputs:
       mode:
@@ -14,9 +16,6 @@ on:
       refresh:
         type: boolean
         default: false
-  push:
-    branches: [gpt/T13b-earnings]
-    paths: ['logs/test/T13b/采集请求.json']
 permissions:
   contents: read
   actions: read

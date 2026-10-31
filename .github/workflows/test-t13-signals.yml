@@ -1,8 +1,6 @@
 name: T13 主线信号离线验收
 on:
-  push:
-    branches: [gpt/T13-signals]
-    paths: ['scripts/mainline_*.py', 'tests/test_mainline_signals.py', 'tests/verify_t13_signals.py', 'system/主线信号格式.md', 'system/运行清单.d/主线信号.json', '.github/workflows/*t13*.yml', '.github/workflows/mainline-signals.yml']
+  workflow_dispatch:
   pull_request:
     paths: ['scripts/mainline_*.py', 'tests/test_mainline_signals.py', 'system/运行清单.d/主线信号.json']
 permissions:
