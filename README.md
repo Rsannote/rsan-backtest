@@ -108,6 +108,10 @@ python3 engine/backtest.py \
 - 每周只自动写一次，已存在的一期不覆盖；手动重生成：`python3 scripts/panorama.py --week <该周任一日期> --force`。
 - 判断档案按"本周日 24:00 前已写入/已复核"取状态，同一周任何时候重跑结果一样。运行记录：`logs/全景_最新.md`。
 
+### 看板（GitHub Pages，手机优先）
+
+https://rsannote.github.io/rsan-backtest/ 。按关注的问题排：大盘能不能进攻（攻守、冷热、情绪温度计）、钱往哪走、有没有主线、像历史哪次、海外怎么样、这周盯什么。每个问题给一个答案、一段"怎么读"、一段 Claude 的判读（取最新一期 `panorama/` 全景，没写就标明）。`scripts/build_site.py` 只读已有产出生成 `site/data/dashboard.json`，`.github/workflows/site.yml` 在主线信号和健康检查之后自动发布。
+
 ### 回测前：切一个固定快照
 
 回测**不要直接读行情库**（它每天在变）。先切出一个固定目录，再用它回测：
