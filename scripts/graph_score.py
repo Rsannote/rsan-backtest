@@ -2,8 +2,9 @@
 """离线计算驱动图谱指标；不抓行情、不修改输入、不作投资判断。
 
 用法：python3 scripts/graph_score.py
-审核后显式配置示例：--state-weights '{"高位放缓":0.5,"加速":1.5,"增强":1,"强":1}'
---drawdown-threshold 0.2 只启用回撤这一项规则，不把计划状态解释为买卖结论。
+状态权重读图谱 rules.state_weights，未被定价阈值读图谱 rules.pricing_drawdown（2026-10-28 审核定）。
+命令行 --state-weights / --drawdown-threshold 只用于临时覆盖对照，不改图谱；计划状态不解释为买卖结论。
+每个交易日由 .github/workflows/graph-score.yml 在市场状态之后运行。
 """
 from __future__ import annotations
 
@@ -49,12 +50,18 @@ def weights_value(raw):
     return weights
 
 
+def threshold_value(value, where):
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or not 0 <= value <= 1:
+        raise ValueError(f"回撤阈值必须是0至1之间的数字：{where}")
+    return float(value)
+
+
 def load_graphs(root, as_of):
     paths = sorted((root / "graph").glob("驱动图谱_*.json"))
     if not paths:
         raise ValueError("缺失 graph/驱动图谱_*.json")
     nodes, families, companies, metadata = {}, {}, {}, []
-    threshold, graph_weights = None, None
+    threshold, graph_weights, graph_drawdown = None, None, None
     for path in paths:
         graph = json.loads(path.read_text(encoding="utf-8"))
         if date.fromisoformat(graph["asOf"]) > as_of:
@@ -72,6 +79,11 @@ def load_graphs(root, as_of):
         if graph_weights is not None and current_weights != graph_weights:
             raise ValueError("多份图谱的状态权重冲突")
         graph_weights = current_weights
+        if "pricing_drawdown" in rules:
+            current_drawdown = threshold_value(rules["pricing_drawdown"], path.name)
+            if graph_drawdown is not None and current_drawdown != graph_drawdown:
+                raise ValueError("多份图谱的回撤阈值冲突")
+            graph_drawdown = current_drawdown
         for family, name in graph["families"].items():
             if family in families and families[family] != name:
                 raise ValueError(f"家族定义冲突：{family}")
@@ -93,7 +105,7 @@ def load_graphs(root, as_of):
     for node in nodes.values():
         if "family" in node and node["family"] not in families:
             raise ValueError(f"未知家族：{node['family']}")
-    return paths, nodes, companies, metadata, threshold, graph_weights
+    return paths, nodes, companies, metadata, threshold, graph_weights, graph_drawdown
 
 
 def expand_driver(node_id, nodes, trail=()):
@@ -193,10 +205,14 @@ def pricing(root, code, as_of, calendar):
 
 
 def render(report):
+    rules = report["rules"]
+    pool_date = report["companies"][0]["pool"]["snapshot_date"] if report["companies"] else None
     lines = ["# 驱动图谱打分指标", "", f"计算日期：{report['as_of']}（北京时间）；仅使用仓库已存数据。",
-             "", "正式状态权重与未被定价阈值未配置时，相关值为缺失/待审核。草案场景不作正式结论。",
+             "", f"状态权重：{rules['state_weights_source']}；未被定价阈值：回撤≥{rules['drawdown_threshold']:g}（{rules['drawdown_threshold_source']}）。"
+             if rules["drawdown_threshold"] is not None else "未被定价阈值未配置，相关值为缺失/待审核。",
+             f"计划状态取自股票池快照 {pool_date or '缺失'}，**已停更每日镜像**（2026-10-28 起只在季度复核后同步），可能已过时。草案场景不作正式结论。",
              "排序：独立家族票数降序 → 正式状态加权分降序（已配置且完整的在前） → 家族最大强度和降序 → 代码。",
-             "", "|代码|公司|票数|计票家族|正式加权分|等权草案|趋势草案|距52周高点回撤|行情日期/质量|计划状态/日期|交叉且未定价|",
+             "", "|代码|公司|票数|计票家族|正式加权分|等权草案|趋势草案|距52周高点回撤|行情日期/质量|计划状态（快照，停更）/计划价日期|交叉且未定价|",
              "|---|---|---:|---|---:|---:|---:|---:|---|---|---|"]
     def score(value):
         return "缺失/待审核" if value is None else f"{value:g}"
@@ -244,8 +260,10 @@ def build(root, as_of=None, explicit_weights=None, drawdown_threshold=None):
     as_of = date.fromisoformat(as_of) if as_of else max(calendar)
     if as_of not in calendar:
         raise ValueError("计算日不在已存沪深300交易日历中")
-    paths, nodes, companies, graphs, threshold, graph_weights = load_graphs(root, as_of)
+    paths, nodes, companies, graphs, threshold, graph_weights, graph_drawdown = load_graphs(root, as_of)
     weights = weights_value(explicit_weights) if explicit_weights is not None else graph_weights
+    drawdown_source = "命令行临时覆盖" if drawdown_threshold is not None else ("图谱rules" if graph_drawdown is not None else "缺失")
+    drawdown_threshold = threshold_value(drawdown_threshold, "命令行") if drawdown_threshold is not None else graph_drawdown
     pool_path, pool_meta = root / "data/股票池/股票.csv", root / "data/股票池/状态.json"
     pool_rows = read_csv(pool_path) if pool_path.exists() else []
     pool = {}
@@ -254,8 +272,11 @@ def build(root, as_of=None, explicit_weights=None, drawdown_threshold=None):
             raise ValueError(f"股票池代码重复：{row['code']}")
         pool[row["code"]] = row
     pool_date = json.loads(pool_meta.read_text(encoding="utf-8")).get("数据日期") if pool_meta.exists() else None
-    warnings = ["正式状态权重：" + ("显式配置" if weights else "缺失，待审核"),
-                "未被定价阈值：" + (str(drawdown_threshold) if drawdown_threshold is not None else "未配置，待审核"),
+    pool_note = (f"股票池快照 {pool_date or '缺失'}：2026-10-28 起不再每日镜像，只在季度复核后或手动同步时更新，"
+                 "计划状态可能已过时，以股票池原文为准")
+    warnings = ["正式状态权重：" + (("命令行临时覆盖" if explicit_weights is not None else "图谱rules") if weights else "缺失，待审核"),
+                "未被定价阈值：" + (f"{drawdown_threshold:g}（{drawdown_source}）" if drawdown_threshold is not None else "未配置，待审核"),
+                pool_note,
                 f"图谱日期：{'、'.join(g['as_of'] for g in graphs)}；股票池快照日期：{pool_date or '缺失'}",
                 "传导强度继承、家族最大值聚合与状态权重由审核确认；JSON 保留逐边证据。"]
     rows = []
@@ -268,7 +289,7 @@ def build(root, as_of=None, explicit_weights=None, drawdown_threshold=None):
         used_paths.append(root / price["source"])
         source_pool = pool.get(code, {})
         pool_valid = bool(pool_date and date.fromisoformat(pool_date) <= as_of)
-        pool_info = {"source": "data/股票池/股票.csv", "snapshot_date": pool_date,
+        pool_info = {"source": "data/股票池/股票.csv", "snapshot_date": pool_date, "snapshot_note": "停更每日镜像，季度同步",
                      "status": "已匹配" if source_pool and pool_valid else "缺失",
                      "reason": None if source_pool and pool_valid else "未匹配公司或快照日期缺失/晚于计算日",
                      "plan_status": (source_pool.get("plan_status") or None) if pool_valid else None,
@@ -297,9 +318,10 @@ def build(root, as_of=None, explicit_weights=None, drawdown_threshold=None):
     return {"schema_version": "1.0", "as_of": as_of.isoformat(), "timezone": "Asia/Shanghai",
             "kind": "指标，非投资结论", "graphs": graphs, "sources": sources,
             "rules": {"vote_strength_threshold": threshold, "state_weights": weights or None,
-                      "state_weights_source": "命令行显式配置" if explicit_weights is not None else "图谱rules或缺失",
+                      "state_weights_source": "命令行临时覆盖" if explicit_weights is not None else ("图谱rules" if weights else "缺失"),
                       "score_aggregation": "合格边强度×状态权重，家族内取最大值，家族间求和",
-                      "drawdown_threshold": drawdown_threshold, "pricing_status": "显式回撤规则" if drawdown_threshold is not None else "待审核",
+                      "drawdown_threshold": drawdown_threshold, "drawdown_threshold_source": drawdown_source,
+                      "pricing_status": "显式回撤规则" if drawdown_threshold is not None else "待审核",
                       "weight_drafts_enabled": False, "pricing_drafts_enabled": False},
             "warnings": warnings, "companies": rows}
 
@@ -308,8 +330,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1], help="离线仓库根目录")
     parser.add_argument("--as-of", help="计算日 YYYY-MM-DD，默认已存沪深300最新交易日")
-    parser.add_argument("--state-weights", help="审核后显式配置的 JSON 状态权重")
-    parser.add_argument("--drawdown-threshold", type=float, help="审核后显式配置回撤比例，例如0.2")
+    parser.add_argument("--state-weights", help="临时覆盖图谱 rules.state_weights（JSON），只用于对照")
+    parser.add_argument("--drawdown-threshold", type=float, help="临时覆盖图谱 rules.pricing_drawdown，例如0.3，只用于对照")
     parser.add_argument("--out-dir", type=Path, help="默认根目录 graph；验证时可输出到临时目录")
     args = parser.parse_args()
     try:
@@ -324,7 +346,7 @@ def main():
     (out / "打分_最新.md").write_text(render(report), encoding="utf-8")
     print(f"计算日期 {report['as_of']}；公司 {len(report['companies'])} 家；票数≥2 {sum(r['votes'] >= 2 for r in report['companies'])} 家")
     print(f"输出：{out / '打分_最新.md'}；{out / '打分_最新.json'}")
-    print("正式权重/阈值未配置的部分保留待审核；草案未启用。")
+    print(f"状态权重：{report['rules']['state_weights_source']}；回撤阈值：{report['rules']['drawdown_threshold']}（{report['rules']['drawdown_threshold_source']}）")
 
 
 if __name__ == "__main__":

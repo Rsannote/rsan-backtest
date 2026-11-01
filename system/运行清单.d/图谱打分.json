@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "items": [{
+    "id": "graph_score",
+    "name": "驱动图谱打分",
+    "workflow": ".github/workflows/graph-score.yml",
+    "kind": "json_date",
+    "date_field": "as_of",
+    "trading_days_only": true,
+    "trigger": "成功的市场状态更新后运行；不联网",
+    "times": ["16:40"],
+    "grace_minutes": 536,
+    "check_mode": "previous_trading_day",
+    "outputs": ["graph/打分_最新.json", "graph/打分_最新.md"],
+    "说明": "T7 小修。as_of 为已存沪深300最新交易日；与市场状态同链，宽限沿用已审核的最大值536分钟，满四周后随延迟统计校准。"
+  }]
+}

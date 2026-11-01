@@ -178,7 +178,10 @@ class AutoTests(unittest.TestCase):
         record=self.record(); common.persist(path.parent,additions=[record])
         self.assertTrue(path.read_bytes().startswith(original))
         result=review.run(self.root,'2026-10-30',path.parent,now=self.now+dt.timedelta(days=10))
-        self.assertEqual(result['status'],'正常'); self.assertEqual(len(result['manual']),2)
+        # 人工待复核条数随真实档案变化（10-22 两条已于 11-01 人工复核），按档案现状计算，不写死
+        manual=sum(1 for l in original.decode('utf-8').splitlines() if l.strip()
+                   for j in [json.loads(l)] if j.get('status')=='待验证' and not j.get('check') and j['review_date']<='2026-10-30')
+        self.assertEqual(result['status'],'正常'); self.assertEqual(len(result['manual']),manual)
         self.assertTrue(path.read_bytes().startswith(original))
         record_after=json.loads(path.read_text().splitlines()[-1])
         self.assertEqual({k:v for k,v in record_after.items() if k not in ('result','status')},{k:v for k,v in record.items() if k not in ('result','status')})

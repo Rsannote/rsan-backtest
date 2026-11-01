@@ -297,8 +297,10 @@ def sec_cross(root: Path, w: Week) -> tuple[list[str], dict]:
     if asof > w.sunday.isoformat():
         raise NoData(f"现存打分日期 {asof} 晚于本周，图谱打分只保留最新一期，不能回看")
     cands = [c for c in g.get("companies", []) if c.get("cross_candidate") is True]
-    out = [f"驱动图谱打分日期 {asof}" + ("（不是本周数据，T7 尚未挂每日运行）" if asof < w.monday.isoformat() else "")
-           + "。条件：≥2 个独立驱动家族计票，且距 52 周高点回撤达到图谱规则阈值。", ""]
+    pool_dates = {(c.get("pool") or {}).get("snapshot_date") for c in g.get("companies", [])} - {None}
+    out = [f"驱动图谱打分日期 {asof}" + ("（不是本周数据）" if asof < w.monday.isoformat() else "")
+           + "。条件：≥2 个独立驱动家族计票，且距 52 周高点回撤达到图谱规则阈值。"
+           + (f"计划状态是股票池 {max(pool_dates)} 的快照（已停更每日镜像，季度同步），可能已过时。" if pool_dates else ""), ""]
     if not cands:
         out.append("无符合条件的公司。")
     else:
