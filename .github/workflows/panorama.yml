@@ -1,0 +1,106 @@
+name: 每周市场全景
+
+# T5 总控：把一周的市场状态、散户情绪、资金轮动、主线雷达、判断档案汇总成 panorama/<本周最后交易日>.md，
+# 提交后开一个 Issue（标签“全景”）提醒到手机。只读已有产出，不重算、不下结论。
+# 触发：
+#   - 主线信号更新跑完后（每个交易日）：脚本只在本周最后一个交易日的数据齐了时才生成，其他日子直接跳过；
+#   - 周五 17:37（北京时间）定时：上游准时时直接生成，否则等主线信号跑完再触发；
+#   - 周六 12:17（北京时间）兜底：到这时上游仍不齐，也照样生成，缺的栏目写明原因；
+#   - 手动：可指定某一周重新生成。
+# 每周只自动写一次，已存在的一期不覆盖（Claude 可能已补写【待判读】）。
+
+on:
+  workflow_run:
+    workflows: ['主线信号更新']
+    types: [completed]
+  schedule:
+    - cron: '37 9 * * 5'   # 北京时间周五 17:37
+    - cron: '17 4 * * 6'   # 北京时间周六 12:17，兜底
+  workflow_dispatch:
+    inputs:
+      week:
+        description: '重新生成某一周（该周任一日期，YYYY-MM-DD）；留空则按自动规则'
+        required: false
+        default: ''
+      force:
+        description: '该周已有全景时是否覆盖（会丢掉已补写的判读）'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  issues: write
+  actions: read
+
+concurrency:
+  group: repo-writer
+  cancel-in-progress: false
+
+jobs:
+  panorama:
+    if: github.ref == 'refs/heads/main' && (github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pandas numpy requests
+      - name: 生成全景
+        env:
+          WEEK: ${{ github.event.inputs.week }}
+          FORCE: ${{ github.event.inputs.force }}
+        run: |
+          set -euo pipefail
+          if [ -n "${WEEK:-}" ]; then
+            if [ "${FORCE:-false}" = "true" ]; then python -u scripts/panorama.py --week "$WEEK" --force
+            else python -u scripts/panorama.py --week "$WEEK"; fi
+          else
+            python -u scripts/panorama.py --auto
+          fi
+      - name: 提交全景
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email actions@users.noreply.github.com
+          git add -A -- panorama logs/全景_最新.json logs/全景_最新.md 2>/dev/null || true
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "每周市场全景 $(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M')"
+          for attempt in 1 2 3; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep 5
+          done
+          exit 1
+      - name: 开 Issue 提醒（每期一次）
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if [ ! -f logs/全景_最新.json ]; then echo "还没有运行记录"; exit 0; fi
+          python -u scripts/panorama.py --issue
+          git add -- logs/全景提醒记录.csv 2>/dev/null || true
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "全景提醒记录 $(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M')"
+          for attempt in 1 2 3; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep 5
+          done
+          exit 1
+      - name: 工作流失败告警
+        if: failure() && github.ref == 'refs/heads/main'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          HEALTH_ITEM_ID: panorama
+          HEALTH_ITEM_NAME: 每周市场全景
+          HEALTH_WORKFLOW_FILE: .github/workflows/panorama.yml
+        run: |
+          alert_script="${GITHUB_WORKSPACE}/scripts/health_alert.py"
+          if [ ! -f "$alert_script" ]; then
+            alert_script="${RUNNER_TEMP}/health_alert.py"
+            curl --fail --silent --show-error --retry 2 -H "Authorization: Bearer ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.raw+json' "https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/scripts/health_alert.py?ref=${GITHUB_SHA}" -o "$alert_script"
+          fi
+          python3 "$alert_script" --workflow-failure
