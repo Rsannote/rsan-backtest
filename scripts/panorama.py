@@ -246,8 +246,38 @@ def sec_flow(root: Path, w: Week) -> tuple[list[str], dict]:
     return out, {"在追": t.head(5)["name"].tolist(), "在撤": t.tail(5).iloc[::-1]["name"].tolist()}
 
 
-def sec_overseas(root: Path, w: Week):
-    raise NoData("T3 海外行情尚未完成，仓库里还没有海外指数日线")
+def sec_overseas(root: Path, w: Week) -> tuple[list[str], dict]:
+    lst = root / "data/标的清单.csv"
+    items = [r for r in csv.DictReader(lst.open(encoding="utf-8"))] if lst.exists() else []
+    items = [r for r in items if r.get("group") == "海外指数"]
+    if not items:
+        raise NoData("标的清单里没有海外指数（T3）")
+    out = ["日期为各市场当地交易日；周五傍晚生成时，美股本周最后一个交易日（周五）通常还没收盘，取截至日。", "",
+           "|指数|截至（当地）|收盘|本周涨跌|近20个交易日|", "|---|---|---:|---:|---:|"]
+    info, missing = {}, []
+    for it in items:
+        p = root / "data/行情库/指数" / f"{it['code']}.csv"
+        if not p.exists():
+            missing.append(it["name"])
+            continue
+        t = pd.read_csv(p, dtype={"date": str})
+        t = t[t["date"] <= w.sunday.isoformat()]
+        week = t[t["date"] >= w.monday.isoformat()]
+        before = t[t["date"] < w.monday.isoformat()]
+        if week.empty or before.empty:
+            out.append(f"|{it['name']}|本周无交易|—|—|—|")
+            continue
+        last, base = week.iloc[-1], before.iloc[-1]
+        r20 = last["close"] / t.iloc[-21]["close"] - 1 if len(t) > 20 else None
+        wk = last["close"] / base["close"] - 1
+        info[it["name"]] = round(wk, 6)
+        out.append(f"|{it['name']}|{last['date']}|{last['close']:g}|{wk * 100:+.2f}%|{'—' if r20 is None else f'{r20 * 100:+.2f}%'}|")
+    if len(missing) == len(items):
+        raise NoData("海外指数行情文件都还没有生成（行情库首次建库后才有）")
+    if missing:
+        out += ["", "行情文件缺失：" + "、".join(missing)]
+    out += ["", "来源：`data/行情库/指数/`（雅虎五个、腾讯恒生科技，见 `data/标的清单.csv` note）"]
+    return out, info
 
 
 def sec_mainline(root: Path, w: Week) -> tuple[list[str], dict]:

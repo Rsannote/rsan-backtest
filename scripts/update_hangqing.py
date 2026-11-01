@@ -16,6 +16,11 @@
         （与 scripts/fetch_etf.py 相同，2026-10-21 已核对与电脑数据一致）；
   指数：只有价格指数，factor=1。
 
+海外指数（标的清单 group=海外指数，T3）：
+  纳指 ^IXIC、标普 ^GSPC、日经 ^N225、KOSPI ^KS11、恒指 ^HSI 取雅虎日线（code 即雅虎代码）；恒生科技 hkHSTECH 取腾讯。
+  2010-01-01 起（恒生科技 2020-07-27 发布）。日期一律是**交易所当地日期**：美股某日的收盘在北京时间次日早上才有，
+  所以每天 16:40 跑完时，美股最新一条是北京时间前一天的美国交易日。雅虎当天还没收盘的那根 K 线不写入。
+
 用法：
   python3 scripts/update_hangqing.py                 # 增量：每个标的只重抓最近约 40 天，并和已存数据核对
   python3 scripts/update_hangqing.py --full          # 全部全量重抓
@@ -32,6 +37,7 @@ import sys
 import threading
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime, timedelta, timezone
@@ -45,6 +51,9 @@ LIB = os.path.join(ROOT, "data", "行情库")
 EVD = os.path.join(LIB, "分红表")
 UA_QQ = {"User-Agent": "Mozilla/5.0", "Referer": "https://gu.qq.com"}
 UA_SINA = {"User-Agent": "Mozilla/5.0", "Referer": "https://finance.sina.com.cn"}
+UA_YAHOO = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36"}
+OVERSEAS_START = date(2010, 1, 1)
+CLOSE_GRACE = 1800  # 雅虎：交易时段结束后 30 分钟内的当天 K 线仍视为未定稿
 COLS = ["open", "high", "low", "close", "volume"]
 FULL_START = date(2005, 1, 1)
 OVERLAP_DAYS = 40
@@ -148,6 +157,41 @@ def fetch_raw(sym, start, *, empty_prefix=False, notes=None):
     df = pd.DataFrame([[d] + v for d, v in sorted(rows.items())], columns=["date"] + COLS)
     df["date"] = pd.to_datetime(df["date"])
     return df.set_index("date")
+
+
+def is_yahoo(item):
+    return item.get("group") == "海外指数" and item["code"].startswith("^")
+
+
+def parse_yahoo(result, now_ts):
+    """雅虎 chart 结果 → 开高低收量；日期按交易所 gmtoffset 换成当地日期；未收盘的当天 K 线丢弃。"""
+    meta = result.get("meta") or {}
+    off = int(meta.get("gmtoffset") or 0)
+    quote = ((result.get("indicators") or {}).get("quote") or [{}])[0]
+    rows = {}
+    for i, ts in enumerate(result.get("timestamp") or []):
+        vals = [(quote.get(k) or [None] * (i + 1))[i] for k in ("open", "high", "low", "close", "volume")]
+        if any(v is None for v in vals[:4]):
+            continue
+        day = datetime.fromtimestamp(ts + off, tz=timezone.utc).date().isoformat()
+        rows[day] = [float(v) for v in vals[:4]] + [float(vals[4] or 0)]
+    end = ((meta.get("currentTradingPeriod") or {}).get("regular") or {}).get("end")
+    if end and now_ts < end + CLOSE_GRACE:
+        rows.pop(datetime.fromtimestamp(end + off, tz=timezone.utc).date().isoformat(), None)
+    df = pd.DataFrame([[d] + v for d, v in sorted(rows.items())], columns=["date"] + COLS)
+    df["date"] = pd.to_datetime(df["date"])
+    return df.set_index("date")
+
+
+def fetch_yahoo(code, start):
+    p1 = int(datetime.combine(start, datetime.min.time(), timezone.utc).timestamp())
+    p2 = int(time.time()) + 86400
+    url = (f"https://query1.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(code)}"
+           f"?period1={p1}&period2={p2}&interval=1d")
+    chart = json.loads(get(url, UA_YAHOO)).get("chart") or {}
+    if chart.get("error") or not chart.get("result"):
+        raise RuntimeError(f"{code}：雅虎没有返回结果 {chart.get('error')}")
+    return parse_yahoo(chart["result"][0], time.time())
 
 
 def fetch_full(sym, path, notes):
@@ -259,24 +303,40 @@ def update_one(item, full):
     evp = os.path.join(EVD, f"{code}.json")
     rep = {"code": code, "name": name, "type": typ, "notes": [], "status": "ok"}
     old = None if full else read_store(path)
+    yahoo = is_yahoo(item)
+    if yahoo:
+        def fetch_tail(start):
+            return fetch_yahoo(code, start)
+
+        def fetch_all():
+            rep["notes"].append(f"{code} 雅虎全量：{OVERSEAS_START} 起")
+            return fetch_yahoo(code, OVERSEAS_START)
+    else:
+        def fetch_tail(start):
+            return fetch_raw(sym, start)
+
+        def fetch_all():
+            return fetch_full(sym, path, rep["notes"])
     try:
         if old is not None and len(old):
             start = (old.index[-1] - pd.Timedelta(days=OVERLAP_DAYS)).date()
-            tail = fetch_raw(sym, start)
+            tail = fetch_tail(start)
             ov = old.index.intersection(tail.index)
             mism = [d for d in ov if any(abs(old.at[d, c] - tail.at[d, c]) > 1e-6 * max(1, abs(tail.at[d, c]))
                                          for c in ["open", "close"])]
             if len(tail) == 0:
-                raise RuntimeError("腾讯没有返回最近的数据")
+                raise RuntimeError(("雅虎" if yahoo else "腾讯") + "没有返回最近的数据")
             if mism or len(ov) == 0:
                 rep["notes"].append(f"最近数据与已存不一致（{len(mism)} 天，如 {mism[:3]}），改为全量重抓")
-                raw = fetch_full(sym, path, rep["notes"])
+                raw = fetch_all()
             else:
                 raw = pd.concat([old.loc[old.index < tail.index[0], COLS], tail[COLS]])
         else:
-            raw = fetch_full(sym, path, rep["notes"])
+            raw = fetch_all()
         if len(raw) == 0:
-            raise RuntimeError("腾讯没有返回任何数据")
+            raise RuntimeError(("雅虎" if yahoo else "腾讯") + "没有返回任何数据")
+        if item.get("group") == "海外指数":
+            raw = raw[raw.index >= pd.Timestamp(OVERSEAS_START)]
         raw = raw[~raw.index.duplicated(keep="last")].sort_index()
         raw = raw[(raw["open"] > 0) & (raw["close"] > 0)]
         raw = drop_spikes(raw, code, rep["notes"])

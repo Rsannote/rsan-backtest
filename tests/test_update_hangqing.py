@@ -170,3 +170,55 @@ class PrefixGuardTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class OverseasTests(unittest.TestCase):
+    """T3：雅虎海外指数解析与路由（离线模拟）。"""
+
+    def chart(self, stamps, closes, end=None, off=-14400):
+        return {"meta": {"gmtoffset": off, "currentTradingPeriod": {"regular": {"end": end}} if end else {}},
+                "timestamp": stamps,
+                "indicators": {"quote": [{"open": closes, "high": closes, "low": closes, "close": closes,
+                                          "volume": [None] * len(closes)}]}}
+
+    def test_local_date_none_rows_and_volume(self):
+        # 2026-10-30 09:30 美东 = 13:30 UTC；gmtoffset -4h → 当地 10-30
+        df = hq.parse_yahoo(self.chart([1793367000, 1793453400], [100.0, None]), 1793800000)
+        self.assertEqual(list(df.index.strftime("%Y-%m-%d")), ["2026-10-30"])
+        self.assertEqual(df.iloc[0]["volume"], 0)
+
+    def test_unfinished_bar_dropped_until_grace_passes(self):
+        open_ts, end = 1793367000, 1793390400            # 10-30 开盘与 16:00 收盘（美东）
+        chart = self.chart([open_ts], [100.0], end=end)
+        self.assertTrue(hq.parse_yahoo(chart, end - 60).empty)                       # 盘中
+        self.assertTrue(hq.parse_yahoo(chart, end + hq.CLOSE_GRACE - 1).empty)       # 刚收盘
+        self.assertEqual(len(hq.parse_yahoo(chart, end + hq.CLOSE_GRACE + 1)), 1)    # 收盘 30 分钟后
+
+    def test_routing_yahoo_vs_tencent(self):
+        self.assertTrue(hq.is_yahoo({"code": "^IXIC", "group": "海外指数"}))
+        self.assertFalse(hq.is_yahoo({"code": "hkHSTECH", "group": "海外指数"}))
+        self.assertFalse(hq.is_yahoo({"code": "sh000300", "group": "指数"}))
+        self.assertEqual(hq.symbol("hkHSTECH", "指数"), "hkHSTECH")
+
+    def test_yahoo_error_raises_and_full_update_writes_from_2010(self):
+        with patch.object(hq, "get", return_value=json.dumps({"chart": {"result": None, "error": {"code": "Not Found"}}})):
+            with self.assertRaises(RuntimeError):
+                hq.fetch_yahoo("^XXX", date(2010, 1, 1))
+        stamps = [1262615400, 1262701800]                 # 2010-01-04、01-05 美东开盘
+        body = json.dumps({"chart": {"result": [self.chart(stamps, [2300.0, 2310.0], off=-18000)]}})
+        with tempfile.TemporaryDirectory() as tmp, patch.object(hq, "LIB", tmp), patch.object(hq, "get", return_value=body) as get:
+            rep = hq.update_one({"code": "^IXIC", "name": "纳斯达克综合", "type": "指数", "group": "海外指数"}, False)
+            self.assertEqual(rep["status"], "ok", rep)
+            self.assertIn("period1=1262304000", get.call_args[0][0])
+            saved = pd.read_csv(Path(tmp) / "指数" / "^IXIC.csv")
+            self.assertEqual(list(saved["date"]), ["2010-01-04", "2010-01-05"])
+            self.assertEqual(set(saved["factor"]), {1})
+
+
+class OverseasListTests(unittest.TestCase):
+    def test_six_overseas_indices_listed_with_source_note(self):
+        import csv as _csv
+        text = (Path(__file__).resolve().parents[1] / "data/标的清单.csv").read_text(encoding="utf-8")
+        rows = [r for r in _csv.DictReader(text.splitlines()) if r["group"] == "海外指数"]
+        self.assertEqual([r["code"] for r in rows], ["^IXIC", "^GSPC", "^N225", "^KS11", "^HSI", "hkHSTECH"])
+        self.assertTrue(all(r["type"] == "指数" and r["note"].startswith("来源") and "日期为" in r["note"] for r in rows))
