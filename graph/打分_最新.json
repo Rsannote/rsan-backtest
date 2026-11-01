@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "as_of": "2026-10-27",
+  "as_of": "2026-10-30",
   "timezone": "Asia/Shanghai",
   "kind": "指标，非投资结论",
   "graphs": [
@@ -27,7 +27,7 @@
   "sources": [
     {
       "path": "data/股票池/状态.json",
-      "sha256_text": "52229e76fd41e66a35b71c38762e3da83aed53239357760502176669dca67480"
+      "sha256_text": "579b00e7d4cf92ed8366e49a5aab1cf3bbd29be3bec79f07607704d20e697788"
     },
     {
       "path": "data/股票池/股票.csv",
@@ -35,79 +35,79 @@
     },
     {
       "path": "data/行情库/指数/sh000300.csv",
-      "sha256_text": "7c577ea936cfcb1c8247d4fdda28f244eb2f8ee172a8b3da9e3fcd55ba881f39"
+      "sha256_text": "d764e3624851441fdd84639e1653709a2303f80a3326642d69df403f48350258"
     },
     {
       "path": "data/行情库/股票/000977.csv",
-      "sha256_text": "d749c8893f1fd01de4359b6a3a837b721f70267e927786a92c09b113069c31db"
+      "sha256_text": "2b6501c774972022befeb2daa9b9f90d6ce367dd4643ddfe9833a364a20d490a"
     },
     {
       "path": "data/行情库/股票/002028.csv",
-      "sha256_text": "f4ddd99577d649fda02d059ce30a809c9bf18586163f86da4c939b2adc009384"
+      "sha256_text": "2486e6df0d0edf3b29c6a9863a8c41d389af0ad412a2bee9cb4e370a93e1c0d9"
     },
     {
       "path": "data/行情库/股票/002270.csv",
-      "sha256_text": "b5d8670a7db471c18deb23b26e057a3c4981cdb81b0c7ab1588c8789f935a9d2"
+      "sha256_text": "3e4a0ac64220d9611c1154e2e9f7b773be86c725eed2e303a8981b0815c179bd"
     },
     {
       "path": "data/行情库/股票/002463.csv",
-      "sha256_text": "435b6fb2af3a31baa4b602fedf9e3c99ff8ae10f2a5399ccfa67c8c10fef0e56"
+      "sha256_text": "b0a7c1d9e2d608d7c26407d8ca7c88f20a1f0836808915380761a24a774331f8"
     },
     {
       "path": "data/行情库/股票/002837.csv",
-      "sha256_text": "c0295f972f95ff446e604d4723094bd0e2d6398852f269a36dd31d74935f6586"
+      "sha256_text": "8a78419f0727ca7418a2f91c21c48eeb7fe1e1954f63a3c6899835315733a1ef"
     },
     {
       "path": "data/行情库/股票/300308.csv",
-      "sha256_text": "d8fe2651867540fce4004803502716cd14ca83bcbd83b07538904402118425ac"
+      "sha256_text": "1f8394f695689e3eec8e20a93c9e7c7fdbba32d56d2107c651627a368079fe7e"
     },
     {
       "path": "data/行情库/股票/300394.csv",
-      "sha256_text": "805d0470eb4ed75b0b5be20bbaface97db52e919dddcc59a66be119e94616289"
+      "sha256_text": "88dcd655ccb5705bb5e804cb06000c41f712ce42739b78ac8f429ee430c42be8"
     },
     {
       "path": "data/行情库/股票/300442.csv",
-      "sha256_text": "fb77d5f67e5142b01b8cc77d3aa2af4a0a7eaa678b16f6e3bc009695db0fb57d"
+      "sha256_text": "62dcf84de79add7bd631dd12683f0897f4077598a10d6cbb06a66e40198bd716"
     },
     {
       "path": "data/行情库/股票/300502.csv",
-      "sha256_text": "d06cfbf18a70c1ad07074e209a5e06e38cc538c49ba4501d646aeefe5f76ca3e"
+      "sha256_text": "f9e06f289f1ee8ff047a19b602c9314b5e4018a663a998b24c2311fa895c59c8"
     },
     {
       "path": "data/行情库/股票/600050.csv",
-      "sha256_text": "fac96aa2a046e10dee51f25496d805c53e9e9e44cb41a4317277488b85df26e4"
+      "sha256_text": "e24e814bc3d82aafdef02f8cd1fd3a02549cb098f4389ff76606eeedd09bfd68"
     },
     {
       "path": "data/行情库/股票/600312.csv",
-      "sha256_text": "3ad3562f12f623e140d87e173d135a1ec7f0abc742936e68c44b2501f6154acd"
+      "sha256_text": "09917cae287eceb61eab009a455a96f19d2da7c5abc91cbdda0f6d10bf3f9091"
     },
     {
       "path": "data/行情库/股票/600406.csv",
-      "sha256_text": "acac28603ee41ba7c74e0926d1b7ddf0b8968cccbedb3f19d310b77d26fa4c21"
+      "sha256_text": "517d3dff491821ef162294ac2c645764e46a717c385953f3eb938499ee1e9b12"
     },
     {
       "path": "data/行情库/股票/600900.csv",
-      "sha256_text": "53b451ddc59bc061433dedafdb931f75cbc32d7702e9437b9aa96512ec20f374"
+      "sha256_text": "c5fb10a67279677d3c8b2e412ac4eeba52e4d385a6bf023d4707a910d2a4143f"
     },
     {
       "path": "data/行情库/股票/600941.csv",
-      "sha256_text": "dc638fe84ee57624cdc423dd57b07594965736e2bd1e29b6f289c387a7a152f9"
+      "sha256_text": "ad1e8e9e749c03e04fe26ce463a969627d7b28840f0f76d911ebf0340be18bf7"
     },
     {
       "path": "data/行情库/股票/601126.csv",
-      "sha256_text": "94f00e5d0f81fdaa6d0978c070b08adb79db1307387f387e99fe06fcddd200ae"
+      "sha256_text": "6a89c9f49f7a2d72d82ba05062572b166909dda1ac302b2bfa24ae9d7e82bcaf"
     },
     {
       "path": "data/行情库/股票/601138.csv",
-      "sha256_text": "cfc6fe07f513448be8e102652237433e1e7a162863c06aea283b2e3f92af8c37"
+      "sha256_text": "f3e4f5c0293ef013ccfc48c3c07667174124548bd7a7810c7f10bce12ee1ab28"
     },
     {
       "path": "data/行情库/股票/601728.csv",
-      "sha256_text": "c52f00e2d32870632a9d61dfbde343b388d4f0e6a30c2e5ad927f4fe1fdf160f"
+      "sha256_text": "2fbbdc277cd9efbbde07d6cecbcdca8c7ad901f69bd485909dedf804fabb9d80"
     },
     {
       "path": "data/行情库/股票/603606.csv",
-      "sha256_text": "f60545dc0491b057961f240de34660dbd8ac005df1ef38eb4c37a87878b1f6aa"
+      "sha256_text": "3eacc3d82d646d000346d16e4a9b8bf2a7a923bff5e2cf36686972b1ab6125dc"
     },
     {
       "path": "graph/驱动图谱_v0.json",
@@ -122,17 +122,19 @@
       "增强": 1.25,
       "强": 1
     },
-    "state_weights_source": "图谱rules或缺失",
+    "state_weights_source": "图谱rules",
     "score_aggregation": "合格边强度×状态权重，家族内取最大值，家族间求和",
     "drawdown_threshold": 0.2,
+    "drawdown_threshold_source": "图谱rules",
     "pricing_status": "显式回撤规则",
     "weight_drafts_enabled": false,
     "pricing_drafts_enabled": false
   },
   "warnings": [
-    "正式状态权重：显式配置",
-    "未被定价阈值：0.2",
-    "图谱日期：2026-10-27；股票池快照日期：2026-10-22",
+    "正式状态权重：图谱rules",
+    "未被定价阈值：0.2（图谱rules）",
+    "股票池快照 2026-10-28：2026-10-28 起不再每日镜像，只在季度复核后或手动同步时更新，计划状态可能已过时，以股票池原文为准",
+    "图谱日期：2026-10-27；股票池快照日期：2026-10-28",
     "传导强度继承、家族最大值聚合与状态权重由审核确认；JSON 保留逐边证据。",
     "300442 润泽科技：相对指数日历缺失6日（可能停牌，未补零）"
   ],
@@ -285,18 +287,19 @@
         "source": "data/行情库/股票/002028.csv",
         "status": "完整",
         "reason": null,
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.55726627,
-        "latest_close": 105.42,
+        "price_date": "2026-10-30",
+        "drawdown_52w": 0.57175528,
+        "latest_close": 101.97,
         "high_52w_adjusted": 4881.3783174968,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
+        "window_start": "2025-11-01",
+        "window_end": "2026-10-30",
         "observations": 241,
         "missing_dates": []
       },
       "pool": {
         "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
+        "snapshot_date": "2026-10-28",
+        "snapshot_note": "停更每日镜像，季度同步",
         "status": "已匹配",
         "reason": null,
         "plan_status": "接近",
@@ -425,18 +428,19 @@
         "source": "data/行情库/股票/600941.csv",
         "status": "完整",
         "reason": null,
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.03578611,
-        "latest_close": 100.7,
+        "price_date": "2026-10-30",
+        "drawdown_52w": 0.0220937,
+        "latest_close": 102.13,
         "high_52w_adjusted": 132.77094309434,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
+        "window_start": "2025-11-01",
+        "window_end": "2026-10-30",
         "observations": 241,
         "missing_dates": []
       },
       "pool": {
         "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
+        "snapshot_date": "2026-10-28",
+        "snapshot_note": "停更每日镜像，季度同步",
         "status": "已匹配",
         "reason": null,
         "plan_status": "等待",
@@ -565,18 +569,19 @@
         "source": "data/行情库/股票/600406.csv",
         "status": "完整",
         "reason": null,
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.2474942,
-        "latest_close": 23.48,
+        "price_date": "2026-10-30",
+        "drawdown_52w": 0.25774982,
+        "latest_close": 23.16,
         "high_52w_adjusted": 1669.9190608170002,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
+        "window_start": "2025-11-01",
+        "window_end": "2026-10-30",
         "observations": 241,
         "missing_dates": []
       },
       "pool": {
         "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
+        "snapshot_date": "2026-10-28",
+        "snapshot_note": "停更每日镜像，季度同步",
         "status": "已匹配",
         "reason": null,
         "plan_status": "接近",
@@ -736,18 +741,19 @@
         "source": "data/行情库/股票/002270.csv",
         "status": "完整",
         "reason": null,
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.48978617,
-        "latest_close": 18.96,
+        "price_date": "2026-10-30",
+        "drawdown_52w": 0.50539398,
+        "latest_close": 18.38,
         "high_52w_adjusted": 99.97618598289,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
+        "window_start": "2025-11-01",
+        "window_end": "2026-10-30",
         "observations": 241,
         "missing_dates": []
       },
       "pool": {
         "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
+        "snapshot_date": "2026-10-28",
+        "snapshot_note": "停更每日镜像，季度同步",
         "status": "已匹配",
         "reason": null,
         "plan_status": "在区间",
@@ -876,18 +882,19 @@
         "source": "data/行情库/股票/601126.csv",
         "status": "完整",
         "reason": null,
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.67217722,
-        "latest_close": 28.5,
+        "price_date": "2026-10-30",
+        "drawdown_52w": 0.69035126,
+        "latest_close": 26.92,
         "high_52w_adjusted": 283.3859661248,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
+        "window_start": "2025-11-01",
+        "window_end": "2026-10-30",
         "observations": 241,
         "missing_dates": []
       },
       "pool": {
         "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
+        "snapshot_date": "2026-10-28",
+        "snapshot_note": "停更每日镜像，季度同步",
         "status": "已匹配",
         "reason": null,
         "plan_status": "远期",
@@ -983,18 +990,19 @@
         "source": "data/行情库/股票/000977.csv",
         "status": "完整",
         "reason": null,
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.43094324,
-        "latest_close": 54.84,
+        "price_date": "2026-10-30",
+        "drawdown_52w": 0.43779184,
+        "latest_close": 54.18,
         "high_52w_adjusted": 646.62729342447,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
+        "window_start": "2025-11-01",
+        "window_end": "2026-10-30",
         "observations": 241,
         "missing_dates": []
       },
       "pool": {
         "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
+        "snapshot_date": "2026-10-28",
+        "snapshot_note": "停更每日镜像，季度同步",
         "status": "已匹配",
         "reason": null,
         "plan_status": "等待回落",
@@ -1090,12 +1098,12 @@
         "source": "data/行情库/股票/300442.csv",
         "status": "不完整",
         "reason": "相对指数日历缺失6日（可能停牌，未补零）",
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.49121143,
-        "latest_close": 55.9,
+        "price_date": "2026-10-30",
+        "drawdown_52w": 0.53617414,
+        "latest_close": 50.96,
         "high_52w_adjusted": 214.38762395996,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
+        "window_start": "2025-11-01",
+        "window_end": "2026-10-30",
         "observations": 235,
         "missing_dates": [
           "2026-02-06",
@@ -1108,7 +1116,8 @@
       },
       "pool": {
         "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
+        "snapshot_date": "2026-10-28",
+        "snapshot_note": "停更每日镜像，季度同步",
         "status": "已匹配",
         "reason": null,
         "plan_status": "在区间",
@@ -1204,18 +1213,19 @@
         "source": "data/行情库/股票/600312.csv",
         "status": "完整",
         "reason": null,
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.16522065,
-        "latest_close": 20.99,
+        "price_date": "2026-10-30",
+        "drawdown_52w": 0.1831173,
+        "latest_close": 20.54,
         "high_52w_adjusted": 177.44592980745,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
+        "window_start": "2025-11-01",
+        "window_end": "2026-10-30",
         "observations": 241,
         "missing_dates": []
       },
       "pool": {
         "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
+        "snapshot_date": "2026-10-28",
+        "snapshot_note": "停更每日镜像，季度同步",
         "status": "已匹配",
         "reason": null,
         "plan_status": "等待回落",
@@ -1342,18 +1352,19 @@
         "source": "data/行情库/股票/600900.csv",
         "status": "完整",
         "reason": null,
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.00533511,
-        "latest_close": 29.83,
-        "high_52w_adjusted": 117.82333392951,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
+        "price_date": "2026-10-30",
+        "drawdown_52w": 0.00866667,
+        "latest_close": 29.74,
+        "high_52w_adjusted": 117.86262147000001,
+        "window_start": "2025-11-01",
+        "window_end": "2026-10-30",
         "observations": 241,
         "missing_dates": []
       },
       "pool": {
         "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
+        "snapshot_date": "2026-10-28",
+        "snapshot_note": "停更每日镜像，季度同步",
         "status": "已匹配",
         "reason": null,
         "plan_status": "等待回落",
@@ -1467,18 +1478,19 @@
         "source": "data/行情库/股票/601728.csv",
         "status": "完整",
         "reason": null,
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.02048985,
-        "latest_close": 6.95,
+        "price_date": "2026-10-30",
+        "drawdown_52w": 0.01203364,
+        "latest_close": 7.01,
         "high_52w_adjusted": 8.95593134866,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
+        "window_start": "2025-11-01",
+        "window_end": "2026-10-30",
         "observations": 241,
         "missing_dates": []
       },
       "pool": {
         "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
+        "snapshot_date": "2026-10-28",
+        "snapshot_note": "停更每日镜像，季度同步",
         "status": "已匹配",
         "reason": null,
         "plan_status": "等待回落",
@@ -1592,18 +1604,19 @@
         "source": "data/行情库/股票/603606.csv",
         "status": "完整",
         "reason": null,
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.39062287,
-        "latest_close": 35.33,
+        "price_date": "2026-10-30",
+        "drawdown_52w": 0.36285334,
+        "latest_close": 36.94,
         "high_52w_adjusted": 291.64404570864,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
+        "window_start": "2025-11-01",
+        "window_end": "2026-10-30",
         "observations": 241,
         "missing_dates": []
       },
       "pool": {
         "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
+        "snapshot_date": "2026-10-28",
+        "snapshot_note": "停更每日镜像，季度同步",
         "status": "已匹配",
         "reason": null,
         "plan_status": "跌破区间",
@@ -1710,18 +1723,19 @@
         "source": "data/行情库/股票/002837.csv",
         "status": "完整",
         "reason": null,
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.55718986,
-        "latest_close": 41.39,
+        "price_date": "2026-10-30",
+        "drawdown_52w": 0.59559741,
+        "latest_close": 37.8,
         "high_52w_adjusted": 1357.8267272147998,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
+        "window_start": "2025-11-01",
+        "window_end": "2026-10-30",
         "observations": 241,
         "missing_dates": []
       },
       "pool": {
         "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
+        "snapshot_date": "2026-10-28",
+        "snapshot_note": "停更每日镜像，季度同步",
         "status": "已匹配",
         "reason": null,
         "plan_status": "等待回落",
@@ -1835,18 +1849,19 @@
         "source": "data/行情库/股票/600050.csv",
         "status": "完整",
         "reason": null,
-        "price_date": "2026-10-27",
+        "price_date": "2026-10-30",
         "drawdown_52w": 0.19596645,
         "latest_close": 4.39,
         "high_52w_adjusted": 10.20730515602,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
+        "window_start": "2025-11-01",
+        "window_end": "2026-10-30",
         "observations": 241,
         "missing_dates": []
       },
       "pool": {
         "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
+        "snapshot_date": "2026-10-28",
+        "snapshot_note": "停更每日镜像，季度同步",
         "status": "已匹配",
         "reason": null,
         "plan_status": "接近",
@@ -1953,18 +1968,19 @@
         "source": "data/行情库/股票/002463.csv",
         "status": "完整",
         "reason": null,
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.37294564,
-        "latest_close": 99.2,
+        "price_date": "2026-10-30",
+        "drawdown_52w": 0.44791403,
+        "latest_close": 87.34,
         "high_52w_adjusted": 515.4671594366,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
+        "window_start": "2025-11-01",
+        "window_end": "2026-10-30",
         "observations": 241,
         "missing_dates": []
       },
       "pool": {
         "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
+        "snapshot_date": "2026-10-28",
+        "snapshot_note": "停更每日镜像，季度同步",
         "status": "已匹配",
         "reason": null,
         "plan_status": "远期",
@@ -2060,18 +2076,19 @@
         "source": "data/行情库/股票/300308.csv",
         "status": "完整",
         "reason": null,
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.59213912,
-        "latest_close": 577.0,
+        "price_date": "2026-10-30",
+        "drawdown_52w": 0.60910387,
+        "latest_close": 553.0,
         "high_52w_adjusted": 9354.341747804721,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
+        "window_start": "2025-11-01",
+        "window_end": "2026-10-30",
         "observations": 241,
         "missing_dates": []
       },
       "pool": {
         "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
+        "snapshot_date": "2026-10-28",
+        "snapshot_note": "停更每日镜像，季度同步",
         "status": "已匹配",
         "reason": null,
         "plan_status": "等待回落",
@@ -2167,18 +2184,19 @@
         "source": "data/行情库/股票/300394.csv",
         "status": "完整",
         "reason": null,
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.49521963,
-        "latest_close": 188.62,
+        "price_date": "2026-10-30",
+        "drawdown_52w": 0.60392591,
+        "latest_close": 148.0,
         "high_52w_adjusted": 5208.5037086249995,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
+        "window_start": "2025-11-01",
+        "window_end": "2026-10-30",
         "observations": 241,
         "missing_dates": []
       },
       "pool": {
         "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
+        "snapshot_date": "2026-10-28",
+        "snapshot_note": "停更每日镜像，季度同步",
         "status": "已匹配",
         "reason": null,
         "plan_status": "远期",
@@ -2274,18 +2292,19 @@
         "source": "data/行情库/股票/300502.csv",
         "status": "完整",
         "reason": null,
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.61609062,
-        "latest_close": 237.59,
+        "price_date": "2026-10-30",
+        "drawdown_52w": 0.68329375,
+        "latest_close": 196.0,
         "high_52w_adjusted": 10363.434405718801,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
+        "window_start": "2025-11-01",
+        "window_end": "2026-10-30",
         "observations": 241,
         "missing_dates": []
       },
       "pool": {
         "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
+        "snapshot_date": "2026-10-28",
+        "snapshot_note": "停更每日镜像，季度同步",
         "status": "已匹配",
         "reason": null,
         "plan_status": "接近",
@@ -2392,18 +2411,19 @@
         "source": "data/行情库/股票/601138.csv",
         "status": "完整",
         "reason": null,
-        "price_date": "2026-10-27",
-        "drawdown_52w": 0.45317805,
-        "latest_close": 45.92,
+        "price_date": "2026-10-30",
+        "drawdown_52w": 0.46413354,
+        "latest_close": 45.0,
         "high_52w_adjusted": 101.1454332573,
-        "window_start": "2025-10-29",
-        "window_end": "2026-10-27",
+        "window_start": "2025-11-01",
+        "window_end": "2026-10-30",
         "observations": 241,
         "missing_dates": []
       },
       "pool": {
         "source": "data/股票池/股票.csv",
-        "snapshot_date": "2026-10-22",
+        "snapshot_date": "2026-10-28",
+        "snapshot_note": "停更每日镜像，季度同步",
         "status": "已匹配",
         "reason": null,
         "plan_status": "等待回落",
