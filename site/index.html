@@ -5,112 +5,256 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>市场看板</title>
 <style>
-:root{--bg:#f6f5f2;--card:#fff;--ink:#1d1d1f;--sub:#6b6b70;--line:#e4e2dc;--warn:#b7791f;--warnbg:#fdf3dc;
---up:#c0392b;--down:#2e7d4f;--accent:#2b5bb8;--chip:#efede8}
-@media (prefers-color-scheme:dark){:root{--bg:#141416;--card:#1e1e21;--ink:#ececee;--sub:#9a9aa1;--line:#2e2e33;
---warn:#e0b25c;--warnbg:#3a2f18;--up:#e5675a;--down:#5cbf86;--accent:#7aa2f0;--chip:#2a2a2f}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 -apple-system,"PingFang SC","Noto Sans SC",sans-serif}
-header{padding:20px 16px 8px;max-width:920px;margin:auto}h1{font-size:20px;margin:0}header p{margin:4px 0 0;color:var(--sub);font-size:13px}
-nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap;padding:8px max(16px,calc((100% - 888px)/2))}
-nav a{color:var(--sub);text-decoration:none;font-size:13px;margin-right:14px}nav a:hover{color:var(--ink)}
-main{max-width:920px;margin:auto;padding:8px 16px 40px}
-section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin:14px 0}
-section h2{font-size:16px;margin:0 0 4px;display:flex;justify-content:space-between;gap:8px;align-items:baseline}
-.date{font-size:12px;color:var(--sub);font-weight:400}.stale{background:var(--warnbg);border-color:var(--warn)}
-.stale .date{color:var(--warn);font-weight:600}
-.big{font-size:28px;font-weight:700}.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:10px 0}
-.kpi{background:var(--chip);border-radius:8px;padding:8px 10px}.kpi b{display:block;font-size:18px}.kpi span{font-size:12px;color:var(--sub)}
-.muted{color:var(--sub);font-size:13px}.chip{display:inline-block;background:var(--chip);border-radius:999px;padding:2px 10px;margin:3px 4px 3px 0;font-size:13px;cursor:pointer}
-.stage{margin:8px 0}.stage h3{font-size:14px;margin:0 0 2px}
-table{border-collapse:collapse;width:100%;font-size:13px}td,th{padding:4px 6px;border-bottom:1px solid var(--line);text-align:left}
-th{color:var(--sub);font-weight:500}td.num{text-align:right;font-variant-numeric:tabular-nums}
-.heat{overflow-x:auto}.heat table{width:auto}.heat table td{padding:0;width:8px;height:16px;border:none}.heat table td.name{width:auto;padding-right:6px;white-space:nowrap;font-size:12px}
-.up{color:var(--up)}.down{color:var(--down)}.tabs button{background:var(--chip);border:0;color:var(--ink);border-radius:6px;padding:4px 10px;margin-right:6px;font:inherit;font-size:13px}
-.tabs button.on{background:var(--accent);color:#fff}details{margin-top:6px}summary{cursor:pointer;color:var(--sub);font-size:13px}
-.alert{border-left:3px solid var(--accent);padding-left:10px;white-space:pre-wrap;font-size:13px}
-footer{max-width:920px;margin:auto;padding:0 16px 30px;color:var(--sub);font-size:12px}
+:root{
+  --bg:#f2f4f6;--surface:#fff;--ink:#18212b;--sub:#5b6776;--rule:#d9dfe6;--soft:#e9edf1;
+  --cold:#2f5f98;--hot:#c2412d;--up:#c2412d;--down:#2e7d57;--warn:#9a6a12;--warnbg:#fbf1dc;
+  --serif:"Songti SC","Noto Serif SC","Source Han Serif SC","STSong",serif;
+  --sans:-apple-system,"PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0f141a;--surface:#171e26;--ink:#e6ebf0;--sub:#94a1b0;--rule:#2a3440;--soft:#202833;
+  --cold:#6f9bd3;--hot:#e46a54;--up:#e46a54;--down:#5cb98a;--warn:#e0b25c;--warnbg:#3a2f18}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 var(--sans)}
+.wrap{max-width:680px;margin:0 auto;padding:0 16px}
+a{color:var(--cold)}
+:focus-visible{outline:2px solid var(--cold);outline-offset:2px}
+header{padding:22px 0 6px;display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+header h1{font:600 17px/1.3 var(--sans);margin:0;letter-spacing:.02em}
+header p{margin:0;color:var(--sub);font-size:13px}
+.num{font-variant-numeric:tabular-nums}
+
+/* 头部：大盘结论与情绪温度计 */
+.hero{background:var(--surface);border-radius:18px;padding:20px 18px 18px;margin:10px 0 8px}
+.verdict{display:flex;align-items:flex-end;gap:14px}
+.verdict .glyph{font:700 84px/0.9 var(--serif);letter-spacing:-.02em}
+.verdict .glyph.守{color:var(--cold)}.verdict .glyph.攻{color:var(--hot)}.verdict .glyph.中性{color:var(--sub);font-size:56px}
+.verdict .side{padding-bottom:6px}
+.verdict .side b{display:block;font-size:20px;font-weight:600}
+.verdict .side span{color:var(--sub);font-size:13px}
+.thermo{margin:22px 0 4px}
+.thermo .track{position:relative;height:12px;border-radius:6px;
+  background:linear-gradient(90deg,#2f5f98 0%,#6f9bd3 20%,#b9c6d3 40%,#cfc6b8 60%,#e08a6f 80%,#c2412d 100%)}
+.thermo .tick{position:absolute;top:-3px;width:1px;height:18px;background:var(--surface);opacity:.9}
+.thermo .mark{position:absolute;top:-9px;width:0;height:0;transform:translateX(-7px);border:7px solid transparent;border-top:9px solid var(--ink)}
+.thermo .ghost{position:absolute;top:14px;transform:translateX(-50%);font-size:11px;color:var(--sub);white-space:nowrap}
+.thermo .zones{display:flex;font-size:11px;color:var(--sub);margin-top:22px}
+.thermo .zones span{flex:1;text-align:center}
+.reading{margin:10px 0 0;font-size:15px}
+.reading b{font-size:22px;font-weight:700}
+.facts{list-style:none;margin:16px 0 0;padding:0;border-top:1px solid var(--rule)}
+.facts li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--rule);font-size:14px}
+.facts li span:first-child{color:var(--sub)}
+.facts li span:last-child{text-align:right}
+
+/* Claude 判读 */
+.claude{border-left:3px solid var(--cold);padding:2px 0 2px 14px;margin:14px 0}
+.claude .who{font-size:12px;color:var(--sub);margin-bottom:4px}
+.claude p,.claude li{font-size:15px}
+.claude p{margin:6px 0}.claude ul{margin:6px 0;padding-left:1.1em}.claude li{margin:6px 0}
+.claude details{margin:4px 0 0}.claude .full{padding-top:2px}
+.lede .claude{background:var(--surface);border-radius:0 14px 14px 0;padding:12px 14px;margin:8px 0 6px}
+
+/* 问题 */
+section{padding:26px 0 8px;border-bottom:1px solid var(--rule)}
+section:last-of-type{border-bottom:0}
+section h2{font:700 22px/1.35 var(--serif);margin:0 0 6px}
+.answer{font-size:17px;margin:0 0 12px}
+.answer .date{display:block;font-size:12px;color:var(--sub);margin-top:2px}
+.stale{background:var(--warnbg);color:var(--warn);font-size:13px;border-radius:8px;padding:6px 10px;margin:0 0 10px}
+details{margin:10px 0 4px}
+summary{cursor:pointer;color:var(--sub);font-size:14px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"＋";display:inline-block;width:1.3em;color:var(--cold)}
+details[open] summary::before{content:"－"}
+details .how{font-size:14px;color:var(--sub);padding:4px 0 0 1.3em}
+details .how p{margin:6px 0}
+.muted{color:var(--sub);font-size:13px}
+
+/* 资金条 */
+.bars{margin:6px 0 2px}
+.bars h3{font:600 14px/1.4 var(--sans);margin:14px 0 4px;color:var(--sub)}
+.bar{display:grid;grid-template-columns:5.2em 1fr 6.4em;align-items:center;gap:10px;padding:5px 0;font-size:14px}
+.bar .fill{height:10px;border-radius:5px}
+.bar .in{background:var(--up)}.bar .out{background:var(--down)}
+.bar .v{text-align:right;font-variant-numeric:tabular-nums}
+.bar small{display:block;color:var(--sub);font-size:11px;line-height:1.3;white-space:nowrap}
+
+/* 主线 */
+.stage{display:flex;gap:10px;align-items:baseline;padding:8px 0;border-bottom:1px dashed var(--rule)}
+.stage .name{flex:0 0 3.2em;font-weight:600}
+.stage .who{flex:1}
+.pill{display:inline-block;background:var(--soft);border-radius:999px;padding:2px 10px;margin:3px 6px 3px 0;font-size:13px}
+.pill i{font-style:normal;color:var(--sub)}
+.flow{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--sub);margin:12px 0 4px;flex-wrap:wrap}
+.flow b{font-weight:600;color:var(--ink);background:var(--soft);border-radius:6px;padding:1px 8px}
+
+/* 表 */
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:7px 4px;border-bottom:1px solid var(--rule);text-align:left}
+th{color:var(--sub);font-weight:500;font-size:12px}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+.up{color:var(--up)}.down{color:var(--down)}
+
+/* 盯 */
+.watch{list-style:none;padding:0;margin:4px 0}
+.watch li{padding:10px 0;border-bottom:1px solid var(--rule);font-size:15px}
+.watch li .when{display:block;font-size:12px;color:var(--sub)}
+footer{padding:22px 0 40px;color:var(--sub);font-size:12px}
+footer .sys{margin-bottom:8px}
+svg text{font-family:var(--sans)}
+@media (min-width:560px){.verdict .glyph{font-size:104px}}
 </style>
 </head>
 <body>
-<header><h1>市场看板</h1><p id="gen">加载中…</p></header>
-<nav><a href="#market">大盘</a><a href="#mainline">主线雷达</a><a href="#flow">资金轮动</a><a href="#history">历史对照</a><a href="#macro">宏观</a><a href="#judgments">命中率</a><a href="#health">系统状态</a></nav>
-<main>
-<section id="market"><h2>大盘<span class="date"></span></h2><div class="body"></div></section>
-<section id="mainline"><h2>主线雷达<span class="date"></span></h2><div class="body"></div></section>
-<section id="flow"><h2>资金轮动<span class="date"></span></h2><div class="body"></div></section>
-<section id="history"><h2>历史对照<span class="date"></span></h2><div class="body"></div></section>
-<section id="macro"><h2>宏观<span class="date"></span></h2><div class="body"></div></section>
-<section id="judgments"><h2>判断命中率<span class="date"></span></h2><div class="body"></div></section>
-<section id="health"><h2>系统状态<span class="date"></span></h2><div class="body"></div></section>
-</main>
-<footer>指标由程序按规则生成，不构成投资建议。数据来源与规则见仓库 Rsannote/rsan-backtest。</footer>
+<div class="wrap">
+<header><h1>市场看板</h1><p id="gen">正在读取数据</p></header>
+
+<div class="hero" id="hero" aria-live="polite"></div>
+<div class="lede" id="lede"></div>
+
+<section id="flow"><h2>钱在往哪走？</h2><div class="body"></div></section>
+<section id="mainline"><h2>有没有主线？</h2><div class="body"></div></section>
+<section id="history"><h2>现在像历史上哪一次？</h2><div class="body"></div></section>
+<section id="overseas"><h2>海外怎么样？</h2><div class="body"></div></section>
+<section id="watch"><h2>这周盯什么？</h2><div class="body"></div></section>
+
+<footer id="foot"></footer>
+</div>
 <script>
 const $=s=>document.querySelector(s);
-const pct=(x,d=2)=>x==null?'—':(x*100).toFixed(d)+'%';
-const num=(x,d=2)=>x==null?'—':Number(x).toFixed(d);
-const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-async function get(n){try{const r=await fetch('data/'+n+'.json',{cache:'no-store'});return await r.json()}catch(e){return {错误:String(e),过期:true}}}
-function head(id,d){const s=$('#'+id);s.querySelector('.date').textContent=d&&d.数据日期?('数据日期 '+d.数据日期+(d.过期?' · 可能过期':'')):(d&&d.过期?'可能过期':'');
- if(d&&d.过期)s.classList.add('stale');if(d&&d.错误){s.querySelector('.body').innerHTML='<p class="muted">暂无数据：'+d.错误+'</p>';return false}return true}
-function line(el,labels,sets,yfmt){ // 无外部依赖的 SVG 折线图
- const W=640,H=240,P={l:62,r:10,t:12,b:30};const all=sets.flatMap(s=>s.data).filter(v=>v!=null);if(!all.length){el.innerHTML='';return}
- let lo=Math.min(...all),hi=Math.max(...all);if(lo===hi){lo-=1;hi+=1}const n=Math.max(...sets.map(s=>s.data.length));
- const X=i=>P.l+(W-P.l-P.r)*(n<2?0:i/(n-1)),Y=v=>P.t+(H-P.t-P.b)*(1-(v-lo)/(hi-lo));
- const cols=[css('--accent'),'#c08a2b','#8e6cc4','#3aa6a0','#9a9aa1'];const fmt=yfmt||(v=>Math.round(v*10)/10);
- let g='';for(let k=0;k<=3;k++){const v=lo+(hi-lo)*k/3;g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${Y(v)}" y2="${Y(v)}" stroke="${css('--line')}"/><text x="${P.l-4}" y="${Y(v)+4}" text-anchor="end" font-size="15" fill="${css('--sub')}">${fmt(v)}</text>`}
- if(lo<0&&hi>0)g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${Y(0)}" y2="${Y(0)}" stroke="${css('--sub')}" stroke-dasharray="3 3"/>`;
- [0,Math.floor((n-1)/2),n-1].forEach((i,k)=>{if(labels[i]!=null)g+=`<text x="${X(i)}" y="${H-6}" text-anchor="${['start','middle','end'][k]}" font-size="15" fill="${css('--sub')}">${labels[i]}</text>`});
- const paths=sets.map((s,j)=>{let d='',pen=false;s.data.forEach((v,i)=>{if(v==null){pen=false;return}d+=(pen?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1);pen=true});
-  return `<path d="${d}" fill="none" stroke="${s.color||cols[j%5]}" stroke-width="2.6"/>`}).join('');
- const legend=sets.length>1?'<div class="muted">'+sets.map((s,j)=>`<span style="color:${s.color||cols[j%5]}">■</span> ${s.label}`).join('　')+'</div>':'';
- el.outerHTML=`<div><svg viewBox="0 0 ${W} ${H}" width="100%" style="max-width:680px;display:block" role="img">${g}${paths}</svg>${legend}</div>`}
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pct=(x,d=1,sign=true)=>x==null?'—':((sign&&x>0?'+':'')+(x*100).toFixed(d)+'%');
+const n=(x,d=0)=>x==null?'—':Number(x).toFixed(d);
+const md2=s=>s.slice(5).replace('-','/');               // 2026-10-30 → 10/30
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+function md(text){ // 只支持段落、"- "列表、**加粗**；先转义
+  if(!text)return'';const out=[];let list=[];
+  const inline=t=>esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');
+  const flush=()=>{if(list.length){out.push('<ul>'+list.map(l=>'<li>'+inline(l)+'</li>').join('')+'</ul>');list=[]}};
+  text.split('\n').forEach(l=>{const t=l.trim();if(/^- /.test(t))list.push(t.slice(2));else{flush();if(t)out.push('<p>'+inline(t)+'</p>')}});
+  flush();return out.join('')}
+function gist(text){ // 要点：有"小结："段落就用它，否则用每条的加粗开头
+  const sum=text.split('\n').find(l=>/^小结[:：]/.test(l.trim()));if(sum)return sum.trim().replace(/^小结[:：]\s*/,'');
+  const leads=[...text.matchAll(/^\s*-\s*\*\*(.+?)\*\*/gm)].map(m=>m[1].replace(/[。：:]$/,''));return leads.length?leads.join('；')+'。':''}
+function claude(text,j){if(!text)return'<p class="muted">这一块本周还没写判读。</p>';const g=gist(text);
+  return `<div class="claude"><div class="who">Claude 的判读（${md2(j.日期)} 全景）</div>${g?`<p>${esc(g)}</p>`:''}
+   <details><summary>展开全文</summary><div class="full">${md(text)}</div></details></div>`}
+function how(title,html){return `<details><summary>${title}</summary><div class="how">${html}</div></details>`}
+function staleNote(d){return d&&d.过期?'<div class="stale">这一块的数据没有按时更新，下面可能是旧数据。</div>':''}
+function failed(id,d){if(d&&d.错误){$(id+' .body').innerHTML=`<p class="muted">这一块暂时读不到数据（${esc(d.错误)}）。其他部分不受影响。</p>`;return true}return false}
 
-function market(d){if(!head('market',d))return;const b=$('#market .body');
- b.innerHTML=`<div class="big">${d.结论||'—'} · ${d.冷热||'—'}</div><div class="muted">规则总分 ${d.总分??'—'}；${(d.冷信号||[]).concat(d.热信号||[]).join('；')}</div>
- <div class="kpis"><div class="kpi"><span>情绪温度（${d.情绪日期}）</span><b>${num(d.情绪温度,1)}</b></div>
- <div class="kpi"><span>两市成交</span><b>${num(d.成交额亿,0)} 亿</b><span>近一年分位 ${num(d.成交额一年分位,0)}</span></div>
- <div class="kpi"><span>融资余额（${d.融资日期}）</span><b>${num(d.融资余额亿,0)} 亿</b><span>5日 ${pct(d.融资5日变化)}</span></div></div>
- <div id="tempc"></div><details><summary>依据</summary><ul class="muted">${(d.依据||[]).map(x=>'<li>'+x+'</li>').join('')}</ul></details>`;
- line($('#tempc'),d.情绪走势.date,[{label:'情绪温度',data:d.情绪走势.温度}])}
+function lineChart(sets,{labels,fmt,zero,bands}){ // 自绘 SVG 折线，sets:[{label,data,color,width}]
+  const W=640,H=230,P={l:46,r:12,t:12,b:26};const all=sets.flatMap(s=>s.data).filter(v=>v!=null);if(!all.length)return'';
+  let lo=Math.min(...all),hi=Math.max(...all);if(bands){lo=Math.min(lo,bands.lo);hi=Math.max(hi,bands.hi)}
+  if(zero){lo=Math.min(lo,0);hi=Math.max(hi,0)}const pad=(hi-lo)*0.08||1;lo-=pad;hi+=pad;
+  const len=Math.max(...sets.map(s=>s.data.length));const X=i=>P.l+(W-P.l-P.r)*(len<2?0:i/(len-1));const Y=v=>P.t+(H-P.t-P.b)*(1-(v-lo)/(hi-lo));
+  let g='';
+  if(bands)bands.lines.forEach(b=>{g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${Y(b.v)}" y2="${Y(b.v)}" stroke="${b.color}" stroke-dasharray="4 4"/><text x="${P.l+4}" y="${Y(b.v)-5}" text-anchor="start" font-size="13" fill="${b.color}">${b.label}</text>`});
+  for(let k=0;k<=2;k++){const v=lo+pad+(hi-lo-2*pad)*k/2;g+=`<text x="${P.l-6}" y="${Y(v)+4}" text-anchor="end" font-size="13" fill="${css('--sub')}">${fmt(v)}</text>`}
+  if(zero)g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${Y(0)}" y2="${Y(0)}" stroke="${css('--sub')}" stroke-width="1"/>`;
+  if(labels)[0,len-1].forEach((i,k)=>{if(labels[i]!=null)g+=`<text x="${X(i)}" y="${H-6}" text-anchor="${k?'end':'start'}" font-size="13" fill="${css('--sub')}">${labels[i]}</text>`});
+  const paths=sets.map(s=>{let d='',pen=false;s.data.forEach((v,i)=>{if(v==null){pen=false;return}d+=(pen?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1);pen=true});
+    return `<path d="${d}" fill="none" stroke="${s.color}" stroke-width="${s.width||2.4}" stroke-linejoin="round"/>`}).join('');
+  const legend=sets.length>1?'<div class="muted">'+sets.map(s=>`<span style="color:${s.color}">━</span> ${esc(s.label)}`).join('　')+'</div>':'';
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${esc(sets.map(s=>s.label).join('、'))}">${g}${paths}</svg>${legend}`}
 
-function mainline(d){if(!head('mainline',d))return;const b=$('#mainline .body');const order=['确认','拥挤','启动','退潮','潜伏','无'];
- const by={};order.forEach(o=>by[o]=[]);(d.行业||[]).forEach(r=>(by[r.阶段]||(by[r.阶段]=[])).push(r));
- let h=d.提醒&&!/没有新的共振/.test(d.提醒)?`<div class="alert">${d.提醒.replace(/^# .*\n/,'')}</div>`:'';
- h+=order.map(o=>`<div class="stage"><h3>${o}（${by[o].length}）</h3>${by[o].map(r=>`<span class="chip" data-c="${r.code}">${r.行业}</span>`).join('')||'<span class="muted">无</span>'}</div>`).join('');
- h+='<div id="mldetail" class="muted"></div>';
- const ch=d.近5日阶段变化||[];h+='<details open><summary>近5个交易日阶段变化</summary>'+(ch.length?'<table><tr><th>日期</th><th>行业</th><th>变化</th><th>类型</th></tr>'+
-  ch.map(e=>{const r=(d.行业||[]).find(x=>x.code===e.code)||{};return `<tr><td>${e.date}</td><td>${r.行业||e.code}</td><td>${e.from}→${e.to}</td><td>${e.上位类型||''}</td></tr>`}).join('')+'</table>':'<p class="muted">无</p>')+'</details>';
- h+=`<p class="muted">${d.回放要点} 参数：${d.参数版本}</p>`;b.innerHTML=h;
- b.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{const r=d.行业.find(x=>x.code===c.dataset.c);
-  $('#mldetail').innerHTML=`<b>${r.行业}</b>：20日强弱排名 ${r['20日强弱排名']??'—'}，占比5日均较20日均 ${pct(r.占比5日均较20日均,1)}，占比60日分位 ${num(r.占比60日分位,0)}，一年分位 ${num(r.占比一年分位,0)}，偏离60日线 ${pct(r.偏离60日线,1)}<br>近20日：${(r.近20日||[]).join(' ')}`})}
+function hero(d,j){
+  if(d.错误){$('#hero').innerHTML=`<p class="muted">大盘数据暂时读不到（${esc(d.错误)}）。</p>`;return}
+  const pos=Math.max(0,Math.min(100,d.温度)),ghost=d.温度5日前;
+  const dir=ghost==null?'':(d.温度<ghost?`，比 5 个交易日前的 ${n(ghost)} 更冷`:d.温度>ghost?`，比 5 个交易日前的 ${n(ghost)} 回暖`:'');
+  const hs=d.沪深300||{};
+  const below20=(hs.偏离20日线??0)<0,above60=hs.在60日线上;
+  const trend=`${below20?'低于':'高于'} 20 日线 ${pct(Math.abs(hs.偏离20日线??0)/100,1,false)}，${above60?'在 60 日线上方':'在 60 日线下方'}`;
+  const sig=(d.信号||[]).map(s=>`<tr><td>${esc(s.组)}</td><td>${esc(s.信号)}</td><td class="r ${s.分<0?'down':s.分>0?'up':''}">${s.分>0?'+':''}${s.分}</td></tr>`).join('');
+  $('#hero').innerHTML=`${staleNote(d)}
+  <div class="verdict"><div class="glyph ${esc(d.结论)}">${esc(d.结论||'—')}</div>
+   <div class="side"><b>大盘${d.结论==='守'?'偏守':d.结论==='攻'?'可攻':'中性'}，${esc(d.冷热||'')}</b><span>规则结论，数据截至 ${esc(d.数据日期)}</span></div></div>
+  <div class="thermo" role="img" aria-label="情绪温度 ${n(d.温度)}，${d.温度区间}">
+   <div class="track">${[20,40,60,80].map(v=>`<div class="tick" style="left:${v}%"></div>`).join('')}
+    <div class="mark" style="left:${pos}%"></div>${ghost!=null?`<div class="ghost" style="left:${ghost}%">5日前 ${n(ghost)}</div>`:''}</div>
+   <div class="zones"><span>冰点</span><span>偏冷</span><span>中性</span><span>偏热</span><span>过热</span></div></div>
+  <p class="reading">散户情绪温度 <b class="num">${n(d.温度)}</b>，${esc(d.温度区间)}${dir}。${d.阶段?`情绪阶段：<b style="font-size:inherit">${esc(d.阶段)}</b>（${md2(d.阶段日期)} 判读）。`:''}</p>
+  <ul class="facts">
+   <li><span>沪深300</span><span class="num">${trend}</span></li>
+   <li><span>两市成交</span><span class="num">${n(d.成交额亿)} 亿，近一年 ${n(d.成交额分位)}% 分位</span></li>
+   <li><span>融资余额 5 日</span><span class="num ${d.融资5日变化<0?'down':'up'}">${pct((d.融资5日变化??0)/100,2)}</span></li>
+   <li><span>涨停 / 跌停</span><span class="num">${n(d.涨停)} / ${n(d.跌停)}</span></li>
+  </ul>
+  ${how('为什么是这个结论',`<p>规则把 7 个信号加总，总分 <b>${d.总分}</b>：</p><table>${sig}</table>
+   <p>攻 / 守 判断不了明天涨跌，它提示的是回撤风险：历史上进入"守"之后 20 个交易日内从起点回撤 5% 以上的概率约 30%，平时约 18%–21%。</p>`)}
+  ${how('情绪温度怎么读',`<p>温度 0–100，由成交额、融资杠杆、赚钱效应（涨停减跌停）三项的历史分位合成。低于 20 是冰点，2018-10、2022-04、2024-02 的底部都在这里；80 以上是过热。</p>
+   <p>它适合判断"离底部还有多远"，不适合单独当买卖开关：回测里冷买热卖沪深300 没有跑赢红利。</p>
+   <div>${lineChart([{label:'情绪温度',data:d.温度走势.温度,color:css('--cold')}],{labels:d.温度走势.date.map(md2),fmt:v=>Math.round(v),
+     bands:{lo:15,hi:60,lines:[{v:20,label:'冰点 20',color:css('--cold')},{v:80,label:'过热 80',color:css('--hot')}]}})}</div>
+   <p class="muted">近 120 个交易日。</p>`)}`}
 
-function heatColor(v,m){if(v==null)return 'transparent';const a=Math.min(1,Math.abs(v)/m);return v>0?`rgba(192,57,43,${a})`:`rgba(46,125,79,${a})`}
-function flow(d){if(!head('flow',d))return;const b=$('#flow .body');
- b.innerHTML=`<div class="tabs"><button data-s="31" class="on">31行业</button><button data-s="28">28行业</button></div>
- <p class="muted">成交占比5日变化（百分点），红=资金流入、绿=流出，近60个交易日</p><div class="heat" id="heat"></div>
- <details><summary>20日相对沪深300强弱排名</summary><table>${(d.强弱排名||[]).map((r,i)=>`<tr><td>${i+1}</td><td>${r.行业}</td><td class="num ${r.相对沪深300_20>0?'up':'down'}">${pct(r.相对沪深300_20)}</td></tr>`).join('')}</table></details>`;
- const draw=s=>{const rows=d.行业[s]||[];const m=Math.max(0.2,...rows.flatMap(r=>r.占比5日变化.filter(v=>v!=null).map(Math.abs)))*0.6;
-  $('#heat').innerHTML='<table>'+rows.map(r=>`<tr><td class="name">${r.行业}</td>${r.占比5日变化.map((v,i)=>`<td title="${d.日期[i]} ${v==null?'缺':v.toFixed(2)}" style="background:${heatColor(v,m)}"></td>`).join('')}</tr>`).join('')+'</table>'};
- draw('31');b.querySelectorAll('.tabs button').forEach(x=>x.onclick=()=>{b.querySelectorAll('.tabs button').forEach(y=>y.classList.remove('on'));x.classList.add('on');draw(x.dataset.s)})}
+function lede(j){if(!j||!j.小结){$('#lede').innerHTML='';return}
+  $('#lede').innerHTML=`<div class="claude"><div class="who">Claude 本周小结（<a href="${esc(j.链接)}">${md2(j.日期)} 全景</a>）</div><p>${esc(j.小结)}</p></div>`}
 
-function history(d){if(!head('history',d))return;const b=$('#history .body');const f=d.当前特征||{};
- b.innerHTML=`<p class="muted">当前：60日涨幅 ${pct(f.启动前60日涨幅,1)}，成交额分位 ${num(f.启动时成交额分位,0)}，情绪 ${num(f.启动时情绪温度,0)}，中/美10年 ${num(f.启动时中国10年国债)} / ${num(f.启动时美国10年国债)}</p>
- <div id="histc"></div><table><tr><th>历史事件</th><th>距离</th><th>当时</th></tr>${(d.最像||[]).map(r=>`<tr><td>${r.类型} ${r.开始}→${r.结束}</td><td class="num">${num(r.距离)}</td><td>${(r.判读.触发事件||'')}<br><span class="muted">像在哪：${r.像在哪}</span></td></tr>`).join('')}</table>`;
- const L=(d.最像||[]);const n=Math.max(...L.map(r=>r.之后走势.length),1);line($('#histc'),[...Array(n).keys()].map(i=>'第'+i+'日'),L.map(r=>({label:r.类型+' '+r.开始,data:r.之后走势})),v=>v.toFixed(1)+'%')}
+function flow(d){if(failed('#flow',d))return;
+  const style=(d.风格||'').replace(/（.*?）/g,'');const m=Math.max(...d.在追.concat(d.在撤).map(r=>Math.abs(r.变化)),0.001);
+  const row=(r,cls)=>`<div class="bar"><div>${esc(r.行业)}<small>一年分位 ${n(r.一年分位)}</small></div>
+    <div><div class="fill ${cls}" style="width:${Math.max(4,Math.abs(r.变化)/m*100)}%"></div></div>
+    <div class="v ${cls==='in'?'up':'down'}">${(r.变化*100>0?'+':'')+(r.变化*100).toFixed(2)}<small>5日相对 ${pct(r.相对沪深300,1)}</small></div></div>`;
+  $('#flow .body').innerHTML=`${staleNote(d)}<p class="answer">${esc(style||'暂无风格结论')}。<span class="date">截至 ${esc(d.数据日期)}，申万一级 31 个行业</span></p>
+  <div class="bars"><h3>成交占比升得最多（个百分点）</h3>${d.在追.map(r=>row(r,'in')).join('')}<h3>成交占比降得最多（个百分点）</h3>${d.在撤.map(r=>row(r,'out')).join('')}</div>
+  ${how('怎么读',`<p>右边的数字是这个行业成交额占全市场的比例，和 5 个交易日前相比变了多少个百分点。占比上升说明资金在往里挤，下降说明在撤。</p>
+   <p>要和价格一起看：占比升、价格也跑赢沪深300，才是资金在追；占比升、价格却在跌（"5日相对"为负），更可能是放量出逃。"一年分位"接近 100 说明这个行业的成交占比已经是一年来最高，拥挤。</p>`)}`}
 
-function macro(d){if(!head('macro',d))return;const b=$('#macro .body');const c=d['20日变化bp']||{};
- b.innerHTML=`<table><tr><th>指标</th><th>日期</th><th class="num">最新</th><th class="num">上期</th></tr>${(d.指标||[]).map(r=>`<tr><td>${r.指标}${c[r.指标]!=null?`<br><span class="muted">20日 ${c[r.指标]>0?'+':''}${c[r.指标]}bp</span>`:''}</td><td>${r.日期}</td><td class="num">${num(r.值,r.值>1000?0:2)}</td><td class="num">${num(r.上期,r.上期>1000?0:2)}</td></tr>`).join('')}</table>`}
+function mainline(d,j){if(failed('#mainline',d))return;
+  const order=['潜伏','启动','确认','拥挤','退潮'];const st=d.阶段||{};
+  const parts=order.filter(o=>(st[o]||[]).length).map(o=>`${o} ${st[o].length} 个`);
+  const answer=!(st.确认||[]).length?`没有行业在"确认"阶段。${parts.length?'目前：'+parts.join('、')+'。':'所有行业都不在任何阶段。'}`:`有 ${st.确认.length} 个行业在"确认"阶段：${st.确认.map(r=>r.行业).join('、')}。`;
+  const rows=order.filter(o=>(st[o]||[]).length).map(o=>`<div class="stage"><div class="name">${o}</div><div class="who">${st[o].map(r=>
+    `<span class="pill">${esc(r.行业)} <i>自 ${r.自?md2(r.自):'—'}，60日线${r.偏离60日线>=0?'上':'下'} ${pct(r.偏离60日线,1)}</i></span>`).join('')}</div></div>`).join('');
+  const crowd=(d.成交拥挤||[]).map(r=>`<span class="pill">${esc(r.行业)} <i class="num">${n(r.占比一年分位)}</i> <i class="${r.偏离60日线>=0?'up':'down'}">${r.偏离60日线>=0?'线上':'线下'}</i></span>`).join('');
+  $('#mainline .body').innerHTML=`${staleNote(d)}<p class="answer">${answer}<span class="date">截至 ${esc(d.数据日期)}，规则 ${esc(d.参数版本)}</span></p>
+  ${rows}
+  <h3 class="muted" style="margin:16px 0 4px;font-weight:600">成交最拥挤的行业</h3><p class="muted" style="margin:0 0 4px">数字是成交占比一年分位（≥ 90 才列出），"线上 / 线下"指价格在 60 日线上方还是下方。</p><div>${crowd||'<span class="muted">没有</span>'}</div>
+  ${claude(j.主线判读,j)}
+  ${how('主线阶段怎么读',`<div class="flow"><b>潜伏</b>→<b>启动</b>→<b>确认</b>→<b>拥挤</b>→<b>退潮</b></div>
+   <p>潜伏：业绩或催化先动，价格还没动。启动：资金开始进来、跑赢大盘。确认：资金和价格都持续走强，像一条主线。拥挤：成交占比到了一年高位，追的人太多。退潮：资金撤出、开始跑输。</p>
+   <p>按历史回放，进入任何一个阶段之后 20 个交易日都不比平均水平好；"确认""拥挤"之后偏弱（确认后中位数 -1.1%，胜率 40%）。所以阶段是地图和风险提示，看到"确认""拥挤"不是追的时候。</p>
+   <p>"成交最拥挤"那一行不看阶段，直接列成交占比一年分位 90 以上的行业：价格在 60 日线上方的，是真的有资金在抱团；在下方的，更像放量换手。</p>`)}`}
 
-function judgments(d){const b=$('#judgments .body');const g=d.分组||{};const ks=Object.keys(g);
- b.innerHTML=ks.length?`<p class="muted">共 ${d.总数} 条判断</p><table><tr><th>模块·置信度</th><th class="num">待验证</th><th class="num">证实</th><th class="num">证伪</th><th class="num">命中率</th></tr>${ks.map(k=>`<tr><td>${k}</td><td class="num">${g[k].待验证}</td><td class="num">${g[k].证实}</td><td class="num">${g[k].证伪}</td><td class="num">${pct(g[k].命中率,0)}</td></tr>`).join('')}</table>`:'<p class="muted">暂无判断</p>'}
+function history(d,j){if(failed('#history',d))return;const top=(d.最像||[])[0];
+  if(!top){$('#history .body').innerHTML='<p class="muted">事件库还没有可对照的历史事件。</p>';return}
+  const cols=[css('--cold'),css('--hot'),css('--sub')];
+  const fmtF={启动前60日涨幅:v=>pct(v,1),启动时融资余额变化:v=>pct(v,1),启动时成交额分位:v=>n(v),启动时情绪温度:v=>n(v),启动时中国10年国债:v=>n(v,2)+'%',启动时美国10年国债:v=>n(v,2)+'%'};
+  const label=k=>k.replace('启动时','').replace('启动前','前');
+  const rows=d.特征名.map(k=>`<tr><td>${label(k)}</td><td class="r">${fmtF[k](d.当前[k])}</td><td class="r">${top.特征[k]==null?'—':fmtF[k](top.特征[k])}</td></tr>`).join('');
+  $('#history .body').innerHTML=`${staleNote(d)}<p class="answer">最接近 ${esc(top.开始)} 那轮${esc(top.类型)}的起点。<span class="date">按 6 个特征算距离 ${n(top.距离,2)}，越小越像；截至 ${esc(d.数据日期)}</span></p>
+  <div>${lineChart(d.最像.map((r,i)=>({label:`${r.类型} ${r.开始}`,data:r.之后60日,color:cols[i],width:i?1.6:2.6})),{labels:[...Array(61).keys()].map(i=>i===0?'起点':i===60?'第 60 日':null),fmt:v=>Math.round(v)+'%',zero:true})}</div>
+  <p class="muted">三次最像的历史事件，起点之后 60 个交易日沪深300的走势。</p>
+  <table><tr><th>特征</th><th class="r">现在</th><th class="r">${md2(top.开始)}</th></tr>${rows}</table>
+  ${claude(j.历史判读,j)}
+  ${how('怎么读',`<p>程序把现在的 6 个特征（前 60 日涨跌、成交额分位、融资余额变化、情绪温度、中美 10 年国债）和历史上每次大调整、大反弹开始时的特征比，找出最接近的几次。</p>
+   <p>完整可比的历史事件只有 10 个左右，距离 2 以上就不算很像。它回答的是"现在的处境像哪一段"，不是"接下来一定会怎样"。</p>`)}`}
 
-function health(d){const b=$('#health .body');$('#health .date').textContent=d._checked_at?'检查于 '+d._checked_at.slice(0,16).replace('T',' '):'';
- const rows=Object.entries(d).filter(([k])=>k[0]!=='_');if(rows.some(([,v])=>v.状态!=='正常'))$('#health').classList.add('stale');
- b.innerHTML='<table>'+rows.map(([,v])=>`<tr><td>${v.名称}${v.状态==='正常'?'':`<br><span class="muted" style="word-break:break-all">${v.原因}</span>`}</td><td class="${v.状态==='正常'?'down':'up'}" style="white-space:nowrap">${v.状态}</td></tr>`).join('')+'</table>'}
+function overseas(d){if(failed('#overseas',d))return;
+  const idx=d.指数||[];
+  const t=idx.length?`<table><tr><th>指数</th><th>截至</th><th class="r">5 日</th><th class="r">20 日</th></tr>${idx.map(r=>`<tr><td>${esc(r.指数)}</td><td class="num">${md2(r.日期)}</td><td class="r ${r['5日']<0?'down':'up'}">${pct(r['5日'])}</td><td class="r ${r['20日']<0?'down':'up'}">${pct(r['20日'])}</td></tr>`).join('')}</table>
+   <p class="muted">日期是各市场当地交易日，美股比 A 股晚一天。</p>`:
+   `<p class="muted">海外指数还没建库，下一次行情库更新（交易日 16:40）之后出现：${esc((d.缺||[]).join('、'))}。</p>`;
+  const m=(d.宏观||[]).map(r=>`<tr><td>${esc(r.指标)}</td><td class="num">${md2(r.日期)}</td><td class="r">${n(r.值,r.指标==='美元兑人民币'?4:2)}${r.指标.includes('国债')?'%':''}</td><td class="r">${r['20日变化bp']==null?'—':(r['20日变化bp']>0?'+':'')+n(r['20日变化bp'],0)+'bp'}</td></tr>`).join('');
+  $('#overseas .body').innerHTML=`${staleNote(d)}${t}${m?`<table style="margin-top:12px"><tr><th>利率与汇率</th><th>日期</th><th class="r">最新</th><th class="r">20 日变化</th></tr>${m}</table>`:''}`}
 
-(async()=>{const m=await get('meta');$('#gen').textContent='生成于 '+(m.generated_at||'').slice(0,16).replace('T',' ')+'（北京时间）'+(m.errors&&m.errors.length?' · 部分栏目出错':'');
- const [a,b,c,d,e,f,g]=await Promise.all(['market','mainline','flow','history','macro','judgments','health'].map(get));
- market(a);mainline(b);flow(c);history(d);macro(e);judgments(f);health(g)})();
+function watch(w,j){const items=[];
+  (j.要盯||[]).forEach(t=>items.push(`<li>${md(t).replace(/^<p>|<\/p>$/g,'')}</li>`));
+  (w.近两周到期||[]).forEach(r=>items.push(`<li><span class="when">${md2(r.复核日)} 到期复核，${esc(r.模块)}</span>${esc(r.对象)}：${esc(r.判断)}</li>`));
+  const s=w.判断||{};
+  $('#watch .body').innerHTML=`<ul class="watch">${items.join('')||'<li class="muted">这周没有特别要盯的。</li>'}</ul>
+  <p class="muted">另有 ${w.程序判断近两周到期||0} 条程序判断两周内到期，到期自动打分。判断档案共 ${s.总数||0} 条，已复核 ${s.已复核||0} 条${s.命中率!=null?`，命中率 ${Math.round(s.命中率*100)}%（样本还少，只作参考）`:''}。</p>`}
+
+function foot(x){const sys=x.系统||{};const pr=sys.问题||[];
+  $('#foot').innerHTML=`<div class="sys">${pr.length?'系统提醒：'+pr.map(p=>`${esc(p.名称)}${esc(p.状态)}（${esc(p.原因.replace(/https?:\/\/\S+/g,'').replace(/请求失败：?/,'请求失败').slice(0,50))}）`).join('；'):'各项自动任务都按时跑完了。'}${sys.检查时间?`<br>健康检查于 ${esc(sys.检查时间.slice(5,16).replace('T',' '))}`:''}</div>
+  指标由程序按规则生成，判读由 Claude 每周写入全景；不构成投资建议。数据与规则见 <a href="https://github.com/Rsannote/rsan-backtest">Rsannote/rsan-backtest</a>。`}
+
+(async()=>{let x;try{x=await (await fetch('data/dashboard.json',{cache:'no-store'})).json()}catch(e){$('#gen').textContent='数据读取失败，请稍后刷新';return}
+  $('#gen').textContent='更新于 '+x.生成时间.slice(5,16).replace('T',' ');
+  const j=x.判读||{};hero(x.大盘||{},j);lede(j);flow(x.资金);mainline(x.主线,j);history(x.历史,j);overseas(x.海外);watch(x.盯||{},j);foot(x)})();
 </script>
 </body>
 </html>
