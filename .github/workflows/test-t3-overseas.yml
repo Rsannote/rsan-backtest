@@ -1,0 +1,43 @@
+# T3 海外指数建库验收：只在 claude/T3-overseas 分支运行，CSV 与核对表提交到 logs/test/T3/，正式 data/ 不提交。
+name: T3 海外指数建库验收
+on:
+  push:
+    branches: [claude/T3-overseas]
+    paths: ['logs/test/T3/建库请求.json']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: t3-overseas-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    if: github.ref == 'refs/heads/claude/T3-overseas'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pandas numpy requests
+      - name: 离线测试与引擎校验
+        run: |
+          set -euo pipefail
+          mkdir -p logs/test/T3
+          python -m unittest discover -s tests 2>&1 | tail -4 | tee logs/test/T3/离线测试.txt
+          md5sum -c engine/ENGINE_MD5.txt
+      - name: 建库并核对
+        run: python -u tests/verify_t3_overseas.py
+      - name: 只提交测试产出
+        if: always()
+        run: |
+          set -euo pipefail
+          git checkout -- data logs/行情库_最新.md 2>/dev/null || true
+          git clean -fdq -- data
+          git config user.name github-actions
+          git config user.email actions@users.noreply.github.com
+          git add -- logs/test/T3
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "T3 海外指数建库核对 $(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M')"
+          git pull --rebase origin claude/T3-overseas && git push origin HEAD:claude/T3-overseas
