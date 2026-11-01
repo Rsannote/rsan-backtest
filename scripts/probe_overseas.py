@@ -30,12 +30,12 @@ UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.3
 MAX_BYTES = 16 * 1024 * 1024
 
 INDICES = {  # 名称: {来源: [候选代码…]}
-    "纳斯达克综合": {"tencent": ["us.IXIC"], "sina_us": [".IXIC"], "stooq": ["^ndq"], "yahoo": ["^IXIC"], "eastmoney": ["100.NDX"]},
-    "标普500": {"tencent": ["us.INX"], "sina_us": [".INX"], "stooq": ["^spx"], "yahoo": ["^GSPC"], "eastmoney": ["100.SPX"]},
-    "日经225": {"stooq": ["^nkx"], "yahoo": ["^N225"], "eastmoney": ["100.N225"]},
-    "韩国KOSPI": {"stooq": ["^kospi"], "yahoo": ["^KS11"], "eastmoney": ["100.KS11"]},
-    "恒生指数": {"tencent": ["hkHSI"], "sina_hk": ["HSI"], "stooq": ["^hsi"], "yahoo": ["^HSI"], "eastmoney": ["100.HSI"]},
-    "恒生科技": {"tencent": ["hkHSTECH"], "sina_hk": ["HSTECH"], "yahoo": ["HSTECH.HK", "^HSTECH"], "eastmoney": ["124.HSTECH"]},
+    "纳斯达克综合": {"tencent": ["us.IXIC"], "sina_us": [".IXIC"], "yahoo": ["^IXIC"], "eastmoney": ["100.NDX"]},
+    "标普500": {"tencent": ["us.INX"], "sina_us": [".INX"], "yahoo": ["^GSPC"], "eastmoney": ["100.SPX"]},
+    "日经225": {"yahoo": ["^N225"], "yahoo2": ["^N225"], "eastmoney": ["100.N225"], "sina_gi": ["N225"]},
+    "韩国KOSPI": {"yahoo": ["^KS11"], "yahoo2": ["^KS11"], "eastmoney": ["100.KS11"], "sina_gi": ["KS11"]},
+    "恒生指数": {"tencent": ["hkHSI"], "yahoo": ["^HSI"], "eastmoney": ["100.HSI"]},
+    "恒生科技": {"tencent": ["hkHSTECH"], "yahoo": ["^HSTECH", "HSTECH.HK", "3033.HK"], "eastmoney": ["124.HSTECH"]},
 }
 
 
@@ -137,10 +137,14 @@ def fetch(source: str, sym: str, today: date):
                                     {"Referer": "https://finance.sina.com.cn"}))
     if source == "stooq":
         return parse_stooq(get("https://stooq.com/q/d/l/?s=" + urllib.request.quote(sym) + "&i=d"))
-    if source == "yahoo":
+    if source == "sina_gi":
+        return parse_sina_jsonp(get(f"https://stock.finance.sina.com.cn/usstock/api/jsonp.php/var%20t=/Global_IndexService.getDailyK?symbol={sym}",
+                                    {"Referer": "https://finance.sina.com.cn"}))
+    if source in ("yahoo", "yahoo2"):
         p1 = int(datetime(2010, 1, 1, tzinfo=timezone.utc).timestamp())
         p2 = int(datetime.combine(today + timedelta(days=1), datetime.min.time(), timezone.utc).timestamp())
-        return parse_yahoo(get(f"https://query1.finance.yahoo.com/v8/finance/chart/{urllib.request.quote(sym)}?period1={p1}&period2={p2}&interval=1d"))
+        host = "query2" if source == "yahoo2" else "query1"
+        return parse_yahoo(get(f"https://{host}.finance.yahoo.com/v8/finance/chart/{urllib.request.quote(sym)}?period1={p1}&period2={p2}&interval=1d"))
     if source == "eastmoney":
         return parse_eastmoney(get(f"https://push2his.eastmoney.com/api/qt/stock/kline/get?secid={sym}&fields1=f1,f2,f3,f4,f5,f6"
                                    f"&fields2=f51,f52,f53,f54,f55,f56&klt=101&fqt=0&beg=20100101&end=20500101",
@@ -171,7 +175,9 @@ def compare(a, b, sample=5, seed=20261101):
     return {"共同日期": len(common), "近250日最大相对差": round(max(diffs), 6),
             "近250日相差超0.1%天数": sum(x > 0.001 for x in diffs),
             "抽样": [(d.isoformat(), da[d], db[d]) for d in sorted(rnd)],
-            "只在前者": len(set(da) - set(db)), "只在后者": len(set(db) - set(da))}
+            "只在前者": len(set(da) - set(db)), "只在后者": len(set(db) - set(da)),
+            "只在前者日期": [d.isoformat() for d in sorted(set(da) - set(db))[:10]],
+            "只在后者日期": [d.isoformat() for d in sorted(set(db) - set(da))[:10]]}
 
 
 def run(now: datetime):
@@ -183,6 +189,7 @@ def run(now: datetime):
             for sym in syms:
                 first = attempt(source, sym, today)
                 time.sleep(1.5)
+                time.sleep(4 if source in ("tencent", "eastmoney") else 0)   # 第一轮里腾讯/东财第二次请求被限流，拉开间隔
                 second = attempt(source, sym, today) if first["ok"] else None
                 if second:
                     same = second["ok"] and second["行数"] == first["行数"] and second["止"] == first["止"]
@@ -192,8 +199,8 @@ def run(now: datetime):
                 results[name][f"{source}:{sym}"] = first
                 print(f"{name} {source}:{sym} → {'成功 ' + str(first['行数']) + '行 ' + first['起'] + '~' + first['止'] if first['ok'] else first['错误']}", flush=True)
                 time.sleep(1.5)
-                if first["ok"]:
-                    break                                         # 同一来源的候选代码，首个成功即可
+                if first["ok"] and first["行数"] >= 250:
+                    break                                         # 行数太少（如只有当天）继续试下一个候选                                         # 同一来源的候选代码，首个成功即可
     for name, res in results.items():
         ok = [k for k, v in res.items() if v["ok"]]
         res["_对照"] = {f"{ok[i]} vs {ok[j]}": compare(res[ok[i]]["_rows"], res[ok[j]]["_rows"])
@@ -220,7 +227,7 @@ def report(results, now: datetime) -> str:
                     lines.append(f"- {pair}：没有共同日期")
                     continue
                 lines.append(f"- {pair}：共同 {c['共同日期']} 天；近250日最大相对差 {c['近250日最大相对差']:.4%}，超0.1%的 {c['近250日相差超0.1%天数']} 天；"
-                             f"日期只在前者 {c['只在前者']}、只在后者 {c['只在后者']}")
+                             f"日期只在前者 {c['只在前者']}{c['只在前者日期'] or ''}、只在后者 {c['只在后者']}{c['只在后者日期'] or ''}")
                 lines.append("  抽样：" + "；".join(f"{d} {x:g} / {y:g}" for d, x, y in c["抽样"]))
         lines.append("")
     lines += ["来源取舍由审核决定；本探测不写 data/。", ""]
