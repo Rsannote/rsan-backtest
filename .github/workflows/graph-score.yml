@@ -1,0 +1,61 @@
+name: 驱动图谱打分
+
+# T7：每个交易日市场状态跑完后，按 graph/驱动图谱_*.json 的 rules（状态权重、回撤阈值）重算打分，
+# 输出 graph/打分_最新.md / .json，供每周全景的「交叉候选」读取。只算指标，不改图谱内容。
+
+on:
+  workflow_run:
+    workflows: ['市场状态']
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+  actions: read
+
+concurrency:
+  group: repo-writer
+  cancel-in-progress: false
+
+jobs:
+  score:
+    if: github.ref == 'refs/heads/main' && (github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: 重算图谱打分
+        run: python -u scripts/graph_score.py
+      - name: 提交打分
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email actions@users.noreply.github.com
+          git add -- graph/打分_最新.json graph/打分_最新.md
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "驱动图谱打分 $(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M')"
+          for attempt in 1 2 3; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep 5
+          done
+          exit 1
+      - name: 工作流失败告警
+        if: failure() && github.ref == 'refs/heads/main'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          HEALTH_ITEM_ID: graph_score
+          HEALTH_ITEM_NAME: 驱动图谱打分
+          HEALTH_WORKFLOW_FILE: .github/workflows/graph-score.yml
+        run: |
+          alert_script="${GITHUB_WORKSPACE}/scripts/health_alert.py"
+          if [ ! -f "$alert_script" ]; then
+            alert_script="${RUNNER_TEMP}/health_alert.py"
+            curl --fail --silent --show-error --retry 2 -H "Authorization: Bearer ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.raw+json' "https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/scripts/health_alert.py?ref=${GITHUB_SHA}" -o "$alert_script"
+          fi
+          python3 "$alert_script" --workflow-failure

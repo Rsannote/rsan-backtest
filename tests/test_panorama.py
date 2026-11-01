@@ -2,9 +2,11 @@
 import csv
 import datetime as dt
 import json
+import os
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -228,7 +230,9 @@ class PanoramaTests(unittest.TestCase):
 
     def test_issue_offline_does_not_record(self):
         panorama.auto(self.root, dt.datetime(2026, 10, 30, 23, 0, tzinfo=BJ))
-        self.assertEqual(panorama.issue(self.root, dt.datetime(2026, 10, 30, 23, 5, tzinfo=BJ)), 0)
+        # 测试本身可能跑在 Actions 上（GITHUB_ACTIONS=true），这里显式模拟本地环境，确保不联网
+        with mock.patch.dict(os.environ, {"GITHUB_ACTIONS": "false"}):
+            self.assertEqual(panorama.issue(self.root, dt.datetime(2026, 10, 30, 23, 5, tzinfo=BJ)), 0)
         self.assertFalse((self.root / "logs/全景提醒记录.csv").exists())
 
 
