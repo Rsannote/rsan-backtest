@@ -1,0 +1,38 @@
+# T3 海外指数来源探测：只在 claude/T3-probe 分支运行，结果提交回该分支，不写 data/、不碰 main。
+name: T3 海外行情来源探测
+on:
+  push:
+    branches: [claude/T3-probe]
+    paths: ['logs/test/T3/探测请求.json', 'scripts/probe_overseas.py']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: t3-probe-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  probe:
+    if: github.ref == 'refs/heads/claude/T3-probe'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: 离线自检
+        run: python scripts/probe_overseas.py --self-test
+      - name: 探测六个指数的各个来源
+        run: python -u scripts/probe_overseas.py
+      - name: 正式目录未改写
+        run: git diff --exit-code -- data engine archive judgments graph system
+      - name: 结果提交回分支
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email actions@users.noreply.github.com
+          git add -- logs/海外行情探测.txt logs/test/T3 2>/dev/null || true
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "T3 海外来源探测结果 $(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M')"
+          git pull --rebase origin claude/T3-probe && git push origin HEAD:claude/T3-probe
