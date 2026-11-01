@@ -466,6 +466,34 @@
         "sample_n": 0,
         "说明": "新任务无运行样本；周频任务按一周加周六兜底时刻定阈值，未放宽其他任务"
       }
+    },
+    {
+      "id": "reddit",
+      "name": "信息源·Reddit（每日）",
+      "workflow": ".github/workflows/reddit.yml",
+      "kind": "json_date",
+      "date_field": "last_success_at",
+      "trading_days_only": false,
+      "times": [
+        "07:23"
+      ],
+      "check_mode": "freshness",
+      "max_age_minutes": 2160,
+      "freshness_success_paths": [
+        {
+          "path": "data/信息源/reddit/状态.json",
+          "field": "last_success_at"
+        }
+      ],
+      "outputs": [
+        "data/信息源/reddit/状态.json",
+        "data/信息源/精华_最新.md"
+      ],
+      "说明": "T10。至少一个版块成功才更新 last_success_at；全部失败时工作流失败告警。max_age=1天+12小时（覆盖 GitHub 定时常见的 5–7 小时延迟），待四周后按实测校准。",
+      "delay_basis": {
+        "sample_n": 0,
+        "说明": "新任务无运行样本；参照信息源监控的实测延迟取一天加半天"
+      }
     }
   ]
 }

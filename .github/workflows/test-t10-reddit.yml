@@ -1,0 +1,44 @@
+# T10 试跑：只在 claude/T10-reddit 分支运行；Reddit 抓取写到 logs/test/T10/试跑/，另复测知乎直连，结果提交回分支。
+name: T10 Reddit 试跑与知乎复测
+on:
+  push:
+    branches: [claude/T10-reddit]
+    paths: ['logs/test/T10/试跑请求.json']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: t10-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  trial:
+    if: github.ref == 'refs/heads/claude/T10-reddit'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: 隔离试跑（计时）
+        run: |
+          set -o pipefail
+          start=$(date +%s)
+          python3 scripts/fetch_reddit.py --out-dir logs/test/T10/试跑 2>&1 | tee logs/test/T10/试跑输出.txt || true
+          echo "用时 $(( $(date +%s) - start )) 秒" | tee -a logs/test/T10/试跑输出.txt
+      - name: 知乎直连复测
+        run: |
+          for u in "https://www.zhihu.com/api/v4/topics/19554196/feeds/essence?limit=10" "https://www.zhihu.com/topic/19554196/hot" "https://www.zhihu.com/api/v3/feed/topstory/hot-lists/total?limit=10"; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/124 Safari/537.36' "$u")
+            echo "$(TZ=Asia/Shanghai date '+%F %T') $code $u" | tee -a logs/test/T10/知乎复测.txt
+            sleep 3
+          done
+      - name: 正式目录未改写
+        run: git diff --exit-code -- data engine archive judgments graph
+      - name: 结果提交回分支
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email actions@users.noreply.github.com
+          git add -- logs/test/T10
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "T10 试跑结果 $(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M')"
+          git pull --rebase origin claude/T10-reddit && git push origin HEAD:claude/T10-reddit

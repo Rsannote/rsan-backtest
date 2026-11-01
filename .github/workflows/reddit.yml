@@ -1,0 +1,51 @@
+name: 信息源·Reddit
+
+# T10：抓 system/信息源白名单.json 里的 Reddit 版块（本周最热 RSS），版块之间间隔约 60 秒防限流。
+# 新帖存 data/信息源/reddit/<年-月>/<日期>.jsonl，按「目的」预筛出 data/信息源/精华_最新.md。全部是三级信息源。
+
+on:
+  schedule:
+    - cron: "23 23 * * *"   # 北京时间 07:23
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: repo-writer
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: 抓取 Reddit 版块
+        run: python3 scripts/fetch_reddit.py
+      - name: 提交
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email actions@users.noreply.github.com
+          git add -- data/信息源/reddit data/信息源/精华_最新.md 2>/dev/null || true
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "信息源 Reddit $(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M')"
+          for i in 1 2 3; do git pull --rebase origin main && git push origin HEAD:main && exit 0; sleep 5; done
+          exit 1
+      - name: 工作流失败告警
+        if: failure()
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          HEALTH_ITEM_ID: reddit
+          HEALTH_ITEM_NAME: 信息源·Reddit
+          HEALTH_WORKFLOW_FILE: .github/workflows/reddit.yml
+        run: |
+          alert_script="${GITHUB_WORKSPACE}/scripts/health_alert.py"
+          if [ ! -f "$alert_script" ]; then
+            alert_script="${RUNNER_TEMP}/health_alert.py"
+            curl --fail --silent --show-error --retry 2 -H "Authorization: Bearer ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.raw+json' "https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/scripts/health_alert.py?ref=${GITHUB_SHA}" -o "$alert_script"
+          fi
+          python3 "$alert_script" --workflow-failure

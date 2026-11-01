@@ -108,6 +108,10 @@ python3 engine/backtest.py \
 - 每周只自动写一次，已存在的一期不覆盖；手动重生成：`python3 scripts/panorama.py --week <该周任一日期> --force`。
 - 判断档案按"本周日 24:00 前已写入/已复核"取状态，同一周任何时候重跑结果一样。运行记录：`logs/全景_最新.md`。
 
+### 信息源·Reddit（T10，每天）
+
+`.github/workflows/reddit.yml` 每天北京时间 07:23 运行 `scripts/fetch_reddit.py`：按 `system/信息源白名单.json` 里状态为「可抓」的 Reddit 版块，取本周最热 RSS（版块之间间隔 60 秒防限流，10 个版块约 9 分钟）。新帖只追加到 `data/信息源/reddit/<年-月>/<日期>.jsonl`，按白名单「目的」每个最多 10 条汇成 `data/信息源/精华_最新.md`。全部是三级信息源，只当线索。知乎话题、X、雪球从 GitHub 服务器抓不到或暂停，见白名单备注；热榜由上面的 tophub 信息源监控负责。
+
 ### 回测前：切一个固定快照
 
 回测**不要直接读行情库**（它每天在变）。先切出一个固定目录，再用它回测：
