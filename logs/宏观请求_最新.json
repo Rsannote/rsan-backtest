@@ -1,14 +1,14 @@
 [
   {
-    "url": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2026-09-20&endDate=2026-10-31&gjqx=0&qxId=ycqx&locale=cn_ZH",
-    "北京时间": "2026-11-01T16:04:28.596962+08:00",
+    "url": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery?startDate=2026-09-20&endDate=2026-11-01&gjqx=0&qxId=ycqx&locale=cn_ZH",
+    "北京时间": "2026-11-02T00:53:52.585519+08:00",
     "HTTP": 200,
     "字节数": 32144,
-    "SHA256": "7a7670f837ce8420eb096c8ff106f31d3ef75bb870033cebfa0071b17455ed4f"
+    "SHA256": "5cf31d699a3f95b2a74c40940d25af628a9501678fa2e0880eba33face54b1c1"
   },
   {
     "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2015-01-01",
-    "北京时间": "2026-11-01T16:04:31.759372+08:00",
+    "北京时间": "2026-11-02T00:53:56.356365+08:00",
     "HTTP": 200,
     "字节数": 48875,
     "SHA256": "a2b2bd3a1abb900e8955e26a278dcab6921aacab12d9640e93ed7f9a34443972",
@@ -16,105 +16,105 @@
   },
   {
     "url": "https://www.chinamoney.com.cn/r/cms/www/chinamoney/data/fx/ccpr.json",
-    "北京时间": "2026-11-01T16:04:32.232191+08:00",
+    "北京时间": "2026-11-02T00:53:56.854137+08:00",
     "HTTP": 200,
     "字节数": 11002,
     "SHA256": "952528467ac5d24d3d379cda02f9a03e3893755858da03d12dc28a1d2c93483a"
   },
   {
-    "url": "https://query1.finance.yahoo.com/v8/finance/chart/DX-Y.NYB?period1=1420070400&period2=1793520268&interval=1d",
-    "北京时间": "2026-11-01T16:04:33.276842+08:00",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/DX-Y.NYB?period1=1420070400&period2=1793552032&interval=1d",
+    "北京时间": "2026-11-02T00:53:58.595498+08:00",
     "HTTP": 200,
     "字节数": 328353,
-    "SHA256": "5809b17919efcd760afc30327ac58d7420774fea128e77d84d2e997d0b13f347"
+    "SHA256": "c89a5aa3ac668f348a2eff44ec9093edc4a5934a0a73f7e83e5bd7b6bf04475c"
   },
   {
-    "url": "https://query1.finance.yahoo.com/v8/finance/chart/BZ%3DF?period1=1420070400&period2=1793520268&interval=1d",
-    "北京时间": "2026-11-01T16:04:33.794732+08:00",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/BZ%3DF?period1=1420070400&period2=1793552032&interval=1d",
+    "北京时间": "2026-11-02T00:53:59.027160+08:00",
     "HTTP": 200,
     "字节数": 312521,
-    "SHA256": "63c5b5c7cb37012de19cba0eeaedcc3b4a96ed51c420a8acca22b788310421c0"
+    "SHA256": "d6cff1b6eedf31d9bb53ec1e1618ca4b7716ce0e828c086acbe95dadea9db8c4"
   },
   {
-    "url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1420070400&period2=1793520268&interval=1d",
-    "北京时间": "2026-11-01T16:04:34.156529+08:00",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1420070400&period2=1793552032&interval=1d",
+    "北京时间": "2026-11-02T00:53:59.392766+08:00",
     "HTTP": 200,
     "字节数": 283202,
-    "SHA256": "024aec260fcb875aec43529a3b9388d917ad6d88c9625405faeba80bd0101c0f"
+    "SHA256": "1d3370a41119cd6141ade7dff44cf8977d895b43d7db72a3216eaea7a124dfd8"
   },
   {
     "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_CURRENCY_SUPPLY&columns=ALL&pageSize=500&pageNumber=1&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
-    "北京时间": "2026-11-01T16:04:35.715206+08:00",
+    "北京时间": "2026-11-02T00:54:00.665249+08:00",
     "HTTP": 200,
     "字节数": 70175,
     "SHA256": "fb7c6ce5bdc84debd1f6738fd34e7785c632b672a65ff35e50645b0e649a5b90"
   },
   {
     "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_CPI&columns=ALL&pageSize=500&pageNumber=1&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
-    "北京时间": "2026-11-01T16:04:38.524469+08:00",
+    "北京时间": "2026-11-02T00:54:03.682196+08:00",
     "HTTP": 200,
     "字节数": 76364,
     "SHA256": "eee1bd0effff84e377396a35215f27a2f1bc24d27657ba8f7380b33bc41163b3"
   },
   {
     "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_PPI&columns=ALL&pageSize=500&pageNumber=1&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
-    "北京时间": "2026-11-01T16:04:40.492440+08:00",
+    "北京时间": "2026-11-02T00:54:06.153768+08:00",
     "HTTP": 200,
     "字节数": 29237,
     "SHA256": "fc9804a7b36967bdd2678bc2852f13b85e1d2e56383a8bc9043aeced5efd9523"
   },
   {
     "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_PMI&columns=ALL&pageSize=500&pageNumber=1&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
-    "北京时间": "2026-11-01T16:04:45.617686+08:00",
+    "北京时间": "2026-11-02T00:54:07.976959+08:00",
     "HTTP": 200,
     "字节数": 33242,
     "SHA256": "a724a416dc4eb95b7f087f67deb2921f1ac9f5e8cebe12879f45af9a1b6beb75"
   },
   {
     "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=1&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
-    "北京时间": "2026-11-01T16:04:47.743465+08:00",
+    "北京时间": "2026-11-02T00:54:10.003181+08:00",
     "HTTP": 200,
     "字节数": 136621,
     "SHA256": "0f06f2a3aa8e09c3ce4e46c71c95f9383337ed48d2fef1c41bfb15120faf7e53"
   },
   {
     "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=2&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
-    "北京时间": "2026-11-01T16:04:50.549448+08:00",
+    "北京时间": "2026-11-02T00:54:12.018277+08:00",
     "HTTP": 200,
     "字节数": 137096,
     "SHA256": "9403272b56abc0d308bd139fe0fca4eae2638ace2c4c16910b8c9658743fd9c5"
   },
   {
     "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=3&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
-    "北京时间": "2026-11-01T16:04:53.698124+08:00",
+    "北京时间": "2026-11-02T00:54:14.465812+08:00",
     "HTTP": 200,
     "字节数": 136850,
     "SHA256": "d41dfefc464f35bc81f7d60f04ccdf2c584742f6fa14de5588329ebfc2a6e5fb"
   },
   {
     "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=4&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
-    "北京时间": "2026-11-01T16:04:56.215450+08:00",
+    "北京时间": "2026-11-02T00:54:17.133864+08:00",
     "HTTP": 200,
     "字节数": 136786,
     "SHA256": "9383f7b3e480bdfa2513b49285f980f7cfad9e384d5aaeddb7f6a829cd9ec7da"
   },
   {
     "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=5&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
-    "北京时间": "2026-11-01T16:04:58.687342+08:00",
+    "北京时间": "2026-11-02T00:54:19.493510+08:00",
     "HTTP": 200,
     "字节数": 136808,
     "SHA256": "2420ba03e2689576a99214f8ea75a92df186d388f06b92c087d29f2089776265"
   },
   {
     "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=6&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
-    "北京时间": "2026-11-01T16:05:02.151251+08:00",
+    "北京时间": "2026-11-02T00:54:21.771331+08:00",
     "HTTP": 200,
     "字节数": 136704,
     "SHA256": "dff891820ccb8ec6034576dfb8981428aff70c3818098c3afb2dbfac3b92fb3f"
   },
   {
     "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPTA_WEB_TREASURYYIELD&columns=ALL&pageSize=500&pageNumber=7&sortColumns=SOLAR_DATE&sortTypes=-1&source=WEB&client=WEB",
-    "北京时间": "2026-11-01T16:05:04.513914+08:00",
+    "北京时间": "2026-11-02T00:54:24.227419+08:00",
     "HTTP": 200,
     "字节数": 136797,
     "SHA256": "86e9050936c2bdf4fd02bd5231ec58c20805ccb596c12e6b5bb28193b6e73d33"
