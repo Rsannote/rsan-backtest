@@ -116,7 +116,7 @@ class PanoramaTests(unittest.TestCase):
         self.assertEqual(titles, ["1. 散户情绪", "2. 大盘攻守", "3. 两层对照", "4. 资金在追什么、在撤什么", "5. 海外市场一周涨跌",
                                   "6. 主线雷达", "7. 交叉候选", "8. 冲突清单", "9. 到期复核", "10. 命中率", "11. 本周证实/证伪"])
         self.assertTrue(text.rstrip().endswith("不构成投资建议。"))
-        self.assertIn("暂无数据，原因：T3", text)
+        self.assertIn("暂无数据，原因：标的清单里没有海外指数", text)
         self.assertEqual(list(meta["缺数据栏目"]), ["5. 海外市场一周涨跌"])
 
     def test_numbers_match_sources(self):
@@ -165,6 +165,21 @@ class PanoramaTests(unittest.TestCase):
         self.assertIn("6. 主线雷达", meta["缺数据栏目"])
         self.assertIn("3. 两层对照", meta["缺数据栏目"])
         self.assertEqual(text.count("暂无数据，原因："), 5)
+
+    def test_overseas_week_change_uses_local_dates(self):
+        write(self.root / "data/标的清单.csv", "code,name,type,group,note\nsh000300,沪深300,指数,指数,\n"
+              "^IXIC,纳斯达克综合,指数,海外指数,来源雅虎\n^N225,日经225,指数,海外指数,来源雅虎\nhkHSTECH,恒生科技,指数,海外指数,来源腾讯\n")
+        # 纳指：上周五 10-23 收 100，本周最后一条 10-29（美股周五未收盘）收 110
+        write_csv(self.root / "data/行情库/指数/^IXIC.csv", ["date", "open", "high", "low", "close", "volume", "factor"],
+                  [[d, 1, 1, 1, c, 0, 1] for d, c in [("2026-10-22", 99), ("2026-10-23", 100), ("2026-10-26", 105), ("2026-10-29", 110)]])
+        write_csv(self.root / "data/行情库/指数/^N225.csv", ["date", "open", "high", "low", "close", "volume", "factor"],
+                  [[d, 1, 1, 1, c, 0, 1] for d, c in [("2026-10-23", 200), ("2026-10-30", 190)]])
+        text, meta = self.build()
+        sec = text.split("## 5. 海外市场一周涨跌", 1)[1].split("## 6.", 1)[0]
+        self.assertIn("|纳斯达克综合|2026-10-29|110|+10.00%|", sec)
+        self.assertIn("|日经225|2026-10-30|190|-5.00%|", sec)
+        self.assertIn("行情文件缺失：恒生科技", sec)
+        self.assertNotIn("5. 海外市场一周涨跌", meta["缺数据栏目"])
 
     def test_previous_week_and_late_graph(self):
         text, meta = self.build("2026-10-23")
